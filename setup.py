@@ -19,7 +19,7 @@ setup(
   author = "Lungsi Ngwua",
   author_email = "neuralgraphs@gmail.com",
   url = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur",
-  download_url = "https://github.com/NMCog/archive/v0.2.27.tar.gz",
+  #download_url = "https://github.com/NMCog/archive/v0.2.27.tar.gz",
   keywords = ["NEUROSCIENCE", "COMPUTATIONAL NEUROSCIENCE", "SIGNAL PROCESSING", "SPIKING", "BASAL GANGLIA"],
   #install_requires=[
   #        "numpy",
@@ -33,7 +33,7 @@ setup(
     "Topic :: Software Development :: Build Tools",
     "License :: OSI Approved :: BSD-3-Clause",
     "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
+    #"Programming Language :: Python :: 3.6",
   ],
-  python_requires = ">=3.5",
+  #python_requires = ">=3.5",
 )
