@@ -21,12 +21,12 @@ setup(
   url = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur",
   #download_url = "https://github.com/NMCog/archive/v0.2.27.tar.gz",
   keywords = ["NEUROSCIENCE", "COMPUTATIONAL NEUROSCIENCE", "SIGNAL PROCESSING", "SPIKING", "BASAL GANGLIA"],
-  #install_requires=[
-  #        "numpy",
-  #        "quantities",
-  #        "neo",
-  #        "spynnaker8",
-  #    ],
+  install_requires=[
+          "numpy",
+          "pandas",
+          "matplotlib",
+          "quantities",
+      ],
   classifiers=[
     "Development Status :: 3 - Alpha",      # Choose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
     "Intended Audience :: Developers",      # Define that your audience are developers
