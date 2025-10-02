@@ -1,4 +1,4 @@
-`Guide to Cognitive Modeling via nmcog <_static/Applying_Discrimination.html>`_
+`Guide to Cognitive Modeling via analyseur <_static/Applying_Discrimination.html>`_
 ********************************************************************************
 
 Notebook examples
