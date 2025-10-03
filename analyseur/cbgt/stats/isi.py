@@ -1,4 +1,4 @@
-# ~/analyseur/cbgt/isi.py
+# ~/analyseur/cbgt/stat/isi.py
 #
 # Documentation by Lungsi 2 Oct 2025
 #
@@ -6,6 +6,8 @@
 #
 
 import numpy as np
+
+from utilities import compute_grand_mean as cgm
 
 class InterSpikeInterval(object):
     """This class
@@ -25,7 +27,7 @@ class InterSpikeInterval(object):
         return interspike_intervals
 
     @classmethod
-    def mean_freq(cls, all_neurons_isi=None):
+    def mean_freqs(cls, all_neurons_isi=None):
         mean_spiking_freq = {}
 
         for n_id, isi in all_neurons_isi.items():
@@ -35,5 +37,6 @@ class InterSpikeInterval(object):
         return mean_spiking_freq
 
     @classmethod
-    def grand_mean_freq(cls, all_neurons_mean_freq=None):
-        return np.mean(all_neurons_mean_freq)
+    def grand_mean_freq(cls, all_neurons_isi=None):
+        all_neurons_mean_freq = cls.mean_freqs(all_neurons_isi)
+        return cgm(all_neurons_mean_freq)
