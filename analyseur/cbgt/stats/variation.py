@@ -10,8 +10,25 @@ import numpy as np
 from utilities import compute_grand_mean as cgm
 
 class Variations(object):
-    """This class
-    
+    """
+    Computes variation or dispersion in the data
+
+    +------------------------+----------
+    | Methods                | Argument
+    +========================+==========
+    | :py:meth:`.computeCV`  | - fd
+    +------------------------+-----------
+    | :py:meth:`.computeCV2` |
+    +------------------------+-----------
+    | :py:meth:`.computeLV`  |
+    +------------------------+-----------
+    | :py:meth:`grandCV`     | -
+    +------------------------+------------
+    | :py:meth:`grandCV2`    |
+    +------------------------+------------
+    | :py:meth:`grandLV`     |
+    +------------------------+------------
+
     *
     *
     

@@ -10,7 +10,18 @@ import numpy as np
 from utilities import compute_grand_mean as cgm
 
 class InterSpikeInterval(object):
-    """This class
+    """
+    Computes interspike intervals for the given spike times
+
+    +------------------------------+----------
+    | Methods                      | Argument
+    +==============================+==========
+    | :py:meth:`.compute`          | - fd
+    +------------------------------+-----------
+    | :py:meth:`.mean_freqs`       |
+    +------------------------------+-----------
+    | :py:meth:`.grand_mean_freq`  |
+    +------------------------------+-----------
 
     * sdf
     * sdf
