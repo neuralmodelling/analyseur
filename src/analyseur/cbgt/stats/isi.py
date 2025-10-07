@@ -7,7 +7,7 @@
 
 import numpy as np
 
-from utilities import compute_grand_mean as cgm
+from compute_shared import compute_grand_mean as cgm
 
 class InterSpikeInterval(object):
     """

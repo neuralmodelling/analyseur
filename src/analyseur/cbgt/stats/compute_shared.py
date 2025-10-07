@@ -1,4 +1,4 @@
-# ~/analyseur/cbgt/stat/utilities.py
+# ~/analyseur/cbgt/stat/compute_shared.py
 #
 # Documentation by Lungsi 3 Oct 2025
 #

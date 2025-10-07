@@ -7,7 +7,7 @@
 
 import numpy as npw
 
-from utilities import compute_grand_mean as cgm
+from compute_shared import compute_grand_mean as cgm
 
 class Variations(object):
     """

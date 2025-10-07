@@ -12,27 +12,7 @@ import numpy as np
 
 import re
 
-def _extract_neuron_no(neuron_id):
-    match = re.search(r'n(\d+)', neuron_id)
-    return int(match.group(1))
-
-def _get_desired_spiketrains(spiketrains, neurons="all"):
-    desired_spiketrains = []
-    yticks = []
-
-    if neurons=="all":
-        for nX, data in spiketrains.items():
-            desired_spiketrains.append( list(data) )
-            # yticks.append( _extract_neuron_no(nX) )
-            yticks.append(nX)
-    else: # neurons = range(a, b) or neurons = [1, 4, 5, 9]
-        for i in neurons:
-            neuron_id = "n" + str(i)
-            desired_spiketrains.append( list(spiketrains[neuron_id]) )
-            # yticks.append( _extract_neuron_no(neuron_id) )
-            yticks.append(neuron_id)
-    return desired_spiketrains, yticks
-
+from ..loader import get_desired_spiketrains
 
 def _get_line_colors(colors=False, no_neurons=None):
     if colors:
@@ -48,7 +28,7 @@ def rasterplot(spiketrains, colors=False, neurons="all", nucleus=None):
     :param colors: `[OPTIONAL] False` [default] or True
     :param neurons: [OPTIONAL] "all" [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
     :param nucleus: [OPTIONAL] None or name of the nucleus (string)
-    :return: object `matplotlib.pyplot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html>`_
+    :return: object `matplotlib.pyplot.eventplot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.eventplot.html>`_
 
     **Use Case:**
 
@@ -87,7 +67,7 @@ def rasterplot(spiketrains, colors=False, neurons="all", nucleus=None):
     ytick_trigger = 50
     ytick_interval = 10
 
-    [desired_spiketrains, yticks] = _get_desired_spiketrains(spiketrains, neurons=neurons)
+    [desired_spiketrains, yticks] = get_desired_spiketrains(spiketrains, neurons=neurons)
     linecolors = _get_line_colors(colors=colors, no_neurons=len(desired_spiketrains))
 
     # lineoffsets = 0.5  # default: 1

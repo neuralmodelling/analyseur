@@ -127,3 +127,32 @@ class LoadSpikeTimes(object):
             spiketrain["n" + str(n_id)] = self._get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
 
         return spiketrain
+
+def _extract_neuron_no(neuron_id):
+    match = re.search(r'n(\d+)', neuron_id)
+    return int(match.group(1))
+
+def get_desired_spiketrains(spiketrains, neurons="all"):
+    """
+    Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
+    and its associated yticks (list of neuron labels corresponding to the spike trains).
+
+    :param spiketrains: Dictionary returned using :py:class:`LoadSpikeTimes`
+    :param neurons: [OPTIONAL] None or name of the nucleus (string)
+    :return: nested_list, label_list
+    """
+    desired_spiketrains = []
+    yticks = []
+
+    if neurons=="all":
+        for nX, data in spiketrains.items():
+            desired_spiketrains.append( list(data) )
+            # yticks.append( _extract_neuron_no(nX) )
+            yticks.append(nX)
+    else: # neurons = range(a, b) or neurons = [1, 4, 5, 9]
+        for i in neurons:
+            neuron_id = "n" + str(i)
+            desired_spiketrains.append( list(spiketrains[neuron_id]) )
+            # yticks.append( _extract_neuron_no(neuron_id) )
+            yticks.append(neuron_id)
+    return desired_spiketrains, yticks
