@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "analyseur"
+version = "0.0.1"
+authors = [
+  { name="Lungsi NGWUA", email="neuralgraphs@gmail.com" },
+]
+maintainers = [
+  { name="Lungsi NGWUA", email="neuralgraphs@gmail.com" },
+]
+description = "Module (Library) for analyzing models (CBGTC, rBCBG) outputs."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE.txt" }
+keywords = ["NEUROSCIENCE", "COMPUTATIONAL NEUROSCIENCE", "SIGNAL PROCESSING", "SPIKING", "BASAL GANGLIA"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD-3-Clause",
+    "Development Status :: 3 - Alpha",      # "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
+    "Intended Audience :: Developers",      # Define that your audience are developers
+]
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+]
+
+[project.urls]
+"Homepage" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"
+"Source" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"
+"Bug Reports" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur/issues"

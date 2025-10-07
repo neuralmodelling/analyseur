@@ -8,6 +8,12 @@
 import numpy as np
 
 def compute_grand_mean(all_neuron_stat=None):
+    """
+    Returns the grand/global mean of a given statistics of all the neurons in a nucleus.
+
+    :param all_neuron_stat:
+    :return: a number
+    """
     stat_array = np.zeros(len(all_neuron_stat))
 
     i = 0

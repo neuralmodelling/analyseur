@@ -43,7 +43,7 @@ class LoadSpikeTimes(object):
 
     def __init__(self, full_filepath=" "):
         self.full_filepath = full_filepath
-        self.filename = full_filepath("/")[-1]
+        self.filename = full_filepath.split("/")[-1]
 
 
     def _extract_nucleus_name(self, filename):
