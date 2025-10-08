@@ -30,7 +30,7 @@ def psth(spiketrains, binsz=50, window=(0,10000), nucleus=None):
     
     * `window` controls the binning range as well as the spike counting window
     * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
-    * `psth` gives an overall temporal pattern of population activity
+    * `psth` gives an overall temporal pattern of population activity with a picture in both temporal and rate
     
     **Use Case:**
 
