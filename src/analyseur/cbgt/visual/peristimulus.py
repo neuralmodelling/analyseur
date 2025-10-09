@@ -321,3 +321,23 @@ class PSTH(object):
             "rate_heterogeneity": (std_firing_rate / mean_firing_rate).item(),
             "response_reliability": (np.sum(rate_changes > 0) / len(self.allspikes_in_window)).item(),
         }
+
+    def analytics_energy(self):
+        firing_rates = self.true_avg_rate["firing_rates"]
+        total_activity = np.sum(firing_rates)
+
+        max_entropy = np.log(len(firing_rates))
+
+        entropy = -np.sum([(r/total_activity) * np.log(r/total_activity)
+                           for r in firing_rates if r > 0])
+
+        dynamic_range = np.max(firing_rates) / (np.max(firing_rates[firing_rates > 0]) + 1e-8)
+
+        return {
+            "total_population_activity": total_activity,
+            "max_entropy": max_entropy,
+            "entropy": entropy,
+            "efficiency": entropy / max_entropy,
+            "energy_per_bit": total_activity / (entropy + 1e-8),
+            "dynamic_range": dynamic_range,
+        }
