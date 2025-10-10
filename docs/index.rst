@@ -6,7 +6,8 @@
 Welcome to analyseur's documentation!
 =================================
 
-analyseur is a module for cognitive modeling in neuromorphic platform.
+analyseur is a module for viewing analytical measures from (potentially) myriad
+models developed (or involved) in Dr. Benoît Girard's lab.
 
 .. toctree::
    :maxdepth: 2

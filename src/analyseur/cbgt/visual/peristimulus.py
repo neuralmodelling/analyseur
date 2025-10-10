@@ -68,18 +68,18 @@ class PSTH(object):
     def __init__(self, spiketrains):
         self.spiketrains = spiketrains
 
-    def _compute_true_avg_firing_rate(self, window, allspikes_in_window):
+    def _compute_true_avg_firing_rate(self, window, desired_spiketrains):
         """
         Computes the average of each neuron's firing rate over the entire period
 
         :param window:
-        :param allspikes_in_window:
+        :param desired_spiketrains:
         :return: dictionary with keys: firing_rates, mean_firing_rate, std_firing_rate
         """
         firing_rates = []
         total_duration = window[1] - window[0]
 
-        for indiv_spiketimes in allspikes_in_window:
+        for indiv_spiketimes in desired_spiketrains:
             spiketimes = np.array(indiv_spiketimes)
             spikes_in_window = spiketimes[(spiketimes >= window[0]) & (spiketimes <= window[1])]
             indiv_rate = len(spikes_in_window) / total_duration # kHz
@@ -91,9 +91,8 @@ class PSTH(object):
             "std_firing_rate": np.std(firing_rates),
         }
 
-    def _compute_pop_firing_rate_in_window(self, binsz, allspikes_in_window, pop_counts):
-        total_neurons = len(allspikes_in_window)
-        return pop_counts / (total_neurons * binsz)  # in kHz
+    def _compute_pop_firing_rate(self, n_neurons, binsz, pop_counts):
+        return pop_counts / (n_neurons * binsz)  # in kHz
 
     def _compute_psth(self, desired_spiketrains, binsz=50, window=(0, 10000)):
         allspikes = np.concatenate(desired_spiketrains)
@@ -106,11 +105,11 @@ class PSTH(object):
         # Compute
         counts, bin_edges = np.histogram(allspikes_in_window, bins=bins)
 
-        bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+        bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2 # should be = (bins[:-1] + bins[1:]) / 2
 
         # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)
-        popfirerates = self._compute_pop_firing_rate_in_window(binsz, allspikes_in_window, counts)
-        true_avg_rate = self._compute_true_avg_firing_rate(window, allspikes_in_window)
+        popfirerates = self._compute_pop_firing_rate(len(desired_spiketrains), binsz, counts)
+        true_avg_rate = self._compute_true_avg_firing_rate(window, desired_spiketrains)
 
         return counts, bin_centers, popfirerates, true_avg_rate, allspikes_in_window
 
@@ -122,7 +121,7 @@ class PSTH(object):
         :param binsz: integer or float; defines the number of equal-width bins in the range [default: 50]
         :param window: 2-tuple; defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: string; [OPTIONAL] None or name of the nucleus
-        :return: object `matplotlib.pyplot.hist <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html>`_
+        :return: object `matplotlib.pyplot.bar <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html>`_
         
         * `window` controls the binning range as well as the spike counting window
         * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
@@ -136,6 +135,7 @@ class PSTH(object):
         [self.desired_spiketrains, _] = get_desired_spiketrains(self.spiketrains)
         # NOTE: desired_spiketrains as nested list and not numpy array because
         # each neuron may have variable length of spike times
+        self.n_neurons = len(self.desired_spiketrains)
 
         # Compute PSTH and set the results as instance attributes
         [self.counts, self.bin_centers, self.popfirerates,
@@ -151,8 +151,7 @@ class PSTH(object):
         plt.xlabel("Time (ms)")
 
         nucname = "" if nucleus is None else " in " + nucleus
-        allno = str(len(self.desired_spiketrains))
-        plt.title("PSTH - Population Activity of " + allno + " neurons" + nucname +
+        plt.title("PSTH - Population Activity of " + str(self.n_neurons) + " neurons" + nucname +
                   "\n (mean firing rate within the window = "
                   + str(self.true_avg_rate["mean_firing_rate"]) + " kHz)")
 
@@ -282,7 +281,7 @@ class PSTH(object):
         baseline_rates = []
         response_rates = []
 
-        for indiv_spiketimes in self.allspikes_in_window:
+        for indiv_spiketimes in self.desired_spiketrains:
             spiketimes = np.array(indiv_spiketimes)
 
             # Rates: Baseline vs Response
@@ -316,10 +315,10 @@ class PSTH(object):
             "mean_response_rate": np.mean(response_rates).item(),
             "mean_rate_change": np.mean(rate_changes).item(),
             "mean_fold_change": np.mean(fold_changes).item(),
-            "active_fraction": (active_neurons / len(self.allspikes_in_window)).item(),
+            "active_fraction": (active_neurons / self.n_neurons).item(),
             "population_sparsity": sparsity_index.item(),
             "rate_heterogeneity": (std_firing_rate / mean_firing_rate).item(),
-            "response_reliability": (np.sum(rate_changes > 0) / len(self.allspikes_in_window)).item(),
+            "response_reliability": (np.sum(rate_changes > 0) / self.n_neurons).item(),
         }
 
     def analytics_energy(self):
