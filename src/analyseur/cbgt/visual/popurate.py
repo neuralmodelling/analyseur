@@ -71,14 +71,17 @@ class PSRH(object):
 
         # Population Rate Histogram
         pop_rate = np.zeros(len(bins) - 1)
+        # Firing rate variability
+        firing_rates = np.zeros((len(desired_spiketrains), len(bins)-1))
         # First get the counts
-        for a_spiketrain in desired_spiketrains:
+        for i, a_spiketrain in enumerate(desired_spiketrains):
             counts, _ = np.histogram(a_spiketrain, bins=bins)
             pop_rate += counts
+            firing_rates[i] = counts / binsz # Per bin compute firing rate per neuron
         # Then compute the rates
         pop_rate = pop_rate / (binsz * len(desired_spiketrains))  # kHz: spikes per milliseconds neurons
 
-        return pop_rate, bins
+        return pop_rate, firing_rates, bins
 
     def plot(self, binsz=50, window=(0, 10000), nucleus=None):
         """
@@ -97,6 +100,7 @@ class PSRH(object):
         # Set binsz and window as the instance attributes
         self.binsz = binsz
         self.window = window
+        self.nucleus = nucleus
 
         # Get and set desired_spiketrains as instance attribute
         [self.desired_spiketrains, _] = get_desired_spiketrains(self.spiketrains)
@@ -105,7 +109,7 @@ class PSRH(object):
         self.n_neurons = len(self.desired_spiketrains)
 
         # Compute PSRH and set the results as instance attributes
-        [self.pop_rate, self.bins] = \
+        [self.pop_rate, self.firing_rates, self.bins] = \
             self._compute_psrh(self.desired_spiketrains, binsz=binsz, window=window)
 
         t_axis = self.bins[:-1] + binsz / 2
@@ -174,4 +178,24 @@ class PSRH(object):
             "skewness": (stats.skew(self.pop_rate)).item(),
             "kurtosis": (stats.kurtosis(self.pop_rate)).item(),
         }
+
+    def plot_rate_variability(self):
+
+        t_axis = self.bins[:-1] + self.binsz / 2
+
+        mean_fr = np.mean(self.firing_rates, axis=0)
+        std_fr = np.std(self.firing_rates, axis=0)
+
+        plt.plot(t_axis, mean_fr, label="Mean", linewidth=2)
+        plt.fill_between(t_axis, mean_fr - std_fr, mean_fr + std_fr,
+                         alpha=0.3, label="±1 STD")
+        plt.grid(True, alpha=0.3)
+
+        plt.ylabel("Firing Rate (Hz)")
+        plt.xlabel("Time (ms)")
+
+        nucname = "" if self.nucleus is None else " in " + self.nucleus
+        plt.title("Population Firing Rate (Mean ± STD) Variability of " + str(self.n_neurons) + " neurons" + nucname)
+
+        plt.show()
 
