@@ -22,7 +22,7 @@ Loaders
    :maxdepth: 1
    :caption: Available file loaders:
 
-   loader.rst
+   cbgt/loader.rst
 
 
 Visual
