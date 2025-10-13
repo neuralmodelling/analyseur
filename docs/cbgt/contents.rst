@@ -22,7 +22,7 @@ Loaders
    :maxdepth: 2
    :caption: Available file loaders:
 
-   loader
+   loader.rst
 
 
 Visualizers
