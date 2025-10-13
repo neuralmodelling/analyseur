@@ -11,5 +11,5 @@ Available Functions
    :maxdepth: 2
    :caption: Available functions:
 
-   cbgt/contents.rst
+   cbgt/contents
 
