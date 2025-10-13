@@ -19,12 +19,12 @@ sys.path.insert(0, os.path.abspath("../src"))
 
 # -- Verify module structure -------------------------------------------------
 
-try:
-    from analyseur.cbgt.loader import *
-    print("Import successful!")
-    print([x for x in dir() if not x.startswith("_")])
-except Exception as e:
-    print(f"Import failed: {e}")
+# try:
+#     from analyseur.cbgt.loader import *
+#     print("Import successful!")
+#     print([x for x in dir() if not x.startswith("_")])
+# except Exception as e:
+#     print(f"Import failed: {e}")
 
 
 # -- Project information -----------------------------------------------------
