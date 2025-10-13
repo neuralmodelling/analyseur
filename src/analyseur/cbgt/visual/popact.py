@@ -11,6 +11,47 @@ import matplotlib.pyplot as plt
 from ..loader import get_desired_spiketrains
 
 class ActivityHeatmap(object):
+    """
+    The ActivityHeatmap Class is instantiated by passing
+
+    :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+    
+    +--------------------------------+--------------------------------------------------------------------+
+    | Methods                        | Return                                                             |
+    +================================+====================================================================+
+    | :py:meth:`.plot`               | - `matplotlib.pyplot.imshow` object                                |
+    +--------------------------------+--------------------------------------------------------------------+
+
+    * `popactivity` gives a spatio-temporal pattern across neurons
+    
+    **Use Case:**
+
+    1. Setup
+
+    ::
+
+      from  analyseur.cbgt.loader import LoadSpikeTimes
+      loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
+      spike_trains = loadST.get_spiketrains()
+
+      from analyseur.cbgt.visual.popact import ActivityHeatmap
+
+      my_pact = ActivityHeatmap(spike_trains)
+
+    2. Population Activity Heatmap for the entire simulation window
+
+    ::
+
+      my_pact.plot()
+
+    3. Population Activity Heatmap for desired window and bin size
+
+    ::
+
+      my_pact.plot(spike_trains, window=(0,50), binsz=1)
+      my_pact.plot(spike_trains, window=(0,50), binsz=0.05)
+
+    """
     def __init__(self, spiketrains):
         self.spiketrains = spiketrains
 
@@ -27,6 +68,21 @@ class ActivityHeatmap(object):
         return activity, bins
 
     def plot(self, binsz=50, window=(0, 10000), nucleus=None):
+        """
+
+        Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
+
+        :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+        :param binsz: defines the number of equal-width bins in the range [default: 50]
+        :param window: defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
+        :param nucleus: [OPTIONAL] None or name of the nucleus (string)
+        :return: object `matplotlib.pyplot.imshow <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html>`_
+    
+        * `window` controls the binning range as well as the spike counting window
+        * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
+        * `popactivity` gives a spatio-temporal pattern across neurons
+
+        """
         # Set binsz and window as the instance attributes
         self.binsz = binsz
         self.window = window
@@ -39,7 +95,7 @@ class ActivityHeatmap(object):
 
         # Compute activities in activity matrix and set the results as instance attributes
         [self.activity_matrix, self.bins] = \
-            self._compute_psrh(self.desired_spiketrains, binsz=binsz, window=window)
+            self._compute_activity(self.desired_spiketrains, binsz=binsz, window=window)
 
         t_axis = self.bins[:-1] + binsz / 2
 

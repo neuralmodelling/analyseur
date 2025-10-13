@@ -20,12 +20,14 @@ class PSRH(object):
     +--------------------------------+--------------------------------------------------------------------+
     | Methods                        | Return                                                             |
     +================================+====================================================================+
-    | :py:meth:`.plot`               | - `matplotlib.pyplot.hist` object                                  |
+    | :py:meth:`.plot`               | - `matplotlib.pyplot.plot` object                                  |
     +--------------------------------+--------------------------------------------------------------------+
-    | :py:meth:`.analytics` | - dictionary of population dynamics from the population rates   |
+    | :py:meth:`.analytics`          | - dictionary of population dynamics from the population rates      |
+    +--------------------------------+--------------------------------------------------------------------+
+    | :py:meth:`.plot_ratevar`       | - `matplotlib.pyplot.plot` object                                  |
     +--------------------------------+--------------------------------------------------------------------+
 
-    * The instance must first invoke :py:meth:`.plot` before calling either :py:meth:`.analytics_temporal` or :py:meth:`.analytics_rate`
+    * The instance must first invoke :py:meth:`.plot` before calling :py:meth:`.analytics` or :py:meth:`.plot_ratevar`
     * `psrh` gives a collective dynamics of the population ensemble
     
     **Use Case:**
@@ -60,6 +62,12 @@ class PSRH(object):
     ::
 
       my_psrh.analytics()
+      
+    5. View Firing Rate Variability
+    
+    ::
+
+      my_psrh.plot_ratevar()
 
     """
 
@@ -115,6 +123,7 @@ class PSRH(object):
         t_axis = self.bins[:-1] + binsz / 2
 
         # Plot
+        plt.figure(1)
         plt.plot(t_axis, self.pop_rate, linewidth=2)
         plt.fill_between(t_axis, self.pop_rate, alpha=0.3)
         plt.grid(True, alpha=0.3)
@@ -179,14 +188,26 @@ class PSRH(object):
             "kurtosis": (stats.kurtosis(self.pop_rate)).item(),
         }
 
-    def plot_rate_variability(self):
+    def plot_ratevar(self):
+        """
+        Displays the Population Spike Rate Variability in terms of:
+        Mean ± STD Variability and Coefficient of Variation.
 
+        :return: object `matplotlib.pyplot.plot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html>`_
+        
+        """
         t_axis = self.bins[:-1] + self.binsz / 2
+        linewidth = 2
 
         mean_fr = np.mean(self.firing_rates, axis=0)
         std_fr = np.std(self.firing_rates, axis=0)
 
-        plt.plot(t_axis, mean_fr, label="Mean", linewidth=2)
+        cv = std_fr / (mean_fr + 1e-8)
+
+        plt.figure(2)
+        # Plot
+        plt.subplot(1,2,1)
+        plt.plot(t_axis, mean_fr, label="Mean", linewidth=linewidth)
         plt.fill_between(t_axis, mean_fr - std_fr, mean_fr + std_fr,
                          alpha=0.3, label="±1 STD")
         plt.grid(True, alpha=0.3)
@@ -197,5 +218,14 @@ class PSRH(object):
         nucname = "" if self.nucleus is None else " in " + self.nucleus
         plt.title("Population Firing Rate (Mean ± STD) Variability of " + str(self.n_neurons) + " neurons" + nucname)
 
+        # Plot
+        plt.subplot(1,2,2)
+        plt.plot(t_axis, cv, linewidth=linewidth)
+        plt.grid(True, alpha=0.3)
+
+        plt.ylabel("Coefficient of Variation")
+        plt.xlabel("Time (ms)")
+
+        plt.tight_layout()
         plt.show()
 

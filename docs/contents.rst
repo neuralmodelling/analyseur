@@ -15,49 +15,24 @@ Notebook examples
 Available functions
 *******************
 
-Discriminate
-============
+Loaders
+=======
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Available file loaders:
+
+   loader.rst
+
+
+Visual
+======
 
 .. toctree::
    :maxdepth: 2
-   :caption: Available discrimination functions:
+   :caption: Available visualization functions:
    
-   spinnaker/discriminate/BuonomanoMerzenich.rst
-   
-   
-Associate
-=========
+   cbgt/visual/peristimulus.rst
+   cbgt/visual/popurate.rst
+   cbgt/visual/popact.rst
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Available association functions:
-   
-   spinnaker/associate/contents_nealThreeWay.rst
-   
-   
-Cognitive Maps
-==============
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Available cognitive map functions:
-   
-   spinnaker/cognitivemap/contents_nealplacesystem.rst
-   
-Cognitive Planning
-==================
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Available cognitive planning functions:
-   
-..   spinnaker/cognitiveplanning/nealcogplanner.rst
-   
-Special Functions (Utilities)
-=============================
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Contents:
-
-   contents_NEAL.rst
