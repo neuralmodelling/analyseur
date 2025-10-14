@@ -12,7 +12,8 @@ import numpy as np
 
 import re
 
-from ..loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketrains
+from analyseur.cbgt.loader import get_desired_spiketrains
 
 def _get_line_colors(colors=False, no_neurons=None):
     if colors:
