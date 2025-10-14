@@ -26,7 +26,7 @@ class PopAct(object):
     | :py:meth:`.plot`               | - `matplotlib.pyplot.imshow` object                                |
     +--------------------------------+--------------------------------------------------------------------+
 
-    * `popactivity` gives a spatio-temporal pattern across neurons
+    * `PopAct.plot` gives a spatio-temporal pattern across neurons
     
     **Use Case:**
 
