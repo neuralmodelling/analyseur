@@ -17,10 +17,10 @@ import sys
 sys.path.insert(0, os.path.abspath("../src"))
 
 # RTD detection
-on_rtd = os.environ.get("READTHEDOCS") == "True"
-if on_rtd:
-    # Ensure we can import the package
-    sys.path.insert(0, os.path.abspath(".."))
+# on_rtd = os.environ.get("READTHEDOCS") == "True"
+# if on_rtd:
+#     # Ensure we can import the package
+#     sys.path.insert(0, os.path.abspath(".."))
 
 
 # -- Verify module structure -------------------------------------------------
