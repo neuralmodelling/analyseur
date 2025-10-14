@@ -1,6 +1,8 @@
 # analyseur
 
+[analyseur](https://github.com/neuralmodelling/analyseur) is a library to study and analyze the results.
 
+[analyseur documentation](https://analyseur.readthedocs.io/en/latest/)
 
 ## Getting started
 
