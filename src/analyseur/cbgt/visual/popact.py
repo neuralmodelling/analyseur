@@ -14,9 +14,9 @@ from sklearn.preprocessing import StandardScaler
 # from ..loader import get_desired_spiketrains
 from analyseur.cbgt.loader import get_desired_spiketrains
 
-class PopActivity(object):
+class PopAct(object):
     """
-    The PopActivity Class is instantiated by passing
+    The PopAct Class is instantiated by passing
 
     :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     
@@ -38,9 +38,9 @@ class PopActivity(object):
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
       spike_trains = loadST.get_spiketrains()
 
-      from analyseur.cbgt.visual.popact import PopActivity
+      from analyseur.cbgt.visual.popact import PopAct
 
-      my_pact = PopActivity(spike_trains)
+      my_pact = PopAct(spike_trains)
 
     2. Population Activity Heatmap for the entire simulation window
 
