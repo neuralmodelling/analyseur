@@ -127,20 +127,21 @@ class PopActivity(object):
 
         return plt
 
-    def plot_pcatraj(self, n_comp=3):
+    def plot_pcatraj(self, n_comp=3, nucleus=None):
         """
         PCA Trajectory of population activity
         """
-        self.t_axis = self.bins[:-1] + self.binsz / 2
         [self.scaler, self.pca, self.pca_traj] = self._compute_PCA(self.activity_matrix, n_comp=n_comp)
+        self.t_points = np.linspace(self.window[0], self.window[1], self.pca_traj.shape[0])
+
         # Plot
         fig = plt.figure(2)
 
         # PC1 vs PC2
-        ax1 = fig.add_subplot(131)
+        ax1 = fig.add_subplot(2,2,3)
 
         scatter = ax1.scatter(self.pca_traj[:,0], self.pca_traj[:,1],
-                              c=self.t_axis, cmap="viridis", s=50)
+                              c=self.t_points, cmap="viridis", s=50, alpha=0.7)
         plt.colorbar(scatter, ax=ax1, label="Time (ms)")
 
         ax1.set_xlabel("PC1 ({:.1f}%".format(self.pca.explained_variance_ratio_[0]*100))
@@ -148,9 +149,9 @@ class PopActivity(object):
         ax1.set_title("PCA Trajectory: PC1 vs PC2")
 
         # PC1 vs Time
-        ax2 = fig.add_subplot(132)
+        ax2 = fig.add_subplot(2,1,1)
 
-        ax2.plot(self.t_axis, self.pca_traj[:,0], linewidth=2)
+        ax2.plot(self.t_points, self.pca_traj[:,0], linewidth=2)
         ax2.grid(True, alpha=0.3)
 
         ax2.set_xlabel("Time (ms)")
@@ -158,7 +159,7 @@ class PopActivity(object):
         ax2.set_title("PC1 Over Time")
 
         # Variance explained?
-        ax3 = fig.add_subplot(133)
+        ax3 = fig.add_subplot(2,2,4)
 
         components = range(1, min(10, len(self.pca.explained_variance_ratio_)) + 1)
         ax3.bar(components, self.pca.explained_variance_ratio_[:len(components)])
@@ -167,13 +168,16 @@ class PopActivity(object):
         ax3.set_ylabel("Variance Explained")
         ax3.set_title("PCA Variance Explained")
 
+        nucname = "" if nucleus is None else " in " + nucleus
+        fig.suptitle(' Principal Component Analysis of ' + str(self.n_neurons) + " neurons" + nucname, fontsize=14)
+
         plt.tight_layout()
         plt.show()
 
     def analytics(self):
         return {
             "activity": self.activity_matrix,
-            "time_points": self.t_axis,
+            "time_points": self.t_points,
             "scaler": self.scaler,
             "pca": self.pca,
             "pca_trajectory": self.pca_traj,
