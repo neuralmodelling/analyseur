@@ -31,6 +31,9 @@ dependencies = [
     "sklearn",
 ]
 
+[tool.setuptools]
+packages = {find = {where = ["src"]}}
+
 [project.urls]
 "Homepage" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"
 "Source" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"
