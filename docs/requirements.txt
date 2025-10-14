@@ -1,3 +1,2 @@
---no-deps -e .
 nbsphinx
 recommonmark
