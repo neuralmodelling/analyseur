@@ -8,11 +8,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
 from ..loader import get_desired_spiketrains
 
-class ActivityHeatmap(object):
+class PopActivity(object):
     """
-    The ActivityHeatmap Class is instantiated by passing
+    The PopActivity Class is instantiated by passing
 
     :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     
@@ -34,9 +37,9 @@ class ActivityHeatmap(object):
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
       spike_trains = loadST.get_spiketrains()
 
-      from analyseur.cbgt.visual.popact import ActivityHeatmap
+      from analyseur.cbgt.visual.popact import PopActivity
 
-      my_pact = ActivityHeatmap(spike_trains)
+      my_pact = PopActivity(spike_trains)
 
     2. Population Activity Heatmap for the entire simulation window
 
@@ -55,6 +58,14 @@ class ActivityHeatmap(object):
     def __init__(self, spiketrains):
         self.spiketrains = spiketrains
 
+    def _compute_PCA(self, activity_matrix, n_comp=3):
+        scaler = StandardScaler()
+        scaled_activity = scaler.fit_transform(activity_matrix)
+        pca = PCA(n_components=n_comp)
+        pca_trajectory = pca.fit_transform(scaled_activity)
+
+        return scaler, pca, pca_trajectory
+
     def _compute_activity(self, desired_spiketrains, binsz=50, window=(0, 10000)):
         bins = np.arange(window[0], window[1] + binsz, binsz)
 
@@ -69,7 +80,6 @@ class ActivityHeatmap(object):
 
     def plot(self, binsz=50, window=(0, 10000), nucleus=None):
         """
-
         Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
 
         :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
@@ -100,6 +110,7 @@ class ActivityHeatmap(object):
         t_axis = self.bins[:-1] + binsz / 2
 
         # Plot
+        plt.figure(1)
         plt.imshow(self.activity_matrix, aspect="auto", cmap="hot",
                    # extent=[window[0], window[1], n_neurons, 0] # if neuron 0 is at the top by default
                    extent=[window[0], window[1], 0, self.n_neurons])
@@ -114,3 +125,56 @@ class ActivityHeatmap(object):
         plt.show()
 
         return plt
+
+    def plot_pcatraj(self, n_comp=3):
+        """
+        PCA Trajectory of population activity
+        """
+        self.t_axis = self.bins[:-1] + self.binsz / 2
+        [self.scaler, self.pca, self.pca_traj] = self._compute_PCA(self.activity_matrix, n_comp=n_comp)
+        # Plot
+        fig = plt.figure(2)
+
+        # PC1 vs PC2
+        ax1 = fig.add_subplot(131)
+
+        scatter = ax1.scatter(self.pca_traj[:,0], self.pca_traj[:,1],
+                              c=self.t_axis, cmap="viridis", s=50)
+        plt.colorbar(scatter, ax=ax1, label="Time (ms)")
+
+        ax1.set_xlabel("PC1 ({:.1f}%".format(self.pca.explained_variance_ratio_[0]*100))
+        ax1.set_ylabel("PC2 ({:.1f}%".format(self.pca.explained_variance_ratio_[1] * 100))
+        ax1.set_title("PCA Trajectory: PC1 vs PC2")
+
+        # PC1 vs Time
+        ax2 = fig.add_subplot(132)
+
+        ax2.plot(self.t_axis, self.pca_traj[:,0], linewidth=2)
+        ax2.grid(True, alpha=0.3)
+
+        ax2.set_xlabel("Time (ms)")
+        ax2.set_ylabel("PC1")
+        ax2.set_title("PC1 Over Time")
+
+        # Variance explained?
+        ax3 = fig.add_subplot(133)
+
+        components = range(1, min(10, len(self.pca.explained_variance_ratio_)) + 1)
+        ax3.bar(components, self.pca.explained_variance_ratio_[:len(components)])
+
+        ax3.set_xlabel("Principal Component")
+        ax3.set_ylabel("Variance Explained")
+        ax3.set_title("PCA Variance Explained")
+
+        plt.tight_layout()
+        plt.show()
+
+    def analytics(self):
+        return {
+            "activity": self.activity_matrix,
+            "time_points": self.t_axis,
+            "scaler": self.scaler,
+            "pca": self.pca,
+            "pca_trajectory": self.pca_traj,
+            "explained_variance": self.pca.explained_variance_ratio_,
+        }
