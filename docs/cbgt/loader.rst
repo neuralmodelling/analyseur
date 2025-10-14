@@ -1,5 +1,5 @@
 Loader class for CBGT results (in respective files)
 ===================================================
 
-.. automodule:: analyseur.cbgt.loader
+.. automodule:: src.analyseur.cbgt.loader
    :members:
