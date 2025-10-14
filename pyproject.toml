@@ -28,8 +28,11 @@ dependencies = [
     "pandas",
     "matplotlib",
     "scipy",
-    "sklearn",
+    "scikit-learn", # import sklearn
 ]
+
+#[tool.setuptools]
+#packages = {find = {where = ["src"]}}
 
 [project.urls]
 "Homepage" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"

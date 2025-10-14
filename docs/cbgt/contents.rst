@@ -21,4 +21,5 @@ Visualizers
    visual/peristimulus.rst
    visual/popurate.rst
    visual/popact.rst
+   visual/tabular.rst
 

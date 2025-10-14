@@ -5,9 +5,10 @@
 # This contains function for loading the files
 #
 
-import numpy as npw
+import numpy as np
 
-from compute_shared import compute_grand_mean as cgm
+# from compute_shared import compute_grand_mean as cgm
+from analyseur.cbgt.stats.compute_shared import compute_grand_mean as cgm
 
 class Variations(object):
     """

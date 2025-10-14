@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from ..loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketrains
+from analyseur.cbgt.loader import get_desired_spiketrains
 
 class PopActivity(object):
     """

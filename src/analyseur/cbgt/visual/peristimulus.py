@@ -8,7 +8,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ..loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketrains
+from analyseur.cbgt.loader import get_desired_spiketrains
 
 class PSTH(object):
     """
