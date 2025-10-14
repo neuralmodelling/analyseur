@@ -7,6 +7,9 @@ For `CBGT <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 Available Functions
 ===================
 
+For CBGT
+--------
+
 .. toctree::
    :maxdepth: 2
    :caption: Available functions:
