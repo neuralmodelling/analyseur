@@ -11,14 +11,14 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-# from ..loader import get_desired_spiketrains
-from analyseur.cbgt.loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketimes_superset
+from analyseur.cbgt.loader import get_desired_spiketimes_subset
 
 class PopAct(object):
     """
     The PopAct Class is instantiated by passing
 
-    :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     
     +--------------------------------+--------------------------------------------------------------------+
     | Methods                        | Return                                                             |
@@ -36,11 +36,11 @@ class PopAct(object):
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
-      spike_trains = loadST.get_spiketrains()
+      spiketimes_superset = loadST.get_spiketimes_superset()
 
       from analyseur.cbgt.visual.popact import PopAct
 
-      my_pact = PopAct(spike_trains)
+      my_pact = PopAct(spiketimes_superset)
 
     2. Population Activity Heatmap for the entire simulation window
 
@@ -56,8 +56,8 @@ class PopAct(object):
       my_pact.plot(spike_trains, window=(0,50), binsz=0.05)
 
     """
-    def __init__(self, spiketrains):
-        self.spiketrains = spiketrains
+    def __init__(self, spiketimes_superset):
+        self.spiketimes_superset = spiketimes_superset
 
     def _compute_PCA(self, activity_matrix, n_comp=3):
         scaler = StandardScaler()
@@ -67,26 +67,27 @@ class PopAct(object):
 
         return scaler, pca, pca_trajectory
 
-    def _compute_activity(self, desired_spiketrains, binsz=50, window=(0, 10000)):
+    def _compute_activity(self, desired_spiketimes_superset, binsz=50, window=(0, 10000)):
         bins = np.arange(window[0], window[1] + binsz, binsz)
 
         # Activity Matrix
-        activity = np.zeros((len(desired_spiketrains), len(bins) - 1))
-        for i, spikes in enumerate(desired_spiketrains):
+        activity = np.zeros((len(desired_spiketimes_superset), len(bins) - 1))
+        for i, spikes in enumerate(desired_spiketimes_superset):
             counts, _ = np.histogram(spikes, bins=bins)
             activity[i] = counts
         activity = activity[::-1, :]  # reverse it so that neuron 0 is at the bottom
 
         return activity, bins
 
-    def plot(self, binsz=50, window=(0, 10000), nucleus=None):
+    def plot(self, binsz=50, window=(0, 10000), nucleus=None, show=True):
         """
         Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
 
-        :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+        :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
         :param binsz: defines the number of equal-width bins in the range [default: 50]
         :param window: defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: [OPTIONAL] None or name of the nucleus (string)
+        :param show: boolean [default: True]
         :return: object `matplotlib.pyplot.imshow <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html>`_
     
         * `window` controls the binning range as well as the spike counting window
@@ -98,15 +99,15 @@ class PopAct(object):
         self.binsz = binsz
         self.window = window
 
-        # Get and set desired_spiketrains as instance attribute
-        [self.desired_spiketrains, _] = get_desired_spiketrains(self.spiketrains)
-        # NOTE: desired_spiketrains as nested list and not numpy array because
+        # Get and set desired_spiketimes_superset as instance attribute
+        [self.desired_spiketimes_superset, _] = get_desired_spiketimes_subset(self.spiketimes_superset)
+        # NOTE: desired_spiketimes_superset as nested list and not numpy array because
         # each neuron may have variable length of spike times
-        self.n_neurons = len(self.desired_spiketrains)
+        self.n_neurons = len(self.desired_spiketimes_superset)
 
         # Compute activities in activity matrix and set the results as instance attributes
         [self.activity_matrix, self.bins] = \
-            self._compute_activity(self.desired_spiketrains, binsz=binsz, window=window)
+            self._compute_activity(self.desired_spiketimes_superset, binsz=binsz, window=window)
 
         t_axis = self.bins[:-1] + binsz / 2
 
@@ -123,11 +124,12 @@ class PopAct(object):
         nucname = "" if nucleus is None else " in " + nucleus
         plt.title("Population Activity Heatmap of " + str(self.n_neurons) + " neurons" + nucname)
 
-        plt.show()
+        if show:
+            plt.show()
 
         return plt
 
-    def plot_pcatraj(self, n_comp=3, nucleus=None):
+    def plot_pcatraj(self, n_comp=3, nucleus=None, show=True):
         """
         PCA Trajectory of population activity
         """
@@ -172,14 +174,16 @@ class PopAct(object):
         fig.suptitle(' Principal Component Analysis of ' + str(self.n_neurons) + " neurons" + nucname, fontsize=14)
 
         plt.tight_layout()
-        plt.show()
+
+        if show:
+            plt.show()
 
     def analytics(self):
         return {
             "activity": self.activity_matrix,
             "time_points": self.t_points,
             "scaler": self.scaler,
-            "pca": self.pca,
+            "pca": self.pca, # if n_comp=0.9 => dimensionality = self.pca.n_components_
             "pca_trajectory": self.pca_traj,
             "explained_variance": self.pca.explained_variance_ratio_,
         }

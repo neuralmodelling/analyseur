@@ -9,14 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# from ..loader import get_desired_spiketrains
-from analyseur.cbgt.loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketimes_subset
+from analyseur.cbgt.loader import get_desired_spiketimes_subset
 
 class PSRH(object):
     """
     The Population Spike Rate Histogram (PSRH) Class is instantiated by passing
 
-    :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     
     +--------------------------------+--------------------------------------------------------------------+
     | Methods                        | Return                                                             |
@@ -39,11 +39,11 @@ class PSRH(object):
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
-      spike_trains = loadST.get_spiketrains()
+      spiketimes_superset = loadST.get_spiketimes_superset()
 
       from analyseur.cbgt.visual.popurate import PSRH
 
-      my_psrh = PSRH(spike_trains)
+      my_psrh = PSRH(spiketimes_superset)
 
     2. Population Spike Rate Histogram for the whole simulation window
 
@@ -72,27 +72,27 @@ class PSRH(object):
 
     """
 
-    def __init__(self, spiketrains):
-        self.spiketrains = spiketrains
+    def __init__(self, spiketimes_superset):
+        self.spiketimes_superset = spiketimes_superset
 
-    def _compute_psrh(self, desired_spiketrains, binsz=50, window=(0, 10000)):
+    def _compute_psrh(self, desired_spiketimes_subset, binsz=50, window=(0, 10000)):
         bins = np.arange(window[0], window[1] + binsz, binsz)
 
         # Population Rate Histogram
         pop_rate = np.zeros(len(bins) - 1)
         # Firing rate variability
-        firing_rates = np.zeros((len(desired_spiketrains), len(bins)-1))
+        firing_rates = np.zeros((len(desired_spiketimes_subset), len(bins)-1))
         # First get the counts
-        for i, a_spiketrain in enumerate(desired_spiketrains):
+        for i, a_spiketrain in enumerate(desired_spiketimes_subset):
             counts, _ = np.histogram(a_spiketrain, bins=bins)
             pop_rate += counts
             firing_rates[i] = counts / binsz # Per bin compute firing rate per neuron
         # Then compute the rates
-        pop_rate = pop_rate / (binsz * len(desired_spiketrains))  # kHz: spikes per milliseconds neurons
+        pop_rate = pop_rate / (binsz * len(desired_spiketimes_subset))  # kHz: spikes per milliseconds neurons
 
         return pop_rate, firing_rates, bins
 
-    def plot(self, binsz=50, window=(0, 10000), nucleus=None):
+    def plot(self, binsz=50, window=(0, 10000), nucleus=None, show=True):
         """
         Displays the Population Spike Rate Histogram (PSRH) of the given spike times
         and returns the plot figure (to save if necessary).
@@ -100,6 +100,7 @@ class PSRH(object):
         :param binsz: integer or float; defines the number of equal-width bins in the range [default: 50]
         :param window: 2-tuple; defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: string; [OPTIONAL] None or name of the nucleus
+        :param show: boolean [default: True]
         :return: object `matplotlib.pyplot.plot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html>`_
         
         * `window` controls the binning range as well as the spike counting window
@@ -111,15 +112,15 @@ class PSRH(object):
         self.window = window
         self.nucleus = nucleus
 
-        # Get and set desired_spiketrains as instance attribute
-        [self.desired_spiketrains, _] = get_desired_spiketrains(self.spiketrains)
-        # NOTE: desired_spiketrains as nested list and not numpy array because
+        # Get and set desired_spiketimes_subset as instance attribute
+        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset)
+        # NOTE: desired_spiketimes_subset as nested list and not numpy array because
         # each neuron may have variable length of spike times
-        self.n_neurons = len(self.desired_spiketrains)
+        self.n_neurons = len(self.desired_spiketimes_subset)
 
         # Compute PSRH and set the results as instance attributes
         [self.pop_rate, self.firing_rates, self.bins] = \
-            self._compute_psrh(self.desired_spiketrains, binsz=binsz, window=window)
+            self._compute_psrh(self.desired_spiketimes_subset, binsz=binsz, window=window)
 
         t_axis = self.bins[:-1] + binsz / 2
 
@@ -135,7 +136,8 @@ class PSRH(object):
         nucname = "" if nucleus is None else " in " + nucleus
         plt.title("Population Spiking Rate Histogram of " + str(self.n_neurons) + " neurons" + nucname)
 
-        plt.show()
+        if show:
+            plt.show()
 
         return plt
 

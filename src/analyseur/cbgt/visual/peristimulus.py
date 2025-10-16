@@ -8,8 +8,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# from ..loader import get_desired_spiketrains
-from analyseur.cbgt.loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketimes_subset
+from analyseur.cbgt.loader import get_desired_spiketimes_subset
 
 class PSTH(object):
     """
@@ -38,11 +38,11 @@ class PSTH(object):
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
-      spike_trains = loadST.get_spiketrains()
+      spiketimes_superset = loadST.get_spiketrains()
 
       from analyseur.cbgt.visual.peristimulus import PSTH
 
-      my_psth = PSTH(spike_trains)
+      my_psth = PSTH(spiketimes_superset)
 
     2. Peri-Stimulus Time Histogram for the whole simulation window
 
@@ -66,21 +66,21 @@ class PSTH(object):
 
     """
 
-    def __init__(self, spiketrains):
-        self.spiketrains = spiketrains
+    def __init__(self, spiketimes_superset):
+        self.spiketimes_superset = spiketimes_superset
 
-    def _compute_true_avg_firing_rate(self, window, desired_spiketrains):
+    def _compute_true_avg_firing_rate(self, window, spiketimes_superset):
         """
         Computes the average of each neuron's firing rate over the entire period
 
         :param window:
-        :param desired_spiketrains:
+        :param spiketimes_superset:
         :return: dictionary with keys: firing_rates, mean_firing_rate, std_firing_rate
         """
         firing_rates = []
         total_duration = window[1] - window[0]
 
-        for indiv_spiketimes in desired_spiketrains:
+        for indiv_spiketimes in spiketimes_superset:
             spiketimes = np.array(indiv_spiketimes)
             spikes_in_window = spiketimes[(spiketimes >= window[0]) & (spiketimes <= window[1])]
             indiv_rate = len(spikes_in_window) / total_duration # kHz
@@ -95,8 +95,8 @@ class PSTH(object):
     def _compute_pop_firing_rate(self, n_neurons, binsz, pop_counts):
         return pop_counts / (n_neurons * binsz)  # in kHz
 
-    def _compute_psth(self, desired_spiketrains, binsz=50, window=(0, 10000)):
-        allspikes = np.concatenate(desired_spiketrains)
+    def _compute_psth(self, spiketimes_superset, binsz=50, window=(0, 10000)):
+        allspikes = np.concatenate(spiketimes_superset)
         allspikes_in_window = allspikes[(allspikes >= window[0]) &
                                         (allspikes <= window[1])]  # Memory efficient
 
@@ -109,12 +109,12 @@ class PSTH(object):
         bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2 # should be = (bins[:-1] + bins[1:]) / 2
 
         # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)
-        popfirerates = self._compute_pop_firing_rate(len(desired_spiketrains), binsz, counts)
-        true_avg_rate = self._compute_true_avg_firing_rate(window, desired_spiketrains)
+        popfirerates = self._compute_pop_firing_rate(len(spiketimes_superset), binsz, counts)
+        true_avg_rate = self._compute_true_avg_firing_rate(window, spiketimes_superset)
 
         return counts, bin_centers, popfirerates, true_avg_rate, allspikes_in_window
 
-    def plot(self, binsz=50, window=(0, 10000), nucleus=None):
+    def plot(self, binsz=50, window=(0, 10000), nucleus=None, show=True):
         """
         Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times
         and returns the plot figure (to save if necessary).
@@ -122,6 +122,7 @@ class PSTH(object):
         :param binsz: integer or float; defines the number of equal-width bins in the range [default: 50]
         :param window: 2-tuple; defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: string; [OPTIONAL] None or name of the nucleus
+        :param show: boolean [default: True]
         :return: object `matplotlib.pyplot.bar <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html>`_
         
         * `window` controls the binning range as well as the spike counting window
@@ -132,16 +133,16 @@ class PSTH(object):
         self.binsz = binsz
         self.window = window
 
-        # Get and set desired_spiketrains as instance attribute
-        [self.desired_spiketrains, _] = get_desired_spiketrains(self.spiketrains)
-        # NOTE: desired_spiketrains as nested list and not numpy array because
+        # Get and set desired_spiketimes_subset as instance attribute
+        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset)
+        # NOTE: desired_spiketimes_subset as nested list and not numpy array because
         # each neuron may have variable length of spike times
-        self.n_neurons = len(self.desired_spiketrains)
+        self.n_neurons = len(self.desired_spiketimes_subset)
 
         # Compute PSTH and set the results as instance attributes
         [self.counts, self.bin_centers, self.popfirerates,
          self.true_avg_rate, self.allspikes_in_window] = \
-            self._compute_psth(self.desired_spiketrains, binsz=binsz, window=window)
+            self._compute_psth(self.desired_spiketimes_subset, binsz=binsz, window=window)
 
         # Plot
         plt.bar(self.bin_centers, self.counts, width=binsz,
@@ -156,7 +157,8 @@ class PSTH(object):
                   "\n (mean firing rate within the window = "
                   + str(self.true_avg_rate["mean_firing_rate"]) + " kHz)")
 
-        plt.show()
+        if show:
+            plt.show()
         
         return plt
 
@@ -223,7 +225,7 @@ class PSTH(object):
         first_spike_times = [np.min(np.array(indiv_spiketimes)[np.array(indiv_spiketimes) >= stimulus_onset])
                              if np.any(np.array(indiv_spiketimes) >= stimulus_onset)
                              else np.inf
-                             for indiv_spiketimes in self.desired_spiketrains]
+                             for indiv_spiketimes in self.desired_spiketimes_subset]
         first_spike_times = [t for t in first_spike_times if t != np.inf]
 
         if len(first_spike_times) > 0:
@@ -282,7 +284,7 @@ class PSTH(object):
         baseline_rates = []
         response_rates = []
 
-        for indiv_spiketimes in self.desired_spiketrains:
+        for indiv_spiketimes in self.desired_spiketimes_subset:
             spiketimes = np.array(indiv_spiketimes)
 
             # Rates: Baseline vs Response

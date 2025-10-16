@@ -17,7 +17,7 @@ class InterSpikeInterval(object):
     +------------------------------+-------------------------------------------------------+
     | Methods                      | Argument                                              |
     +==============================+=======================================================+
-    | :py:meth:`.compute`          | - :param all_neurons_spiketrains: Dictionary returned |
+    | :py:meth:`.compute`          | - :param all_neurons_spiketimes: Dictionary returned |
     |                              | using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`  |
     +------------------------------+-------------------------------------------------------+
     | :py:meth:`.mean_freqs`       | - :param all_neurons_isi: Dictionary returned         |
@@ -30,11 +30,11 @@ class InterSpikeInterval(object):
     """
 
     @classmethod
-    def compute(cls, all_neurons_spiketrains=None):
+    def compute(cls, all_neurons_spiketimes=None):
         """
         Returns the interspike interval for all individual neurons.
 
-        :param all_neurons_spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+        :param all_neurons_spiketimes: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
         :return: dictionary of individual neurons whose values are their respective interspike interval
 
         .. table:: Formula
@@ -54,7 +54,7 @@ class InterSpikeInterval(object):
         """
         interspike_intervals = {}
 
-        for n_id, spiketimes in all_neurons_spiketrains.items():
+        for n_id, spiketimes in all_neurons_spiketimes.items():
             interspike_intervals[n_id] = np.diff(spiketimes)
 
         return interspike_intervals

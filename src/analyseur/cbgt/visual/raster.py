@@ -12,8 +12,8 @@ import numpy as np
 
 import re
 
-# from ..loader import get_desired_spiketrains
-from analyseur.cbgt.loader import get_desired_spiketrains
+# from ..loader import get_desired_spiketimes_superset
+from analyseur.cbgt.loader import get_desired_spiketimes_subset
 
 def _get_line_colors(colors=False, no_neurons=None):
     if colors:
@@ -21,11 +21,11 @@ def _get_line_colors(colors=False, no_neurons=None):
     else:
         return "black"
 
-def rasterplot(spiketrains, colors=False, neurons="all", nucleus=None):
+def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     """
     Displays the rasterplot of the given spike times and returns the plot figure (to save if necessary).
 
-    :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     :param colors: `[OPTIONAL] False` [default] or True
     :param neurons: [OPTIONAL] "all" [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
     :param nucleus: [OPTIONAL] None or name of the nucleus (string)
@@ -39,7 +39,7 @@ def rasterplot(spiketrains, colors=False, neurons="all", nucleus=None):
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
-      spike_trains = loadST.get_spiketrains()
+      spiketimes_superset = loadST.get_spiketimes_superset()
 
       from analyseur.cbgt.visual.raster import rasterplot
 
@@ -47,49 +47,55 @@ def rasterplot(spiketrains, colors=False, neurons="all", nucleus=None):
 
     ::
 
-      rasterplot(spike_trains)
+      rasterplot(spiketimes_superset)
 
     3. Raster for first 50 neurons
 
     ::
 
-      rasterplot(spike_trains, neurons=range(50))
+      rasterplot(spiketimes_superset, neurons=range(50))
 
     4. Raster for second 50 neurons
 
     ::
 
-      rasterplot(spike_trains, neurons=range(50, 100))
+      rasterplot(spiketimes_superset, neurons=range(50, 100))
 
     """
+    [desired_spiketimes_subset, yticks] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+    n_neurons = len(desired_spiketimes_subset)
+
+    linecolors = _get_line_colors(colors=colors, no_neurons=n_neurons)
+
     # ====== PLOT PARAMETERS ======
+    n_yticks = 20
     linelengths = 0.5  # default: 1
     linewidths = 0.5  # default: 1.5
-    ytick_trigger = 50
-    ytick_interval = 10
-
-    [desired_spiketrains, yticks] = get_desired_spiketrains(spiketrains, neurons=neurons)
-    linecolors = _get_line_colors(colors=colors, no_neurons=len(desired_spiketrains))
+    # ytick_trigger = 50
+    # ytick_interval = 10
+    ytick_interval = int(n_neurons / n_yticks)
 
     # lineoffsets = 0.5  # default: 1
-    lineoffsets = np.arange(1, len(desired_spiketrains) + 1)
+    lineoffsets = np.arange(1, n_neurons + 1)
 
-    plt.eventplot(desired_spiketrains, colors=linecolors,
+    plt.eventplot(desired_spiketimes_subset, colors=linecolors,
                   linelengths=linelengths, linewidths=linewidths,
                   lineoffsets=lineoffsets,
                   orientation="horizontal", alpha=None)
 
-    if len(desired_spiketrains) > ytick_trigger:
-        # plt.yticks([])
-        plt.yticks(lineoffsets[::ytick_interval], yticks[::ytick_interval])
-    else:
-        plt.yticks(lineoffsets, yticks)
+    # if n_neurons > ytick_trigger:
+    #     # plt.yticks([])
+    #     plt.yticks(lineoffsets[::ytick_interval], yticks[::ytick_interval])
+    # else:
+    #     plt.yticks(lineoffsets, yticks)
+
+    plt.yticks(lineoffsets[::ytick_interval], yticks[::ytick_interval])
 
     plt.ylabel("neurons")
     plt.xlabel("Time (ms)")
 
     nucname = "" if nucleus is None else " in "+nucleus
-    allno = str(len(desired_spiketrains))
+    allno = str(n_neurons)
     if neurons=="all":
         plt.title("Raster of all (" + allno + ") the neurons" + nucname)
     else:
