@@ -33,12 +33,12 @@ class LoadSpikeTimes(object):
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
                    + "spike times in milliseconds for all the neurons recorded." )
 
-    pattern_with_nucleus_name = r"\_(.*?)\."
-    nuclei_ctx = ["CSN", "PTN", "IN"]
-    nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN"]
-    significant_digits = 5
-    ms_to_s = 1000  # multiplicand
-    t_start_recording = 2000  # subtrahend
+    _pattern_with_nucleus_name = r"\_(.*?)\."
+    _nuclei_ctx = ["CSN", "PTN", "IN"]
+    _nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN"]
+    _significant_digits = 5
+    _ms_to_s = 1000  # multiplicand
+    _t_start_recording = 2000  # subtrahend
 
 
     def __init__(self, full_filepath=" "):
@@ -50,7 +50,7 @@ class LoadSpikeTimes(object):
         """Extracts <nucleus> name from `spikes_<nucleus>.csv`"""
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
-        match = re.search(self.pattern_with_nucleus_name, filename)
+        match = re.search(self._pattern_with_nucleus_name, filename)
 
         if match:
             nucleus = match.group(1)
@@ -65,9 +65,9 @@ class LoadSpikeTimes(object):
         """Returns region name for respective nucleus name for which the spike times are for in the file."""
         nucleus = self._extract_nucleus_name(filename)
 
-        if nucleus in self.nuclei_ctx:
+        if nucleus in self._nuclei_ctx:
             region = "cortex"
-        elif nucleus in self.nuclei_bg:
+        elif nucleus in self._nuclei_bg:
             region = "bg"
         else:
             region = "thalamus"
@@ -79,11 +79,11 @@ class LoadSpikeTimes(object):
         """For respective region, returns factors (multiplicand and subtrahend)
         to set spike times unit to milliseconds."""
         if region in ("bg", "thalamus"):
-            multiplicand = self.ms_to_s
+            multiplicand = self._ms_to_s
         else:
             multiplicand = 1
 
-        subtrahend = self.t_start_recording
+        subtrahend = self._t_start_recording
 
         return [multiplicand, subtrahend]
 
@@ -103,7 +103,7 @@ class LoadSpikeTimes(object):
         """Returns the spike times (numpy.array data type) in milliseconds for a given neuron."""
         raw_neuron_id_times = dataframe[ dataframe["i"] == neuron_id ]["t"]
 
-        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.significant_digits)).values
+        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self._significant_digits)).values
                        * multiplicand - subtrahend)
 
         return spike_times
@@ -121,39 +121,10 @@ class LoadSpikeTimes(object):
         region = self._get_region_name(self.filename)
         [multiplicand, subtrahend] = self._get_multiplicand_subtrahend(region)
 
-        spiketrain = {"n" + str(min_id):
-                          self._get_spike_times_for_a_neuron(dataframe, min_id, multiplicand, subtrahend)}
+        spiketimes_superset = {"n" + str(min_id):
+                                   self._get_spike_times_for_a_neuron(dataframe, min_id, multiplicand, subtrahend)}
 
         for n_id in range(1, max_id + 1):
-            spiketrain["n" + str(n_id)] = self._get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
+            spiketimes_superset["n" + str(n_id)] = self._get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
 
-        return spiketrain
-
-def _extract_neuron_no(neuron_id):
-    match = re.search(r'n(\d+)', neuron_id)
-    return int(match.group(1))
-
-def get_desired_spiketimes_subset(spiketimes_superset, neurons="all"):
-    """
-    Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
-    and its associated yticks (list of neuron labels corresponding to the spike trains).
-
-    :param spiketimes_superset: Dictionary returned using :py:class:`LoadSpikeTimes`
-    :param neurons: [OPTIONAL] None or name of the nucleus (string)
-    :return: nested_list, label_list
-    """
-    desired_spiketimes_subset = []
-    yticks = []
-
-    if neurons=="all":
-        for nX, data in spiketimes_superset.items():
-            desired_spiketimes_subset.append( list(data) )
-            # yticks.append( _extract_neuron_no(nX) )
-            yticks.append(nX)
-    else: # neurons = range(a, b) or neurons = [1, 4, 5, 9]
-        for i in neurons:
-            neuron_id = "n" + str(i)
-            desired_spiketimes_subset.append( list(spiketimes_superset[neuron_id]) )
-            # yticks.append( _extract_neuron_no(neuron_id) )
-            yticks.append(neuron_id)
-    return desired_spiketimes_subset, yticks
+        return spiketimes_superset

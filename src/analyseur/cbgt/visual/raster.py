@@ -13,7 +13,7 @@ import numpy as np
 import re
 
 # from ..loader import get_desired_spiketimes_superset
-from analyseur.cbgt.loader import get_desired_spiketimes_subset
+from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 def _get_line_colors(colors=False, no_neurons=None):
     if colors:

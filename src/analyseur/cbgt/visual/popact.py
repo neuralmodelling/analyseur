@@ -12,7 +12,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 # from ..loader import get_desired_spiketimes_superset
-from analyseur.cbgt.loader import get_desired_spiketimes_subset
+from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 class PopAct(object):
     """

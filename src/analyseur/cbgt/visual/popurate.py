@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 # from ..loader import get_desired_spiketimes_subset
-from analyseur.cbgt.loader import get_desired_spiketimes_subset
+from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 class PSRH(object):
     """

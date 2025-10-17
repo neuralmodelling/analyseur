@@ -12,7 +12,7 @@ from scipy.stats import gaussian_kde
 
 import re
 
-from analyseur.cbgt.loader import get_desired_spiketimes_subset
+from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.visual.tabular import SpikingStats
 
 
