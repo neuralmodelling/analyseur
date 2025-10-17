@@ -101,7 +101,7 @@ class PSRH(object):
         :param window: 2-tuple; defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: string; [OPTIONAL] None or name of the nucleus
         :param show: boolean [default: True]
-        :return: object `matplotlib.pyplot.plot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html>`_
+        :return: object `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
         
         * `window` controls the binning range as well as the spike counting window
         * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
@@ -113,7 +113,7 @@ class PSRH(object):
         self.nucleus = nucleus
 
         # Get and set desired_spiketimes_subset as instance attribute
-        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset)
+        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
         # NOTE: desired_spiketimes_subset as nested list and not numpy array because
         # each neuron may have variable length of spike times
         self.n_neurons = len(self.desired_spiketimes_subset)
@@ -125,21 +125,21 @@ class PSRH(object):
         t_axis = self.bins[:-1] + binsz / 2
 
         # Plot
-        plt.figure(1)
-        plt.plot(t_axis, self.pop_rate, linewidth=2)
-        plt.fill_between(t_axis, self.pop_rate, alpha=0.3)
-        plt.grid(True, alpha=0.3)
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(t_axis, self.pop_rate, linewidth=2)
+        ax.fill_between(t_axis, self.pop_rate, alpha=0.3)
+        ax.grid(True, alpha=0.3)
 
-        plt.ylabel("Pop. firing rate (kHz)")
-        plt.xlabel("Time (ms)")
+        ax.set_ylabel("Pop. firing rate (kHz)")
+        ax.set_xlabel("Time (ms)")
 
         nucname = "" if nucleus is None else " in " + nucleus
-        plt.title("Population Spiking Rate Histogram of " + str(self.n_neurons) + " neurons" + nucname)
+        ax.set_title("Population Spiking Rate Histogram of " + str(self.n_neurons) + " neurons" + nucname)
 
         if show:
             plt.show()
 
-        return plt
+        return fig, ax
 
     def analytics(self, stimulus_onset=0):
         """
@@ -196,7 +196,7 @@ class PSRH(object):
         Displays the Population Spike Rate Variability in terms of:
         Mean ± STD Variability and Coefficient of Variation.
 
-        :return: object `matplotlib.pyplot.plot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html>`_
+        :return: object `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
         
         """
         t_axis = self.bins[:-1] + self.binsz / 2
@@ -207,28 +207,28 @@ class PSRH(object):
 
         cv = std_fr / (mean_fr + 1e-8)
 
-        plt.figure(2)
         # Plot
-        plt.subplot(1,2,1)
-        plt.plot(t_axis, mean_fr, label="Mean", linewidth=linewidth)
-        plt.fill_between(t_axis, mean_fr - std_fr, mean_fr + std_fr,
-                         alpha=0.3, label="±1 STD")
-        plt.grid(True, alpha=0.3)
+        fig, axes = plt.subplots(1,2)
 
-        plt.ylabel("Firing Rate (Hz)")
-        plt.xlabel("Time (ms)")
+        axes[0].plot(t_axis, mean_fr, label="Mean", linewidth=linewidth)
+        axes[0].fill_between(t_axis, mean_fr - std_fr, mean_fr + std_fr,
+                         alpha=0.3, label="±1 STD")
+        axes[0].grid(True, alpha=0.3)
+
+        axes[0].set_ylabel("Firing Rate (Hz)")
+        axes[0].set_xlabel("Time (ms)")
 
         nucname = "" if self.nucleus is None else " in " + self.nucleus
-        plt.title("Population Firing Rate (Mean ± STD) Variability of " + str(self.n_neurons) + " neurons" + nucname)
+        axes[0].set_title("Population Firing Rate (Mean ± STD) Variability of " + str(self.n_neurons) + " neurons" + nucname)
 
-        # Plot
-        plt.subplot(1,2,2)
-        plt.plot(t_axis, cv, linewidth=linewidth)
-        plt.grid(True, alpha=0.3)
+        axes[1].plot(t_axis, cv, linewidth=linewidth)
+        axes[1].grid(True, alpha=0.3)
 
-        plt.ylabel("Coefficient of Variation")
-        plt.xlabel("Time (ms)")
+        axes[1].set_ylabel("Coefficient of Variation")
+        axes[1].set_xlabel("Time (ms)")
 
         plt.tight_layout()
         plt.show()
+
+        return fig, axes
 

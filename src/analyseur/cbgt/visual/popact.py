@@ -100,7 +100,7 @@ class PopAct(object):
         self.window = window
 
         # Get and set desired_spiketimes_superset as instance attribute
-        [self.desired_spiketimes_superset, _] = get_desired_spiketimes_subset(self.spiketimes_superset)
+        [self.desired_spiketimes_superset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
         # NOTE: desired_spiketimes_superset as nested list and not numpy array because
         # each neuron may have variable length of spike times
         self.n_neurons = len(self.desired_spiketimes_superset)
@@ -112,22 +112,22 @@ class PopAct(object):
         t_axis = self.bins[:-1] + binsz / 2
 
         # Plot
-        plt.figure(1)
-        plt.imshow(self.activity_matrix, aspect="auto", cmap="hot",
-                   # extent=[window[0], window[1], n_neurons, 0] # if neuron 0 is at the top by default
-                   extent=[window[0], window[1], 0, self.n_neurons])
-        plt.colorbar(label="Spike Count per Bin")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        im = ax.imshow(self.activity_matrix, aspect="auto", cmap="hot",
+                       # extent=[window[0], window[1], n_neurons, 0] # if neuron 0 is at the top by default
+                       extent=[window[0], window[1], 0, self.n_neurons])
+        fig.colorbar(im, ax=ax, label="Spike Count per Bin")
 
-        plt.ylabel("neurons")
-        plt.xlabel("Time (ms)")
+        ax.set_ylabel("neurons")
+        ax.set_xlabel("Time (ms)")
 
         nucname = "" if nucleus is None else " in " + nucleus
-        plt.title("Population Activity Heatmap of " + str(self.n_neurons) + " neurons" + nucname)
+        ax.set_title("Population Activity Heatmap of " + str(self.n_neurons) + " neurons" + nucname)
 
         if show:
             plt.show()
 
-        return plt
+        return fig, ax
 
     def plot_pcatraj(self, n_comp=3, nucleus=None, show=True):
         """
@@ -139,26 +139,26 @@ class PopAct(object):
         # Plot
         fig = plt.figure(2)
 
-        # PC1 vs PC2
-        ax1 = fig.add_subplot(2,2,3)
-
-        scatter = ax1.scatter(self.pca_traj[:,0], self.pca_traj[:,1],
-                              c=self.t_points, cmap="viridis", s=50, alpha=0.7)
-        plt.colorbar(scatter, ax=ax1, label="Time (ms)")
-
-        ax1.set_xlabel("PC1 ({:.1f}%".format(self.pca.explained_variance_ratio_[0]*100))
-        ax1.set_ylabel("PC2 ({:.1f}%".format(self.pca.explained_variance_ratio_[1] * 100))
-        ax1.set_title("PCA Trajectory: PC1 vs PC2")
-
         # PC1 vs Time
-        ax2 = fig.add_subplot(2,1,1)
+        ax1 = fig.add_subplot(2, 1, 1)
 
-        ax2.plot(self.t_points, self.pca_traj[:,0], linewidth=2)
-        ax2.grid(True, alpha=0.3)
+        ax1.plot(self.t_points, self.pca_traj[:, 0], linewidth=2)
+        ax1.grid(True, alpha=0.3)
 
-        ax2.set_xlabel("Time (ms)")
-        ax2.set_ylabel("PC1")
-        ax2.set_title("PC1 Over Time")
+        ax1.set_xlabel("Time (ms)")
+        ax1.set_ylabel("PC1")
+        ax1.set_title("PC1 Over Time")
+
+        # PC1 vs PC2
+        ax2 = fig.add_subplot(2,2,3)
+
+        scatter = ax2.scatter(self.pca_traj[:,0], self.pca_traj[:,1],
+                              c=self.t_points, cmap="viridis", s=50, alpha=0.7)
+        fig.colorbar(scatter, ax=ax2, label="Time (ms)")
+
+        ax2.set_xlabel("PC1 ({:.1f}%".format(self.pca.explained_variance_ratio_[0]*100))
+        ax2.set_ylabel("PC2 ({:.1f}%".format(self.pca.explained_variance_ratio_[1] * 100))
+        ax2.set_title("PCA Trajectory: PC1 vs PC2")
 
         # Variance explained?
         ax3 = fig.add_subplot(2,2,4)
@@ -177,6 +177,8 @@ class PopAct(object):
 
         if show:
             plt.show()
+
+        return fig, [ax1, ax2, ax3]
 
     def analytics(self):
         return {

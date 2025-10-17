@@ -123,7 +123,8 @@ class PSTH(object):
         :param window: 2-tuple; defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: string; [OPTIONAL] None or name of the nucleus
         :param show: boolean [default: True]
-        :return: object `matplotlib.pyplot.bar <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html>`_
+        :return: object `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
+        containing `matplotlib.pyplot.bar <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
         
         * `window` controls the binning range as well as the spike counting window
         * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
@@ -134,7 +135,7 @@ class PSTH(object):
         self.window = window
 
         # Get and set desired_spiketimes_subset as instance attribute
-        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset)
+        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
         # NOTE: desired_spiketimes_subset as nested list and not numpy array because
         # each neuron may have variable length of spike times
         self.n_neurons = len(self.desired_spiketimes_subset)
@@ -145,22 +146,23 @@ class PSTH(object):
             self._compute_psth(self.desired_spiketimes_subset, binsz=binsz, window=window)
 
         # Plot
-        plt.bar(self.bin_centers, self.counts, width=binsz,
-                alpha=0.7, color="blue", edgecolor="black")
-        plt.grid(True, alpha=0.3)
+        fig, ax = plt.subplots(figsize=(10, 6))
 
-        plt.ylabel("Spike Count")
-        plt.xlabel("Time (ms)")
+        ax.bar(self.bin_centers, self.counts, width=binsz, alpha=0.7, color="blue", edgecolor="black")
+        ax.grid(True, alpha=0.3)
+
+        ax.set_ylabel("Spike Count")
+        ax.set_xlabel("Time (ms)")
 
         nucname = "" if nucleus is None else " in " + nucleus
-        plt.title("PSTH - Population Activity of " + str(self.n_neurons) + " neurons" + nucname +
-                  "\n (mean firing rate within the window = "
-                  + str(self.true_avg_rate["mean_firing_rate"]) + " kHz)")
+        ax.set_title("PSTH - Population Activity of " + str(self.n_neurons) + " neurons" + nucname +
+                     "\n (mean firing rate within the window = "
+                     + str(self.true_avg_rate["mean_firing_rate"]) + " kHz)")
 
         if show:
             plt.show()
         
-        return plt
+        return fig, ax
 
     def analytics_temporal(self, stimulus_onset=0):
         """

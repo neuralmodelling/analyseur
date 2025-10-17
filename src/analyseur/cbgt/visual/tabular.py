@@ -88,6 +88,7 @@ class SpikingStats(object):
                  [self._shortened_array(computed_stats["LV_array"]), str(computed_stats["grand_LV"])]]
 
         fig, ax = plt.subplots(figsize=(10, 4))
+        ax.axis("off")  # Remove axis
         # Create Table
         table = ax.table(cellText=cells, rowLabels=row_headers, colLabels=column_headers[1:],
                          loc='center', cellLoc="center")
@@ -112,12 +113,9 @@ class SpikingStats(object):
         table.set_fontsize(11)
         table.scale(1, 1.8)
 
-        # Remove axis
-        ax.axis("off")
-
         plt.title("Spiking Statistics Summary", pad=20, fontsize=14, weight="bold")
 
         plt.tight_layout()
         plt.show()
 
-        return fig
+        return fig, ax

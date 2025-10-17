@@ -72,16 +72,19 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     linelengths = 0.5  # default: 1
     linewidths = 0.5  # default: 1.5
     # ytick_trigger = 50
-    # ytick_interval = 10
-    ytick_interval = int(n_neurons / n_yticks)
+    if n_neurons > 50:
+        ytick_interval = int(n_neurons / n_yticks)
+    else:
+        ytick_interval = 1
 
     # lineoffsets = 0.5  # default: 1
     lineoffsets = np.arange(1, n_neurons + 1)
 
-    plt.eventplot(desired_spiketimes_subset, colors=linecolors,
-                  linelengths=linelengths, linewidths=linewidths,
-                  lineoffsets=lineoffsets,
-                  orientation="horizontal", alpha=None)
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.eventplot(desired_spiketimes_subset, colors=linecolors,
+                 linelengths=linelengths, linewidths=linewidths,
+                 lineoffsets=lineoffsets,orientation="horizontal", alpha=None)
 
     # if n_neurons > ytick_trigger:
     #     # plt.yticks([])
@@ -89,18 +92,18 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     # else:
     #     plt.yticks(lineoffsets, yticks)
 
-    plt.yticks(lineoffsets[::ytick_interval], yticks[::ytick_interval])
+    ax.set_yticks(lineoffsets[::ytick_interval], yticks[::ytick_interval])
 
-    plt.ylabel("neurons")
-    plt.xlabel("Time (ms)")
+    ax.set_ylabel("neurons")
+    ax.set_xlabel("Time (ms)")
 
     nucname = "" if nucleus is None else " in "+nucleus
     allno = str(n_neurons)
     if neurons=="all":
-        plt.title("Raster of all (" + allno + ") the neurons" + nucname)
+        ax.set_title("Raster of all (" + allno + ") the neurons" + nucname)
     else:
-        plt.title("Raster of the selected neurons" + nucname)
+        ax.set_title("Raster of " + str(neurons[0]) + " to " + str(neurons[-1]) + " neurons" + nucname)
 
     plt.show()
 
-    return plt
+    return fig, ax
