@@ -100,14 +100,14 @@ class PopAct(object):
         self.window = window
 
         # Get and set desired_spiketimes_superset as instance attribute
-        [self.desired_spiketimes_superset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
+        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
         # NOTE: desired_spiketimes_superset as nested list and not numpy array because
         # each neuron may have variable length of spike times
-        self.n_neurons = len(self.desired_spiketimes_superset)
+        self.n_neurons = len(self.desired_spiketimes_subset)
 
         # Compute activities in activity matrix and set the results as instance attributes
         [self.activity_matrix, self.bins] = \
-            self._compute_activity(self.desired_spiketimes_superset, binsz=binsz, window=window)
+            self._compute_activity(self.desired_spiketimes_subset, binsz=binsz, window=window)
 
         t_axis = self.bins[:-1] + binsz / 2
 
