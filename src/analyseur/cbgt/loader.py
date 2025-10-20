@@ -8,6 +8,8 @@
 import re
 import pandas as pd
 
+from analyseur.cbgt.parameters import SimulationParams
+
 class LoadSpikeTimes(object):
     """
     Loads the csv file containing spike times for all the neurons
@@ -34,16 +36,12 @@ class LoadSpikeTimes(object):
                    + "spike times in milliseconds for all the neurons recorded." )
 
     __pattern_with_nucleus_name = r"\_(.*?)\."
-    __nuclei_ctx = ["CSN", "PTN", "IN"]
-    __nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN"]
-    __significant_digits = 3
-    __1000ms = 1000  # multiplicand
-    __t_start_recording = 2000  # subtrahend
 
 
     def __init__(self, full_filepath=" "):
         self.full_filepath = full_filepath
         self.filename = full_filepath.split("/")[-1]
+        self.simparams = SimulationParams()
 
 
     def __extract_nucleus_name(self, filename):
@@ -65,9 +63,9 @@ class LoadSpikeTimes(object):
         """Returns region name for respective nucleus name for which the spike times are for in the file."""
         nucleus = self.__extract_nucleus_name(filename)
 
-        if nucleus in self.__nuclei_ctx:
+        if nucleus in self.simparams.nuclei_ctx:
             region = "cortex"
-        elif nucleus in self.__nuclei_bg:
+        elif nucleus in self.simparams.nuclei_bg:
             region = "bg"
         else:
             region = "thalamus"
@@ -81,9 +79,9 @@ class LoadSpikeTimes(object):
         if region in ("bg", "thalamus"):
             multiplicand = 1
         else:
-            multiplicand = self.__1000ms
+            multiplicand = 1 / self.simparams._1000ms
 
-        subtrahend = self.__t_start_recording / self.__1000ms
+        subtrahend = self.simparams.t_start_recording / self.simparams._1000ms
 
         return [multiplicand, subtrahend]
 
@@ -103,7 +101,7 @@ class LoadSpikeTimes(object):
         """Returns the spike times (numpy.array data type) in seconds for a given neuron."""
         raw_neuron_id_times = dataframe[ dataframe["i"] == neuron_id ]["t"]
 
-        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.__significant_digits)).values
+        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.simparams.significant_digits)).values
                        * multiplicand - subtrahend)
 
         return spike_times
