@@ -75,7 +75,7 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_basic(cls, spiketimes_superset, binsz=50, window=(0, 10000)):
+    def compute_basic(cls, spiketimes_superset, binsz=0.05, window=(0, 10)):
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
         n_neurons = len(spike_arrays)
 
@@ -92,7 +92,7 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_basic_slide(cls, spiketimes_superset, binsz=50, window=(0, 10000), windowsz=5.0):
+    def compute_basic_slide(cls, spiketimes_superset, binsz=0.05, window=(0, 10), windowsz=0.5):
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
         n_neurons = len(spike_arrays)
 
@@ -113,7 +113,7 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_fano_factor(cls, spiketimes_superset, binsz=50, window=(0, 10000), bins_option="all_bins"):
+    def compute_fano_factor(cls, spiketimes_superset, binsz=0.05, window=(0, 10), bins_option="all_bins"):
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
 
         time_bins = np.arange(window[0], window[1] + binsz, binsz)

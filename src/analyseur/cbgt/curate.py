@@ -9,6 +9,7 @@ import re
 
 import numpy as np
 
+from analyseur.cbgt.parameters import SimulationParams
 
 def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
@@ -49,8 +50,18 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
 
     return valid_indices
 
-def get_binary_spiketrains(spiketimes_superset, window=(0, 10000), sampling_rate=10, neurons="all"):
+def __get_sampling_rate():
+    simparam = SimulationParams()
+    sampling_period = simparam.dt / simparam._1000ms  # seconds
+
+    return 1 / sampling_period
+
+def get_binary_spiketrains(spiketimes_superset, window=(0, 10), sampling_rate=None, neurons="all"):
     total_duration = window[1] - window[0]
+
+    if sampling_rate is None:
+        sampling_rate = __get_sampling_rate()
+
     num_samples = int(total_duration * sampling_rate)
     time_axis = np.linspace(window[0], window[1], num_samples)
     num_neurons = len(spiketimes_superset)

@@ -7,6 +7,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from odf.grammar import required_attributes
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -180,12 +181,32 @@ class PopAct(object):
 
         return fig, [ax1, ax2, ax3]
 
-    def analytics(self):
-        return {
-            "activity": self.activity_matrix,
-            "time_points": self.t_points,
-            "scaler": self.scaler,
-            "pca": self.pca, # if n_comp=0.9 => dimensionality = self.pca.n_components_
-            "pca_trajectory": self.pca_traj,
-            "explained_variance": self.pca.explained_variance_ratio_,
-        }
+    def analytics(self, binsz=0.05, window=(0, 10)):
+        required_attributes = ["activity_matrix", "pca"]
+
+        all_required_exist = all(hasattr(self, attr) for attr in required_attributes)
+
+        if all_required_exist:
+            return {
+                "activity": self.activity_matrix,
+                "time_points": self.t_points,
+                "scaler": self.scaler,
+                "pca": self.pca,  # if n_comp=0.9 => dimensionality = self.pca.n_components_
+                "pca_trajectory": self.pca_traj,
+                "explained_variance": self.pca.explained_variance_ratio_,
+            }
+        else:
+            [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
+
+            [activity_matrix, _] = self._compute_activity(desired_spiketimes_subset, binsz=binsz, window=window)
+            [scaler, pca, pca_traj] = self._compute_PCA(activity_matrix, n_comp=0.90)
+            t_points = np.linspace(window[0], window[1], pca_traj.shape[0])
+
+            return {
+                "activity": activity_matrix,
+                "time_points": t_points,
+                "scaler": scaler,
+                "pca": pca,  # if n_comp=0.9 => dimensionality = self.pca.n_components_
+                "pca_trajectory": pca_traj,
+                "explained_variance": pca.explained_variance_ratio_,
+            }

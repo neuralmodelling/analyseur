@@ -12,6 +12,7 @@ from typing import List, Tuple
 class SimulationParams:
     duration: float = 10000 # ms
     t_start_recording = 2000 # ms
+    dt: float = 0.1 # ms
     _1000ms: int = 1000
     significant_digits: int = 3
     nuclei_ctx: List[str] = None
@@ -36,3 +37,4 @@ class SpikeAnalysisParams:
         if self.window[1] <= self.window[0]:
             raise ValueError("time window end must be greater than start")
 
+#custom_param = SpikeAnalysisParams(window=(0,5), binsz=0.02)

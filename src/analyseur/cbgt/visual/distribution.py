@@ -150,7 +150,7 @@ def isi_distrib(spiketimes_superset, n_bins=50):
             axes[0].hist(isis, bins=n_bins, alpha=0.3, density=True)
 
     axes[0].grid(True, alpha=0.3)
-    axes[0].set_xlabel("Interspike Interval (ms)")
+    axes[0].set_xlabel("Interspike Interval (s)")
     axes[0].set_ylabel("Density")
     axes[0].set_title("Neuron ISI Distributions")
 
@@ -158,7 +158,7 @@ def isi_distrib(spiketimes_superset, n_bins=50):
         axes[1].hist(all_isis, bins=n_bins, alpha=0.7, color="red", density=True)
         axes[1].set_grid(True, alpha=0.3)
 
-        axes[1].set_xlabel("Interspike Interval (ms)")
+        axes[1].set_xlabel("Interspike Interval (s)")
         axes[1].set_ylabel("Density")
         axes[1].set_title("Population ISI Distributions")
 
