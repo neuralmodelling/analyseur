@@ -10,7 +10,7 @@ import re
 import numpy as np
 
 
-def _extract_neuron_no(neuron_id):
+def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
     return int(match.group(1))
 
@@ -39,7 +39,7 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons="all"):
             yticks.append(neuron_id)
     return desired_spiketimes_subset, yticks
 
-def _get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
+def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
     """
     This function is essential because spiketimes are only recorded when spikes occur
     as opposed to recording for every time points.
@@ -61,7 +61,7 @@ def get_binary_spiketrains(spiketimes_superset, window=(0, 10000), sampling_rate
         spiketrains = np.zeros((num_neurons, num_samples))
         row = 0
         for nX, indiv_spiketimes in spiketimes_superset.items():
-            index = _get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples)
+            index = __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples)
             spiketrains[row, index] = 1.0
             yticks.append(nX)
             row += 1
@@ -71,7 +71,7 @@ def get_binary_spiketrains(spiketimes_superset, window=(0, 10000), sampling_rate
         for i in neurons:
             neuron_id = "n" + str(i)
             indiv_spiketimes = spiketimes_superset[neuron_id]
-            index = _get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples)
+            index = __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples)
             spiketrains[row, index] = 1.0  # row != i because neurons can be = [13, 14, 15 ,16 ...]
             yticks.append(neuron_id)
 

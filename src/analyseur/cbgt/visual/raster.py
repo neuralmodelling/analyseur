@@ -12,7 +12,7 @@ import numpy as np
 
 import re
 
-# from ..loader import get_desired_spiketimes_superset
+# from ..curate import get_desired_spiketimes_superset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 def _get_line_colors(colors=False, no_neurons=None):
@@ -23,7 +23,7 @@ def _get_line_colors(colors=False, no_neurons=None):
 
 def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     """
-    Displays the rasterplot of the given spike times and returns the plot figure (to save if necessary).
+    Displays the rasterplot of the given spike times (seconds) and returns the plot figure (to save if necessary).
 
     :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     :param colors: `[OPTIONAL] False` [default] or True
@@ -95,7 +95,7 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     ax.set_yticks(lineoffsets[::ytick_interval], yticks[::ytick_interval])
 
     ax.set_ylabel("neurons")
-    ax.set_xlabel("Time (ms)")
+    ax.set_xlabel("Time (s)")
 
     nucname = "" if nucleus is None else " in "+nucleus
     allno = str(n_neurons)

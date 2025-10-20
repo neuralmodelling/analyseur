@@ -52,7 +52,7 @@ def spike_counts_distrib(spiketimes_superset):
 
     ax.grid(True, alpha=0.3)
 
-    ax.set_xlabel("Time (ms)")
+    ax.set_xlabel("Time (s)")
     ax.set_ylabel("Cumulative Spike Count")
     ax.set_title("Cumulative Spike Counts")
     ax.set_legend()
@@ -79,7 +79,7 @@ def _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth):
 
     return all_spikes, kde(time_points)
 
-def spike_densitites_distrib(spiketimes_superset, window=(0, 10000), bandwidth=0.1):
+def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
     time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
 
@@ -99,7 +99,7 @@ def spike_densitites_distrib(spiketimes_superset, window=(0, 10000), bandwidth=0
 
     ax.grid(True, alpha=0.3)
 
-    ax.set_xlabel("Time (ms)")
+    ax.set_xlabel("Time (s)")
     ax.set_ylabel("Density + Offset")
     ax.set_title("Spike Density")
     ax.set_legend()

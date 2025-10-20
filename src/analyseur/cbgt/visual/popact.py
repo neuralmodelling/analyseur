@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-# from ..loader import get_desired_spiketimes_superset
+# from ..curate import get_desired_spiketimes_superset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 class PopAct(object):
@@ -52,8 +52,8 @@ class PopAct(object):
 
     ::
 
-      my_pact.plot(spike_trains, window=(0,50), binsz=1)
-      my_pact.plot(spike_trains, window=(0,50), binsz=0.05)
+      my_pact.plot(spike_trains, window=(0,5), binsz=1)    # time unit in seconds
+      my_pact.plot(spike_trains, window=(0,5), binsz=0.05)
 
     """
     def __init__(self, spiketimes_superset):
@@ -67,7 +67,7 @@ class PopAct(object):
 
         return scaler, pca, pca_trajectory
 
-    def _compute_activity(self, desired_spiketimes_superset, binsz=50, window=(0, 10000)):
+    def _compute_activity(self, desired_spiketimes_superset, binsz=0.05, window=(0, 10)):
         bins = np.arange(window[0], window[1] + binsz, binsz)
 
         # Activity Matrix
@@ -79,7 +79,7 @@ class PopAct(object):
 
         return activity, bins
 
-    def plot(self, binsz=50, window=(0, 10000), nucleus=None, show=True):
+    def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):
         """
         Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
 
@@ -91,7 +91,7 @@ class PopAct(object):
         :return: object `matplotlib.pyplot.imshow <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html>`_
     
         * `window` controls the binning range as well as the spike counting window
-        * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
+        * CBGT simulation was done in seconds so window `(0, 10)` signifies time 0 s to 10 s
         * `popactivity` gives a spatio-temporal pattern across neurons
 
         """
@@ -119,7 +119,7 @@ class PopAct(object):
         fig.colorbar(im, ax=ax, label="Spike Count per Bin")
 
         ax.set_ylabel("neurons")
-        ax.set_xlabel("Time (ms)")
+        ax.set_xlabel("Time (s)")
 
         nucname = "" if nucleus is None else " in " + nucleus
         ax.set_title("Population Activity Heatmap of " + str(self.n_neurons) + " neurons" + nucname)
@@ -145,7 +145,7 @@ class PopAct(object):
         ax1.plot(self.t_points, self.pca_traj[:, 0], linewidth=2)
         ax1.grid(True, alpha=0.3)
 
-        ax1.set_xlabel("Time (ms)")
+        ax1.set_xlabel("Time (s)")
         ax1.set_ylabel("PC1")
         ax1.set_title("PC1 Over Time")
 
@@ -154,7 +154,7 @@ class PopAct(object):
 
         scatter = ax2.scatter(self.pca_traj[:,0], self.pca_traj[:,1],
                               c=self.t_points, cmap="viridis", s=50, alpha=0.7)
-        fig.colorbar(scatter, ax=ax2, label="Time (ms)")
+        fig.colorbar(scatter, ax=ax2, label="Time (s)")
 
         ax2.set_xlabel("PC1 ({:.1f}%".format(self.pca.explained_variance_ratio_[0]*100))
         ax2.set_ylabel("PC2 ({:.1f}%".format(self.pca.explained_variance_ratio_[1] * 100))

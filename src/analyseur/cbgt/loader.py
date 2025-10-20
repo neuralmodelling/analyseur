@@ -33,12 +33,12 @@ class LoadSpikeTimes(object):
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
                    + "spike times in milliseconds for all the neurons recorded." )
 
-    _pattern_with_nucleus_name = r"\_(.*?)\."
-    _nuclei_ctx = ["CSN", "PTN", "IN"]
-    _nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN"]
-    _significant_digits = 5
-    _ms_to_s = 1000  # multiplicand
-    _t_start_recording = 2000  # subtrahend
+    __pattern_with_nucleus_name = r"\_(.*?)\."
+    __nuclei_ctx = ["CSN", "PTN", "IN"]
+    __nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN"]
+    __significant_digits = 3
+    __1000ms = 1000  # multiplicand
+    __t_start_recording = 2000  # subtrahend
 
 
     def __init__(self, full_filepath=" "):
@@ -46,11 +46,11 @@ class LoadSpikeTimes(object):
         self.filename = full_filepath.split("/")[-1]
 
 
-    def _extract_nucleus_name(self, filename):
+    def __extract_nucleus_name(self, filename):
         """Extracts <nucleus> name from `spikes_<nucleus>.csv`"""
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
-        match = re.search(self._pattern_with_nucleus_name, filename)
+        match = re.search(self.__pattern_with_nucleus_name, filename)
 
         if match:
             nucleus = match.group(1)
@@ -63,11 +63,11 @@ class LoadSpikeTimes(object):
 
     def _get_region_name(self, filename):
         """Returns region name for respective nucleus name for which the spike times are for in the file."""
-        nucleus = self._extract_nucleus_name(filename)
+        nucleus = self.__extract_nucleus_name(filename)
 
-        if nucleus in self._nuclei_ctx:
+        if nucleus in self.__nuclei_ctx:
             region = "cortex"
-        elif nucleus in self._nuclei_bg:
+        elif nucleus in self.__nuclei_bg:
             region = "bg"
         else:
             region = "thalamus"
@@ -75,20 +75,20 @@ class LoadSpikeTimes(object):
         return region
 
 
-    def _get_multiplicand_subtrahend(self, region):
+    def __get_multiplicand_subtrahend(self, region):
         """For respective region, returns factors (multiplicand and subtrahend)
-        to set spike times unit to milliseconds."""
+        to set spike times unit to seconds."""
         if region in ("bg", "thalamus"):
-            multiplicand = self._ms_to_s
-        else:
             multiplicand = 1
+        else:
+            multiplicand = self.__1000ms
 
-        subtrahend = self._t_start_recording
+        subtrahend = self.__t_start_recording / self.__1000ms
 
         return [multiplicand, subtrahend]
 
 
-    def _extract_smallest_largest_neuron_id(self, dataframe):
+    def __extract_smallest_largest_neuron_id(self, dataframe):
         """Returns the smallest & largest neuron id whose spike times are
         recorded in the file (loaded as a panda dataframe)."""
         neuron_ids = dataframe.filter(like="i").values
@@ -99,11 +99,11 @@ class LoadSpikeTimes(object):
         return [smallest_id, largest_id]
 
 
-    def _get_spike_times_for_a_neuron(self, dataframe, neuron_id, multiplicand, subtrahend):
-        """Returns the spike times (numpy.array data type) in milliseconds for a given neuron."""
+    def __get_spike_times_for_a_neuron(self, dataframe, neuron_id, multiplicand, subtrahend):
+        """Returns the spike times (numpy.array data type) in seconds for a given neuron."""
         raw_neuron_id_times = dataframe[ dataframe["i"] == neuron_id ]["t"]
 
-        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self._significant_digits)).values
+        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.__significant_digits)).values
                        * multiplicand - subtrahend)
 
         return spike_times
@@ -111,20 +111,20 @@ class LoadSpikeTimes(object):
 
     def get_spiketimes_superset(self):
         """
-        Returns a dictionary containing the spike times (numpy.array data type) in milliseconds
+        Returns a dictionary containing the spike times (numpy.array data type) in seconds
         for all the neurons recorded into the file as value of the key `n<X>` where
         :math:`X \\in [0, N] \\subset \\mathbb{Z}`.
         """
         dataframe = pd.read_csv(self.full_filepath)
-        [min_id, max_id] = self._extract_smallest_largest_neuron_id(dataframe)
+        [min_id, max_id] = self.__extract_smallest_largest_neuron_id(dataframe)
 
         region = self._get_region_name(self.filename)
-        [multiplicand, subtrahend] = self._get_multiplicand_subtrahend(region)
+        [multiplicand, subtrahend] = self.__get_multiplicand_subtrahend(region)
 
         spiketimes_superset = {"n" + str(min_id):
-                                   self._get_spike_times_for_a_neuron(dataframe, min_id, multiplicand, subtrahend)}
+                                   self.__get_spike_times_for_a_neuron(dataframe, min_id, multiplicand, subtrahend)}
 
         for n_id in range(1, max_id + 1):
-            spiketimes_superset["n" + str(n_id)] = self._get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
+            spiketimes_superset["n" + str(n_id)] = self.__get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
 
         return spiketimes_superset

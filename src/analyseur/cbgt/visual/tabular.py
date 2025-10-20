@@ -21,14 +21,14 @@ class SpikingStats(object):
     def __init__(self, spiketimes_superset):
         self.spiketimes_superset = spiketimes_superset
 
-    def _compute_ISI(self, all_neurons_isi):
+    def __compute_ISI(self, all_neurons_isi):
         # isi = InterSpikeInterval.compute(self.spiketimes_superset)
         vec_mu = InterSpikeInterval.mean_freqs(all_neurons_isi)
         grand_mu = cgm(vec_mu)
 
         return vec_mu, grand_mu
 
-    def _compute_CVs(self, all_neurons_isi):
+    def __compute_CVs(self, all_neurons_isi):
         vec_CV = Variations.computeCV(all_neurons_isi)
         vec_CV2 = Variations.computeCV2(all_neurons_isi)
 
@@ -37,7 +37,7 @@ class SpikingStats(object):
 
         return vec_CV, vec_CV2, grand_CV, grand_CV2
 
-    def _compute_LV(self, all_neurons_isi):
+    def __compute_LV(self, all_neurons_isi):
         vec_LV = Variations.computeLV(all_neurons_isi)
 
         grand_LV = cgm(vec_LV)
@@ -46,9 +46,9 @@ class SpikingStats(object):
 
     def compute_stats(self):
         all_isi = InterSpikeInterval.compute(self.spiketimes_superset)
-        [vec_mu, grand_mu] = self._compute_ISI(all_isi)
-        [vec_CV, vec_CV2, grand_CV, grand_CV2] = self._compute_CVs(all_isi)
-        [vec_LV, grand_LV] = self._compute_LV(all_isi)
+        [vec_mu, grand_mu] = self.__compute_ISI(all_isi)
+        [vec_CV, vec_CV2, grand_CV, grand_CV2] = self.__compute_CVs(all_isi)
+        [vec_LV, grand_LV] = self.__compute_LV(all_isi)
 
         return {
             "mean_freqs": vec_mu,
@@ -61,17 +61,17 @@ class SpikingStats(object):
             "grand_LV": grand_LV,
         }
 
-    def _extract_neuron_number(self, key):
+    def __extract_neuron_number(self, key):
         numbers = re.findall(r'\d+', key)
         return int(numbers[0])
 
-    def _dict_to_array(self, dict_for_all_neurons):
+    def __dict_to_array(self, dict_for_all_neurons):
         sorted_dict = {k: dict_for_all_neurons[k] for k in
-                       sorted(dict_for_all_neurons.keys(), key=self._extract_neuron_number)}
+                       sorted(dict_for_all_neurons.keys(), key=self.__extract_neuron_number)}
         return np.array(list(sorted_dict.values()))
 
-    def _shortened_array(self, dict_for_all_neurons, n=3):
-        raw_arr = self._dict_to_array(dict_for_all_neurons)
+    def __shortened_array(self, dict_for_all_neurons, n=3):
+        raw_arr = self.__dict_to_array(dict_for_all_neurons)
         arr = np.round(raw_arr, 3) # 3 decimal points
         return f"[{', '.join(map(str, arr[:n]))}, ..., {', '.join(map(str, arr[-n:]))}]"
 
@@ -82,12 +82,12 @@ class SpikingStats(object):
         column_headers = ("Statistic", "Array-Values", "Mean")
         row_headers = [x for x in ("Mean Freq.", "Coeff. of Var.", "Local Coeff. of Var.", "Linear Var.")]
 
-        cells = [[self._shortened_array(computed_stats["mean_freqs"]), str(computed_stats["grand_mean_freqs"])],
-                 [self._shortened_array(computed_stats["CV_array"]), str(computed_stats["grand_CV"])],
-                 [self._shortened_array(computed_stats["CV2_array"]), str(computed_stats["grand_CV2"])],
-                 [self._shortened_array(computed_stats["LV_array"]), str(computed_stats["grand_LV"])]]
+        cells = [[self.__shortened_array(computed_stats["mean_freqs"]), str(computed_stats["grand_mean_freqs"])],
+                 [self.__shortened_array(computed_stats["CV_array"]), str(computed_stats["grand_CV"])],
+                 [self.__shortened_array(computed_stats["CV2_array"]), str(computed_stats["grand_CV2"])],
+                 [self.__shortened_array(computed_stats["LV_array"]), str(computed_stats["grand_LV"])]]
 
-        fig, ax = plt.subplots(figsize=(10, 4))
+        fig, ax = plt.subplots(figsize=(15, 4))
         ax.axis("off")  # Remove axis
         # Create Table
         table = ax.table(cellText=cells, rowLabels=row_headers, colLabels=column_headers[1:],

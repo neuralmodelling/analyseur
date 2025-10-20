@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# from ..loader import get_desired_spiketimes_subset
+# from ..curate import get_desired_spiketimes_subset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 class PSRH(object):
@@ -55,8 +55,8 @@ class PSRH(object):
 
     ::
 
-      my_psrh.plot(window=(0,50), binsz=1)
-      my_psrh.plot(window=(0,50), binsz=0.05)
+      my_psrh.plot(window=(0,5), binsz=1)    # time unit in seconds
+      my_psrh.plot(window=(0,5), binsz=0.05)
 
     4. Get the analytics
 
@@ -75,7 +75,7 @@ class PSRH(object):
     def __init__(self, spiketimes_superset):
         self.spiketimes_superset = spiketimes_superset
 
-    def _compute_psrh(self, desired_spiketimes_subset, binsz=50, window=(0, 10000)):
+    def _compute_psrh(self, desired_spiketimes_subset, binsz=0.05, window=(0, 10)):
         bins = np.arange(window[0], window[1] + binsz, binsz)
 
         # Population Rate Histogram
@@ -92,9 +92,9 @@ class PSRH(object):
 
         return pop_rate, firing_rates, bins
 
-    def plot(self, binsz=50, window=(0, 10000), nucleus=None, show=True):
+    def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):
         """
-        Displays the Population Spike Rate Histogram (PSRH) of the given spike times
+        Displays the Population Spike Rate Histogram (PSRH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
         
         :param binsz: integer or float; defines the number of equal-width bins in the range [default: 50]
@@ -104,7 +104,7 @@ class PSRH(object):
         :return: object `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
         
         * `window` controls the binning range as well as the spike counting window
-        * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
+        * CBGT simulation was done in seconds so window `(0, 10)` signifies time 0 s to 10 s
         
         """
         # Set binsz and window as the instance attributes
@@ -130,8 +130,8 @@ class PSRH(object):
         ax.fill_between(t_axis, self.pop_rate, alpha=0.3)
         ax.grid(True, alpha=0.3)
 
-        ax.set_ylabel("Pop. firing rate (kHz)")
-        ax.set_xlabel("Time (ms)")
+        ax.set_ylabel("Pop. firing rate (Hz)")
+        ax.set_xlabel("Time (s)")
 
         nucname = "" if nucleus is None else " in " + nucleus
         ax.set_title("Population Spiking Rate Histogram of " + str(self.n_neurons) + " neurons" + nucname)
@@ -216,7 +216,7 @@ class PSRH(object):
         axes[0].grid(True, alpha=0.3)
 
         axes[0].set_ylabel("Firing Rate (Hz)")
-        axes[0].set_xlabel("Time (ms)")
+        axes[0].set_xlabel("Time (s)")
 
         nucname = "" if self.nucleus is None else " in " + self.nucleus
         axes[0].set_title("Population Firing Rate (Mean ± STD) Variability of " + str(self.n_neurons) + " neurons" + nucname)
@@ -225,7 +225,7 @@ class PSRH(object):
         axes[1].grid(True, alpha=0.3)
 
         axes[1].set_ylabel("Coefficient of Variation")
-        axes[1].set_xlabel("Time (ms)")
+        axes[1].set_xlabel("Time (s)")
 
         plt.tight_layout()
         plt.show()

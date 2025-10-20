@@ -8,8 +8,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# from ..loader import get_desired_spiketimes_subset
-from analyseur.cbgt.loader import get_desired_spiketimes_subset
+# from ..curate import get_desired_spiketimes_subset
+from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 class PSTH(object):
     """
@@ -54,8 +54,8 @@ class PSTH(object):
 
     ::
 
-      my_psth.plot(window=(0,50), binsz=1)
-      my_psth.plot(window=(0,50), binsz=0.05)
+      my_psth.plot(window=(0,5), binsz=1)  # time unit in seconds
+      my_psth.plot(window=(0,5), binsz=0.05)
 
     4. Get the analytics for respective (immediately preceeding plotted psth)
 
@@ -95,7 +95,7 @@ class PSTH(object):
     def _compute_pop_firing_rate(self, n_neurons, binsz, pop_counts):
         return pop_counts / (n_neurons * binsz)  # in kHz
 
-    def _compute_psth(self, spiketimes_superset, binsz=50, window=(0, 10000)):
+    def _compute_psth(self, spiketimes_superset, binsz=0.005, window=(0, 10)):
         allspikes = np.concatenate(spiketimes_superset)
         allspikes_in_window = allspikes[(allspikes >= window[0]) &
                                         (allspikes <= window[1])]  # Memory efficient
@@ -114,9 +114,9 @@ class PSTH(object):
 
         return counts, bin_centers, popfirerates, true_avg_rate, allspikes_in_window
 
-    def plot(self, binsz=50, window=(0, 10000), nucleus=None, show=True):
+    def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):
         """
-        Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times
+        Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
         
         :param binsz: integer or float; defines the number of equal-width bins in the range [default: 50]
@@ -127,7 +127,7 @@ class PSTH(object):
         containing `matplotlib.pyplot.bar <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
         
         * `window` controls the binning range as well as the spike counting window
-        * CBGT simulation was done in milliseconds so window `(0, 10000)` signifies time 0 ms to 10,000 ms (or 10 s)
+        * CBGT simulation was done in seconds so window `(0, 10)` signifies time 0 s to 10 s
         
         """
         # Set binsz and window as the instance attributes
@@ -152,12 +152,12 @@ class PSTH(object):
         ax.grid(True, alpha=0.3)
 
         ax.set_ylabel("Spike Count")
-        ax.set_xlabel("Time (ms)")
+        ax.set_xlabel("Time (s)")
 
         nucname = "" if nucleus is None else " in " + nucleus
         ax.set_title("PSTH - Population Activity of " + str(self.n_neurons) + " neurons" + nucname +
                      "\n (mean firing rate within the window = "
-                     + str(self.true_avg_rate["mean_firing_rate"]) + " kHz)")
+                     + str(self.true_avg_rate["mean_firing_rate"]) + " Hz)")
 
         if show:
             plt.show()
