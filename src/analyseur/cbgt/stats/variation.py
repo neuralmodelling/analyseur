@@ -49,7 +49,7 @@ class Variations(object):
         all_CV = {}
 
         for n_id, isi in all_neurons_isi.items():
-            all_CV[n_id] = np.std(isi) / np.mean(isi)
+            all_CV[n_id] = np.std(isi) / (np.mean(isi) + 1e-8)
 
         return all_CV
 

@@ -10,7 +10,27 @@ import pandas as pd
 
 from analyseur.cbgt.parameters import SimulationParams
 
-class LoadSpikeTimes(object):
+class CommonLoader(object):
+
+    def __init__(self, full_filepath=" "):
+        self.full_filepath = full_filepath
+        self.filename = full_filepath.split("/")[-1]
+        self.simparams = SimulationParams()
+
+
+    def _get_region_name(self, nucleus):
+        """Returns region name for respective nucleus name for which the spike times are for in the file."""
+        if nucleus in self.simparams.nuclei_ctx:
+            region = "cortex"
+        elif nucleus in self.simparams.nuclei_bg:
+            region = "bg"
+        else:
+            region = "thalamus"
+
+        return region
+
+
+class LoadSpikeTimes(CommonLoader):
     """
     Loads the csv file containing spike times for all the neurons
     in a particular nucleus and returns all their spike trains in milliseconds.
@@ -34,17 +54,10 @@ class LoadSpikeTimes(object):
     _description = ( "LoadSpikeTimes loads the spike times containing csv file "
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
                    + "spike times in milliseconds for all the neurons recorded." )
-
     __pattern_with_nucleus_name = r"\_(.*?)\."
 
 
-    def __init__(self, full_filepath=" "):
-        self.full_filepath = full_filepath
-        self.filename = full_filepath.split("/")[-1]
-        self.simparams = SimulationParams()
-
-
-    def __extract_nucleus_name(self, filename):
+    def _extract_nucleus_name(self, filename):
         """Extracts <nucleus> name from `spikes_<nucleus>.csv`"""
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
@@ -57,20 +70,6 @@ class LoadSpikeTimes(object):
             nucleus = None
 
         return nucleus
-
-
-    def _get_region_name(self, filename):
-        """Returns region name for respective nucleus name for which the spike times are for in the file."""
-        nucleus = self.__extract_nucleus_name(filename)
-
-        if nucleus in self.simparams.nuclei_ctx:
-            region = "cortex"
-        elif nucleus in self.simparams.nuclei_bg:
-            region = "bg"
-        else:
-            region = "thalamus"
-
-        return region
 
 
     def __get_multiplicand_subtrahend(self, region):
@@ -116,7 +115,8 @@ class LoadSpikeTimes(object):
         dataframe = pd.read_csv(self.full_filepath)
         [min_id, max_id] = self.__extract_smallest_largest_neuron_id(dataframe)
 
-        region = self._get_region_name(self.filename)
+        nucleus = self._extract_nucleus_name(self.filename)
+        region = self._get_region_name(nucleus)
         [multiplicand, subtrahend] = self.__get_multiplicand_subtrahend(region)
 
         spiketimes_superset = {"n" + str(min_id):
@@ -126,3 +126,79 @@ class LoadSpikeTimes(object):
             spiketimes_superset["n" + str(n_id)] = self.__get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
 
         return spiketimes_superset
+
+class LoadChannelVorG(CommonLoader):
+    """
+    Loads the csv file containing spike times for all the neurons
+    in a particular nucleus and returns all their spike trains in milliseconds.
+
+    +------------------------------+------------------------------------+--------------------------------------------+
+    | Methods                      | Argument                           | Return                                     |
+    +==============================+====================================+============================================+
+    | :py:meth:`.get_spiketimes_superset`  | - no arguments                     | - dictionary with keys, `n<X>` where       |
+    |                              | - instantiated with full file path | :math:`X \\in [0, N] \\subset \\mathbb{Z}` |
+    +------------------------------+------------------------------------+--------------------------------------------+
+
+    **Use Case:**
+
+    ::
+
+      from  analyseur.cbgt.loader import LoadSpikeTimes
+      loadST = LoadSpikeTimes("/full/path/to/CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
+      spike_trains = loadST.get_spiketimes_superset()
+
+    """
+    _description = ( "LoadSpikeTimes loads the spike times containing csv file "
+                   + "and `get_spiketimes_superset` returns a dictionary containing the "
+                   + "spike times in milliseconds for all the neurons recorded." )
+    __pattern_with_nucleus_name = r"(.*?)\_"
+    __pattern_with_attrib_name = r"\_V\_syn\_(.*?)\_1msgrouped"
+    __nonChnl_attributes = ["L", "g_NMDA", "g_GABAA", "g_GABAB", "g_AMPA"]
+
+    def __prepreprocessSize(self, neurotrans_name):  # As there is a shift in indices in the LFP formula
+        full_size = self.simparams.duration - 6 - 1
+        if neurotrans_name == 'AMPA':
+            start, end = 6, 0
+        elif neurotrans_name == 'GABAA':
+            start, end = 0, 6
+        else:
+            start, end = 6, 6
+            full_size = self.simparams.duration - 1
+        start, end = start, full_size - end
+
+        return start, end
+
+    def _extract_nucleus_attribute_name(self, filename):
+        """Extracts <nucleus> name from `<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv`"""
+        # flist = filename.split("_")
+        # nucleus = flist[1].split(".")[0]
+        match1 = re.search(self.__pattern_with_nucleus_name, filename)
+        match2 = re.search(self.__pattern_with_attrib_name, filename)
+
+        if match1:
+            nucleus = match1.group(1)
+            if match2:
+                attrib = match2.group(1)
+            else:
+                print("Filename is not in the form '<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv'")
+                attrib = None
+        else:
+            print("Filename is not in the form '<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv'")
+            nucleus = None
+            attrib = None
+
+        return nucleus, attrib
+
+    def get_measurables(self):
+        [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
+        # region = self._get_region_name(nucleus)
+
+        if attrib in self.simparams.neurotrans + self.__nonChnl_attributes:
+            start, end = self.__prepreprocessSize(attrib)
+            dataframe = pd.read_csv(self.full_filepath).iloc[start:end, [0]]
+            measurables = dataframe.apply(lambda x: round(x, self.simparams.significant_digits_ephys)).values
+        else:
+            print("Attributes must be from " + str(self.simparams.neurotrans + self.__nonChnl_attributes))
+            measurables = None
+
+        return measurables
