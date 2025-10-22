@@ -29,6 +29,7 @@ dependencies = [
     "matplotlib",
     "scipy",
     "scikit-learn", # import sklearn
+    "pywavelets",
 ]
 
 #[tool.setuptools]

@@ -49,7 +49,10 @@ class Variations(object):
         all_CV = {}
 
         for n_id, isi in all_neurons_isi.items():
-            all_CV[n_id] = np.std(isi) / (np.mean(isi) + 1e-8)
+            if len(isi) == 0:
+                all_CV[n_id] = np.zeros(1)
+            else:
+                all_CV[n_id] = np.std(isi) / np.mean(isi)
 
         return all_CV
 
@@ -64,8 +67,11 @@ class Variations(object):
         all_CV2 = {}
 
         for n_id, isi in all_neurons_isi.items():
-            abs_diff_over_sum = np.diff(isi) / (isi[1:] + isi[:-1])
-            all_CV2[n_id] = np.mean( 2 * abs_diff_over_sum )
+            if len(isi) == 0:
+                all_CV2[n_id] = np.zeros(1)
+            else:
+                abs_diff_over_sum = np.diff(isi) / (isi[1:] + isi[:-1])
+                all_CV2[n_id] = np.mean(2 * abs_diff_over_sum)
 
         return all_CV2
 
@@ -80,8 +86,11 @@ class Variations(object):
         all_LV = {}
 
         for n_id, isi in all_neurons_isi.items():
-            sq_diff_over_sum = np.square( np.diff(isi) ) / np.square( (isi[1:] + isi[:-1]) )
-            all_LV[n_id] = np.mean( 3 * sq_diff_over_sum )
+            if len(isi) == 0:
+                all_LV[n_id] = np.zeros(1)
+            else:
+                sq_diff_over_sum = np.square(np.diff(isi)) / np.square((isi[1:] + isi[:-1]))
+                all_LV[n_id] = np.mean(3 * sq_diff_over_sum)
 
         return all_LV
 

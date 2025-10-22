@@ -86,7 +86,10 @@ class InterSpikeInterval(object):
 
         for n_id, isi in all_neurons_isi.items():
             # n_spikes = len(isi) + 1
-            mean_spiking_freq[n_id] = (1/(len(isi) + 1e-8)) * np.sum(1/isi)
+            if len(isi) == 0:
+                mean_spiking_freq[n_id] = 0
+            else:
+                mean_spiking_freq[n_id] = (1 / len(isi)) * np.sum(1 / isi)
 
         return mean_spiking_freq
 

@@ -9,7 +9,9 @@ import re
 
 import numpy as np
 
-from analyseur.cbgt.parameters import SimulationParams
+from analyseur.cbgt.parameters import SpikeAnalysisParams
+
+spikeanal = SpikeAnalysisParams()
 
 def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
@@ -40,6 +42,7 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons="all"):
             yticks.append(neuron_id)
     return desired_spiketimes_subset, yticks
 
+
 def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
     """
     This function is essential because spiketimes are only recorded when spikes occur
@@ -50,17 +53,15 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
 
     return valid_indices
 
-def __get_sampling_rate():
-    simparam = SimulationParams()
-    sampling_period = simparam.dt / simparam._1000ms  # seconds
 
-    return 1 / sampling_period
-
-def get_binary_spiketrains(spiketimes_superset, window=(0, 10), sampling_rate=None, neurons="all"):
-    total_duration = window[1] - window[0]
+def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None, neurons="all"):
+    if window is None:
+        window = spikeanal.window
 
     if sampling_rate is None:
-        sampling_rate = __get_sampling_rate()
+        sampling_rate = 1 / spikeanal.sampling_period
+
+    total_duration = window[1] - window[0]
 
     num_samples = int(total_duration * sampling_rate)
     time_axis = np.linspace(window[0], window[1], num_samples)

@@ -7,6 +7,7 @@
 
 import re
 import pandas as pd
+import numpy as np
 
 from analyseur.cbgt.parameters import SimulationParams
 
@@ -100,8 +101,11 @@ class LoadSpikeTimes(CommonLoader):
         """Returns the spike times (numpy.array data type) in seconds for a given neuron."""
         raw_neuron_id_times = dataframe[ dataframe["i"] == neuron_id ]["t"]
 
-        spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.simparams.significant_digits)).values
-                       * multiplicand - subtrahend)
+        if len(raw_neuron_id_times) == 0:
+            spike_times = np.array([])
+        else:
+            spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.simparams.decimal_places)).values
+                           * multiplicand - subtrahend)
 
         return spike_times
 
@@ -196,7 +200,7 @@ class LoadChannelVorG(CommonLoader):
         if attrib in self.simparams.neurotrans + self.__nonChnl_attributes:
             start, end = self.__prepreprocessSize(attrib)
             dataframe = pd.read_csv(self.full_filepath).iloc[start:end, [0]]
-            measurables = dataframe.apply(lambda x: round(x, self.simparams.significant_digits_ephys)).values
+            measurables = dataframe.apply(lambda x: round(x, self.simparams.decimal_places_ephys)).values
         else:
             print("Attributes must be from " + str(self.simparams.neurotrans + self.__nonChnl_attributes))
             measurables = None

@@ -97,10 +97,11 @@ def plot_current_distrib(rootpath, nucleus, attriblist, decayfolderid):
     plt.show()
 
 
-def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid):
+def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, show=True, save=False):
     [mean_I, filtered_attriblist] = get_observables(rootpath, nucleus, attriblist, decayfolderid)
     x_axis = np.round(np.array(list(decayfolderid.values())) * 100, decimals=1)
     n_experiments = len(x_axis)
+    suptitle = "Current Distribution of " + nucleus
 
     plt.figure(figsize=(14, 8))
 
@@ -118,14 +119,18 @@ def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid):
 
     plt.xlabel("Number of Experiments")
     plt.ylabel("Mean Current (nA)")
-    plt.title("Distribution of Mean Channel Currents across Disinhibition Experiments")
+    plt.title(suptitle)
     plt.xticks(x_pos + width * (len(filtered_attriblist) - 1) / 2,
                [f"{i}%" for i in x_axis])
     plt.legend()
     plt.grid(True, alpha=0.3, axis="y")
     plt.tight_layout()
 
-    plt.show()
+    if show:
+        plt.show()
+
+    if save:
+        plt.savefig(suptitle.replace(" ", "_"))
 
 # rootpath = "/home/lungsi/DockerShare/data/parameter_search/6aMar2025/CORTEX/"
 # nucleus = "CSN"

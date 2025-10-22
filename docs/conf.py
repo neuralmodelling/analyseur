@@ -62,7 +62,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # to avoid breaking the building process due to external dependencies not met
 autodoc_mock_imports = [
     "numpy", "pandas", "matplotlib",
-    "scipy", "sklearn",
+    "scipy", "sklearn", "pywavelets",
 ]
 
 # -- Options for HTML output -------------------------------------------------
