@@ -17,7 +17,7 @@ Visualizers
 ===========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Available visualization functions:
 
    visual/raster.rst
@@ -32,7 +32,7 @@ Composite Visualizers
 ---------------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Available composite visualizer functions:
 
    visual/composite/observables.rst
@@ -42,7 +42,7 @@ Statistics
 ==========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Available statistical functions:
 
    stats/isi.rst
