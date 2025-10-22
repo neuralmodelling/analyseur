@@ -13,7 +13,7 @@ models developed (or involved) in Dr. Benoît Girard's lab.
    :maxdepth: 2
    :caption: Contents:
    
-   contents.rst
+   cbgt/contents.rst
 
 
 
