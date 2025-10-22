@@ -7,7 +7,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from odf.grammar import required_attributes
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
