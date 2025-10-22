@@ -7,7 +7,7 @@ Welcome to analyseur's documentation!
 =================================
 
 analyseur is a module for viewing analytical measures from (potentially) myriad
-models developed (or involved) in Dr. Benoît Girard's lab.
+models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
 
 .. toctree::
    :maxdepth: 2
