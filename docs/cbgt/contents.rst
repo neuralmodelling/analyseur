@@ -8,7 +8,9 @@ Loaders
    :maxdepth: 5
    :caption: Available file loaders:
 
+   parameters.rst
    loader.rst
+   curate.rst
 
 
 Visualizers
@@ -23,6 +25,18 @@ Visualizers
    visual/peristimulus.rst
    visual/popurate.rst
    visual/popact.rst
+   visual/scalo.rst
+   visual/distribution.rst
+
+Composite Visualizers
+---------------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Available composite visualizer functions:
+
+   visual/composite/observables.rst
+   visual/composite/current_distrib.rst
 
 Statistics
 ==========
@@ -33,4 +47,6 @@ Statistics
 
    stats/isi.rst
    stats/variation.rst
+   stats/sync.rst
+   stats/wavelet.rst
 

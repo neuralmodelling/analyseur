@@ -15,27 +15,92 @@ class Scalogram(object):
         self.spiketimes_superset = spiketimes_superset
         # get_binary_spiketrains(spiketimes_superset, window=(0, 10), sampling_rate=None, neurons="all"):
 
-    def plot(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
-             sampling_rate=None, window=None, neurons=None, sigma=None,):
-        [coefficients, frequencies, _, time_axis] = \
-            WaveletTransform.compute_cwt(self.spiketimes_superset, sampling_rate=sampling_rate,
-                                         window=window, neurons=neurons, sigma=sigma,
-                                         scales=scales, wavelet=wavelet)
+    def plot_single(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
+                    sampling_rate=None, window=None, neurons=None, sigma=None, neuron_indx=None):
+        [coefficients, frequencies, neuronid, time_axis] = \
+            WaveletTransform.compute_cwt_single(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                                window=window, neurons=neurons, sigma=sigma,
+                                                scales=scales, wavelet=wavelet, neuron_indx=neuron_indx)
+
+        nucname = "" if nucleus is None else " of " + nucleus
+        suptitle = "Scalogram" + nucname + f" ({neuronid})"
+
         # Plot
         fig, ax = plt.subplots(figsize=(10, 6))
 
         mesh = ax.pcolormesh(time_axis, frequencies, np.abs(coefficients),
-                             shading="gouraud", cmap="viridis")
-        ax.set_ylabel("Frequency (Hz)")
+                             shading="gouraud", cmap="YlOrRd")
+        ax.set_title(suptitle)
         ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Frequency (Hz)")
         ax.set_yscale("log")
 
         fig.colorbar(mesh, ax=ax, label="CWT Coefficient Magnitude")
 
+        if show:
+            plt.show()
+
+        if save:
+            plt.savefig(suptitle.replace(" ", "_"))
+
+        return fig, ax
+
+    def plot_avg(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
+                sampling_rate=None, window=None, neurons=None, sigma=None,):
+        [avg_coefficients, frequencies, yticks, time_axis] = \
+            WaveletTransform.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                            window=window, neurons=neurons, sigma=sigma,
+                                            scales=scales, wavelet=wavelet, )
+
         nucname = "" if nucleus is None else " of " + nucleus
-        ax.set_title("Scalogram" + nucname)
+        suptitle = "Scalogram" + nucname + f"( {len(yticks)} average)"
+
+        # Plot
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        mesh = ax.pcolormesh(time_axis, frequencies, avg_coefficients,
+                             shading="gouraud", cmap="YlOrRd")
+        ax.set_title(suptitle)
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Frequency (Hz)")
+        ax.set_yscale("log")
+
+        fig.colorbar(mesh, ax=ax, label="CWT Coefficient Magnitude")
 
         if show:
             plt.show()
+
+        if save:
+            plt.savefig(suptitle.replace(" ", "_"))
+
+        return fig, ax
+
+    def plot_sum(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
+                sampling_rate=None, window=None, neurons=None, sigma=None,):
+        [coefficients, frequencies, yticks, time_axis] = \
+            WaveletTransform.compute_cwt_sum(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                            window=window, neurons=neurons, sigma=sigma,
+                                            scales=scales, wavelet=wavelet, )
+
+        nucname = "" if nucleus is None else " of " + nucleus
+        suptitle = "Scalogram" + nucname + f"( {len(yticks)} sum)"
+
+        # Plot
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        mesh = ax.pcolormesh(time_axis, frequencies, coefficients,
+                             shading="gouraud", cmap="YlOrRd")
+        ax.set_title(suptitle)
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Frequency (Hz)")
+        ax.set_yscale("log")
+
+        fig.colorbar(mesh, ax=ax, label="CWT Coefficient Magnitude")
+
+        if show:
+            plt.show()
+
+        if save:
+            plt.savefig(suptitle.replace(" ", "_"))
 
         return fig, ax
