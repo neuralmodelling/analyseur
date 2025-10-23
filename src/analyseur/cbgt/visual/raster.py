@@ -78,7 +78,8 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
         ytick_interval = 1
 
     # lineoffsets = 0.5  # default: 1
-    lineoffsets = np.arange(1, n_neurons + 1)
+    # lineoffsets = np.arange(1, n_neurons + 1)
+    lineoffsets = np.arange(n_neurons) * 0.8 + 0.5  # minimal spacing between neurons
 
     # Plot
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -96,6 +97,7 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
 
     ax.set_ylabel("neurons")
     ax.set_xlabel("Time (s)")
+    ax.set_ylim(0, lineoffsets[-1] + 0.5)  # visibile y-range to eliminate white space
 
     nucname = "" if nucleus is None else " in "+nucleus
     allno = str(n_neurons)

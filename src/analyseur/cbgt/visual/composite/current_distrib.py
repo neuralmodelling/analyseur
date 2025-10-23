@@ -97,7 +97,9 @@ def plot_current_distrib(rootpath, nucleus, attriblist, decayfolderid):
     plt.show()
 
 
-def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, show=True, save=False):
+def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, feedfwd=False, show=True, save=False):
+    simparams = SimulationParams()
+
     [mean_I, filtered_attriblist] = get_observables(rootpath, nucleus, attriblist, decayfolderid)
     x_axis = np.round(np.array(list(decayfolderid.values())) * 100, decimals=1)
     n_experiments = len(x_axis)
@@ -116,6 +118,10 @@ def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, show=Tru
 
         plt.bar(x_pos + offset, data, width, label=attrib)
         multiplier += 1
+
+    if feedfwd:
+        plt.axhline(y=simparams.ff_currents[__get_region_name(simparams, nucleus)][nucleus],
+                    color='b', linestyle='--', label=r"$I_{feedforward}$")
 
     plt.xlabel("Number of Experiments")
     plt.ylabel("Mean Current (nA)")

@@ -91,8 +91,12 @@ class LoadSpikeTimes(CommonLoader):
         recorded in the file (loaded as a panda dataframe)."""
         neuron_ids = dataframe.filter(like="i").values
 
-        smallest_id = min(neuron_ids)[0]
-        largest_id = max(neuron_ids)[0]
+        if len(neuron_ids)==0:
+            smallest_id = 0  # Temporary solution to get the code to execute/plot
+            largest_id = 0   # even with errors from child functions
+        else:
+            smallest_id = min(neuron_ids)[0]
+            largest_id = max(neuron_ids)[0]
 
         return [smallest_id, largest_id]
 
