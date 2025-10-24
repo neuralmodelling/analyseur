@@ -94,10 +94,10 @@ class InterSpikeInterval(object):
         .. table:: Formula_mean_freqs_1.2
 
         ========================================================================== ======================================================
-          Definitions                                                               Interpretation
+          Definitions                                                                Interpretation
         ========================================================================== ======================================================
-         :math:`\\overline{f^{(i)}}`                                                  mean spiking frequency of i-th neuron
-         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`     array of mean frequencies of all neurons
+         :math:`\\overline{f^{(i)}}`                                                 mean spiking frequency of i-th neuron
+         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
         ========================================================================== ======================================================
 
         """
