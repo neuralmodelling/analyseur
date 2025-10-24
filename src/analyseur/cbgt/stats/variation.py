@@ -48,7 +48,7 @@ class Variations(object):
 
         **Formula**
 
-        .. table:: Formula
+        .. table:: Formula_computeCV_1.2
         ========================================================================================= ======================================================
           Definitions                                                                             Interpretation
         ========================================================================================= ======================================================
@@ -66,17 +66,18 @@ class Variations(object):
 
             cv^{(i)} = \\frac{\\sigma\\left(\\overrightarrow{ISI}^{(i)}\\right)}{\\mu\\left(\\overrightarrow{ISI}^{(i)}\\right)}
 
-        where, :math:`\\sigma(\\cdot)`
+        where, :math:`\\sigma(\\cdot)` is the standard deviation function over the given dimension and
+        :math:`\\mu(\\cdot)` is the arithmetic mean function over the given dimension.
 
         We therefore get
 
-        .. table:: Formula_mean_freqs_1.2
-        ========================================================================== ======================================================
-          Definitions                                                                Interpretation
-        ========================================================================== ======================================================
-         :math:`\\overline{f^{(i)}}`                                                 mean spiking frequency of i-th neuron
-         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
-        ========================================================================== ======================================================
+        .. table:: Formula_computeCV_1.2
+        ================================================================================== ======================================================
+          Definitions                                                                       Interpretation
+        ================================================================================== ======================================================
+         :math:`cv^{(i)}`                                                                   coefficient of variation of i-th neuron
+         :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
+        ================================================================================== ======================================================
 
         .. raw:: html
 
