@@ -222,9 +222,9 @@ class Variations(object):
         =============================================================================================== ======================================================
          total neurons, :math:`n_{Nuc}`                                                                  total number of neurons in the Nucleus
          neuron index, :math:`i`                                                                         i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                          mean spiking frequency of i-th neuron
+         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                          coefficient of variation of i-th neuron
          :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`               array of coefficient of variation of all neurons
-         grand coefficient of variation, :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV}\\right)`     grand or global mean spiking frequency
+         grand coefficient of variation, :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV}\\right)`     grand or global coefficient of variation
         =============================================================================================== ======================================================
 
         where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
@@ -249,15 +249,15 @@ class Variations(object):
         **Formula**
 
         .. table:: Formula
-        ================================================================================================= ======================================================
-          Definitions                                                                                      Interpretation
-        ================================================================================================= ======================================================
-         total neurons, :math:`n_{Nuc}`                                                                    total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                           i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                            mean spiking frequency of i-th neuron
-         :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`            array of local coefficient of variation of all neurons
-         grand coefficient of variation, :math:`\\overline{CV_2} = \\mu\\left(\\overrightarrow{CV_2}\\right)`  grand or global mean spiking frequency
-        ================================================================================================= ======================================================
+        ====================================================================================================== ======================================================
+          Definitions                                                                                            Interpretation
+        ====================================================================================================== ======================================================
+         total neurons, :math:`n_{Nuc}`                                                                          total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                                 i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         local coefficient of variation, :math:`\\overline{cv^{(i)}}`                                            local coefficient of variation of i-th neuron
+         :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`                  array of local coefficient of variation of all neurons
+         grand local coefficient of variation, :math:`\\overline{CV_2} = \\mu\\left(\\overrightarrow{CV_2}\\right)`  grand or global local coefficient of variation
+        ====================================================================================================== ======================================================
 
         where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
 
@@ -286,7 +286,7 @@ class Variations(object):
         ======================================================================================== ======================================================
          total neurons, :math:`n_{Nuc}`                                                            total number of neurons in the Nucleus
          neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                    mean spiking frequency of i-th neuron
+         local variation, :math:`\\overline{cv^{(i)}}`                                             local variation of i-th neuron
          :math:`\\overrightarrow{LV} = \\left[lv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of local variation of all neurons
          grand local variation, :math:`\\overline{LV} = \\mu\\left(\\overrightarrow{LV}\\right)`      grand or global local variation
         ======================================================================================== ======================================================
