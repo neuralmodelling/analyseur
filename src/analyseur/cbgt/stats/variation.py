@@ -43,7 +43,7 @@ class Variations(object):
         """
         Returns
 
-        :param all_neurons_isi: Dictionary returned using 
+        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return:
 
         **Formula**
