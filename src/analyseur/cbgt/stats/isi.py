@@ -68,8 +68,32 @@ class InterSpikeInterval(object):
         :return: dictionary of individual neurons whose values are their respective mean frequencies
 
 
-        Formula
-        ~~~~~~~
+        Section Title
+        =============
+
+        Section Title
+        -------------
+
+        Section Title
+        `````````````
+
+        Section Title
+        '''''''''''''
+
+        Section Title
+        .............
+
+        Section Title
+        ~~~~~~~~~~~~~
+
+        Section Title
+        *************
+
+        Section Title
+        +++++++++++++
+
+        Section Title
+        ^^^^^^^^^^^^^
 
         .. table:: Formula
 
