@@ -13,7 +13,8 @@ from scipy.stats import gaussian_kde
 import re
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
-from analyseur.cbgt.visual.tabular import SpikingStats
+from analyseur.cbgt.stats.isi import InterSpikeInterval
+from analyseur.cbgt.stats.variation import Variations
 
 
 ##########################################################################
@@ -113,25 +114,70 @@ def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1)
 #    CV PLOT
 ##########################################################################
 
-def cv_distrib(spiketimes_superset):
-    sstat = SpikingStats(spiketimes_superset)
-    compstat = sstat.compute_stats()
+def cv_distrib(spiketimes_superset, orient="vertical", show=True):
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    CVarr = compstat["CV_array"].values()
+    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    CVarr = Variations.computeCV(all_isi)
+    vec_CV = CVarr.values()
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    if orient=="horizontal":
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.barh(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.bar(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
+        ax.set_xlabel("Neurons")
 
-    ax.barh(range(len(CVarr)), CVarr, color="steelblue", edgecolor="black")
-    ax.grid(True, alpha=0.3, axis="x")
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
 
     # ax.set_ylable()
     # ax.set_xlable()
 
     ax.set_title("CV")
 
-    plt.show()
+    if show:
+        plt.show()
 
-    return ax
+    plt.close()
+
+    return fig, ax
+
+
+##########################################################################
+#    Mean Freq PLOT
+##########################################################################
+
+def mean_freq_distrib(spiketimes_superset, orient="vertical", show=True):
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    mu_arr = InterSpikeInterval.mean_freqs(all_isi)
+    vec_mu = mu_arr.values()
+
+    if orient=="horizontal":
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.bar(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    # ax.set_ylable()
+    # ax.set_xlable()
+
+    ax.set_title("Mean Freq (1/s)")
+
+    if show:
+        plt.show()
+
+    plt.close()
+
+    return fig, ax
 
 
 ##########################################################################

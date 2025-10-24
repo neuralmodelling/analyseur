@@ -74,7 +74,51 @@ def get_observables(rootpath, nucleus, attriblist, decayfolderid):
 
     return current_means, filtered_attriblist
 
-def plot_current_distrib(rootpath, nucleus, attriblist, decayfolderid):
+def plot_current_distrib2(rootpath, nucleus, attriblist, decayfolderid, feedfwd=False, show=True, save=False):
+    simparams = SimulationParams()
+
+    [mean_I, filtered_attriblist] = get_observables(rootpath, nucleus, attriblist, decayfolderid)
+    x_axis = np.round(np.array(list(decayfolderid.values())) * 100, decimals=1)
+    n_experiments = len(x_axis)
+    n_attrib = len(filtered_attriblist)
+    suptitle = "Current Distribution of " + nucleus
+
+    # Plot
+    plt.clf()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Set bar width and positions
+    bar_width = 0.8 / n_attrib # width changes dynamically with number of attributes (channels)
+    x_positions = np.arange(n_experiments)
+
+    # Create bars for each attribute
+    for i, attrib in enumerate(filtered_attriblist):
+        offset = (i - n_attrib/2 + 0.5) * bar_width
+        ax.bar(x_positions + offset, mean_I[attrib], bar_width, label=attrib)
+
+    if feedfwd:
+        plt.axhline(y=simparams.ff_currents[__get_region_name(simparams, nucleus)][nucleus],
+                    color='b', linestyle='--', label=r"$I_{feedforward}$")
+
+    ax.set_xlabel("Number of Experiments")
+    ax.set_ylabel("Mean Current (µA⋅cm"+r"$^{-2}$)")
+    ax.set_title(suptitle)
+    ax.set_xticks(x_positions)
+    ax.set_xticklabels([f"Exp {i+1}" for i in range(n_experiments)])
+    ax.legend()
+    ax.grid(alpha=0.3, axis="y")
+
+    plt.tight_layout()
+
+    if show:
+        plt.show()
+
+    if save:
+        plt.savefig(suptitle.replace(" ", "_"))
+
+
+def plot_current_distrib(rootpath, nucleus, attriblist, decayfolderid, show=True, ):
     [mean_I, filtered_attriblist] = get_observables(rootpath, nucleus, attriblist, decayfolderid)
 
     plt.figure(figsize=(12, 8))
@@ -87,14 +131,15 @@ def plot_current_distrib(rootpath, nucleus, attriblist, decayfolderid):
                  label=f"{attrib} (mean: {np.mean(data):.3f}±{np.std(data):.3f} nA)",
                  edgecolor="black", linewidth=0.5)
 
-    plt.xlabel("Mean Current (nA)")
+    plt.xlabel("Mean Current (µA⋅cm"+r"$^{-2}$)")
     plt.ylabel("Number of Experiments")
     plt.title("Distribution of Mean Channel Currents across 10 Experiments")
     plt.legend()
     plt.grid(True, alpha=0.3, axis="y")
     plt.tight_layout()
 
-    plt.show()
+    if show:
+        plt.show()
 
 
 def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, feedfwd=False, show=True, save=False):
@@ -124,7 +169,7 @@ def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, feedfwd=
                     color='b', linestyle='--', label=r"$I_{feedforward}$")
 
     plt.xlabel("Number of Experiments")
-    plt.ylabel("Mean Current (nA)")
+    plt.ylabel("Mean Current (µA⋅cm"+r"$^{-2}$)")
     plt.title(suptitle)
     plt.xticks(x_pos + width * (len(filtered_attriblist) - 1) / 2,
                [f"{i}%" for i in x_axis])

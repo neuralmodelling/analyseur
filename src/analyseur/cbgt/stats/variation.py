@@ -70,7 +70,7 @@ class Variations(object):
             if len(isi) == 0:
                 all_CV2[n_id] = np.zeros(1)
             else:
-                abs_diff_over_sum = np.diff(isi) / (isi[1:] + isi[:-1])
+                abs_diff_over_sum = np.abs( np.diff(isi) / (isi[1:] + isi[:-1]) )
                 all_CV2[n_id] = np.mean(2 * abs_diff_over_sum)
 
         return all_CV2

@@ -21,7 +21,7 @@ def _get_line_colors(colors=False, no_neurons=None):
     else:
         return "black"
 
-def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
+def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None, show=True):
     """
     Displays the rasterplot of the given spike times (seconds) and returns the plot figure (to save if necessary).
 
@@ -82,7 +82,9 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     lineoffsets = np.arange(n_neurons) * 0.8 + 0.5  # minimal spacing between neurons
 
     # Plot
-    fig, ax = plt.subplots(figsize=(10, 6))
+    plt.clf()
+
+    fig, ax = plt.subplots(figsize=(16, 14))
     ax.eventplot(desired_spiketimes_subset, colors=linecolors,
                  linelengths=linelengths, linewidths=linewidths,
                  lineoffsets=lineoffsets,orientation="horizontal", alpha=None)
@@ -106,6 +108,9 @@ def rasterplot(spiketimes_superset, colors=False, neurons="all", nucleus=None):
     else:
         ax.set_title("Raster of " + str(neurons[0]) + " to " + str(neurons[-1]) + " neurons" + nucname)
 
-    plt.show()
+    plt.grid(True, axis="x", alpha=0.3)
+
+    if show:
+        plt.show()
 
     return fig, ax
