@@ -66,8 +66,8 @@ class Variations(object):
 
             cv^{(i)} = \\frac{\\sigma\\left(\\overrightarrow{ISI}^{(i)}\\right)}{\\mu\\left(\\overrightarrow{ISI}^{(i)}\\right)}
 
-        where, :math:`\\sigma(\\cdot)` is the standard deviation function over the given dimension and
-        :math:`\\mu(\\cdot)` is the arithmetic mean function over the given dimension.
+        where, :math:`\\sigma(\\cdot)` is the `standard deviation function <https://numpy.org/doc/stable/reference/generated/numpy.std.html>`_ over the given dimension and
+        :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
 
         We therefore get
 
@@ -76,7 +76,7 @@ class Variations(object):
           Definitions                                                                       Interpretation
         ================================================================================== ======================================================
          :math:`cv^{(i)}`                                                                   coefficient of variation of i-th neuron
-         :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
+         :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of coefficient of variation of all neurons
         ================================================================================== ======================================================
 
         .. raw:: html
