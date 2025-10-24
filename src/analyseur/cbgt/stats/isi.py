@@ -70,7 +70,7 @@ class InterSpikeInterval(object):
 
         **Formula**
 
-        .. table:: Formula
+        .. table:: Formula_mean_freqs_1.1
 
         ========================================================================================= ======================================================
           Definitions                                                                             Interpretation
@@ -88,6 +88,17 @@ class InterSpikeInterval(object):
         .. math::
 
             \\overline{f^{(i)}} = \\frac{1}{(n_{spk}^{(i)} - 1)} \\sum_{j=1}^{(n_{spk}^{(i)} - 1)}\\frac{1}{isi_{j}^{(i)}}
+
+        We therefore get
+
+        .. table:: Formula_mean_freqs_1.2
+
+        ========================================================================== ======================================================
+          Definitions                                                               Interpretation
+        ========================================================================== ======================================================
+         :math:`\\overline{f^{(i)}}`                                                  mean spiking frequency of i-th neuron
+         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`     array of mean frequencies of all neurons
+        ========================================================================== ======================================================
 
         """
         mean_spiking_freq = {}
