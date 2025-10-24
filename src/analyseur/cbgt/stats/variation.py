@@ -43,8 +43,43 @@ class Variations(object):
         """
         Returns
 
-        :param all_neurons_isi:
+        :param all_neurons_isi: Dictionary returned using :meth:`~analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return:
+
+        **Formula**
+
+        .. table:: Formula
+        ========================================================================================= ======================================================
+          Definitions                                                                             Interpretation
+        ========================================================================================= ======================================================
+         total neurons, :math:`n_{nuc}`                                                            total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                       total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`                array of array interspike intervals of all neurons
+        ========================================================================================= ======================================================
+
+        Then, the coefficient of variation of the i-th neuron is
+
+        .. math::
+
+            \\overline{cv^{(i)}} = \\frac{\\sigma(\\overrightarrow{ISI}^{(i)})}{\\mu(\\overrightarrow{ISI}^{(i)})}
+
+        We therefore get
+
+        .. table:: Formula_mean_freqs_1.2
+        ========================================================================== ======================================================
+          Definitions                                                                Interpretation
+        ========================================================================== ======================================================
+         :math:`\\overline{f^{(i)}}`                                                 mean spiking frequency of i-th neuron
+         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
+        ========================================================================== ======================================================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         all_CV = {}
 
