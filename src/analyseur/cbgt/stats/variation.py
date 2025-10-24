@@ -209,7 +209,7 @@ class Variations(object):
     @classmethod
     def grandCV(cls, all_neurons_isi=None):
         """
-        Returns the grand mean frequency which is the mean of mean frequencies of all the neurons
+        Returns the grand coefficient of variation which is the mean of coefficient of variation of all the neurons
 
         :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: a number
@@ -224,10 +224,11 @@ class Variations(object):
          neuron index, :math:`i`                                                                         i-th neuron in the pool of :math:`n_{Nuc}` neurons
          coefficient of variation, :math:`\\overline{cv^{(i)}}`                                          mean spiking frequency of i-th neuron
          :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`               array of coefficient of variation of all neurons
-         grand coefficient of variation, :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV_2}\\right)`   grand or global mean spiking frequency
+         grand coefficient of variation, :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV}\\right)`     grand or global mean spiking frequency
         =============================================================================================== ======================================================
 
         where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
+
         NOTE: The array :math:`\\overrightarrow{CV}` is obtained by calling :py:meth:`.computeCV`
 
         .. raw:: html
@@ -240,10 +241,31 @@ class Variations(object):
     @classmethod
     def grandCV2(cls, all_neurons_isi=None):
         """
+        Returns the grand local coefficient of variation which is the mean of local coefficient of variation of all the neurons
 
-        :param all_neurons_isi:
-        :return:
-        """
+        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :return: a number
+
+        **Formula**
+
+        .. table:: Formula
+        ================================================================================================= ======================================================
+          Definitions                                                                                      Interpretation
+        ================================================================================================= ======================================================
+         total neurons, :math:`n_{Nuc}`                                                                    total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                           i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                            mean spiking frequency of i-th neuron
+         :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`            array of local coefficient of variation of all neurons
+         grand coefficient of variation, :math:`\\overline{CV_2} = \\mu\\left(\\overrightarrow{CV_2}\\right)`  grand or global mean spiking frequency
+        ================================================================================================= ======================================================
+
+        where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
+
+        NOTE: The array :math:`\\overrightarrow{CV_2}` is obtained by calling :py:meth:`.computeCV2`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         all_neurons_CV2 = cls.computeCV2(all_neurons_isi)
         return cgm(all_neurons_CV2)
 
