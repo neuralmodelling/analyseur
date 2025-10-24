@@ -56,7 +56,7 @@ class InterSpikeInterval(object):
 
         I = InterSpikeInterval.compute(spiketimes_superset)
 
-    The returns the value for :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    This returns the value for :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.compute`.
 
     2.2. Compute Mean Frequencies (for all neurons)
@@ -65,7 +65,7 @@ class InterSpikeInterval(object):
 
         F = InterSpikeInterval.mean_freqs(I)
 
-    The returns the value for :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    This returns the value for :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.mean_freqs`
 
     2.3. Compute Global Mean Frequency
@@ -74,7 +74,7 @@ class InterSpikeInterval(object):
 
         grand_f = InterSpikeInterval.grand_mean_freq(I)
 
-    The returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
+    This returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
 
     .. raw:: html
 
