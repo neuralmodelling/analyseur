@@ -86,15 +86,15 @@ class InterSpikeInterval(object):
 
             \\overline{f^{(i)}} = \\frac{1}{(n_{spk}^{(i)} - 1)} \\sum_{j=1}^{(n_{spk}^{(i)} - 1)}\\frac{1}{isi_{j}^{(i)}}\\
             \\overrightarrow{ISI^i} = [\\overrightarrow{ISI^{(i)}}]
-            
-            \\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+
+            \\overrightarrow{ISI}^{(i)} = [isi_k]^{(i)}_{\\forall{k \\in [1, n_{spk}^{(i)})}}
 
         .. table::
 
         =========================================================================================   ============================================
         Definitions                                                                                 Interpretations
         =========================================================================================   ============================================
-        :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`   array of interspike intervals of i-th neuron
+        :math:`\\overrightarrow{ISI}^{(i)} = [isi_k]^{(i)}_{\\forall{k \\in [1, n_{spk}^{(i)})}}`   array of interspike intervals of i-th neuron
         =========================================================================================   ============================================
 
         """
