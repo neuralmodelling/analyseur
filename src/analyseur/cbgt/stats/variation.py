@@ -273,9 +273,31 @@ class Variations(object):
     @classmethod
     def grandLV(cls, all_neurons_isi=None):
         """
+        Returns the grand local variation which is the mean of local variation of all the neurons
 
-        :param all_neurons_isi:
-        :return:
+        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :return: a number
+
+        **Formula**
+
+        .. table:: Formula
+        ======================================================================================== ======================================================
+          Definitions                                                                              Interpretation
+        ======================================================================================== ======================================================
+         total neurons, :math:`n_{Nuc}`                                                            total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                    mean spiking frequency of i-th neuron
+         :math:`\\overrightarrow{LV} = \\left[lv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of local variation of all neurons
+         grand local variation, :math:`\\overline{LV} = \\mu\\left(\\overrightarrow{LV}\\right)`      grand or global local variation
+        ======================================================================================== ======================================================
+
+        where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
+
+        NOTE: The array :math:`\\overrightarrow{LV}` is obtained by calling :py:meth:`.computeLV`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         all_neurons_LV = cls.computeLV(all_neurons_isi)
         return cgm(all_neurons_LV)
