@@ -106,7 +106,7 @@ class InterSpikeInterval(object):
 
         .. raw:: html
 
-        <hr style="border: 2px solid red; margin: 20px 0;">
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         interspike_intervals = {}
@@ -156,7 +156,7 @@ class InterSpikeInterval(object):
 
         .. raw:: html
 
-        <hr style="border: 2px solid red; margin: 20px 0;">
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         mean_spiking_freq = {}
@@ -195,7 +195,7 @@ class InterSpikeInterval(object):
 
         .. raw:: html
 
-        <hr style="border: 2px solid red; margin: 20px 0;">
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         all_neurons_mean_freq = cls.mean_freqs(all_neurons_isi)
