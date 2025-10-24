@@ -78,24 +78,13 @@ class InterSpikeInterval(object):
          interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
          :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
          :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`                array of array interspike intervals of all neurons
-         mean frequency, :math:`\\overline{f^{(i)}}`                                               mean spiking frequency of i-th neuron
         ========================================================================================= ======================================================
+
+        Then, the mean spiking frequency of i-th neuron is
 
         .. math::
 
             \\overline{f^{(i)}} = \\frac{1}{(n_{spk}^{(i)} - 1)} \\sum_{j=1}^{(n_{spk}^{(i)} - 1)}\\frac{1}{isi_{j}^{(i)}}
-
-            \\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
-
-            \\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}
-
-        .. table::
-
-        =========================================================================================   ============================================
-        Definitions                                                                                 Interpretations
-        =========================================================================================   ============================================
-        :math:`\\overrightarrow{ISI}^{(i)} = [isi_k]^{(i)}_{\\forall{k \\in [1, n_{spk}^{(i)})}}`   array of interspike intervals of i-th neuron
-        =========================================================================================   ============================================
 
         """
         mean_spiking_freq = {}
