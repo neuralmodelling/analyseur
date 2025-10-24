@@ -76,7 +76,7 @@ class InterSpikeInterval(object):
          neuron index, :math:`i`                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
          total spikes, :math:`n_{spk}^{(i)}`                total number of spikes (spike times) by i-th neuron
          interspike interval, :math:`isi_{k}^{(i)}`         k-th absolute interval between successive spike times
-         :math:`\\overrightarrow{ISI}^{(i)}`                array of interspike intervals of i-th neuron
+         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{i}]`  array of interspike intervals of i-th neuron
          array of interspike interval, :math:`\\vec{I}`     interspike interval between all spike times of i-th neuron
          mean frequency, :math:`\\overline{f^{(i)}}`        mean spiking frequency of i-th neuron
         ================================================== ======================================================
