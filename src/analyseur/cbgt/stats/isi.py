@@ -67,9 +67,10 @@ class InterSpikeInterval(object):
         :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
         :return: dictionary of individual neurons whose values are their respective mean frequencies
 
-        -------
+
         Formula
         -------
+        
         .. table:: Formula
 
         ========================================================================================= ======================================================
