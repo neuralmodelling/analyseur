@@ -67,27 +67,33 @@ class Variations(object):
     ```````````````````````````
     ::
 
-        I = InterSpikeInterval.compute(spiketimes_superset)
+        CV = Variations.computeCV(isi_superset)
+        CV2 = Variations.computeCV2(isi_superset)
+        LV = Variations.computeLV(isi_superset)
 
-    This returns the value for :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
-    see :py:meth:`.compute`.
+    This returns the respective values for
 
-    2.2. Compute Mean Frequencies (for all neurons)
-    ````````````````````````````````````````````````
+    - :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
+
+    - :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
+
+    - :math:`\\overrightarrow{LV} = \\left[lv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
+
+    2.2. Compute Global Values
+    ``````````````````````````
     ::
 
-        F = InterSpikeInterval.mean_freqs(I)
+        grand_CV = Variations.grandCV(isi_superset)
+        grand_CV2 = Variations.grandCV2(isi_superset)
+        grand_LV = Variations.grandLV(isi_superset)
 
-    This returns the value for :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
-    see :py:meth:`.mean_freqs`
+    This returns the respective values for
 
-    2.3. Compute Global Mean Frequency
-    ```````````````````````````````````
-    ::
+    - :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV}\\right)`
 
-        grand_f = InterSpikeInterval.grand_mean_freq(I)
+    - :math:`\\overline{CV_2} = \\mu\\left(\\overrightarrow{CV_2}\\right)`
 
-    This returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
+    - :math:`\\overline{LV} = \\mu\\left(\\overrightarrow{LV}\\right)`
 
     .. raw:: html
 
