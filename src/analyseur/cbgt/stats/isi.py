@@ -14,18 +14,15 @@ class InterSpikeInterval(object):
     """
     Computes interspike intervals for the given spike times
 
-    +------------------------------+-------------------------------------------------------+
-    | Methods                      | Argument                                              |
-    +==============================+=======================================================+
-    | :py:meth:`.compute`          | - :param all_neurons_spiketimes: Dictionary returned  |
-    |                              | using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`  |
-    +------------------------------+-------------------------------------------------------+
-    | :py:meth:`.mean_freqs`       | - :param all_neurons_isi: Dictionary returned         |
-    |                              | using :py:meth:`.compute`                             |
-    +------------------------------+-------------------------------------------------------+
-    | :py:meth:`.grand_mean_freq`  | - :param all_neurons_isi: Dictionary returned         |
-    |                              | using :py:meth:`.compute`                             |
-    +------------------------------+-------------------------------------------------------+
+    +------------------------------+-----------------------------------------------------------------------------------------------------+
+    | Methods                      | Argument                                                                                            |
+    +==============================+=====================================================================================================+
+    | :py:meth:`.compute`          | - `all_neurons_spiketimes`: Dictionary returned; see :class:`~analyseur/cbgt/loader.LoadSpikeTimes` |
+    +------------------------------+-----------------------------------------------------------------------------------------------------+
+    | :py:meth:`.mean_freqs`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                   |
+    +------------------------------+-----------------------------------------------------------------------------------------------------+
+    | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                   |
+    +------------------------------+-----------------------------------------------------------------------------------------------------+
 
     ----
 
@@ -136,6 +133,7 @@ class InterSpikeInterval(object):
          grand mean frequency, :math:`\\overline{f}`                                 grand or global mean spiking frequency
         ========================================================================== ======================================================
 
+        NOTE: The array :math:`\\vec{F}` is obtained by calling :py:meth:`.mean_freqs`
         ----
 
         """
