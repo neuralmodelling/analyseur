@@ -17,7 +17,7 @@ class InterSpikeInterval(object):
     +------------------------------+-------------------------------------------------------+
     | Methods                      | Argument                                              |
     +==============================+=======================================================+
-    | :py:meth:`.compute`          | - :param all_neurons_spiketimes: Dictionary returned |
+    | :py:meth:`.compute`          | - :param all_neurons_spiketimes: Dictionary returned  |
     |                              | using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`  |
     +------------------------------+-------------------------------------------------------+
     | :py:meth:`.mean_freqs`       | - :param all_neurons_isi: Dictionary returned         |
@@ -26,6 +26,8 @@ class InterSpikeInterval(object):
     | :py:meth:`.grand_mean_freq`  | - :param all_neurons_isi: Dictionary returned         |
     |                              | using :py:meth:`.compute`                             |
     +------------------------------+-------------------------------------------------------+
+
+    ----
 
     """
 
@@ -135,7 +137,7 @@ class InterSpikeInterval(object):
         ========================================================================== ======================================================
 
         ----
-        
+
         """
         all_neurons_mean_freq = cls.mean_freqs(all_neurons_isi)
         return cgm(all_neurons_mean_freq)
