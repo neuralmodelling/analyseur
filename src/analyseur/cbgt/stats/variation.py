@@ -209,9 +209,29 @@ class Variations(object):
     @classmethod
     def grandCV(cls, all_neurons_isi=None):
         """
+        Returns the grand mean frequency which is the mean of mean frequencies of all the neurons
 
-        :param all_neurons_isi:
-        :return:
+        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :return: a number
+
+        **Formula**
+
+        .. table:: Formula
+        =================================================================================== ======================================================
+          Definitions                                                                         Interpretation
+        =================================================================================== ======================================================
+         total neurons, :math:`n_{Nuc}`                                                       total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         mean frequency, :math:`\\overline{f^{(i)}}`                                          mean spiking frequency of i-th neuron
+         :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`             array of mean frequencies of all (:math:`n_{Nuc}`) neurons
+         grand mean frequency, :math:`\\overline{f}`                                          grand or global mean spiking frequency
+        =================================================================================== ======================================================
+
+        NOTE: The array :math:`\\vec{F}` is obtained by calling :py:meth:`.mean_freqs`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         all_neurons_CV = cls.computeCV(all_neurons_isi)
         return cgm(all_neurons_CV)
