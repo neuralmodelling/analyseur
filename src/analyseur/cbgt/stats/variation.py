@@ -14,28 +14,85 @@ class Variations(object):
     """
     Computes variation or dispersion in the data
 
-    +------------------------+-----------------------------------------------+
-    | Methods                | Argument                                      |
-    +========================+===============================================+
-    | :py:meth:`.computeCV`  | - :param all_neurons_isi: Dictionary returned |
-    |                        | using :py:meth:`.compute`                     |
-    +------------------------+-----------------------------------------------+
-    | :py:meth:`.computeCV2` | - :param all_neurons_isi: Dictionary returned |
-    |                        | using :py:meth:`.compute`                     |
-    +------------------------+-----------------------------------------------+
-    | :py:meth:`.computeLV`  | - :param all_neurons_isi: Dictionary returned |
-    |                        | using :py:meth:`.compute`                     |
-    +------------------------+-----------------------------------------------+
-    | :py:meth:`grandCV`     | - :param all_neurons_isi: Dictionary returned |
-    |                        | using :py:meth:`.compute`                     |
-    +------------------------+-----------------------------------------------+
-    | :py:meth:`grandCV2`    | - :param all_neurons_isi: Dictionary returned |
-    |                        | using :py:meth:`.compute`                     |
-    +------------------------+-----------------------------------------------+
-    | :py:meth:`grandLV`     | - :param all_neurons_isi: Dictionary returned |
-    |                        | using :py:meth:`.compute`                     |
-    +------------------------+-----------------------------------------------+
-    
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+    | Methods                | Argument                                                                                            |
+    +========================+=====================================================================================================+
+    | :py:meth:`.computeCV`  | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+    | :py:meth:`.computeCV2` | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+    | :py:meth:`.computeLV`  | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+    | :py:meth:`grandCV`     | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+    | :py:meth:`grandCV2`    | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+    | :py:meth:`grandLV`     | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------------+-----------------------------------------------------------------------------------------------+
+
+    =========
+    Use Cases
+    =========
+
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules
+    ````````````````````
+    ::
+
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgt.stats.isi import InterSpikeInterval
+        from analyseur.cbgt.stats.variation import Variations
+
+    1.2. Load file and get spike times
+    ```````````````````````````````````
+    ::
+
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
+
+    1.3. Compute the Inter-Spike Intervals
+    ``````````````````````````````````````
+    ::
+
+        isi_superset = InterSpikeInterval.compute(spiketimes_superset)
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Compute Inter-Spike Intervals (for all neurons)
+    `````````````````````````````````````````````````````
+    ::
+
+        I = InterSpikeInterval.compute(spiketimes_superset)
+
+    This returns the value for :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    see :py:meth:`.compute`.
+
+    2.2. Compute Mean Frequencies (for all neurons)
+    ````````````````````````````````````````````````
+    ::
+
+        F = InterSpikeInterval.mean_freqs(I)
+
+    This returns the value for :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    see :py:meth:`.mean_freqs`
+
+    2.3. Compute Global Mean Frequency
+    ```````````````````````````````````
+    ::
+
+        grand_f = InterSpikeInterval.grand_mean_freq(I)
+
+    This returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
     """
 
     @classmethod
