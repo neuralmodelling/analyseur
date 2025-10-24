@@ -97,7 +97,7 @@ class Variations(object):
     @classmethod
     def computeCV2(cls, all_neurons_isi=None):
         """
-        Returns
+        Returns the local coefficient of variation for all individual neurons.
 
         :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: dictionary of individual neurons whose values are their respective local coefficient of variation value
@@ -153,7 +153,7 @@ class Variations(object):
     @classmethod
     def computeLV(cls, all_neurons_isi=None):
         """
-        Returns
+        Returns the local variation for all individual neurons.
 
         :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: dictionary of individual neurons whose values are their respective local variation value
