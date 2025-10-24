@@ -130,8 +130,8 @@ class Variations(object):
         ======================================================================================= ======================================================
           Definitions                                                                            Interpretation
         ======================================================================================= ======================================================
-         :math:`cv_2^{(i)}`                                                                      coefficient of variation of i-th neuron
-         :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`         array of coefficient of variation of all neurons
+         :math:`cv_2^{(i)}`                                                                      local coefficient of variation of the i-th neuron
+         :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`         array of local coefficient of variation of all neurons
         ======================================================================================= ======================================================
 
         .. raw:: html
@@ -157,6 +157,42 @@ class Variations(object):
 
         :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: dictionary of individual neurons whose values are their respective local variation value
+
+        **Formula**
+
+        .. table:: Formula_computeLV_1.2
+        ========================================================================================= ======================================================
+          Definitions                                                                             Interpretation
+        ========================================================================================= ======================================================
+         total neurons, :math:`n_{nuc}`                                                            total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                       total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`        array of array interspike intervals of all neurons
+        ========================================================================================= ======================================================
+
+        Then, the local variation of the i-th neuron is
+
+        .. math::
+
+            lv^{(i)} = \\mu\\left(3\\frac{\\left[\\left(isi^{(i)}_k - isi^{(i)}_{k-1}\\right)^2\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}{\\left[\\left(isi^{(i)}_k + isi^{(i)}_{k-1}\\right)^2\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}\\right)
+
+        where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
+
+        We therefore get
+
+        .. table:: Formula_computeLV_1.2
+        ======================================================================================= ======================================================
+          Definitions                                                                            Interpretation
+        ======================================================================================= ======================================================
+         :math:`lv^{(i)}`                                                                        local variation of the i-th neuron
+         :math:`\\overrightarrow{LV} = \\left[lv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`         array of local coefficient of variation of all neurons
+        ======================================================================================= ======================================================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         all_LV = {}
