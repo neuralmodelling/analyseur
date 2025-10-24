@@ -57,7 +57,7 @@ class Variations(object):
     ``````````````````````````````````````
     ::
 
-        isi_superset = InterSpikeInterval.compute(spiketimes_superset)
+        I = InterSpikeInterval.compute(spiketimes_superset)
 
     ---------
     2. Cases
@@ -67,9 +67,9 @@ class Variations(object):
     ```````````````````````````
     ::
 
-        CV = Variations.computeCV(isi_superset)
-        CV2 = Variations.computeCV2(isi_superset)
-        LV = Variations.computeLV(isi_superset)
+        CV = Variations.computeCV(I)
+        CV2 = Variations.computeCV2(I)
+        LV = Variations.computeLV(I)
 
     This returns the respective values for
 
@@ -83,9 +83,9 @@ class Variations(object):
     ``````````````````````````
     ::
 
-        grand_CV = Variations.grandCV(isi_superset)
-        grand_CV2 = Variations.grandCV2(isi_superset)
-        grand_LV = Variations.grandLV(isi_superset)
+        grand_CV = Variations.grandCV(I)
+        grand_CV2 = Variations.grandCV2(I)
+        grand_LV = Variations.grandLV(I)
 
     This returns the respective values for
 
