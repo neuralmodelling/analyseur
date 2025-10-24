@@ -40,7 +40,6 @@ class InterSpikeInterval(object):
         **Formula**
 
         .. table:: Formula
-
         ========================================================================================= ======================================================
           Definitions                                                                             Interpretation
         ========================================================================================= ======================================================
@@ -71,7 +70,6 @@ class InterSpikeInterval(object):
         **Formula**
 
         .. table:: Formula_mean_freqs_1.1
-
         ========================================================================================= ======================================================
           Definitions                                                                             Interpretation
         ========================================================================================= ======================================================
@@ -92,7 +90,6 @@ class InterSpikeInterval(object):
         We therefore get
 
         .. table:: Formula_mean_freqs_1.2
-
         ========================================================================== ======================================================
           Definitions                                                                Interpretation
         ========================================================================== ======================================================
@@ -128,10 +125,9 @@ class InterSpikeInterval(object):
         ========================================================================== ======================================================
          total neurons, :math:`n_{Nuc}`                                              total number of neurons in the Nucleus
          neuron index, :math:`i`                                                     i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         total spikes, :math:`n_{spk}^{(i)}`                                         total number of spikes (spike times) by i-th neuron
          mean frequency, :math:`\\overline{f^{(i)}}`                                 mean spiking frequency of i-th neuron
-         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
-         grand mean frequency, :math:`\\overline{f}`                                 grand or global mean spiking frequency of all :math:`n_{Nuc}`
+         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all (:math:`n_{Nuc}`) neurons
+         grand mean frequency, :math:`\\overline{f}`                                 grand or global mean spiking frequency
         ========================================================================== ======================================================
         
         """
