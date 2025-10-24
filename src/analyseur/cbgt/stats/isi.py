@@ -28,6 +28,24 @@ class InterSpikeInterval(object):
     Use Cases
     =========
 
+    --------------
+    Pre-requisites
+    --------------
+
+    Import Modules
+    ``````````````
+    ::
+
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgt.stats.isi import InterSpikeInterval
+
+    Load file and get spike times
+    `````````````````````````````
+    ::
+
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
+
     ----
 
     """
