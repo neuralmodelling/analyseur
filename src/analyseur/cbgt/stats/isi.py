@@ -119,18 +119,20 @@ class InterSpikeInterval(object):
         
         :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
         :return: a number
+
+        **Formula**
         
         .. table:: Formula
-
-        ================================================== ======================================================
-          Definitions                                        Interpretation
-        ================================================== ======================================================
-          total neurons, :math:`n_{Nuc}`                     total number of neurons in the Nucleus
-          neuron index, :math:`i`                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
-          total spikes, :math:`n_{spk}^{(i)}`                total number of spikes (spike times) by i-th neuron
-          mean frequency, :math:`\\overline{f^{(i)}}`        mean spiking frequency of i-th neuron
-          grand mean frequency, :math:`\\overline{f}`        grand or global mean spiking frequency of all :math:`n_{Nuc}`
-        ================================================== ======================================================
+        ========================================================================== ======================================================
+          Definitions                                                                Interpretation
+        ========================================================================== ======================================================
+         total neurons, :math:`n_{Nuc}`                                              total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                     i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                         total number of spikes (spike times) by i-th neuron
+         mean frequency, :math:`\\overline{f^{(i)}}`                                 mean spiking frequency of i-th neuron
+         :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
+         grand mean frequency, :math:`\\overline{f}`                                 grand or global mean spiking frequency of all :math:`n_{Nuc}`
+        ========================================================================== ======================================================
         
         """
         all_neurons_mean_freq = cls.mean_freqs(all_neurons_isi)
