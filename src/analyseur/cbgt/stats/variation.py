@@ -120,19 +120,19 @@ class Variations(object):
 
         .. math::
 
-            cv_2^{(i)} = \\mu\\left(2\\frac{\\left[\\left|isi^{(i)}_k - isi^{(i)}_{k-1}\\right|\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}{\\left[isi^{(i)}_k + isi^{(i)}_{k-1}\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}
+            cv_2^{(i)} = \\mu\\left(2\\frac{\\left[\\left|isi^{(i)}_k - isi^{(i)}_{k-1}\\right|\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}{\\left[isi^{(i)}_k + isi^{(i)}_{k-1}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}\\right)
 
         where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
 
         We therefore get
 
         .. table:: Formula_computeCV2_1.2
-        ================================================================================== ======================================================
-          Definitions                                                                       Interpretation
-        ================================================================================== ======================================================
-         :math:`cv^{(i)}`                                                                   coefficient of variation of i-th neuron
-         :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of coefficient of variation of all neurons
-        ================================================================================== ======================================================
+        ===================================================================================== ======================================================
+          Definitions                                                                          Interpretation
+        ===================================================================================== ======================================================
+         :math:`cv_2^{(i)}`                                                                    coefficient of variation of i-th neuron
+         :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`         array of coefficient of variation of all neurons
+        ===================================================================================== ======================================================
 
         .. raw:: html
 
