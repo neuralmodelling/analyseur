@@ -41,10 +41,10 @@ class Variations(object):
     @classmethod
     def computeCV(cls, all_neurons_isi=None):
         """
-        Returns
+        Returns the coefficient of variation for all individual neurons.
 
         :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :return:
+        :return: dictionary of individual neurons whose values are their respective coefficient of variation value
 
         **Formula**
 
@@ -99,8 +99,45 @@ class Variations(object):
         """
         Returns
 
-        :param all_neurons_isi:
-        :return:
+        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :return: dictionary of individual neurons whose values are their respective local coefficient of variation value
+
+        **Formula**
+
+        .. table:: Formula_computeCV2_1.2
+        ========================================================================================= ======================================================
+          Definitions                                                                             Interpretation
+        ========================================================================================= ======================================================
+         total neurons, :math:`n_{nuc}`                                                            total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                       total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`        array of array interspike intervals of all neurons
+        ========================================================================================= ======================================================
+
+        Then, the coefficient of variation of the i-th neuron is
+
+        .. math::
+
+            cv_2^{(i)} = \\mu\\left(2\\frac{\\left[\\left|isi^{(i)}_k - isi^{(i)}_{k-1}\\right|\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}{\\left[isi^{(i)}_k + isi^{(i)}_{k-1}\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}}
+
+        where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
+
+        We therefore get
+
+        .. table:: Formula_computeCV2_1.2
+        ================================================================================== ======================================================
+          Definitions                                                                       Interpretation
+        ================================================================================== ======================================================
+         :math:`cv^{(i)}`                                                                   coefficient of variation of i-th neuron
+         :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`       array of coefficient of variation of all neurons
+        ================================================================================== ======================================================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         all_CV2 = {}
 
@@ -118,8 +155,9 @@ class Variations(object):
         """
         Returns
 
-        :param all_neurons_isi:
-        :return:
+        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :return: dictionary of individual neurons whose values are their respective local variation value
+
         """
         all_LV = {}
 
