@@ -266,6 +266,7 @@ class Variations(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         all_neurons_CV2 = cls.computeCV2(all_neurons_isi)
         return cgm(all_neurons_CV2)
 
