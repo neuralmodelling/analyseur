@@ -76,8 +76,9 @@ class InterSpikeInterval(object):
 
     The returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
 
-    ----
-    ----
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
 
