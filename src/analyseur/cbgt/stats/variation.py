@@ -217,16 +217,17 @@ class Variations(object):
         **Formula**
 
         .. table:: Formula
-        ========================================================================================= ======================================================
-          Definitions                                                                              Interpretation
-        ========================================================================================= ======================================================
-         total neurons, :math:`n_{Nuc}`                                                            total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                    mean spiking frequency of i-th neuron
+        =============================================================================================== ======================================================
+          Definitions                                                                                    Interpretation
+        =============================================================================================== ======================================================
+         total neurons, :math:`n_{Nuc}`                                                                  total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                         i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         coefficient of variation, :math:`\\overline{cv^{(i)}}`                                          mean spiking frequency of i-th neuron
          :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`               array of coefficient of variation of all neurons
-         grand coefficient of variation, :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV_2}\\right)`     grand or global mean spiking frequency
-        ========================================================================================= ======================================================
+         grand coefficient of variation, :math:`\\overline{CV} = \\mu\\left(\\overrightarrow{CV_2}\\right)`   grand or global mean spiking frequency
+        =============================================================================================== ======================================================
 
+        where, :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
         NOTE: The array :math:`\\overrightarrow{CV}` is obtained by calling :py:meth:`.computeCV`
 
         .. raw:: html
