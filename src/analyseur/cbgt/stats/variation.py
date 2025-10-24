@@ -64,7 +64,7 @@ class Variations(object):
 
         .. math::
 
-            \\overline{cv^{(i)}} = \\frac{\\sigma(\\overrightarrow{ISI}^{(i)})}{\\mu(\\overrightarrow{ISI}^{(i)})}
+            cv^{(i)} = \\frac{\\sigma\\left(\\overrightarrow{ISI}^{(i)}\\right)}{\\mu\\left(\\overrightarrow{ISI}^{(i)}\\right)}
 
         We therefore get
 
