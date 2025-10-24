@@ -51,6 +51,8 @@ class InterSpikeInterval(object):
          :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`                array of array interspike intervals of all neurons
         ========================================================================================= ======================================================
 
+        ----
+
         """
         interspike_intervals = {}
 
@@ -97,6 +99,8 @@ class InterSpikeInterval(object):
          :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all neurons
         ========================================================================== ======================================================
 
+        ----
+
         """
         mean_spiking_freq = {}
 
@@ -129,6 +133,8 @@ class InterSpikeInterval(object):
          :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`       array of mean frequencies of all (:math:`n_{Nuc}`) neurons
          grand mean frequency, :math:`\\overline{f}`                                 grand or global mean spiking frequency
         ========================================================================== ======================================================
+
+        ----
         
         """
         all_neurons_mean_freq = cls.mean_freqs(all_neurons_isi)
