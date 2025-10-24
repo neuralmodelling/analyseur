@@ -80,6 +80,10 @@ class InterSpikeInterval(object):
           mean frequency, :math:`\\overline{f^{(i)}}`        mean spiking frequency of i-th neuron
         ================================================== ======================================================
 
+        .. math::
+
+            \\overline{f^{(i)}} = \\frac{1}{(n_{spk}^{(i)} - 1)} \\sum_{j=1}^{(n_{spk}^{(i)} - 1)}\\frac{1}{isi_{j}^{(i)}}
+
         """
         mean_spiking_freq = {}
 
