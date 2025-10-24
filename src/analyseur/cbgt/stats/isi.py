@@ -127,16 +127,16 @@ class InterSpikeInterval(object):
         **Formula**
 
         .. table:: Formula_mean_freqs_1.1
-        ========================================================================================= ======================================================
-          Definitions                                                                             Interpretation
-        ========================================================================================= ======================================================
-         total neurons, :math:`n_{nuc}`                                                            total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         total spikes, :math:`n_{spk}^{(i)}`                                                       total number of spikes (spike times) by i-th neuron
-         interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
-         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
-         :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`        array of array interspike intervals of all neurons
-        ========================================================================================= ======================================================
+        ================================================================================================== ======================================================
+          Definitions                                                                                       Interpretation
+        ================================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                                     total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`              array of array interspike intervals of all neurons
+        ================================================================================================== ======================================================
 
         Then, the mean spiking frequency of i-th neuron is
 
