@@ -17,12 +17,16 @@ class InterSpikeInterval(object):
     +------------------------------+-----------------------------------------------------------------------------------------------------+
     | Methods                      | Argument                                                                                            |
     +==============================+=====================================================================================================+
-    | :py:meth:`.compute`          | - `all_neurons_spiketimes`: Dictionary returned; see :class:`~analyseur/cbgt/loader.LoadSpikeTimes` |
+    | :py:meth:`.compute`          | - `all_neurons_spiketimes`: Dictionary returned; see :class:`analyseur/cbgt/loader.LoadSpikeTimes` |
     +------------------------------+-----------------------------------------------------------------------------------------------------+
     | :py:meth:`.mean_freqs`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                   |
     +------------------------------+-----------------------------------------------------------------------------------------------------+
     | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                   |
     +------------------------------+-----------------------------------------------------------------------------------------------------+
+
+    =========
+    Use Cases
+    =========
 
     ----
 
