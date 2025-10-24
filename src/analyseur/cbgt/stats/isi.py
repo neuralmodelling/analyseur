@@ -71,29 +71,8 @@ class InterSpikeInterval(object):
         Section Title
         =============
 
-        Section Title
-        -------------
-
-        Section Title
-        `````````````
-
-        Section Title
-        '''''''''''''
-
-        Section Title
-        .............
-
-        Section Title
-        ~~~~~~~~~~~~~
-
-        Section Title
-        *************
-
-        Section Title
-        +++++++++++++
-
-        Section Title
-        ^^^^^^^^^^^^^
+        Formula
+        -------
 
         .. table:: Formula
 
