@@ -28,23 +28,53 @@ class InterSpikeInterval(object):
     Use Cases
     =========
 
-    --------------
-    Pre-requisites
-    --------------
+    ------------------
+    1. Pre-requisites
+    ------------------
 
-    Import Modules
-    ``````````````
+    1.1. Import Modules
+    ````````````````````
     ::
 
         from analyseur.cbgt.loader import LoadSpikeTimes
         from analyseur.cbgt.stats.isi import InterSpikeInterval
 
-    Load file and get spike times
-    `````````````````````````````
+    1.2. Load file and get spike times
+    ```````````````````````````````````
     ::
 
         loadST = LoadSpikeTimes("spikes_GPi.csv")
         spiketimes_superset = loadST.get_spiketimes_superset()
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Compute Inter-Spike Intervals (for all neurons)
+    `````````````````````````````````````````````````````
+    ::
+
+        I = InterSpikeInterval.compute(spiketimes_superset)
+
+    The returns the value for :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    see :py:meth:`.compute`.
+
+    2.2. Compute Mean Frequencies (for all neurons)
+    ````````````````````````````````````````````````
+    ::
+
+        F = InterSpikeInterval.mean_freqs(I)
+
+    The returns the value for :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    see :py:meth:`.mean_freqs`
+
+    2.3. Compute Global Mean Frequency
+    ```````````````````````````````````
+    ::
+
+        grand_f = InterSpikeInterval.grand_mean_freq(I)
+
+    The returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
 
     ----
 
