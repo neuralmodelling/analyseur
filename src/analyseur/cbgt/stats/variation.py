@@ -75,7 +75,7 @@ class Variations(object):
 
     - :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
 
-    - :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
+    - :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}` 
 
     - :math:`\\overrightarrow{LV} = \\left[lv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
 
@@ -208,7 +208,7 @@ class Variations(object):
             if len(isi) == 0:
                 all_CV2[n_id] = np.zeros(1)
             else:
-                abs_diff_over_sum = np.abs( np.diff(isi) / (isi[1:] + isi[:-1]) )
+                abs_diff_over_sum = np.abs( np.diff(isi) ) / (isi[1:] + isi[:-1])
                 all_CV2[n_id] = np.mean(2 * abs_diff_over_sum)
 
         return all_CV2
