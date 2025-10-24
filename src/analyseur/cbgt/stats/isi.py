@@ -56,7 +56,7 @@ class InterSpikeInterval(object):
 
         I = InterSpikeInterval.compute(spiketimes_superset)
 
-    This returns the value for :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    This returns the value for :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.compute`.
 
     2.2. Compute Mean Frequencies (for all neurons)
@@ -65,7 +65,7 @@ class InterSpikeInterval(object):
 
         F = InterSpikeInterval.mean_freqs(I)
 
-    This returns the value for :math:`\\vec{F} = [\\overline{f^{(i)}}]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    This returns the value for :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.mean_freqs`
 
     2.3. Compute Global Mean Frequency
@@ -100,7 +100,7 @@ class InterSpikeInterval(object):
          neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
          total spikes, :math:`n_{spk}^{(i)}`                                                       total number of spikes (spike times) by i-th neuron
          interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
-         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
          :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`        array of array interspike intervals of all neurons
         ========================================================================================= ======================================================
 
