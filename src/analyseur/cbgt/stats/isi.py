@@ -37,19 +37,20 @@ class InterSpikeInterval(object):
         :param all_neurons_spiketimes: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
         :return: dictionary of individual neurons whose values are their respective interspike interval
 
+        **Formula**
+
         .. table:: Formula
 
-        ================================================== ======================================================
-          Definitions                                        Interpretation
-        ================================================== ======================================================
-          total neurons, :math:`n_{Nuc}`                     total number of neurons in the Nucleus
-          neuron index, :math:`i`                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
-          time index, :math:`k`                              integer of indices of the spike times
-          total spikes, :math:`n_{spk}^{(i)}`                total number of spikes (spike times) by i-th neuron
-          interspike interval, :math:`isi_{k}^{(i)}`         absolute interval between successive spike times
-          :math:`isi_{k}^{(i)} = t_{k+1}^{(i)} - t_{k}^{(i)} = \\lvert t_{k}^{(i)} - t_{k+1}^{(i)} \\rvert`
-          array of interspike interval, :math:`ISI^{(i)}`    interspike interval between all spike times of i-th neuron
-        ================================================== ======================================================
+        ========================================================================================= ======================================================
+          Definitions                                                                             Interpretation
+        ========================================================================================= ======================================================
+         total neurons, :math:`n_{nuc}`                                                            total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                   i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                       total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = [isi_k^{(i)}]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = [\\overrightarrow{ISI}^{(i)}]_{\\forall{i \\in [1, n_{nuc}]}}`                array of array interspike intervals of all neurons
+        ========================================================================================= ======================================================
 
         """
         interspike_intervals = {}
@@ -68,7 +69,7 @@ class InterSpikeInterval(object):
         :return: dictionary of individual neurons whose values are their respective mean frequencies
 
         **Formula**
-        
+
         .. table:: Formula
 
         ========================================================================================= ======================================================
