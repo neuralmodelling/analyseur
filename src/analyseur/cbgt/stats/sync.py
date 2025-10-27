@@ -117,8 +117,8 @@ class Synchrony(object):
         .. math::
 
             M = \\begin{bmatrix}
-                    1 & 4 & 7 \\
-                    2 & 5 & 8 \\
+                    1 & 4 & 7 \\\
+                    2 & 5 & 8 \\\
                     3 & 6 & 9
                 \\end{bmatrix}
 
