@@ -126,6 +126,12 @@ class Synchrony(object):
 
         .. math::
 
+            A \\triangleq var_{\\forall{t}} = var\\left(\\begin{matrix}
+                                                            \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
+                                                        \\end{matrix}\\right)
+
+        .. math::
+
             F = \\overset{\\begin{matrix}t_0 & \\quad\\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
                 {\\underset{
                     \\begin{matrix}
