@@ -96,7 +96,7 @@ class Synchrony(object):
          frequency matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`          frequencies of all (:math:`n_{Nuc}`) neurons for all times
         ====================================================================================================================== ===============================================================
 
-        Then, let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
+        Let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
         the :math:`\\mu(\\cdot)`, `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_
         be implemented as shown
 
@@ -118,17 +118,16 @@ class Synchrony(object):
                 \\end{bmatrix}
                 }}
 
-        We define :math:`A \\triangleq var_{\\forall{t}} = var\\left(\\begin{matrix}
-                                                                \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
-                                                            \\end{matrix}\\right)`
-
-        Test matrix :math:`A \triangleq var_{\forall{t}}`
+        Then, we define
 
         .. math::
 
-            A \\triangleq var_{\\forall{t}} = var\\left(\\begin{matrix}
+            A \\triangleq var_{\\forall{t}} = var\\left(\\begin{bmatrix}
                                                             \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
-                                                        \\end{matrix}\\right)
+                                                        \\end{bmatrix}\\right)
+
+        Implementing the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
+        the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ as shown below
 
         .. math::
 
@@ -147,6 +146,14 @@ class Synchrony(object):
                  f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
                 \\end{bmatrix}
                 }}
+
+        we make another definition
+
+        .. math::
+
+            B \\triangleq \\mu_{\\forall{t}} = \\mu\\left(\\begin{bmatrix}
+                                                            var_{t_0} & var_{t_1} & \\ldots & var_{t_T}
+                                                        \\end{bmatrix}\\right)
 
         Then, synchrony is measured as
 
