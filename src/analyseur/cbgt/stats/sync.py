@@ -61,8 +61,9 @@ class Synchrony(object):
             S_t = pop_spike_count_matrix
 
         if len(S_t) > 0:
-            variance_S = np.var(S_t)
-            mean_S = np.mean(S_t)
+            colmn_wise_sums = np.sum(S_t, axis=0)
+            variance_S = np.var(colmn_wise_sums)
+            mean_S = np.mean(colmn_wise_sums)
 
             if mean_S == 0:
                 fanofactor = 0.0
@@ -204,6 +205,97 @@ class Synchrony(object):
 
     @classmethod
     def compute_fano_factor(cls, spiketimes_superset, binsz=0.05, window=(0, 10), bins_option="all_bins"):
+        """
+        Returns the Fano factor as a measure of synchrony of spiking from all neurons.
+
+        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param binsz: 0.05 [default]
+        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
+        :return: a number
+
+        **Formula**
+
+        .. table:: Formula
+        ====================================================================================================================== =====================================================================
+          Definitions                                                                                                             Interpretation
+        ====================================================================================================================== =====================================================================
+         total neurons, :math:`n_{Nuc}`                                                                                           total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                                                  i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         spike count, :math:`p^{(i)}(t)`                                                                                          spike count of the i-th neuron at time :math:`t`
+         spike matrix, :math:`P = \\left[p(a,b) = p^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`                spike counts of all (:math:`n_{Nuc}`) neurons for all times
+        ====================================================================================================================== =====================================================================
+
+        Let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
+        the :math:`\\mu(\\cdot)`, `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_
+        be implemented as shown
+
+        .. math::
+
+            P = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
+                {\\underset{
+                    \\begin{matrix}
+                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
+                        \\quad\\pi_{t_0} & \\quad\\quad\\quad & \\pi_{t_1} & \\quad &\\ldots & & & \\pi_{t_T} & \\rightarrow var_{\\forall{t}} \n
+                        \\quad\\pi_{t_0} & \\quad\\quad\\quad & \\pi_{t_1} & \\quad &\\ldots & & & \\pi_{t_T} & \\rightarrow \\mu_{\\forall{t}}
+                    \\end{matrix}}
+               {\\begin{bmatrix}
+                 p^{(1)}(t_0) & p^{(1)}(t_1) & \\ldots & p^{(1)}(t_T) \n
+                 p^{(2)}(t_0) & p^{(2)}(t_1) & \\ldots & p^{(2)}(t_T) \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 p^{(i)}(t_0) & p^{(i)}(t_1) & \\ldots & p^{(i)}(t_T) \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 p^{(n_{Nuc})}(t_0) & p^{(n_{Nuc})}(t_1) & \\ldots & p^{(n_{Nuc})}(t_T)
+                \\end{bmatrix}
+                }}
+
+        Then, we define
+
+        .. math::
+
+            A \\triangleq var\\left(\\begin{bmatrix}
+                                       \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
+                                     \\end{bmatrix}\\right) = var_{\\forall{t}}
+
+        Implementing the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
+        the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ as shown below
+
+        .. math::
+
+            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
+                {\\underset{
+                    \\begin{matrix}
+                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
+                        \\quad var_{t_0} & \\quad\\quad\\quad & var_{t_1} & \\quad &\\ldots & & & var_{t_T} & \\rightarrow \\mu_{\\forall{t}}
+                    \\end{matrix}}
+               {\\begin{bmatrix}
+                 f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
+                 f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
+                \\end{bmatrix}
+                }}
+
+        we make another definition
+
+        .. math::
+
+            B \\triangleq \\mu\\left(\\begin{bmatrix}
+                                         var_{t_0} & var_{t_1} & \\ldots & var_{t_T}
+                                     \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
+
+        Then, synchrony is measured as
+
+        .. math::
+
+            Sync = \\sqrt{\\frac{A}{B}} = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
 
         time_bins = np.arange(window[0], window[1] + binsz, binsz)
