@@ -118,9 +118,11 @@ class Synchrony(object):
                 \\end{bmatrix}
                 }}
 
-        We define :math:`A \triangleq var_{\forall{t}} = var\left(\begin{matrix}
-                                                                \mu_{t_0} & \mu_{t_1} & \ldots & \\mu_{t_T}
-                                                            \end{matrix}\right)`
+        We define :math:`A \\triangleq var_{\\forall{t}} = var\\left(\\begin{matrix}
+                                                                \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
+                                                            \\end{matrix}\\right)`
+
+        Test matrix :math:`A = \left[ \begin{matrix} 1 & 2 \end{matrix} \right]`
 
         .. math::
 
