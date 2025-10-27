@@ -87,13 +87,14 @@ class Synchrony(object):
         **Formula**
 
         .. table:: Formula
-        ================================= ======================================================
-          Definitions                       Interpretation
-        ================================= ======================================================
-         total neurons, :math:`n_{Nuc}`     total number of neurons in the Nucleus
-         neuron index, :math:`i`            i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         frequency, :math:`f^{(i)}`         mean spiking frequency of the i-th neuron
-        ================================= ======================================================
+        ========================================================================================================================== ===============================================================
+          Definitions                                                                                                                 Interpretation
+        ========================================================================================================================== ===============================================================
+         total neurons, :math:`n_{Nuc}`                                                                                               total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                                                      i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         frequency, :math:`f^{(i)}(t)`                                                                                                frequency of the i-th neuron at time :math:`t`
+         frequency matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`          frequencies of all (:math:`n_{Nuc}`) neurons for all times
+        ========================================================================================================================== ===============================================================
 
         .. math::
 
