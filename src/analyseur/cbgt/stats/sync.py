@@ -159,13 +159,8 @@ class Synchrony(object):
 
         .. math::
 
-            Sync = \\sqrt{\\frac{var\\left(\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right)}{\\mu\\left(var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right)}}
-
-        where, :math:`var(\\cdot)` is the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ over the given dimension and
-        :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
-
-        NOTE: The array :math:`\\vec{F}` is obtained by calling :py:meth:`.mean_freqs`
-
+            Sync = \\frac{A}{B} = \\sqrt{\\frac{var\\left(\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right)}{\\mu\\left(var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right)}}
+        
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
