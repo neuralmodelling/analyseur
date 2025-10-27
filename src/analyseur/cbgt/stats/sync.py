@@ -105,8 +105,8 @@ class Synchrony(object):
             F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
                 {\\underset{
                     \\begin{matrix}
-                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & &\\ldots & & & \\uparrow \n
-                        \\quad\\mu_{t_0} & \\quad\\quad\\quad & \\mu_{t_1} & &\\ldots & & & \\mu_{t_T} & \\rightarrow var_{\\forall{t}}
+                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
+                        \\quad\\mu_{t_0} & \\quad\\quad\\quad & \\mu_{t_1} & \\quad &\\ldots & & & \\mu_{t_T} & \\rightarrow var_{\\forall{t}}
                     \\end{matrix}}
                {\\begin{bmatrix}
                  f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
