@@ -222,7 +222,7 @@ class Synchrony(object):
          total neurons, :math:`n_{Nuc}`                                                                                           total number of neurons in the Nucleus
          neuron index, :math:`i`                                                                                                  i-th neuron in the pool of :math:`n_{Nuc}` neurons
          spike count, :math:`p^{(i)}(t)`                                                                                          spike count of the i-th neuron at time :math:`t`
-         spike matrix, :math:`P = \\left[p(a,b) = p^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`                spike counts of all (:math:`n_{Nuc}`) neurons for all times
+         count matrix, :math:`P = \\left[p(a,b) = p^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`                spike counts of all (:math:`n_{Nuc}`) neurons for all times
         ====================================================================================================================== =====================================================================
 
         Let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
@@ -253,8 +253,11 @@ class Synchrony(object):
         .. math::
 
             A \\triangleq var\\left(\\begin{bmatrix}
-                                       \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
-                                     \\end{bmatrix}\\right) = var_{\\forall{t}}
+                                       \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
+                                     \\end{bmatrix}\\right) = var_{\\forall{t}} \n
+            B \\triangleq \\mu\\left(\\begin{bmatrix}
+                                       \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
+                                     \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
 
         Implementing the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
         the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ as shown below
