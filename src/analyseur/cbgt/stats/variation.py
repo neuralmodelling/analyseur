@@ -75,7 +75,7 @@ class Variations(object):
 
     - :math:`\\overrightarrow{CV} = \\left[cv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
 
-    - :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}` 
+    - :math:`\\overrightarrow{CV_2} = \\left[cv_2^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
 
     - :math:`\\overrightarrow{LV} = \\left[lv^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`
 

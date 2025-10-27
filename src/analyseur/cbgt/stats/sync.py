@@ -76,6 +76,75 @@ class Synchrony(object):
 
     @classmethod
     def compute_basic(cls, spiketimes_superset, binsz=0.05, window=(0, 10)):
+        """
+        Returns the basic measure of synchrony of spiking from all individual neurons.
+
+        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param binsz: 0.05 [default]
+        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
+        :return: dictionary of individual neurons whose values are their respective coefficient of variation value
+
+        **Formula**
+
+        .. table:: Formula
+        ================================= ======================================================
+          Definitions                       Interpretation
+        ================================= ======================================================
+         total neurons, :math:`n_{Nuc}`     total number of neurons in the Nucleus
+         neuron index, :math:`i`            i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         frequency, :math:`f^{(i)}`         mean spiking frequency of the i-th neuron
+        ================================= ======================================================
+
+        .. math::
+
+            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad\\quad & t_1 & & & &\\ldots & & & t_{n_{Nuc}}\\end{matrix}}
+        {\\underset{
+            \\begin{matrix}
+            \\quad\\quad\\quad\\quad\\quad\\uparrow & \\quad\\quad\\quad\\quad & \\uparrow & &\\ldots & & & \\uparrow\\\
+             \\quad\\quad\\quad\\quad\\mu_{t_0} & \\quad\\quad\\quad\\quad & \\mu_{t_1} & &\\ldots & & & \\mu_{t_{n_{Nuc}}} & \\rightarrow var_{\\forall{t}}\\\
+       \\end{matrix}}
+       {\\begin{bmatrix}
+         f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_{n_{Nuc}})\\\
+         f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_{n_{Nuc}})\\\
+         \\vdots & \\vdots & \\ldots & \\vdots\\
+         f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_{n_{Nuc}})\\\
+         \\vdots & \\vdots & \\ldots & \\vdots\\\
+         f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_{n_{Nuc}})\\\
+        \\end{bmatrix}
+        }}
+        \\quad\\quad
+            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad\\quad & t_1 & & & &\\ldots & & & t_{n_{Nuc}}\\end{matrix}}
+        {\\underset{
+            \\begin{matrix}
+            \\quad\\quad\\quad\\quad\\quad\\uparrow & \\quad\\quad\\quad\\quad & \\uparrow & &\\ldots & & & \\uparrow\\\
+            \\quad\\quad\\quad\\quad var_{t_0} & \\quad\\quad\\quad\\quad & var_{t_1} & &\\ldots & & & var_{t_{n_{Nuc}}} & \\rightarrow \\mu_{\\forall{t}}\\\
+        \\end{matrix}}
+       {\\begin{bmatrix}
+         f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_{n_{Nuc}})\\\
+         f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_{n_{Nuc}})\\\
+         \\vdots & \\vdots & \\ldots & \\vdots\\\
+         f^{(i)}(t_0) & f^{(i)}(t_1) & \ldots & f^{(i)}(t_{n_{Nuc}})\\\
+         \\vdots & \\vdots & \\ldots & \\vdots\\\
+         f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_{n_{Nuc}})\\\
+        \\end{bmatrix}
+        }}
+
+        Then, synchrony is measured as
+
+        .. math::
+
+            Sync = \\sqrt{\\frac{var\\left(\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right)}{\\mu\\left(var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right)}}
+
+        where, :math:`var(\\cdot)` is the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ over the given dimension and
+        :math:`\\mu(\\cdot)` is the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ over the given dimension.
+
+        NOTE: The array :math:`\\vec{F}` is obtained by calling :py:meth:`.mean_freqs`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
         n_neurons = len(spike_arrays)
 
