@@ -263,7 +263,7 @@ class Synchrony(object):
 
         .. math::
 
-            F_{Sync} = \\frac{A}{B}} = \\frac{var\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}{\\mu\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}
+            F_{Sync} = \\frac{A}{B}}
 
         .. raw:: html
 
