@@ -248,7 +248,7 @@ class Synchrony(object):
                 \\end{bmatrix}
                 }}
 
-        Then, we define
+        We define
 
         .. math::
 
@@ -263,7 +263,7 @@ class Synchrony(object):
 
         .. math::
 
-            Sync = \\sqrt{\\frac{A}{B}} = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
+            F_{Sync} = \\frac{A}{B}} = \\frac{var\\left(\\left[\\sum_\\forall{i}p^{(i)}(t)\\right]_\\forall{t}\\right)}{\\mu\\left(\\left[\\sum_\\forall{i}p^{(i)}(t)\\right]_\\forall{t}\\right)}
 
         .. raw:: html
 
