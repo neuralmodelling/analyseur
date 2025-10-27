@@ -122,9 +122,9 @@ class Synchrony(object):
 
         .. math::
 
-            A \\triangleq var_{\\forall{t}} = var\\left(\\begin{bmatrix}
-                                                            \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
-                                                        \\end{bmatrix}\\right)
+            A \\triangleq var\\left(\\begin{bmatrix}
+                                       \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
+                                     \\end{bmatrix}\\right) = var_{\\forall{t}}
 
         Implementing the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
         the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ as shown below
@@ -151,16 +151,16 @@ class Synchrony(object):
 
         .. math::
 
-            B \\triangleq \\mu_{\\forall{t}} = \\mu\\left(\\begin{bmatrix}
-                                                            var_{t_0} & var_{t_1} & \\ldots & var_{t_T}
-                                                        \\end{bmatrix}\\right)
+            B \\triangleq \\mu\\left(\\begin{bmatrix}
+                                         var_{t_0} & var_{t_1} & \\ldots & var_{t_T}
+                                     \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
 
         Then, synchrony is measured as
 
         .. math::
 
             Sync = \\frac{A}{B} = \\sqrt{\\frac{var\\left(\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right)}{\\mu\\left(var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right)}}
-        
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
