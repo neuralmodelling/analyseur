@@ -77,12 +77,12 @@ class Synchrony(object):
     @classmethod
     def compute_basic(cls, spiketimes_superset, binsz=0.05, window=(0, 10)):
         """
-        Returns the basic measure of synchrony of spiking from all individual neurons.
+        Returns the basic measure of synchrony of spiking from all neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :param binsz: 0.05 [default]
         :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
-        :return: dictionary of individual neurons whose values are their respective coefficient of variation value
+        :return: a number
 
         **Formula**
 
