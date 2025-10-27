@@ -120,7 +120,7 @@ class Synchrony(object):
                 {\\underset{
                     \\begin{matrix}
                         \\quad\\quad\\quad\\quad\\quad\\uparrow & \\quad\\quad\\quad\\quad & \\uparrow & &\\ldots & & & \\uparrow \n
-                        \\quad\\quad\\quad\\quad\\mu_{t_0} & \\quad\\quad\\quad\\quad & \\mu_{t_1} & &\\ldots & & & \\mu_{t_{n_{Nuc}}} & \\rightarrow \\mu_{\\forall{t}}
+                        \\quad\\quad\\quad\\quad var_{t_0} & \\quad\\quad\\quad\\quad & var_{t_1} & &\\ldots & & & var_{t_{n_{Nuc}}} & \\rightarrow \\mu_{\\forall{t}}
                     \\end{matrix}}
                {\\begin{bmatrix}
                  f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_{n_{Nuc}}) \n
