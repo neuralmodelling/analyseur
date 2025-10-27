@@ -118,16 +118,16 @@ class Synchrony(object):
 
             F = \\overset{\\begin{matrix}t_0 & \\quad\\quad\\quad & t_1 & & & &\\ldots & & & t_{n_{Nuc}}\\end{matrix}}
                 {\\underset{
-                   \\begin{matrix}
-                    \\quad\\quad\\quad\\quad\\quad\\uparrow & \\quad\\quad\\quad\\quad & \\uparrow & &\\ldots & & & \\uparrow \n
-                    \\quad\\quad\\quad\\quad var_{t_0} & \\quad\\quad\\quad\\quad & var_{t_1} & &\\ldots & & & var_{t_{n_{Nuc}}} & \\rightarrow \\mu_{\\forall{t}}
-                   \\end{matrix}}
+                    \\begin{matrix}
+                        \\quad\\quad\\quad\\quad\\quad\\uparrow & \\quad\\quad\\quad\\quad & \\uparrow & &\\ldots & & & \\uparrow \n
+                        \\quad\\quad\\quad\\quad\\mu_{t_0} & \\quad\\quad\\quad\\quad & \\mu_{t_1} & &\\ldots & & & \\mu_{t_{n_{Nuc}}} & \\rightarrow \\mu_{\\forall{t}}
+                    \\end{matrix}}
                {\\begin{bmatrix}
                  f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_{n_{Nuc}}) \n
                  f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_{n_{Nuc}}) \n
                  \\vdots & \\vdots & \\ldots & \\vdots \n
                  f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_{n_{Nuc}}) \n
-                 \\vdots & \\vdots & \\ldots & \vdots \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
                  f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_{n_{Nuc}})
                 \\end{bmatrix}
                 }}
