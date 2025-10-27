@@ -252,40 +252,11 @@ class Synchrony(object):
 
         .. math::
 
-            A \\triangleq var\\left(\\begin{bmatrix}
+            A &\\triangleq var\\left(\\begin{bmatrix}
                                        \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
                                      \\end{bmatrix}\\right) = var_{\\forall{t}} \n
-            B \\triangleq \\mu\\left(\\begin{bmatrix}
+            B &\\triangleq \\mu\\left(\\begin{bmatrix}
                                        \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
-                                     \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
-
-        Implementing the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
-        the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ as shown below
-
-        .. math::
-
-            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
-                {\\underset{
-                    \\begin{matrix}
-                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
-                        \\quad var_{t_0} & \\quad\\quad\\quad & var_{t_1} & \\quad &\\ldots & & & var_{t_T} & \\rightarrow \\mu_{\\forall{t}}
-                    \\end{matrix}}
-               {\\begin{bmatrix}
-                 f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
-                 f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
-                \\end{bmatrix}
-                }}
-
-        we make another definition
-
-        .. math::
-
-            B \\triangleq \\mu\\left(\\begin{bmatrix}
-                                         var_{t_0} & var_{t_1} & \\ldots & var_{t_T}
                                      \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
 
         Then, synchrony is measured as
