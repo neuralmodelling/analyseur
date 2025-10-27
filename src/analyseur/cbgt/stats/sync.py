@@ -10,6 +10,89 @@ import numpy as np
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 
 class Synchrony(object):
+    """
+    Computes measures of synchrony among the neurons with given spike times
+
+    +----------------------------------+----------------------------------------------------------------------------------------------------------+
+    | Methods                          | Argument                                                                                                 |
+    +==================================+==========================================================================================================+
+    | :py:meth:`.compute_basic`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    |                                  | - OPTIONAL: `binsz` (0.05 [default]), `window` ((0, 10) [default])                                       |
+    +----------------------------------+----------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.compute_basic_slide`  | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    |                                  | - OPTIONAL: `binsz` (0.05 [default]), `window` ((0, 10) [default]), `windowsz` (0.5 [default])           |
+    +----------------------------------+----------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.compute_fano_factor`  | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    |                                  | - OPTIONAL: `binsz` (0.05 [default]), `window` ((0, 10) [default]), `bins_option` ("all_bins" [default]) |
+    +----------------------------------+----------------------------------------------------------------------------------------------------------+
+
+    =========
+    Use Cases
+    =========
+
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules
+    ````````````````````
+    ::
+
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgt.stats.sync import Synchrony
+
+    1.2. Load file and get spike times
+    ```````````````````````````````````
+    ::
+
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Compute basic measure of spike times synchrony (for all neurons)
+    ``````````````````````````````````````````````````````````````````````
+    ::
+
+        B = Synchrony.compute_basic(spiketimes_superset)
+
+    This returns the value for
+
+    .. math::
+
+       Sync = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
+
+    2.2. Compute the basic measure of synchrony on a smoother frequency estimation
+    ```````````````````````````````````````````````````````````````````````````````
+    ::
+
+        S = Synchrony.compute_basic_slide(spiketimes_superset)
+
+    This returns the value for
+
+    .. math::
+
+       Sync = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
+
+    2.3. Compute Fano factor as a metric for measuring spike times synchrony (for all neurons)
+    ```````````````````````````````````````````````````````````````````````````````````````````
+    ::
+
+        Fs = Synchrony.compute_fano_factor(spiketimes_superset)
+
+    This returns the value for
+
+    .. math::
+
+        F_{Sync} = \\frac{var\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}{\\mu\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
 
     @staticmethod
     def __get_spikearray_and_window(spiketimes_superset, window, neurons="all"):
@@ -162,6 +245,8 @@ class Synchrony(object):
 
             Sync = \\sqrt{\\frac{A}{B}} = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
 
+        NOTE: This method is a simple histogram-based approach that uses fixed bins.
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
@@ -184,6 +269,19 @@ class Synchrony(object):
 
     @classmethod
     def compute_basic_slide(cls, spiketimes_superset, binsz=0.05, window=(0, 10), windowsz=0.5):
+        """
+        Returns the basic measure of synchrony of spiking from all neurons.
+
+        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param binsz: 0.05 [default]
+        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
+        :return: a number
+
+        NOTE: The computation is done on a sliding window resulting in a smoother frequency estimation otherwise
+        this is the same as :py:meth:`.compute_basic`. Therefore, unlike the simple histogram-based approach the use
+        of overlapping windows (sliding windows) results in a smoother frequency estimation.
+
+        """
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
         n_neurons = len(spike_arrays)
 
