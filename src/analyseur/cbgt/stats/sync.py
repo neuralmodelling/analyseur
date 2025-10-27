@@ -96,6 +96,10 @@ class Synchrony(object):
          frequency matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`          frequencies of all (:math:`n_{Nuc}`) neurons for all times
         ====================================================================================================================== ===============================================================
 
+        Then, let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
+        the :math:`\\mu(\\cdot)`, `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_
+        be implemented as shown
+
         .. math::
 
             F = \\overset{\\begin{matrix}t_0 & \\quad\\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
@@ -114,6 +118,9 @@ class Synchrony(object):
                 \\end{bmatrix}
                 }}
 
+        We define :math:`A = var_{\\forall{t}} = var\\left(\\begin{matrix}
+                                                                \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
+                                                            \\end{matrix}\\right)`
 
         .. math::
 
