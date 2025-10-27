@@ -122,7 +122,7 @@ class Synchrony(object):
                                                                 \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
                                                             \\end{matrix}\\right)`
 
-        Test matrix :math:`A \\triangleq var_{\\forall{t}}`
+        Test matrix :math:`A \triangleq var_{\forall{t}}`
 
         .. math::
 
