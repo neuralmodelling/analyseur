@@ -159,7 +159,7 @@ class Synchrony(object):
 
         .. math::
 
-            Sync = \\frac{A}{B} = \\sqrt{\\frac{var\\left(\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right)}{\\mu\\left(var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right)}}
+            Sync = \\frac{A}{B} = \\sqrt{\\frac{var\\left(\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)_{\\forall{i}}\\right)}{\\mu\\left(var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)_{\\forall{t}}\\right)}}
 
         .. raw:: html
 
