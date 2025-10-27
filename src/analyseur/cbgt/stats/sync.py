@@ -113,6 +113,14 @@ class Synchrony(object):
             \\end{bmatrix}
             }}
 
+        .. math::
+
+            M = \begin{bmatrix}
+                    1 & 4 & 7 \\
+                    2 & 5 & 8 \\
+                    3 & 6 & 9
+                \end{bmatrix}
+
         Then, synchrony is measured as
 
         .. math::
