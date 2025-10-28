@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 
 # from ..curate import get_desired_spiketimes_subset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
-from analyseur.cbgt.stats.psth import PSTH as sPSTH
+from analyseur.cbgt.stats.psth import PSTH
 
-class PSTH(object):
+class vizPSTH(object):
     """
     The Peri-Stimulus Time Histogram (PSTH) Class is instantiated by passing
 
@@ -70,56 +70,11 @@ class PSTH(object):
     def __init__(self, spiketimes_superset):
         self.spiketimes_superset = spiketimes_superset
 
-    def _compute_true_avg_firing_rate(self, window, spiketimes_superset):
-        """
-        Computes the average of each neuron's firing rate over the entire period
-
-        :param window:
-        :param spiketimes_superset:
-        :return: dictionary with keys: firing_rates, mean_firing_rate, std_firing_rate
-        """
-        firing_rates = []
-        total_duration = window[1] - window[0]
-
-        for indiv_spiketimes in spiketimes_superset:
-            spiketimes = np.array(indiv_spiketimes)
-            spikes_in_window = spiketimes[(spiketimes >= window[0]) & (spiketimes <= window[1])]
-            indiv_rate = len(spikes_in_window) / total_duration # kHz
-            firing_rates.append(indiv_rate)
-
-        return {
-            "firing_rates": np.array(firing_rates),
-            "mean_firing_rate": np.mean(firing_rates),
-            "std_firing_rate": np.std(firing_rates),
-        }
-
-    def _compute_pop_firing_rate(self, n_neurons, binsz, pop_counts):
-        return pop_counts / (n_neurons * binsz)  # in kHz
-
-    def _compute_psth(self, spiketimes_superset, binsz=0.005, window=(0, 10)):
-        allspikes = np.concatenate(spiketimes_superset)
-        allspikes_in_window = allspikes[(allspikes >= window[0]) &
-                                        (allspikes <= window[1])]  # Memory efficient
-
-        bins = np.arange(window[0], window[1] + binsz, binsz)
-        # bin_centers = (bins[:-1] + bins[1:]) / 2
-
-        # Compute
-        counts, bin_edges = np.histogram(allspikes_in_window, bins=bins)
-
-        bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2 # should be = (bins[:-1] + bins[1:]) / 2
-
-        # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)
-        popfirerates = self._compute_pop_firing_rate(len(spiketimes_superset), binsz, counts)
-        true_avg_rate = self._compute_true_avg_firing_rate(window, spiketimes_superset)
-
-        return counts, bin_centers, popfirerates, true_avg_rate, allspikes_in_window
-
     @staticmethod
     def plot_in_ax(ax, spiketimes_superset, binsz=0.05, window=(0, 10), neurons="all", nucleus=None):
         # Compute PSTH
-        [counts, bin_centers, popfirerates, true_avg_rate] = sPSTH.compute(spiketimes_superset, neurons=neurons,
-                                                                           binsz=binsz, window=window)
+        [counts, bin_centers, popfirerates, true_avg_rate] = PSTH.compute(spiketimes_superset, neurons=neurons,
+                                                                          binsz=binsz, window=window)
         n_neurons = len(true_avg_rate["firing_rates"])
 
         # Plot
