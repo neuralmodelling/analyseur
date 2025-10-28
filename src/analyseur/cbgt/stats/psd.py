@@ -27,7 +27,7 @@ class PowerSpectrum(object):
     |                            | - `sampling_rate` [OPTIONAL]: 1000/dt = 10000 Hz [default]                                               |
     |                            | - `window` [OPTIONAL]: Tuple (0, 10) seconds [default]                                                   |
     |                            | - `neurons` [OPTIONAL]: "all" [default]                                                                  |
-    |                            | - `resolution` [OPTIONAL]: :math:`~ 9.76 Hz = \\frac{\\text{sampling_rate}}{1024}` [default]             |
+    |                            | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                                    |
     +----------------------------+----------------------------------------------------------------------------------------------------------+
 
     =========
