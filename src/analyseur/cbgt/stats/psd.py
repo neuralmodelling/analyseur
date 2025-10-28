@@ -90,7 +90,7 @@ class PowerSpectrum(object):
         Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param sampling_rate: 1000/dt = 10000 Hz [default]
+        :param sampling_rate: 1000/dt = 10000 Hz [default]; sampling_rate ∊ (0, 10000)
         :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
         :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
