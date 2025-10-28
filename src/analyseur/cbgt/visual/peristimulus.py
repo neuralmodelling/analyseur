@@ -37,9 +37,9 @@ class vizPSTH(object):
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
       spiketimes_superset = loadST.get_spiketrains()
 
-      from analyseur.cbgt.visual.peristimulus import PSTH
+      from analyseur.cbgt.visual.peristimulus import vizPSTH
 
-      my_psth = PSTH(spiketimes_superset)
+      my_psth = vizPSTH(spiketimes_superset)
 
     2. Peri-Stimulus Time Histogram for the whole simulation window
 
