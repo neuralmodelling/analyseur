@@ -114,6 +114,10 @@ class PSTH(object):
 
         return counts, bin_centers, popfirerates, true_avg_rate, allspikes_in_window
 
+    @staticmethod
+    def plot_in_ax(self, binsz=0.05, window=(0, 10), nucleus=None):
+
+
     def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):
         """
         Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
