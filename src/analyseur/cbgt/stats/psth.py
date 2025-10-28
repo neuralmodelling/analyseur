@@ -17,14 +17,28 @@ class PSTH(object):
     `numpy.histogram <https://numpy.org/doc/stable/reference/generated/numpy.histogram.html>`_)
     of spiking times from all neurons.
 
-    +----------------------------+----------------------------------------------------------------------------------------------------------+
-    | Methods                    | Argument                                                                                                 |
-    +============================+==========================================================================================================+
-    | :py:meth:`.compute`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                            | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
-    |                            | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
-    |                            | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
-    +----------------------------+----------------------------------------------------------------------------------------------------------+
+    +--------------------------------+----------------------------------------------------------------------------------------------------------+
+    | Methods                        | Argument                                                                                                 |
+    +================================+==========================================================================================================+
+    | :py:meth:`.compute`            | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
+    |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
+    |                                | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
+    +--------------------------------+----------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.analytics_temporal` | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH                  |
+    |                                | - `popfirerates`: array of population firing rate (at each bin)                                          |
+    |                                | - `bin_centers`: array of bin centers                                                                    |
+    |                                | - `binsz`: bin size used for the PSTH                                                                    |
+    |                                | - `stimulus_onset` [OPTIONAL]: 0 [default]                                                               |
+    +--------------------------------+----------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.analytics_rate`     | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH                  |
+    |                                | - `true_avg_rate`: dictionary of firing rates; see return value of :py:meth:`.compute`                   |
+    |                                | - `popfirerates`: array of population firing rate (at each bin)                                          |
+    |                                | - `window`: window used for the PSTH                                                                     |
+    |                                | - `stimulus_onset` [OPTIONAL]: 0 [default]                                                               |
+    +--------------------------------+----------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.analytics_energy`   | - `true_avg_rate`: dictionary of firing rates; see return value of :py:meth:`.compute`                   |
+    +--------------------------------+----------------------------------------------------------------------------------------------------------+
 
     =========
     Use Cases
@@ -197,6 +211,7 @@ class PSTH(object):
         :param desired_spiketimes_subset: a nested list of spike times used for computing the PSTH
         :param popfirerates: array of population firing rate (at each bin)
         :param bin_centers: array of bin centers
+        :param binsz: bin size used for the PSTH
         :param stimulus_onset: [OPTIONAL] default: 0
         :return: dictionary
 
