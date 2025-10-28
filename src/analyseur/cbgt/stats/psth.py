@@ -2,8 +2,6 @@
 #
 # Documentation by Lungsi 28 Oct 2025
 #
-# This contains function for loading the files
-#
 
 import numpy as np
 
