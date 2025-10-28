@@ -116,6 +116,7 @@ class PSTH(object):
 
     @staticmethod
     def plot_in_ax(self, binsz=0.05, window=(0, 10), nucleus=None):
+        pass
 
 
     def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):

@@ -7,6 +7,7 @@
 
 from dataclasses import dataclass, field
 from typing import List, Tuple
+import math
 
 DEFAULT_CONDUCTANCES = {
     "cortex": { # 0.05
@@ -27,6 +28,20 @@ DEFAULT_FEEDFORWORD_CURRENTS = {
     "bg": {},
     "thalamus": {},
 }
+
+def bin_size_by_rule(total_time=None, rule=None, frequency=None):
+    match rule:
+        case "Square Root":
+            n_bins = round( math.sqrt(total_time) )
+        case "Rice Rule":
+            n_bins = round( 2 * math.cbrt(total_time) )
+        case "Periodic":
+            period = 1 / frequency
+
+    if rule in ["Square Root", "Rice Rule"]:
+        return total_time / n_bins
+    else:
+        return 2 * period  # two periods in one bin
 
 @dataclass
 class SimulationParams:
@@ -51,17 +66,24 @@ class SimulationParams:
         if self.neurotrans is None:
             self.neurotrans = ['AMPA', 'NMDA', 'GABAA', 'GABAB']
 
-
 @dataclass
 class SpikeAnalysisParams:
-    window: Tuple[float, float] = (0, 5)
-    binsz: float = 0.05
+    window: Tuple[float, float] = (0, SimulationParams.duration / SimulationParams._1000ms)
     sampling_period_ms: float = SimulationParams.dt
     sampling_period: float = SimulationParams.dt / SimulationParams._1000ms
+
+    binsz_sqrt_rule: float = bin_size_by_rule(SimulationParams.duration, "Square Root")
+    binsz_rice_rule: float = bin_size_by_rule(SimulationParams.duration, "Rice Rule")
+    binsz_10perbin: float = 10 * sampling_period
+    binsz_100perbin: float = 100 * sampling_period
+    binsz_1000perbin: float = 1000 * sampling_period
+
     std_Gaussian_kernel: float = 2
 
     def validate(self):
-        if self.binsz <= 0:
+        if any(binsz <= 0 for binsz in [binsz_sqrt_rule, binsz_rice_rule,
+                                        binsz_10perbin, binsz_100perbin,
+                                        binsz_1000perbin]):
             raise ValueError("bin size must be positive")
         if self.window[1] <= self.window[0]:
             raise ValueError("time window end must be greater than start")

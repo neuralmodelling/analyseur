@@ -45,9 +45,10 @@ Statistics
    :maxdepth: 5
    :caption: Available statistical functions:
 
-   stats/isi.rst
-   stats/variation.rst
-   stats/sync.rst
-   stats/wavelet.rst
-   stats/psd.rst
+    stats/isi.rst
+    stats/variation.rst
+    stats/sync.rst
+    stats/wavelet.rst
+    stats/psd.rst
+    stats/psth.rst
 
