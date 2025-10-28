@@ -102,91 +102,17 @@ class PowerSpectrum(object):
         :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
         :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
-        :return: a tuple
+        :return: a tuple in the following order
         - array of sample frequencies
         - power spectral density (or power spectrum)
         - list of spike trains
         - list of neuron id's
         - array of time
 
-        **Formula**
+        **Notes on `resolution`:**
 
-        .. table:: Formula
-        ====================================================================================================================== ===============================================================
-          Definitions                                                                                                             Interpretation
-        ====================================================================================================================== ===============================================================
-         total neurons, :math:`n_{Nuc}`                                                                                           total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                                                  i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         frequency, :math:`f^{(i)}(t)`                                                                                            frequency of the i-th neuron at time :math:`t`
-         frequency matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`          frequencies of all (:math:`n_{Nuc}`) neurons for all times
-        ====================================================================================================================== ===============================================================
-
-        Let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
-        the :math:`\\mu(\\cdot)`, `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_
-        be implemented as shown
-
-        .. math::
-
-            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
-                {\\underset{
-                    \\begin{matrix}
-                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
-                        \\quad\\mu_{t_0} & \\quad\\quad\\quad & \\mu_{t_1} & \\quad &\\ldots & & & \\mu_{t_T} & \\rightarrow var_{\\forall{t}}
-                    \\end{matrix}}
-               {\\begin{bmatrix}
-                 f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
-                 f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
-                \\end{bmatrix}
-                }}
-
-        Then, we define
-
-        .. math::
-
-            A \\triangleq var\\left(\\begin{bmatrix}
-                                       \\mu_{t_0} & \\mu_{t_1} & \\ldots & \\mu_{t_T}
-                                     \\end{bmatrix}\\right) = var_{\\forall{t}}
-
-        Implementing the `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
-        the `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_ as shown below
-
-        .. math::
-
-            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
-                {\\underset{
-                    \\begin{matrix}
-                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
-                        \\quad var_{t_0} & \\quad\\quad\\quad & var_{t_1} & \\quad &\\ldots & & & var_{t_T} & \\rightarrow \\mu_{\\forall{t}}
-                    \\end{matrix}}
-               {\\begin{bmatrix}
-                 f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
-                 f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
-                \\end{bmatrix}
-                }}
-
-        we make another definition
-
-        .. math::
-
-            B \\triangleq \\mu\\left(\\begin{bmatrix}
-                                         var_{t_0} & var_{t_1} & \\ldots & var_{t_T}
-                                     \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
-
-        Then, synchrony is measured as
-
-        .. math::
-
-            Sync = \\sqrt{\\frac{A}{B}} = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
-
-        NOTE: This method is a simple histogram-based approach that uses fixed bins.
+        `resolution` or desired frequency resolution is the smallest difference between two frequencies
+        that can be distinguished in the power spectrum. 
 
         .. raw:: html
 
