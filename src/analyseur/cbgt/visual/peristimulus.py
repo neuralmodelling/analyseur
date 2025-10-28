@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 # from ..curate import get_desired_spiketimes_subset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
+from analyseur.cbgt.stats.psth import PSTH as sPSTH
 
 class PSTH(object):
     """
@@ -115,11 +116,28 @@ class PSTH(object):
         return counts, bin_centers, popfirerates, true_avg_rate, allspikes_in_window
 
     @staticmethod
-    def plot_in_ax(self, binsz=0.05, window=(0, 10), nucleus=None):
-        pass
+    def plot_in_ax(ax, spiketimes_superset, binsz=0.05, window=(0, 10), neurons="all", nucleus=None):
+        # Compute PSTH
+        [counts, bin_centers, popfirerates, true_avg_rate] = sPSTH.compute(spiketimes_superset, neurons=neurons,
+                                                                           binsz=binsz, window=window)
+        n_neurons = len(true_avg_rate["firing_rates"])
+
+        # Plot
+        ax.bar(bin_centers, counts, width=binsz, alpha=0.7, color="blue", edgecolor="black")
+        ax.grid(True, alpha=0.3)
+
+        ax.set_ylabel("Spike Count")
+        ax.set_xlabel("Time (s)")
+
+        nucname = "" if nucleus is None else " in " + nucleus
+        ax.set_title("PSTH - Population Activity of " + str(n_neurons) + " neurons" + nucname +
+                     "\n (mean firing rate within the window = "
+                     + str(true_avg_rate["mean_firing_rate"]) + " Hz)")
+
+        return ax
 
 
-    def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):
+    def plot(self, binsz=0.05, window=(0, 10), neurons="all", nucleus=None, show=True):
         """
         Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
@@ -139,30 +157,9 @@ class PSTH(object):
         self.binsz = binsz
         self.window = window
 
-        # Get and set desired_spiketimes_subset as instance attribute
-        [self.desired_spiketimes_subset, _] = get_desired_spiketimes_subset(self.spiketimes_superset, neurons="all")
-        # NOTE: desired_spiketimes_subset as nested list and not numpy array because
-        # each neuron may have variable length of spike times
-        self.n_neurons = len(self.desired_spiketimes_subset)
-
-        # Compute PSTH and set the results as instance attributes
-        [self.counts, self.bin_centers, self.popfirerates,
-         self.true_avg_rate, self.allspikes_in_window] = \
-            self._compute_psth(self.desired_spiketimes_subset, binsz=binsz, window=window)
-
         # Plot
         fig, ax = plt.subplots(figsize=(10, 6))
-
-        ax.bar(self.bin_centers, self.counts, width=binsz, alpha=0.7, color="blue", edgecolor="black")
-        ax.grid(True, alpha=0.3)
-
-        ax.set_ylabel("Spike Count")
-        ax.set_xlabel("Time (s)")
-
-        nucname = "" if nucleus is None else " in " + nucleus
-        ax.set_title("PSTH - Population Activity of " + str(self.n_neurons) + " neurons" + nucname +
-                     "\n (mean firing rate within the window = "
-                     + str(self.true_avg_rate["mean_firing_rate"]) + " Hz)")
+        ax = self.plot_in_ax(ax, self.spiketimes_superset, binsz=binsz, window=window, neurons=neurons, nucleus=nucleus)
 
         if show:
             plt.show()
