@@ -16,6 +16,7 @@ class PSTH(object):
     Computes for the Peri-Stimulus Time Histogram (PSTH using
     `numpy.histogram <https://numpy.org/doc/stable/reference/generated/numpy.histogram.html>`_)
     of spiking times from all neurons.
+    This gives an overall temporal pattern of population activity with a picture in both temporal and rate.
 
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
     | Methods                        | Argument                                                                                                 |
