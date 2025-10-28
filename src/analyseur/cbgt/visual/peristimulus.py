@@ -80,7 +80,7 @@ class vizPSTH(object):
         return ax
 
 
-    def plot(self, binsz=0.05, window=(0, 10), neurons="all", nucleus=None, show=True):
+    def plot(self, binsz=0.01, window=(0, 10), neurons="all", nucleus=None, show=True):
         """
         Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
