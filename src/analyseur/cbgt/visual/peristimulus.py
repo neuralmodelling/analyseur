@@ -69,7 +69,7 @@ class vizPSTH(object):
         Draws the Peri-Stimulus Time Histogram (PSTH) on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
-        :param ax: `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+        :param ax: object `matplotlib.pyplot.axis``
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :param binsz: integer or float; defines the number of equal-width bins in the range
         :param window: 2-tuple; defines upper and lower range of the bins
