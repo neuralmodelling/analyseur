@@ -23,7 +23,7 @@ def __get_region_name(simparams, nucleus):
 
     return region
 
-def __get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
+def _get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
     region = __get_region_name(simparams, nucleus)
 
     measurables = {}
@@ -33,18 +33,23 @@ def __get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
         loadVG = LoadChannelVorG(filepath)
         measurables[attrib] = loadVG.get_measurables()
 
-    current_across_400neurons = {"L": measurables["L"] * simparams.conductance[region]["g_L"]}
-    for attrib in attriblist:
-        for attrib in simparams.neurotrans:
-            current_across_400neurons[attrib] = measurables[attrib] * measurables["g_"+attrib]
+    # current_across_400neurons = {"L": measurables["L"] * simparams.conductance[region]["g_L"]}
+    # for attrib in attriblist:
+    #     if attrib in simparams.neurotrans:
+    #         current_across_400neurons[attrib] = measurables[attrib] * measurables["g_"+attrib]
 
     # mean_current_across_t = [np.mean(current_across_400neurons["L"])]
     # for chnl in current_across_400neurons.keys():
     #     mean_current_across_t.append(np.mean(current_across_400neurons[chnl]))
 
-    mean_current_across_t = {"L": np.mean(current_across_400neurons["L"])}
-    for chnl, current400mean in current_across_400neurons.items():
-        mean_current_across_t[chnl] = np.mean(current400mean)
+    # mean_current_across_t = {"L": np.mean(current_across_400neurons["L"])}
+    # for chnl, current400mean in current_across_400neurons.items():
+    #     mean_current_across_t[chnl] = np.mean(current400mean)
+
+    mean_current_across_t = {"L": np.mean(measurables["L"])}
+    for attrib in attriblist:
+        if attrib in simparams.neurotrans:
+            mean_current_across_t.append(np.mean(measurables[attrib]))
 
     return mean_current_across_t
 
@@ -64,7 +69,7 @@ def get_observables(rootpath, nucleus, attriblist, decayfolderid):
 
     current_means = {}
     for i, dirname in enumerate(decayfolderid):
-        current_means_ = __get_mean_current(rootpath, dirname, nucleus, attriblist, simparams)
+        current_means_ = _get_mean_current(rootpath, dirname, nucleus, attriblist, simparams)
         if i == 0:
             for attrib in filtered_attriblist:
                 current_means[attrib] = [current_means_[attrib]]

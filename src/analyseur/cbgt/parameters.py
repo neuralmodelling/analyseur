@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 from typing import List, Tuple
 
 DEFAULT_CONDUCTANCES = {
-    "cortex": {
-        "g_L": 0.05, # This is called g_L_mean in CBGTC and unit is mS.cm-2
+    "cortex": { # 0.05
+        "g_L": 1.0, # This is called g_L_mean in CBGTC and unit is mS.cm-2
     },
     "bg": {},
     "thalamus": {
