@@ -94,7 +94,7 @@ class PowerSpectrum(object):
     @classmethod
     def compute(cls, spiketimes_superset, sampling_rate=None,
                 window=None, neurons=None, resolution=None):
-        """
+        f"""
         Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
@@ -112,7 +112,15 @@ class PowerSpectrum(object):
         **Notes on `resolution`:**
 
         `resolution` or desired frequency resolution is the smallest difference between two frequencies
-        that can be distinguished in the power spectrum. 
+        that can be distinguished in the power spectrum.
+        The sampling rate is proportional to the desired frequency resolution
+        
+        .. math::
+        
+            \\text{sampling_rate} &\\propto \\text{resolution} \n
+            \\text{sampling_rate} &= \\text{nperseg} \\text{resolution}
+        
+        where the constant of proportionality is the number of points per segment `nperseg`.
 
         .. raw:: html
 
@@ -120,8 +128,12 @@ class PowerSpectrum(object):
 
         """
         #============== DEFAULT Parameters ==============
+        sampling_frequency = 1 / spikeanal.sampling_period
         if sampling_rate is None:
-            sampling_rate = 1 / spikeanal.sampling_period
+            sampling_rate = sampling_frequency
+        elif sampling_rate > sampling_frequency:
+            print("sampling_rate > " + f"{sampling_frequency} ∴ sampling_rate = " + f"{sampling_frequency}")
+            sampling_rate = sampling_frequency
 
         if window is None:
             window = spikeanal.window
