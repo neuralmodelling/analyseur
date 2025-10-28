@@ -218,6 +218,10 @@ class PSTH(object):
 
         * the temporal profile (full time course) is the value of the attribute :ivar popfirerates:
 
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         pre_stimulus_rates = popfirerates[bin_centers < stimulus_onset]
         post_stimulus_rates = popfirerates[bin_centers >= stimulus_onset]
@@ -315,6 +319,10 @@ class PSTH(object):
         | `"response_reliability"` | measure of response consistency                            |
         +--------------------------+------------------------------------------------------------+
 
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         mean_firing_rate = true_avg_rate["mean_firing_rate"]
         std_firing_rate = true_avg_rate["std_firing_rate"]
@@ -366,26 +374,30 @@ class PSTH(object):
     @staticmethod
     def analytics_energy(true_avg_rate):
         """
-        Extracts energy features from the PSTH counts
+        Extracts energy features from the PSTH counts, i.e, analytics for metabolic efficiency of rate distribution.
 
         :param true_avg_rate:
         :return: dictionary
 
-        +--------------------------+------------------------------------------------------------+
-        | Dictionary key           | Meaning                                                    |
-        +==========================+============================================================+
-        | `"total_population_activity"`     | average of each neuron's rate                              |
-        +--------------------------+------------------------------------------------------------+
-        | `"max_entropy"`      | spread of the firing rates                                 |
-        +--------------------------+------------------------------------------------------------+
-        | `"entropy"`   | average of the time varying population signal              |
-        +--------------------------+------------------------------------------------------------+
-        | `"efficiency"`   | average spontaneous activity levels                        |
-        +--------------------------+------------------------------------------------------------+
-        | `"energy_per_bit"`   | average response strengths                                 |
-        +--------------------------+------------------------------------------------------------+
-        | `"dynamic_range"`   | average absolute response magnitudes                       |
-        +--------------------------+------------------------------------------------------------+
+        +-------------------------------+------------------------------------------------------------+
+        | Dictionary key                | Meaning                                                    |
+        +===============================+============================================================+
+        | `"total_population_activity"` | -to do-                                                    |
+        +-------------------------------+------------------------------------------------------------+
+        | `"max_entropy"`               | -to do-                                                    |
+        +-------------------------------+------------------------------------------------------------+
+        | `"entropy"`                   | -to do                                                     |
+        +-------------------------------+------------------------------------------------------------+
+        | `"efficiency"`                | how efficiently are the rates distributed                  |
+        +-------------------------------+------------------------------------------------------------+
+        | `"energy_per_bit"`            | metabolic cost per information bit                         |
+        +-------------------------------+------------------------------------------------------------+
+        | `"dynamic_range"`             | -to do-                                                    |
+        +-------------------------------+------------------------------------------------------------+
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         firing_rates = true_avg_rate["firing_rates"]
