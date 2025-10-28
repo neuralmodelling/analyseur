@@ -84,7 +84,7 @@ class PSTH(object):
     ```````````````````````````````````````````````````
     ::
 
-        [counts, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset] \
+        [counts, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset]
               = PSTH.compute(spiketimes_superset)
 
         temporal_features = PSTH.analytics_temporal(desired_spiketimes_subset,
