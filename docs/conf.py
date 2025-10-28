@@ -74,7 +74,7 @@ html_theme = 'scrolls'
 
 html_theme_options = {
     "body_min_width": "50%",
-    "body_max_width": "70%"
+    "body_max_width": "60%"
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
