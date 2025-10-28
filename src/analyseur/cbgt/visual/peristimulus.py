@@ -54,6 +54,10 @@ class vizPSTH(object):
       my_psth.plot(window=(0,5), binsz=1)  # time unit in seconds
       my_psth.plot(window=(0,5), binsz=0.05)
 
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
     """
 
     def __init__(self, spiketimes_superset):
@@ -72,6 +76,10 @@ class vizPSTH(object):
         :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
         :param nucleus: string; name of the nucleus
         :return: object `ax` with PSTH plotting done into it
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         # Compute PSTH
@@ -109,6 +117,10 @@ class vizPSTH(object):
         
         * `window` controls the binning range as well as the spike counting window
         * CBGT simulation was done in seconds so window `(0, 10)` signifies time 0 s to 10 s
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         
         """
         # Set binsz and window as the instance attributes
