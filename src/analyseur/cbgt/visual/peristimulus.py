@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.psth import PSTH
 
-class vizPSTH(object):
+class VizPSTH(object):
     """
     The Peri-Stimulus Time Histogram (PSTH) Class is instantiated by passing
 
