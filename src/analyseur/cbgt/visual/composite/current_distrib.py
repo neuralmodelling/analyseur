@@ -24,6 +24,13 @@ def __get_region_name(simparams, nucleus):
     return region
 
 def _get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
+    # NOTE: Following my signal chat with Jeanne on 27 Oct 2025, although the filenames
+    # have V in the filenames (V for voltage) Jeanne said the values are actually the
+    # measures of mean I (current) across first 400 neurons.
+    # Therefore, this function following loading of the files (for respective attribute/channel)
+    # it does not take the product of the loaded V files (representing I's) and the respective
+    # conductances to get the current. Once the respective files are loaded the function then
+    # returns the mean of [mean I_400] across time.
     region = __get_region_name(simparams, nucleus)
 
     measurables = {}
@@ -33,23 +40,10 @@ def _get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
         loadVG = LoadChannelVorG(filepath)
         measurables[attrib] = loadVG.get_measurables()
 
-    # current_across_400neurons = {"L": measurables["L"] * simparams.conductance[region]["g_L"]}
-    # for attrib in attriblist:
-    #     if attrib in simparams.neurotrans:
-    #         current_across_400neurons[attrib] = measurables[attrib] * measurables["g_"+attrib]
-
-    # mean_current_across_t = [np.mean(current_across_400neurons["L"])]
-    # for chnl in current_across_400neurons.keys():
-    #     mean_current_across_t.append(np.mean(current_across_400neurons[chnl]))
-
-    # mean_current_across_t = {"L": np.mean(current_across_400neurons["L"])}
-    # for chnl, current400mean in current_across_400neurons.items():
-    #     mean_current_across_t[chnl] = np.mean(current400mean)
-
     mean_current_across_t = {"L": np.mean(measurables["L"])}
     for attrib in attriblist:
         if attrib in simparams.neurotrans:
-            mean_current_across_t.append(np.mean(measurables[attrib]))
+            mean_current_across_t[attrib] = np.mean(measurables[attrib])
 
     return mean_current_across_t
 
@@ -62,10 +56,6 @@ def get_observables(rootpath, nucleus, attriblist, decayfolderid):
     remove_set = set(remove_list)
 
     filtered_attriblist = [item for item in attriblist if item not in remove_set]
-
-    # current_means = np.zeros((len(filtered_attriblist), len(decayfolderid)))
-    # for i, dirname in enumerate(decayfolderid.keys()):
-    #     current_means[:,i] = __get_mean_current(rootpath, dirname, nucleus, attriblist, simparams)
 
     current_means = {}
     for i, dirname in enumerate(decayfolderid):
@@ -187,13 +177,3 @@ def plotH_current_distrib(rootpath, nucleus, attriblist, decayfolderid, feedfwd=
 
     if save:
         plt.savefig(suptitle.replace(" ", "_"))
-
-# rootpath = "/home/lungsi/DockerShare/data/parameter_search/6aMar2025/CORTEX/"
-# nucleus = "CSN"
-# attriblist = ["L", "AMPA", "NMDA", "GABAA", "GABAB", "g_AMPA", "g_NMDA", "g_GABAA", "g_GABAB"]
-# decayfolderid = {
-#     "0": 0, "1": 0.10, "2": 0.15, "3": 0.20, "4": 0.25, "5": 0.30,
-#     "6": 0.35, "7": 0.40, "8": 0.45, "9": 0.50, "10": 0.55, "11": 0.60,
-#     "12": 0.65, "13": 0.70, "14": 0.75, "15": 0.80, "16": 0.85, "17": 0.90,
-#     "18": 0.95, "19": 1.0,
-#     }

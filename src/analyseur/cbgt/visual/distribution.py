@@ -35,9 +35,8 @@ def _get_pop_count(desired_spiketimes_subset):
 
     return  all_spikes, pop_cumulative
 
-def spike_counts_distrib(spiketimes_superset):
+def spike_counts_distrib_in_ax(ax, spiketimes_superset):
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
-    fig, ax = plt.figure(figsize=(10, 6))
 
     for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
         if len(indiv_spiketimes) > 0:
@@ -57,6 +56,13 @@ def spike_counts_distrib(spiketimes_superset):
     ax.set_ylabel("Cumulative Spike Count")
     ax.set_title("Cumulative Spike Counts")
     ax.set_legend()
+
+    return ax
+
+def spike_counts_distrib(spiketimes_superset):
+    fig, ax = plt.figure(figsize=(10, 6))
+
+    ax = spike_counts_distrib_in_ax(ax, spiketimes_superset)
 
     plt.show()
 
@@ -80,11 +86,9 @@ def _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth):
 
     return all_spikes, kde(time_points)
 
-def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
+def spike_densitites_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1):
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
     time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
-
-    fig, ax = plt.figure(figsize=(10, 6))
 
     for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
         if len(indiv_spiketimes) > 0:
@@ -104,6 +108,13 @@ def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1)
     ax.set_ylabel("Density + Offset")
     ax.set_title("Spike Density")
     ax.set_legend()
+
+    return ax
+
+def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
+    fig, ax = plt.figure(figsize=(10, 6))
+
+    ax = spike_counts_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1)
 
     plt.show()
 
