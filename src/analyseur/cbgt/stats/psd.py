@@ -94,7 +94,7 @@ class PowerSpectrum(object):
     @classmethod
     def compute(cls, spiketimes_superset, sampling_rate=None,
                 window=None, neurons=None, resolution=None):
-        f"""
+        """
         Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
