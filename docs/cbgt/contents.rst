@@ -49,4 +49,5 @@ Statistics
    stats/variation.rst
    stats/sync.rst
    stats/wavelet.rst
+   stats/psd.rst
 
