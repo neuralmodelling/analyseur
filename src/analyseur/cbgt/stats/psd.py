@@ -26,7 +26,7 @@ class PowerSpectrum(object):
     | :py:meth:`.compute`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
     |                            | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                             |
     |                            | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
-    |                            | - `neurons` [OPTIONAL]: "all" [default]                                                                  |
+    |                            | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
     |                            | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                                    |
     +----------------------------+----------------------------------------------------------------------------------------------------------+
 
@@ -100,7 +100,7 @@ class PowerSpectrum(object):
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :param sampling_rate: 1000/dt = 10000 Hz [default]
         :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
-        :param neurons: "all" [default]                                                                  |
+        :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
         :return: a tuple
         - array of sample frequencies

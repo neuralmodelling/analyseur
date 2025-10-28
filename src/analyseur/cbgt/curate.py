@@ -60,7 +60,7 @@ def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None,
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
     :param spiketimes_superset: Dictionary returned using :py:class:`LoadSpikeTimes`
-    :param neurons: [OPTIONAL] None or name of the nucleus (string)
+    :param neurons: [OPTIONAL] "all" [default] or list: range(a, b) or [1, 4, 5, 9]
     :param window: Tuple (start, end)
     :param sampling_rate: number
     :return: nested_list, label_list, times_axis
