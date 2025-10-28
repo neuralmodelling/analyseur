@@ -24,8 +24,8 @@ class PowerSpectrum(object):
     | Methods                    | Argument                                                                                                 |
     +============================+==========================================================================================================+
     | :py:meth:`.compute`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                            | - `sampling_rate` [OPTIONAL]: 1000/dt = 10000 Hz [default]                                               |
-    |                            | - `window` [OPTIONAL]: Tuple (0, 10) seconds [default]                                                   |
+    |                            | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                             |
+    |                            | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
     |                            | - `neurons` [OPTIONAL]: "all" [default]                                                                  |
     |                            | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                                    |
     +----------------------------+----------------------------------------------------------------------------------------------------------+
