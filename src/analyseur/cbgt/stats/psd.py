@@ -70,9 +70,6 @@ class PowerSpectrum(object):
     - list of neuron id's
     - array of time
 
-    .. math::
-
-       Sync = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
 
     2.2. Compute the basic measure of synchrony on a smoother frequency estimation
     ```````````````````````````````````````````````````````````````````````````````
@@ -80,11 +77,6 @@ class PowerSpectrum(object):
 
         S = Synchrony.compute_basic_slide(spiketimes_superset)
 
-    This returns the value for
-
-    .. math::
-
-       Sync = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
 
     .. raw:: html
 
@@ -118,7 +110,7 @@ class PowerSpectrum(object):
         .. math::
         
             \\text{sampling_rate} &\\propto \\text{resolution} \n
-            \\text{sampling_rate} &= \\text{nperseg} \\text{resolution}
+            \\text{sampling_rate} &= \\text{nperseg} \\times \\text{resolution}
         
         where the constant of proportionality is the number of points per segment `nperseg`.
 
