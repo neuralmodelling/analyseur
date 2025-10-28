@@ -16,7 +16,7 @@ class vizPSTH(object):
     """
     The Peri-Stimulus Time Histogram (PSTH) Class is instantiated by passing
 
-    :param spiketrains: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
     
     +--------------------------------+--------------------------------------------------------------------+
     | Methods                        | Return                                                             |
@@ -25,6 +25,7 @@ class vizPSTH(object):
     +--------------------------------+--------------------------------------------------------------------+
 
     * PSTH gives an overall temporal pattern of population activity with a picture in both temporal and rate
+    * The computation is done by :class:`~analyseur.cbgt.stats.psth.PSTH`
     
     **Use Case:**
 
