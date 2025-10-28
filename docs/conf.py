@@ -73,7 +73,7 @@ autodoc_mock_imports = [
 html_theme = 'scrolls'
 
 html_theme_options = {
-    "body_min_width": "60%",
+    "body_min_width": "70%",
     # "body_max_width": "60%"
 }
 
