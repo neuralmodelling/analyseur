@@ -97,7 +97,9 @@ class PSTH(object):
 
     @classmethod
     def _compute_pop_firing_rate(cls, n_neurons, binsz, pop_counts):
-        """Computes the firing rate of the whole population."""
+        """
+        Computes the firing rate of the whole population.
+        """
         return pop_counts / (n_neurons * binsz)  # in Hz
 
     @classmethod
