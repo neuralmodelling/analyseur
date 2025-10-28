@@ -150,8 +150,9 @@ class PSTH(object):
         Computation for Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
-        :param binsz: 0.01 (= 100 per bin) [default]
+        :param window: Tuple in the form `(start_time, end_time)`; e.g (0, 10)
+        :param binsz: e.g 0.01 (= 100 per bin)
+        :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
         :return: a tuple in the following order
         - array of the values (counts) of the histogram
         - dictionary of bin information

@@ -60,7 +60,20 @@ class vizPSTH(object):
         self.spiketimes_superset = spiketimes_superset
 
     @staticmethod
-    def plot_in_ax(ax, spiketimes_superset, binsz=0.05, window=(0, 10), neurons="all", nucleus=None):
+    def plot_in_ax(ax, spiketimes_superset, binsz=None, window=(), neurons=None, nucleus=None):
+        """
+        Draws the Peri-Stimulus Time Histogram (PSTH) on the given
+        `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+        :param ax: `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param binsz: integer or float; defines the number of equal-width bins in the range
+        :param window: 2-tuple; defines upper and lower range of the bins
+        :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+        :param nucleus: string; name of the nucleus
+        :return: object `ax` with PSTH plotting done into it
+
+        """
         # Compute PSTH
         [counts, bin_centers, popfirerates, true_avg_rate] = PSTH.compute(spiketimes_superset, neurons=neurons,
                                                                           binsz=binsz, window=window)
@@ -86,9 +99,10 @@ class vizPSTH(object):
         Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
         
-        :param binsz: integer or float; defines the number of equal-width bins in the range [default: 50]
-        :param window: 2-tuple; defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
-        :param nucleus: string; [OPTIONAL] None or name of the nucleus
+        :param binsz: integer or float; defines the number of equal-width bins in the range
+        :param window: 2-tuple; defines upper and lower range of the bins
+        :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+        :param nucleus: string; name of the nucleus
         :param show: boolean [default: True]
         :return: object `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
         containing `matplotlib.pyplot.bar <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
