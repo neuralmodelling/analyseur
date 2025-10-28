@@ -23,6 +23,8 @@ class vizPSTH(object):
     +================================+====================================================================+
     | :py:meth:`.plot`               | - `matplotlib.pyplot.hist` object                                  |
     +--------------------------------+--------------------------------------------------------------------+
+    | :py:meth:`.plot_in_ax`         | - `matplotlib.pyplot.axis` object                                  |
+    +--------------------------------+--------------------------------------------------------------------+
 
     * PSTH gives an overall temporal pattern of population activity with a picture in both temporal and rate
     * The computation is done by :class:`~analyseur.cbgt.stats.psth.PSTH`
