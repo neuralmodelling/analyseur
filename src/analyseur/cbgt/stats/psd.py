@@ -62,21 +62,13 @@ class PowerSpectrum(object):
 
         B = PowerSpectrum.compute(spiketimes_superset)
 
-    This returns
-
-    - array of sample frequencies
-    - power spectral density (or power spectrum)
-    - list of spike trains
-    - list of neuron id's
-    - array of time
-
-
-    2.2. Compute the basic measure of synchrony on a smoother frequency estimation
-    ```````````````````````````````````````````````````````````````````````````````
+    2.2. Compute power spectral density for chosen neurons with desired frequency resolution
+    ````````````````````````````````````````````````````````````````````````````````````````
     ::
 
-        S = Synchrony.compute_basic_slide(spiketimes_superset)
+        B = PowerSpectrum.compute(spiketimes_superset, neurons=range(30, 120), resolution=5)
 
+    Power spectral density for neurons 30 to 120 with the desired frequency resolution of 5 Hz.
 
     .. raw:: html
 
