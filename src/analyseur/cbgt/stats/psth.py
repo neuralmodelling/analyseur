@@ -21,12 +21,12 @@ class PSTH(object):
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
     | Methods                        | Argument                                                                                                 |
     +================================+==========================================================================================================+
-    | :py:meth:`.compute_pool`       | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    | :py:meth:`.compute_poolPSTH`   | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
     |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
     |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
     |                                | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.compute_average`    | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    | :py:meth:`.compute_avgPSTH`    | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
     |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
     |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
     |                                | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
@@ -76,14 +76,14 @@ class PSTH(object):
     ````````````````````````````````````
     ::
 
-        B = PSTH.compute_pool(spiketimes_superset)
-        C = PSTH.compute_average(spiketimes_superset)
+        B = PSTH.compute_poolPSTH(spiketimes_superset)
+        C = PSTH.compute_avgPSTH(spiketimes_superset)
 
     2.2. Compute PSTH for chosen neurons with desired bin size
     ``````````````````````````````````````````````````````````
     ::
 
-        B = PSTH.compute(spiketimes_superset, neurons=range(30, 120), binsz=0.1)
+        B = PSTH.compute_poolPSTH(spiketimes_superset, neurons=range(30, 120), binsz=0.1)
 
     PSTH for neurons 30 to 120 with the bin size of 0.1 seconds.
 
@@ -92,7 +92,7 @@ class PSTH(object):
     ::
 
         [counts, bin_info, popfirerates,
-        true_avg_rate, desired_spiketimes_subset] = PSTH.compute(spiketimes_superset)
+        true_avg_rate, desired_spiketimes_subset] = PSTH.compute_poolPSTH(spiketimes_superset)
 
         temporal_features = PSTH.analytics_temporal(desired_spiketimes_subset,
                                                     popfirerates=popfirerates,
@@ -204,7 +204,7 @@ class PSTH(object):
         return pop_counts / (n_neurons * binsz)  # in Hz
 
     @classmethod
-    def compute_pool(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
+    def compute_poolPSTH(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
         """
         Computation of Pooled Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
 
@@ -266,7 +266,7 @@ class PSTH(object):
         return counts, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset #, allspikes_in_window
 
     @classmethod
-    def compute_average(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
+    def compute_avgPSTH(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
         """
         Computation of Average of Individual Peri-Stimulus Time Histogram (Population PSTH).
 
