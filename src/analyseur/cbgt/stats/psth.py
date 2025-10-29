@@ -21,7 +21,12 @@ class PSTH(object):
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
     | Methods                        | Argument                                                                                                 |
     +================================+==========================================================================================================+
-    | :py:meth:`.compute`            | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    | :py:meth:`.compute_pool`       | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
+    |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
+    |                                | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
+    +--------------------------------+----------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.compute_average`    | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
     |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
     |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
     |                                | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
@@ -71,7 +76,8 @@ class PSTH(object):
     ````````````````````````````````````
     ::
 
-        B = PSTH.compute(spiketimes_superset)
+        B = PSTH.compute_pool(spiketimes_superset)
+        C = PSTH.compute_average(spiketimes_superset)
 
     2.2. Compute PSTH for chosen neurons with desired bin size
     ``````````````````````````````````````````````````````````
@@ -108,6 +114,45 @@ class PSTH(object):
 
         energetics = PSTH.analytics_energy(true_avg_rate)
 
+    ======================================
+    Possible Insights From Population PSTH
+    ======================================
+
+    +-------------------------+-------------------------------------------------------------+
+    |   Insight               | Meaning                                                     |
+    +=========================+=============================================================+
+    | `"collective_timing"`   | when does the population (as whole) respond?                |
+    +-------------------------+-------------------------------------------------------------+
+    | `"pop_reliability"`     | how robust is the population spiking?                       |
+    +-------------------------+-------------------------------------------------------------+
+    | `"info_redundancy"`     | how similarly/diversely do neurons (in population) respond? |
+    +-------------------------+-------------------------------------------------------------+
+    | `"coding_strategy"`     | sparse or dense population spiking?                         |
+    +-------------------------+-------------------------------------------------------------+
+    | `"population_dynamics"` | how activity propagated through the network?                |
+    +-------------------------+-------------------------------------------------------------+
+
+    ======================================================================
+    Mean of Individual Firing Rate vs Mean of Time-Varying Population Rate
+    ======================================================================
+
+    True Average Firing Rate (or Mean of Individual Firing Rate) is
+    - count each neuron's spikes over entire time window
+    - average across neurons (Hz)
+
+    Mean of Time-Varying Population Rate is
+    - count population spikes per time (bin)
+    - take each count per population size per bin (i.e instantaneous rate)
+    - average cross time bins (Hz)
+
+    +-------------------------------------------+----------------------------------------------------+---------------------------------------------------+
+    |  True Average Firing Rate                 |  Population Rate (Time-Varying)                    | Mean of Population Rate                           |
+    +===========================================+====================================================+===================================================+
+    | - actual average firing rate of neurons   | - analyze temporal dynamics of population response | - average level of time-varying population signal |
+    | - calculate population statistics         |     - response latency, peak time, duration        | - comparing temporal patterns (normalization)     |
+    | - compare firing rates across populations | - study population activity evolving over time     | - is NOT neuron's average firing rate             |
+    +-------------------------------------------+----------------------------------------------------+---------------------------------------------------+
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
@@ -140,14 +185,17 @@ class PSTH(object):
     @classmethod
     def _compute_pop_firing_rate(cls, n_neurons, binsz, pop_counts):
         """
-        Computes the firing rate of the whole population.
+        Computes the  firing rate of the whole population at each bin.
+        Therefore, this is the TIME-VARYING population rate (since its at each bin).
+        Hence, mean of the population rates across the bins is NOT average firing rate.
+        It is the AVERAGE of the TIME-VARYING rates across all bins.
         """
         return pop_counts / (n_neurons * binsz)  # in Hz
 
     @classmethod
-    def compute(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
+    def compute_pool(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
         """
-        Computation for Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
+        Computation o Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :param window: Tuple in the form `(start_time, end_time)`; e.g (0, 10)
@@ -183,6 +231,7 @@ class PSTH(object):
 
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
 
+        # Poole spikes from ALL neurons
         allspikes = np.concatenate(desired_spiketimes_subset)
         allspikes_in_window = allspikes[(allspikes >= window[0]) &
                                         (allspikes <= window[1])]  # Memory efficient
@@ -204,6 +253,71 @@ class PSTH(object):
         true_avg_rate = cls._compute_true_avg_firing_rate(window, desired_spiketimes_subset)
 
         return counts, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset #, allspikes_in_window
+
+    @classmethod
+    def compute_average(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
+        """
+        Computation o Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
+
+        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param window: Tuple in the form `(start_time, end_time)`; e.g (0, 10)
+        :param binsz: e.g 0.01 (= 100 per bin)
+        :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+        :return: a tuple in the following order
+        - array of the values (counts) of the histogram
+        - dictionary of bin information
+            - "window": window used for computing the PSTH
+            - "binsz": binsz used for computing the PSTH
+            - "bin_centers": array of bin centers
+        - array of population firing rate (at each bin)
+        - dictionary of firing rates
+            - "firing_rates": array of firing rates for each neuron
+            - "mean_firing_rate": mean of the array of firing rates
+            - "std_firing_rate": standard deviation of the array of firing rates
+        - a nested list of spike times used for computing the PSTH
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
+        # ============== DEFAULT Parameters ==============
+        if window is None:
+            window = spikeanal.window
+
+        if binsz is None:
+            binsz = spikeanal.binsz_100perbin
+
+        if neurons is None:
+            neurons = "all"
+
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+        bins = np.arange(window[0], window[1] + binsz, binsz)
+        bin_centers = (bins[:-1] + bins[1:]) / 2
+
+        # PSTH for EACH neuron
+        n_neurons = len(desired_spiketimes_subset)
+        neuron_psths = np.zeros(n_neurons)
+        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+            counts, _ = np.histogram(indiv_spiketimes, bins=bins)
+            rates = counts / binsz # Hz
+            neuron_psths[i] = rates
+        # Average the PSTH across neurons
+        average_psth = np.mean(neuron_psths, axis=0)
+        std_err_psth = np.std(neuron_psths, axis=0) / np.sqrt(n_neurons)
+
+        bin_info = {
+            "window": window,
+            "binsz": binsz,
+            "bin_centers": (bins[:-1] + bins[1:]) / 2
+        }
+
+        # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)
+        popfirerates = cls._compute_pop_firing_rate(len(desired_spiketimes_subset), binsz, counts)
+        true_avg_rate = cls._compute_true_avg_firing_rate(window, desired_spiketimes_subset)
+
+        return average_psth, std_err_psth, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset
 
     @staticmethod
     def analytics_temporal(desired_spiketimes_subset, popfirerates=[], bin_centers=[], binsz=None, stimulus_onset=0):
