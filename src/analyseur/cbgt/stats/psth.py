@@ -31,19 +31,19 @@ class PSTH(object):
     |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                     |
     |                                | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.analytics_temporal` | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH                  |
+    | :py:meth:`.analyze_temporal`   | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH                  |
     |                                | - `popfirerates`: array of population firing rate (at each bin)                                          |
     |                                | - `bin_centers`: array of bin centers                                                                    |
     |                                | - `binsz`: bin size used for the PSTH                                                                    |
     |                                | - `stimulus_onset` [OPTIONAL]: 0 [default]                                                               |
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.analytics_rate`     | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH                  |
+    | :py:meth:`.analyze_rate`       | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH                  |
     |                                | - `true_avg_rate`: dictionary of firing rates; see return value of :py:meth:`.compute`                   |
     |                                | - `popfirerates`: array of population firing rate (at each bin)                                          |
     |                                | - `window`: window used for the PSTH                                                                     |
     |                                | - `stimulus_onset` [OPTIONAL]: 0 [default]                                                               |
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.analytics_energy`   | - `true_avg_rate`: dictionary of firing rates; see return value of :py:meth:`.compute`                   |
+    | :py:meth:`.analyze_energy`     | - `true_avg_rate`: dictionary of firing rates; see return value of :py:meth:`.compute_poolPSTH`          |
     +--------------------------------+----------------------------------------------------------------------------------------------------------+
 
     =========
@@ -94,25 +94,25 @@ class PSTH(object):
         [counts, bin_info, popfirerates,
         true_avg_rate, desired_spiketimes_subset] = PSTH.compute_poolPSTH(spiketimes_superset)
 
-        temporal_features = PSTH.analytics_temporal(desired_spiketimes_subset,
-                                                    popfirerates=popfirerates,
-                                                    bin_centers=bin_info["bin_centers"],
-                                                    binsz=bin_info["binsz"],)
+        temporal_features = PSTH.analyze_temporal(desired_spiketimes_subset,
+                                                  popfirerates=popfirerates,
+                                                  bin_centers=bin_info["bin_centers"],
+                                                  binsz=bin_info["binsz"],)
 
     2.4. Analytics: Get rate-based features from the PSTH
     `````````````````````````````````````````````````````
     ::
 
-        rate_features = PSTH.analytics_rate(desired_spiketimes_subset,
-                                            true_avg_rate=true_avg_rate,
-                                            popfirerates=popfirerates,
-                                            window=bin_info["window"],)
+        rate_features = PSTH.analyze_rate(desired_spiketimes_subset,
+                                          true_avg_rate=true_avg_rate,
+                                          popfirerates=popfirerates,
+                                          window=bin_info["window"],)
 
     2.5. Analytics: Get energetics from the PSTH
     ````````````````````````````````````````````
     ::
 
-        energetics = PSTH.analytics_energy(true_avg_rate)
+        energetics = PSTH.analyze_energy(true_avg_rate)
 
     ======================================
     Possible Insights From Population PSTH
@@ -131,6 +131,9 @@ class PSTH(object):
     +-------------------------+-------------------------------------------------------------+
     | `"population_dynamics"` | how activity propagated through the network?                |
     +-------------------------+-------------------------------------------------------------+
+
+    - sparse coding is a measure of whether a few neurons do most of the firing
+    - dense coding is a measure of whether the neurons firing in the population is evenly distributed
 
     ======================================================================
     Mean of Individual Firing Rate vs Mean of Time-Varying Population Rate
@@ -333,7 +336,7 @@ class PSTH(object):
         return average_psth, std_err_psth, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset
 
     @staticmethod
-    def analytics_temporal(desired_spiketimes_subset, popfirerates=[], bin_centers=[], binsz=None, stimulus_onset=0):
+    def analyze_temporal(desired_spiketimes_subset, popfirerates=[], bin_centers=[], binsz=None, stimulus_onset=0):
         """
         Extracts temporal features from the PSTH counts
 
@@ -426,7 +429,7 @@ class PSTH(object):
         }
 
     @staticmethod
-    def analytics_rate(desired_spiketimes_subset, true_avg_rate=[], popfirerates=[], window=(), stimulus_onset=0):
+    def analyze_rate(desired_spiketimes_subset, true_avg_rate=[], popfirerates=[], window=(), stimulus_onset=0):
         """
         Extracts rate-based features from the PSTH counts
 
@@ -454,14 +457,16 @@ class PSTH(object):
         +--------------------------+------------------------------------------------------------+
         | `"mean_fold_change"`     | average relative response magnitudes                       |
         +--------------------------+------------------------------------------------------------+
-        | `"active_fraction"`      | active neurons out of total neurons                        |
-        +--------------------------+------------------------------------------------------------+
-        | `"population_sparsity"`  | measure of concentration of firing rates across population |
-        +--------------------------+------------------------------------------------------------+
         | `"rate_heterogeneity"`   | measure of response heterogeneity                          |
         +--------------------------+------------------------------------------------------------+
         | `"response_reliability"` | measure of response consistency                            |
         +--------------------------+------------------------------------------------------------+
+        | `"active_fraction"`      | active neurons out of total neurons                        |
+        +--------------------------+------------------------------------------------------------+
+        | `"population_sparsity"`  | measure of concentration of firing rates across population |
+        +--------------------------+------------------------------------------------------------+
+
+        - sparsity index (`"population_sparsity"`) is a measure of how concentrated or distributed the firing is across the neurons in the population
 
         .. raw:: html
 
@@ -470,13 +475,22 @@ class PSTH(object):
         """
         mean_firing_rate = true_avg_rate["mean_firing_rate"]
         std_firing_rate = true_avg_rate["std_firing_rate"]
-        n_neurons = len(true_avg_rate["firing_rates"])
 
+        n_neurons = len(desired_spiketimes_subset)
+        total_duration = window[1] - window[0]
+
+        # For each neuron in the population
+        firing_rates = []
         baseline_rates = []
         response_rates = []
 
         for indiv_spiketimes in desired_spiketimes_subset:
+            total_spikes = len(indiv_spiketimes)
             spiketimes = np.array(indiv_spiketimes)
+
+            # Overall firing rate
+            firing_rate = total_spikes / total_duration if total_duration > 0 else 0
+            firing_rates.append(firing_rate)
 
             # Rates: Baseline vs Response
             baseline_spikes = spiketimes[(spiketimes >= window[0]) & (spiketimes < stimulus_onset)]
@@ -490,6 +504,7 @@ class PSTH(object):
             response_rates.append(len(response_spikes) / response_duration
                                   if response_duration > 0 else 0)
 
+        firing_rates = np.array(firing_rates)
         baseline_rates = np.array(baseline_rates)
         response_rates = np.array(response_rates)
 
@@ -509,14 +524,14 @@ class PSTH(object):
             "mean_response_rate": np.mean(response_rates).item(),
             "mean_rate_change": np.mean(rate_changes).item(),
             "mean_fold_change": np.mean(fold_changes).item(),
-            "active_fraction": (active_neurons / n_neurons).item(),
-            "population_sparsity": sparsity_index.item(),
             "rate_heterogeneity": (std_firing_rate / mean_firing_rate).item(),
             "response_reliability": (np.sum(rate_changes > 0) / n_neurons).item(),
+            "active_fraction": (active_neurons / n_neurons).item(),
+            "population_sparsity": sparsity_index.item(),
         }
 
     @staticmethod
-    def analytics_energy(true_avg_rate):
+    def analyze_energy(true_avg_rate):
         """
         Extracts energy features from the PSTH counts, i.e, analytics for metabolic efficiency of rate distribution.
 
