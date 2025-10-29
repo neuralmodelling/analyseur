@@ -26,6 +26,11 @@ class Sparsity(object):
     def interpret_sparsity_index(sparsity_value):
         """
         Interpret the given sparsity value
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        
         """
         if sparsity_value < 0.2:
             interpretation = "Very dense coding; most neurons fire similarly"
@@ -42,6 +47,11 @@ class Sparsity(object):
     def biointerpret_sparsity_index(sparsity_value, brain_region="unknown"):
         """
         Interpret the given sparsity value in a biological context
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         interpretations = []
 
@@ -105,8 +115,8 @@ class Sparsity(object):
 
         .. math::
 
-            \\vec{\\psi}_{\\beta} = 1 - \\frac{\\mu\\left(\\vec{\\beta}\\right)^2}{\\mu\\left(\\vec{\\beta}^2\\right)} \n
-            \\vec{\\psi}_{\\rho} = 1 - \\frac{\\mu\\left(\\vec{\\rho}\\right)^2}{\\mu\\left(\\vec{\\rho}^2\\right)}
+            \\vec{\\psi}_{\\beta} &= 1 - \\frac{\\mu\\left(\\vec{\\beta}\\right)^2}{\\mu\\left(\\vec{\\beta}^2\\right)} \n
+            \\vec{\\psi}_{\\rho} &= 1 - \\frac{\\mu\\left(\\vec{\\rho}\\right)^2}{\\mu\\left(\\vec{\\rho}^2\\right)}
 
         and sparsity change is
 
