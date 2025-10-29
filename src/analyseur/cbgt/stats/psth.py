@@ -137,10 +137,12 @@ class PSTH(object):
     ======================================================================
 
     True Average Firing Rate (or Mean of Individual Firing Rate) is
+
     - count each neuron's spikes over entire time window
     - average across neurons (Hz)
 
     Mean of Time-Varying Population Rate is
+    
     - count population spikes per time (bin)
     - take each count per population size per bin (i.e instantaneous rate)
     - average cross time bins (Hz)
