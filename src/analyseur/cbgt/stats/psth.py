@@ -153,6 +153,9 @@ class PSTH(object):
     | - compare firing rates across populations | - study population activity evolving over time     | - is NOT neuron's average firing rate             |
     +-------------------------------------------+----------------------------------------------------+---------------------------------------------------+
 
+    * When firing rate is constant over time
+        - Mean of Individual Firing Rate = Mean of Time-Varying Population Rate
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
@@ -181,6 +184,14 @@ class PSTH(object):
             "mean_firing_rate": np.mean(firing_rates),
             "std_firing_rate": np.std(firing_rates),
         }
+
+    @classmethod
+    def _compute_avg_firing_rate_from_PSTH(cls, window, n_neurons, pop_counts):
+        """
+        Computes the average of each neuron's firing rate from PSTH data
+        """
+        total_duration = window[1] - window[0]
+        return np.sum(pop_counts) / (n_neurons * total_duration) # Hz
 
     @classmethod
     def _compute_pop_firing_rate(cls, n_neurons, binsz, pop_counts):
