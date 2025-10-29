@@ -60,5 +60,5 @@ Analytics
    :maxdepth: 5
    :caption: Available analytics functions:
 
-   stats/ratesparsity.rst
+   analytics/ratesparsity.rst
 
