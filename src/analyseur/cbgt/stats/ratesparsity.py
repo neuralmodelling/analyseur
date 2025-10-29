@@ -25,12 +25,25 @@ class Sparsity(object):
     @staticmethod
     def interpret_sparsity_index(sparsity_value):
         """
-        Interpret the given sparsity value
+        Interpret the given sparsity value :math:`\\psi`. Going with the hypothesis that
+
+        - "only a small fraction of neurons are active at any one time"
+        - average biological neuronal activity ratio "typically" ranges from near 0 to about 0.5, i.e, :math:`(0, 0.5)`
+        - activity ratio above 0.5 cannot be considered sparse because same efficiency can be achieved by inversion
+
+        we interpret :math:`\\psi \\in (0, 0.3)` to low sparsity and :math:`\\psi \\in (0.7, 1.0)` to high sparsity.
+        For greater granularity this is further broken down to
+
+        - :math:`[0, 0.2)`: very dense (most neurons are active)
+        - :math:`(0.2, 0.4)`: dense (firing is distributed)
+        - :math:`(0.4, 0.6)`: moderate (mixed activity)
+        - :math:`(0.6, 0.8)`: sparse
+        - :math:`(0.8, 1.0)`: very sparse (few neurons are active)
 
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-        
+
         """
         if sparsity_value < 0.2:
             interpretation = "Very dense coding; most neurons fire similarly"
@@ -38,6 +51,8 @@ class Sparsity(object):
             interpretation = "Dense coding; firing distributed across population"
         elif sparsity_value < 0.6:
             interpretation = "Moderate coding; mixed distribution"
+        elif sparsity_value < 0.8:
+            interpretation = "Sparse coding; few active neurons"
         else:
             interpretation = "Very sparse coding; very few active neurons"
 
@@ -46,7 +61,7 @@ class Sparsity(object):
     @staticmethod
     def biointerpret_sparsity_index(sparsity_value, brain_region="unknown"):
         """
-        Interpret the given sparsity value in a biological context
+        Interpret the given sparsity value :math:`\\psi` in a biological context
 
         .. raw:: html
 
