@@ -1,4 +1,4 @@
-# ~/analyseur/cbgt/stat/ratesparsity.py
+# ~/analyseur/cbgt/analytics/ratesparsity.py
 #
 # Documentation by Lungsi 29 Oct 2025
 #

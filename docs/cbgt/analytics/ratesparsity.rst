@@ -1,7 +1,7 @@
 Sparsity Index of CBGT spike times
 ===================================
 
-.. automodule:: analyseur.cbgt.stats.ratesparsity
+.. automodule:: analyseur.cbgt.analytics.ratesparsity
    :members:
    :undoc-members:
    :show-inheritance:

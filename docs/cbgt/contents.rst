@@ -52,5 +52,13 @@ Statistics
    stats/wavelet.rst
    stats/psd.rst
    stats/psth.rst
+
+Analytics
+==========
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Available analytics functions:
+
    stats/ratesparsity.rst
 

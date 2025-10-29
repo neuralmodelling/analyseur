@@ -7,6 +7,7 @@ import numpy as np
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.parameters import SpikeAnalysisParams
+from analyseur.cbgt.analytics.ratesparsity import Sparsity
 
 spikeanal = SpikeAnalysisParams()
 
@@ -514,7 +515,8 @@ class PSTH(object):
 
         # Population coding properties
         active_neurons = np.sum(response_rates > baseline_rates + np.std(baseline_rates))
-        sparsity_index = 1 - (mean_firing_rate ** 2 / np.mean(true_avg_rate["firing_rates"] ** 2))
+        sparsity_analytics = Sparsity.analyze(true_avg_rate["firing_rates"],
+                                              baseline_rates, response_rates)
 
         return {
             "mean_firing_rate": mean_firing_rate.item(),
@@ -527,7 +529,7 @@ class PSTH(object):
             "rate_heterogeneity": (std_firing_rate / mean_firing_rate).item(),
             "response_reliability": (np.sum(rate_changes > 0) / n_neurons).item(),
             "active_fraction": (active_neurons / n_neurons).item(),
-            "population_sparsity": sparsity_index.item(),
+            "population_sparsity": sparsity_analytics,
         }
 
     @staticmethod
