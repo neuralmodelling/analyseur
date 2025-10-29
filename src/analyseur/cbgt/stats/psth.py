@@ -195,7 +195,7 @@ class PSTH(object):
     @classmethod
     def compute_pool(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
         """
-        Computation o Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
+        Computation of Pooled Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :param window: Tuple in the form `(start_time, end_time)`; e.g (0, 10)
@@ -257,7 +257,7 @@ class PSTH(object):
     @classmethod
     def compute_average(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
         """
-        Computation o Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
+        Computation of Average of Individual Peri-Stimulus Time Histogram (Population PSTH).
 
         :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :param window: Tuple in the form `(start_time, end_time)`; e.g (0, 10)
