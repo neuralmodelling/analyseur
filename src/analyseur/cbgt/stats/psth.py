@@ -142,7 +142,7 @@ class PSTH(object):
     - average across neurons (Hz)
 
     Mean of Time-Varying Population Rate is
-    
+
     - count population spikes per time (bin)
     - take each count per population size per bin (i.e instantaneous rate)
     - average cross time bins (Hz)

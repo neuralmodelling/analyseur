@@ -85,8 +85,8 @@ class VizPSTH(object):
 
         """
         # Compute PSTH
-        [counts, bin_centers, popfirerates, true_avg_rate] = PSTH.compute(spiketimes_superset, neurons=neurons,
-                                                                          binsz=binsz, window=window)
+        [counts, bin_centers, popfirerates, true_avg_rate] = PSTH.compute_poolPSTH(spiketimes_superset, neurons=neurons,
+                                                                                    binsz=binsz, window=window)
         n_neurons = len(true_avg_rate["firing_rates"])
 
         # Plot
@@ -137,3 +137,4 @@ class VizPSTH(object):
             plt.show()
         
         return fig, ax
+

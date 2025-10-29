@@ -8,13 +8,239 @@
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import gaussian_kde
+from scipy.stats import gaussian_kde, alpha
 
 import re
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
+from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
+
+spikeanal = SpikeAnalysisParams()
+simparams = SimulationParams()
+
+
+##########################################################################
+#    Rate Distribution PLOT
+##########################################################################
+
+def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
+                        neurons=None, nucleus=None, orient=None):
+    """
+    Draws the Population Rate Distribution on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param binsz: integer or float; 0.01 [default]
+    - :param window: 2-tuple; (0, 10) [default]
+    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param orient: "horizontal" or None [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    # ============== DEFAULT Parameters ==============
+    if neurons is None:
+        neurons = "all"
+
+    if window is None:
+        window = spikeanal.window
+
+    if binsz is None:
+        binsz = spikeanal.binsz_100perbin
+
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    # Compute Firing Rate
+    firing_rates = [len(indiv_spiketimes) / (window[1] - window[0])
+                    for indiv_spiketimes in desired_spiketimes_subset]
+    avg_firerate = np.mean(firing_rates)
+
+    n_bins = round((window[1] - window[0]) / binsz)
+    n_neurons = len(desired_spiketimes_subset)
+
+    # Plot
+    if orient=="horizontal":
+        ax.hist(firing_rates, bins=n_bins, alpha=0.7, color="green",
+                edgecolor="black", orientation='horizontal')
+        ax.axhline(avg_firerate, color="red", linestyle="--", label=f"Mean: {avg_firerate:.1f} Hz")
+
+        ax.set_ylabel("Firing Rate (Hz)")
+        ax.set_xlabel("Number of Neurons")
+    else:
+        ax.hist(firing_rates, bins=n_bins, alpha=0.7, color="green", edgecolor="black",)
+        ax.axvline(avg_firerate, color="red", linestyle="--", label=f"Mean: {avg_firerate:.1f} Hz")
+
+        ax.set_ylabel("Number of Neurons")
+        ax.set_xlabel("Firing Rate (Hz)")
+
+    ax.grid(True, alpha=0.3)
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("Population Rate Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
+
+def plot_ratedist(spiketimes_superset, binsz=None, window=None,
+                  neurons=None, nucleus=None, orient=None):
+    """
+    Visualize Rate Distribution of the given neuron population.
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param binsz: integer or float; defines the number of equal-width bins in the range
+    - :param window: 2-tuple; defines upper and lower range of the bins
+    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param orient: "horizontal" or None [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if orient=="horizontal":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plot_ratedist_in_ax(ax, spiketimes_superset, binsz=binsz, window=window,
+                             neurons=neurons, nucleus=nucleus, orient=orient)
+
+    plt.show()
+
+    return fig, ax
+
+
+##########################################################################
+#    Latency Distribution PLOT
+##########################################################################
+
+def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=None,
+                           window=None, neurons=None, nucleus=None, orient=None):
+    """
+    Draws the Population Latency Distribution on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param stimulus_onset: float; 0 [default]
+    - :param binsz: integer or float; 0.01 [default]
+    - :param window: 2-tuple; (0, 10) [default]
+    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param orient: "horizontal" or None [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    # ============== DEFAULT Parameters ==============
+    if neurons is None:
+        neurons = "all"
+
+    if window is None:
+        window = spikeanal.window
+
+    if binsz is None:
+        binsz = spikeanal.binsz_100perbin
+
+    if stimulus_onset is None:
+        stimulus_onset = 0
+
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    n_bins = round((window[1] - window[0]) / binsz)
+    n_neurons = len(desired_spiketimes_subset)
+
+    # Compute Latencies
+    latencies = []
+    for indiv_spiketimes in desired_spiketimes_subset:
+        indiv_spiketimes = np.array(indiv_spiketimes)
+        response_spikes = indiv_spiketimes[indiv_spiketimes >= stimulus_onset]
+        if len(response_spikes) > 0:
+            latency = np.min(response_spikes) - stimulus_onset
+            latencies.append(latency)
+
+    if len(latencies) > 0:
+        avg_latency = np.mean(latencies)
+        # Plot
+        if orient=="horizontal":
+            ax.hist(latencies, bins=n_bins, alpha=0.7, color="green",
+                    edgecolor="black", orientation='horizontal')
+            ax.axhline(avg_latency, color="red", linestyle="--", label=f"Mean: {avg_latency:.1f} s")
+
+            ax.set_ylabel("Response Latency (s)")
+            ax.set_xlabel("Number of Neurons")
+        else:
+            ax.hist(latencies, bins=n_bins, alpha=0.7, color="green", edgecolor="black",)
+            ax.axvline(avg_latency, color="red", linestyle="--", label=f"Mean: {avg_latency:.1f} s")
+
+            ax.set_ylabel("Number of Neurons")
+            ax.set_xlabel("Response Latency (s)")
+
+        ax.grid(True, alpha=0.3)
+
+        nucname = "" if nucleus is None else " in " + nucleus
+        ax.set_title("Response Latency Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+        return ax
+    else:
+        return None
+
+def plot_latencydist(spiketimes_superset, stimulus_onset=None, binsz=None,
+                     window=None, neurons=None, nucleus=None, orient=None):
+    """
+    Visualize Latency Distribution of the given neuron population.
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param stimulus_onset: float
+    - :param binsz: integer or float; defines the number of equal-width bins in the range
+    - :param window: 2-tuple; defines upper and lower range of the bins
+    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param orient: "horizontal" or None [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if orient=="horizontal":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=stimulus_onset, binsz=binsz,
+                                window=window, neurons=neurons, nucleus=nucleus, orient=orient)
+
+    if ax is None:
+        print("There are no latencies to plot.")
+    else:
+        plt.show()
+
+    return fig, ax
 
 
 ##########################################################################
@@ -60,7 +286,7 @@ def spike_counts_distrib_in_ax(ax, spiketimes_superset):
     return ax
 
 def spike_counts_distrib(spiketimes_superset):
-    fig, ax = plt.figure(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     ax = spike_counts_distrib_in_ax(ax, spiketimes_superset)
 
@@ -112,7 +338,7 @@ def spike_densitites_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), band
     return ax
 
 def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
-    fig, ax = plt.figure(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     ax = spike_counts_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1)
 

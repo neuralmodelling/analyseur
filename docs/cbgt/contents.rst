@@ -27,6 +27,7 @@ Visualizers
    visual/popact.rst
    visual/scalo.rst
    visual/distribution.rst
+   visual/markerplot.rst
 
 Composite Visualizers
 ---------------------
