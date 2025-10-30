@@ -237,7 +237,10 @@ class InterSpikeInterval(object):
             \\xi_t &= \\mathbb{E}\\left[\\Xi_p \\mid p \\in b_t\\right] \n
                 &= \\frac{\\sum_{p \\in P}^{ }(\\Xi_p \\cdot 1_{\\{p \\in b_t\\}})}{\\sum_{p \\in P}^{ } 1_{\\{p \\in b_t\\}}}
 
-        where :math:`\\mathbb{E}` is the expectation function.
+        where
+
+        - :math:`\\mathbb{E}` is the expectation function,
+        - :math::`\\sum_{p \\in P} 1_{\\{p \\in b_t\\}}` is the number of time points that fall in the t-th bin
 
         We therefore get
 
