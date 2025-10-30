@@ -242,16 +242,17 @@ class InterSpikeInterval(object):
         - :math:`\\mathbb{E}` is the expectation function,
         - :math:`1_{\\{p \\in b_t\\}}` is the indicator function; 1 if condition is true otherwise 0,
         - :math:`\\sum_{p \\in P} 1_{\\{p \\in b_t\\}}` is the number of time points that fall in the t-th bin
+        - numerator is the sum of instantaneous rates that fall in the t-th bin
 
         We therefore get
 
         .. table::
-        =================================================================================== ======================================================
-          Definitions                                                                             Interpretation
-        =================================================================================== ======================================================
-         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
-         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
-        =================================================================================== ======================================================
+        ================================================== ======================================================
+          Definitions                                        Interpretation
+        ================================================== ======================================================
+         :math:`\\xi_t`                                      average instantaneous rate for t-th bin
+         :math:`\\vec{\\Xi} = [\\xi_t]_{\\forall{t}}`           array of average instantaneous rates for all bins
+        ================================================== ======================================================
 
         .. raw:: html
 
