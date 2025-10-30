@@ -134,7 +134,7 @@ def plot_mean_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
     mu_arr = InterSpikeInterval.mean_freqs(all_isi)
     vec_mu = mu_arr.values()
 
@@ -178,6 +178,90 @@ def plot_mean_rate(spiketimes_superset, nucleus=None, mode=None):
         fig, ax = plt.subplots(figsize=(10, 6))
 
     ax = plot_mean_rate_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+
+    plt.show()
+
+    return fig, ax
+
+
+##########################################################################
+#    PLOT Average Instantaneous Rate
+##########################################################################
+
+def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+    """
+    Draws the Mean Rate (1/s) on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    n_neurons = len(spiketimes_superset)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
+    mu_arr = InterSpikeInterval.mean_freqs(all_isi)
+    vec_mu = mu_arr.values()
+
+    if orient == "horizontal":
+        ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel("Mean Rate (1/s)")
+    else:
+        ax.bar(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Mean Rate (1/s)")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("Mean Rate Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
+
+def plot_avg_inst_rate(spiketimes_superset, nucleus=None, mode=None):
+    """
+    Visualize Mean Rate (1/s) of the given neuron population.
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if mode=="portrait":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
 
     plt.show()
 

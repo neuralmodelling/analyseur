@@ -45,7 +45,7 @@ class SpikingStats(object):
         return vec_LV, grand_LV
 
     def compute_stats(self):
-        all_isi = InterSpikeInterval.compute(self.spiketimes_superset)
+        [all_isi, _] = InterSpikeInterval.compute(self.spiketimes_superset)
         [vec_mu, grand_mu] = self.__compute_ISI(all_isi)
         [vec_CV, vec_CV2, grand_CV, grand_CV2] = self.__compute_CVs(all_isi)
         [vec_LV, grand_LV] = self.__compute_LV(all_isi)

@@ -162,7 +162,7 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
     CVarr = Variations.computeCV(all_isi)
     vec_CV = CVarr.values()
 
@@ -251,7 +251,7 @@ def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
     CV2arr = Variations.computeCV2(all_isi)
     vec_CV2 = CV2arr.values()
 
@@ -335,7 +335,7 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
     LVarr = Variations.computeLV(all_isi)
     vec_LV = LVarr.values()
 

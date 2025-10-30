@@ -54,7 +54,7 @@ class InterSpikeInterval(object):
     `````````````````````````````````````````````````````
     ::
 
-        I = InterSpikeInterval.compute(spiketimes_superset)
+        [I, all_t] = InterSpikeInterval.compute(spiketimes_superset)
 
     This returns the value for :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.compute`.
@@ -88,7 +88,10 @@ class InterSpikeInterval(object):
         Returns the interspike interval for all individual neurons.
 
         :param all_neurons_spiketimes: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
-        :return: dictionary of individual neurons whose values are their respective interspike interval
+        :return: 2-tuple
+
+        - dictionary of individual neurons whose values are their respective interspike interval
+        - dictionary of individual neurons whose values are their respective times for corresponding interspike interval
 
         **Formula**
 
@@ -110,11 +113,67 @@ class InterSpikeInterval(object):
 
         """
         interspike_intervals = {}
+        all_times = {}
 
         for n_id, spiketimes in all_neurons_spiketimes.items():
             interspike_intervals[n_id] = np.diff(spiketimes)
+            all_times[n_id] = spiketimes[1:]
 
-        return interspike_intervals
+        return interspike_intervals, all_times
+
+    @classmethod
+    def inst_rate(cls, all_neurons_isi=None):
+        """
+        Returns the instantaneuous rates for all individual neurons.
+
+        :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
+        :return: dictionary of individual neurons whose values are their respective instantaneous rates
+
+        **Formula**
+
+        .. table:: Formula_mean_freqs_1.1
+        ================================================================================================== ======================================================
+          Definitions                                                                                       Interpretation
+        ================================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                                     total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`              array of array interspike intervals of all neurons
+        ================================================================================================== ======================================================
+
+        Then, the instantaneuous rate of i-th neuron is
+
+        .. math::
+
+            \\vec{\\Upsilon}^{(i)} = \\frac{1}{\\overrightarrow{ISI}^{(i)}} = \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+
+        We therefore get
+
+        .. table:: Formula_mean_freqs_1.2
+        =================================================================================== ======================================================
+          Definitions                                                                         Interpretation
+        =================================================================================== ======================================================
+         :math:`\\vec{\\Upsilon}^{(i)}`                                                       array of instantaneous rates of i-th neuron
+         :math:`\\vec{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`             array (matrix) of array of instaneous rate of all (:math:`n_{Nuc}`) neurons
+        =================================================================================== ======================================================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
+        inst_rates = {}
+
+        for n_id, isi in all_neurons_isi.items():
+            # n_spikes = len(isi) + 1
+            if len(isi) == 0:
+                inst_rates[n_id] = 0
+            else:
+                inst_rates[n_id] = 1 / isi
+
+        return inst_rates
 
     @classmethod
     def mean_freqs(cls, all_neurons_isi=None):
