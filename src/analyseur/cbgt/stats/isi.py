@@ -69,7 +69,7 @@ class InterSpikeInterval(object):
 
     This returns the value for
     :math:`\\mathbf{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
-    see :py:meth:`.inst_rates`
+    see formula :py:meth:`.inst_rates`
 
     2.3. Compute Mean Frequencies (for all neurons)
     ````````````````````````````````````````````````
@@ -78,7 +78,7 @@ class InterSpikeInterval(object):
         F = InterSpikeInterval.mean_freqs(I)
 
     This returns the value for :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
-    see :py:meth:`.mean_freqs`
+    see formula :py:meth:`.mean_freqs`
 
     2.4. Compute Global Mean Frequency
     ```````````````````````````````````
@@ -86,7 +86,7 @@ class InterSpikeInterval(object):
 
         grand_f = InterSpikeInterval.grand_mean_freq(I)
 
-    This returns the value for :math:`\\overline{f}`; see :py:meth:`.grand_mean_freq`
+    This returns the value for :math:`\\overline{f}`; see formula :py:meth:`.grand_mean_freq`
 
     .. raw:: html
 
