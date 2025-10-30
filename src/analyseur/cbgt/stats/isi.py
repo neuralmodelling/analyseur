@@ -19,6 +19,8 @@ class InterSpikeInterval(object):
     +==============================+=======================================================================================================+
     | :py:meth:`.compute`          | - `all_neurons_spiketimes`: Dictionary returned; see :class:`~analyseur.cbgt.loader.LoadSpikeTimes`   |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.inst_rates`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
+    +------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.mean_freqs`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
@@ -59,7 +61,17 @@ class InterSpikeInterval(object):
     This returns the value for :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.compute`.
 
-    2.2. Compute Mean Frequencies (for all neurons)
+    2.2. Compute Instantaneuous Rates (for all neurons)
+    ```````````````````````````````````````````````````
+    ::
+
+        J = InterSpikeInterval.inst_rates(I)
+
+    This returns the value for
+    :math:`\\mathbf{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    see :py:meth:`.inst_rates`
+
+    2.3. Compute Mean Frequencies (for all neurons)
     ````````````````````````````````````````````````
     ::
 
@@ -68,7 +80,7 @@ class InterSpikeInterval(object):
     This returns the value for :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see :py:meth:`.mean_freqs`
 
-    2.3. Compute Global Mean Frequency
+    2.4. Compute Global Mean Frequency
     ```````````````````````````````````
     ::
 
@@ -122,7 +134,7 @@ class InterSpikeInterval(object):
         return interspike_intervals, all_times
 
     @classmethod
-    def inst_rate(cls, all_neurons_isi=None):
+    def inst_rates(cls, all_neurons_isi=None):
         """
         Returns the instantaneuous rates for all individual neurons.
 
