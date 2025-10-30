@@ -67,8 +67,8 @@ collage of subplots.
 
     plt.show()
 
-NOTE: This example shows `plotCV_in_ax` in default setting but this function works like
-`plotCV` therefore all the cases 2.1, 2.2 and 2.3 are applicable for `plotCV_in_ax`.
+NOTE: This example shows :func:`plotCV_in_ax` in default setting but this function works like
+:func:`plotCV` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plotCV_in_ax`.
 
 """
 
