@@ -122,10 +122,10 @@ import re
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
-from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
-
-__spikeanal = SpikeAnalysisParams()
-__simparams = SimulationParams()
+# from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
+#
+# __spikeanal = SpikeAnalysisParams()
+# __simparams = SimulationParams()
 
 
 ##########################################################################
@@ -152,7 +152,6 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-
     n_neurons = len(spiketimes_superset)
 
     match mode:
@@ -167,9 +166,9 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
     CVarr = Variations.computeCV(all_isi)
     vec_CV = CVarr.values()
 
-    window = __spikeanal.window
-    binsz = __spikeanal.binsz_100perbin
-    n_bins = round((window[1] - window[0]) / binsz)
+    # window = __spikeanal.window
+    # binsz = __spikeanal.binsz_100perbin
+    # n_bins = round((window[1] - window[0]) / binsz)
 
     if orient=="horizontal":
         ax.barh(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
@@ -242,7 +241,6 @@ def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-
     n_neurons = len(spiketimes_superset)
 
     match mode:
@@ -257,17 +255,12 @@ def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
     CV2arr = Variations.computeCV2(all_isi)
     vec_CV2 = CV2arr.values()
 
-    window = __spikeanal.window
-    binsz = __spikeanal.binsz_100perbin
-    n_bins = round((window[1] - window[0]) / binsz)
-
     if orient=="horizontal":
         ax.barh(range(len(vec_CV2)), vec_CV2, color="steelblue", edgecolor="black")
         ax.set_ylabel("Neurons")
         ax.set_xlabel(r"CV_2")
     else:
         ax.bar(range(len(vec_CV2)), vec_CV2, color="steelblue", edgecolor="black")
-        # ax.hist(vec_CV, bins=n_bins, alpha=0.7, color="green", edgecolor="black", )
         ax.set_ylabel(r"CV_2")
         ax.set_xlabel("Neurons")
 
@@ -332,7 +325,6 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-
     n_neurons = len(spiketimes_superset)
 
     match mode:
@@ -347,17 +339,12 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
     LVarr = Variations.computeLV(all_isi)
     vec_LV = LVarr.values()
 
-    window = __spikeanal.window
-    binsz = __spikeanal.binsz_100perbin
-    n_bins = round((window[1] - window[0]) / binsz)
-
     if orient=="horizontal":
         ax.barh(range(len(vec_LV)), vec_LV, color="steelblue", edgecolor="black")
         ax.set_ylabel("Neurons")
         ax.set_xlabel("LV")
     else:
         ax.bar(range(len(vec_LV)), vec_LV, color="steelblue", edgecolor="black")
-        # ax.hist(vec_CV, bins=n_bins, alpha=0.7, color="green", edgecolor="black", )
         ax.set_ylabel("LV")
         ax.set_xlabel("Neurons")
 
