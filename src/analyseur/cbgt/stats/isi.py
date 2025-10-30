@@ -222,18 +222,22 @@ class InterSpikeInterval(object):
         ====================================================================================== ======================================================
           Definitions                                                                            Interpretation
         ====================================================================================== ======================================================
+         :math:`\\vec{P} = vec(J)`                                                               array containing all the time points from all the neurons
+         :math:`\\vec{\\Xi} = vec(R)`                                                            array containing all the instantaneous rates from all the neurons
          total bins, :math:`n_{bins} = \\mid vec(J) \\mid`                                       total number of time points from all neurons
          bin size, :math:`w`                                                                     fixed bin width for each time bin
          bin center, :math:`c_{\\forall{t} \\in [0, n_{bins} - 1]}`                              center of t-th time bin
          bin interval, :math:`b_t = \\left[c_t - \\frac{w}{2}, c_t + \\frac{w}{2}\\right)`            interval of t-th time bin
         ====================================================================================== ======================================================
 
-        Then, the instantaneuous rate of i-th neuron is
+        Then, the average instantaneuous rate for t-th bin is
 
         .. math::
 
-            \\vec{R}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
-                           &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+            \\xi_t &= \\mathbb{E}\\left[\\Xi_p \\mid p \\in b_t\\right] \n
+                &= \\frac{\\sum_{p \\in P}\\Xi_p 1_{p \\in b_t}}{\\sum_{p \\in P} 1_{p \\in b_t}}
+
+        where :math:`\\mathbb{E}` is the expectation function.
 
         We therefore get
 
