@@ -403,41 +403,6 @@ def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.
 
 
 ##########################################################################
-#    Mean Freq PLOT
-##########################################################################
-
-def mean_freq_distrib(spiketimes_superset, orient="vertical", show=True):
-    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
-
-    all_isi = InterSpikeInterval.compute(spiketimes_superset)
-    mu_arr = InterSpikeInterval.mean_freqs(all_isi)
-    vec_mu = mu_arr.values()
-
-    if orient=="horizontal":
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
-        ax.set_ylabel("Neurons")
-    else:
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.bar(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
-        ax.set_xlabel("Neurons")
-
-    ax.grid(True, alpha=0.3, axis=get_axis(orient))
-
-    # ax.set_ylable()
-    # ax.set_xlable()
-
-    ax.set_title("Mean Freq (1/s)")
-
-    if show:
-        plt.show()
-
-    plt.close()
-
-    return fig, ax
-
-
-##########################################################################
 #    ISI PLOT
 ##########################################################################
 
