@@ -173,7 +173,7 @@ class InterSpikeInterval(object):
           Definitions                                                                             Interpretation
         =================================================================================== ======================================================
          :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
-         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`      array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
         =================================================================================== ======================================================
 
         .. raw:: html
