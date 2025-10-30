@@ -119,7 +119,7 @@ class InterSpikeInterval(object):
          total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
          interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
          :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
-         :math:`I = \\left{\\overrightarrow{ISI}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right}`              array of array interspike intervals of all neurons
+         :math:`I = \\left[\\overrightarrow{ISI}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right]`              array of array interspike intervals of all neurons
         ================================================================================================== ======================================================
 
         .. raw:: html
