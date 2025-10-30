@@ -24,6 +24,10 @@ class InterSpikeInterval(object):
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.inst_rates`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.avg_inst_rates`   | - `all_inst_rates`: Dictionary returned; see :py:meth:`.inst_rates`                                   |
+    |                              | - `all_times`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                               |
+    |                              | - `binsz`: [OPTIONAL] 0.01 (default)                                                                  |
+    +------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.mean_freqs`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
@@ -75,7 +79,16 @@ class InterSpikeInterval(object):
     :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`;
     see formula :py:meth:`.inst_rates`
 
-    2.3. Compute Mean Frequencies (for all neurons)
+    2.3. Compute Average Instantaneuous Rates (for all neurons)
+    ```````````````````````````````````````````````````````````
+    ::
+
+        E = InterSpikeInterval.avg_inst_rates(J, all_t)
+
+    This returns the value for :math:`\\vec{\\Xi} = [\\xi_t]_{\\forall{t}}`;
+    see formula :py:meth:`.avg_inst_rates`
+
+    2.4. Compute Mean Frequencies (for all neurons)
     ````````````````````````````````````````````````
     ::
 
@@ -84,7 +97,7 @@ class InterSpikeInterval(object):
     This returns the value for :math:`\\vec{F} = \\left[\\overline{f^{(i)}}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
     see formula :py:meth:`.mean_freqs`
 
-    2.4. Compute Global Mean Frequency
+    2.5. Compute Global Mean Frequency
     ```````````````````````````````````
     ::
 
@@ -200,7 +213,11 @@ class InterSpikeInterval(object):
         :param all_times: Dictionary returned using :py:meth:`.compute`
         :param all_inst_rates: Dictionary returned using :py:meth:`.inst_rates`
         :param binsz: [OPTIONAL] 0.01 (default)
-        :return: list of average instantaneous rates
+        :return: 3-tuple
+
+        - list of average instantaneous rates
+        - array of centers for all the time bins (use this as time axis for plotting)
+        - list of number of data point per bin (can be useful for colorbar)
 
         **Formula**
 
@@ -280,13 +297,20 @@ class InterSpikeInterval(object):
         bin_indices = np.digitize(arr_all_times, bins) - 1
 
         # Calculate average instantaneuous rate per bin
-        bin_centers = (bins[:-1] + bins[1:]) / 2
+        bin_centers = (bins[:-1] + bins[1:]) / 2  # time or x-axis for plotting the average rates
         avg_rates = []
+        bin_counts = []  # Tracks number of data points per bin
         for i in range(len(bins) - 1):
             rates_in_bin = arr_all_inst[bin_indices == i]
-            avg_rates.append(np.mean(rates_in_bin) if rates_in_bin.size > 0 else 0)
+            # avg_rates.append(np.mean(rates_in_bin) if rates_in_bin.size > 0 else 0)
+            if rates_in_bin.size > 0:
+                avg_rates.append(np.mean(rates_in_bin))
+                bin_counts.append(rates_in_bin.size)
+            else:
+                avg_rates.append(0)
+                bin_counts.append(0)
 
-        return avg_rates, bin_centers
+        return avg_rates, bin_centers, bin_counts
 
     @classmethod
     def mean_freqs(cls, all_neurons_isi=None):

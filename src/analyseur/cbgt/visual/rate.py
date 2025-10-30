@@ -187,7 +187,7 @@ def plot_mean_rate(spiketimes_superset, nucleus=None, mode=None):
 #    PLOT Average Instantaneous Rate
 ##########################################################################
 
-def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, binsz=None, nucleus=None, mode=None):
     """
     Draws the Mean Rate (1/s) on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
@@ -208,14 +208,8 @@ def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     """
     # ============== DEFAULT Parameters ==============
-    if window is None:
-        window = __spikeanal.window
-
     if binsz is None:
         binsz = __spikeanal.binsz_100perbin
-
-    if neurons is None:
-        neurons = "all"
 
     n_neurons = len(spiketimes_superset)
 
@@ -229,48 +223,30 @@ def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     [all_isi, all_times] = InterSpikeInterval.compute(spiketimes_superset)
     all_inst = InterSpikeInterval.inst_rates(all_isi)
-
-    # Put all times and instantaneuous rates of respective neurons into one list
-    vec_all_times = []
-    vec_all_inst = []
-    [vec_all_times.extend(x) for x in all_times.values()]
-    [vec_all_inst.extend(x) for x in all_inst.values()]
-
-    # Convert the above two lists to arrays
-    arr_all_times = np.array(vec_all_times)
-    arr_all_inst = np.array(vec_all_inst)
-
-    # Create time bins
-    [t_min, t_max] = [np.min(arr_all_times), np.max(arr_all_times)]
-    bins = np.arange(t_min, t_max + binsz, binsz)
-
-    # Digitize time bins
-    bins_indices = np.digitize(arr_all_times, bins) - 1
-
-    # Calculate average instantaneuous rate per bin
-    bins_centers = (bins[:-1] + bins[1:]) / 2
-    avg_rates = []
-    for i in range(len(bins) - 1):
-        rates_in_bin = arr_all_inst[bins_indices == i]
-        avg_rates.append(np.mean(rates_in_bin) if rates_in_bin.size > 0 else 0)
-
+    [avg_rates, bin_centers, bin_counts] = InterSpikeInterval.avg_inst_rates(all_inst_rates=all_inst,
+                                                                             all_times=all_times,
+                                                                             binsz=binsz)
     if orient == "horizontal":
-        ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
-        ax.set_ylabel("Neurons")
-        ax.set_xlabel("Mean Rate (1/s)")
+        ax.barh(bin_centers, avg_rates, height=binsz*0.8, linewidth=0.5,
+                alpha=0.7, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Time (s)")
+        ax.set_xlabel("Average Inst. Rate (Hz)")
     else:
-        ax.bar(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
-        ax.set_ylabel("Mean Rate (1/s)")
-        ax.set_xlabel("Neurons")
+        # Base bar
+        ax.bar(bin_centers, avg_rates, width=binsz*0.8, linewidth=0.5,
+               alpha=0.7, color="steelblue", edgecolor="black")
+        # ax.plot(bin_centers, avg_rates, "o-", linewidth=2, markersize=6)  # Plot
+        ax.set_ylabel("Average Inst. Rate (Hz)")
+        ax.set_xlabel("Time (s)")
 
     ax.grid(True, alpha=0.3, axis=get_axis(orient))
 
     nucname = "" if nucleus is None else " in " + nucleus
-    ax.set_title("Mean Rate Distribution of " + str(n_neurons) + " neurons" + nucname)
+    ax.set_title("Average Inst. Rates of " + str(n_neurons) + " neurons" + nucname)
 
     return ax
 
-def plot_avg_inst_rate(spiketimes_superset, nucleus=None, mode=None):
+def plot_avg_inst_rate(spiketimes_superset, binsz=None, nucleus=None, mode=None):
     """
     Visualize Mean Rate (1/s) of the given neuron population.
 
@@ -293,7 +269,7 @@ def plot_avg_inst_rate(spiketimes_superset, nucleus=None, mode=None):
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+    ax = plot_avg_inst_rate_in_ax(ax, spiketimes_superset, binsz=binsz, nucleus=nucleus, mode=mode)
 
     plt.show()
 
