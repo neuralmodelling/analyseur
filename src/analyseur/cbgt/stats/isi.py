@@ -162,18 +162,18 @@ class InterSpikeInterval(object):
 
         .. math::
 
-            \\vec{\\Upsilon}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
-                                   &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+            \\vec{R}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
+                           &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
 
         We therefore get
 
         .. table:: Formula_mean_freqs_1.2
-        ======================================================================================= ======================================================
-          Definitions                                                                                 Interpretation
-        ======================================================================================= ======================================================
-         :math:`\\vec{\\Upsilon}^{(i)}`                                                               array of instantaneous rates of i-th neuron
-         :math:`\\mathbf{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`             array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
-        ======================================================================================= ======================================================
+        =================================================================================== ======================================================
+          Definitions                                                                             Interpretation
+        =================================================================================== ======================================================
+         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
+         :math:`\\mathbf{R} = \\left[\\vec{R}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`      array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+        =================================================================================== ======================================================
 
         .. raw:: html
 
