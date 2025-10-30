@@ -195,10 +195,12 @@ class InterSpikeInterval(object):
     @classmethod
     def avg_inst_rates(cls, all_inst_rates=None, all_times=None, binsz=None):
         """
-        Returns the instantaneous rates for all individual neurons.
+        Returns the average instantaneous rates for all individual neurons.
 
-        :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
-        :return: dictionary of individual neurons whose values are their respective instantaneous rates
+        :param all_times: Dictionary returned using :py:meth:`.compute`
+        :param all_inst_rates: Dictionary returned using :py:meth:`.inst_rates`
+        :param binsz: [OPTIONAL] 0.01 (default)
+        :return: list of average instantaneous rates
 
         **Formula**
 
@@ -213,6 +215,8 @@ class InterSpikeInterval(object):
          :math:`\\vec{J}^{(i)}`                                                               array of time points where instantaneous rates of i-th neuron occur
          :math:`J = \\left\\{\\vec{J}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of time points of all (:math:`n_{Nuc}`) neurons
         =================================================================================== ======================================================
+
+        Using bin-based conditional average
 
         Then, the instantaneuous rate of i-th neuron is
 
