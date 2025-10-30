@@ -223,11 +223,9 @@ class InterSpikeInterval(object):
           Definitions                                                                         Interpretation
         =================================================================================== ======================================================
          total bins, :math:`n_{bins} = \\mid vec(J) \\mid`                                    total number of time points from all neurons
-         neuron index, :math:`i`                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
-         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
-         :math:`\\vec{J}^{(i)}`                                                               array of time points where instantaneous rates of i-th neuron occur
-         :math:`J = \\left\\{\\vec{J}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of time points of all (:math:`n_{Nuc}`) neurons
+         bin size, :math:`w`                                                                  fixed bin width for each time bin
+         bin center, :math:`c_{\\forall{t} \\in [0, n_{bins} - 1}`                            center of t-th time bin
+         bin interval, :math:`b_t = \\left[c_t - \\frac{w}{2}, c_t + \\frac{w}{2}\\right)`            interval of t-th time bin
         =================================================================================== ======================================================
 
         Then, the instantaneuous rate of i-th neuron is
