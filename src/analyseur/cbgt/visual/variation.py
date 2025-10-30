@@ -70,6 +70,10 @@ collage of subplots.
 NOTE: This example shows :func:`plotCV_in_ax` in default setting but this function works like
 :func:`plotCV` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plotCV_in_ax`.
 
+.. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+
 """
 
 import matplotlib
