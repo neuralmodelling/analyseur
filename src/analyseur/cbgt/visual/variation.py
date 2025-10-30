@@ -6,7 +6,70 @@
 #
 
 """
-Plots
+==============================
+Plot Coefficient of Variations
+==============================
+
+-----------------
+1. Pre-requisites
+-----------------
+
+1.1. Import Modules
+````````````````````
+::
+
+    from analyseur.cbgt.loader import LoadSpikeTimes
+    from analyseur.cbgt.visual.variation import plotCV
+
+1.2. Load file and get spike times
+```````````````````````````````````
+::
+
+    loadST = LoadSpikeTimes("spikes_GPi.csv")
+    spiketimes_superset = loadST.get_spiketimes_superset()
+
+---------
+2. Cases
+---------
+
+2.1. Visualize CV with default setting
+``````````````````````````````````````
+::
+
+    [fig, ax] = plotCV(spiketimes_superset)
+
+2.2. Visualize CV in portrait mode
+``````````````````````````````````
+::
+
+    [fig, ax] = plotCV(spiketimes_superset, mode="portrait")
+
+2.3. Visualize CV in portrait mode with nucleus name in title
+`````````````````````````````````````````````````````````````
+::
+
+    [fig, ax] = plotCV(spiketimes_superset, mode="portrait", nucleus="GPi")
+
+2.4. Create the plot for customization
+``````````````````````````````````````
+This is for power users who for instance want to insert the CV plot in their
+collage of subplots.
+::
+
+    import matplotlib.pyplot as plt
+    from analyseur.cbgt.visual.variation import plotCV_in_ax
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Horizontally stacked subplots')
+
+    ax1 = plotCV_in_ax(ax1, spiketimes_superset)
+    ax2 = plotCV_in_ax(ax2, spiketimes_superset)
+
+    plt.show()
+
+NOTE: This example shows `plotCV_in_ax` in default setting but this function works like
+`plotCV` therefore all the cases 2.1, 2.2 and 2.3 are applicable for `plotCV_in_ax`.
+
 """
 
 import matplotlib
@@ -21,15 +84,15 @@ from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
 from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
 
-spikeanal = SpikeAnalysisParams()
-simparams = SimulationParams()
+__spikeanal = SpikeAnalysisParams()
+__simparams = SimulationParams()
 
 
 ##########################################################################
 #    CV PLOT
 ##########################################################################
 
-def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, orient=None):
+def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
     """
     Draws the Coefficient of Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
@@ -41,7 +104,7 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, orient=None):
 
     - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
     - :param nucleus: string; name of the nucleus
-    - :param orient: "horizontal" or None [default]
+    - :param mode: "portrait" or None/landscape [default]
     - :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
@@ -52,14 +115,20 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, orient=None):
 
     n_neurons = len(spiketimes_superset)
 
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
     all_isi = InterSpikeInterval.compute(spiketimes_superset)
     CVarr = Variations.computeCV(all_isi)
     vec_CV = CVarr.values()
 
-    window = spikeanal.window
-    binsz = spikeanal.binsz_100perbin
+    window = __spikeanal.window
+    binsz = __spikeanal.binsz_100perbin
     n_bins = round((window[1] - window[0]) / binsz)
 
     if orient=="horizontal":
@@ -79,7 +148,7 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, orient=None):
 
     return ax
 
-def plotCV(spiketimes_superset, nucleus=None, orient=None):
+def plotCV(spiketimes_superset, nucleus=None, mode=None):
     """
     Visualize Coefficient of Variation of the given neuron population.
 
@@ -89,7 +158,7 @@ def plotCV(spiketimes_superset, nucleus=None, orient=None):
 
     - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
     - :param nucleus: string; name of the nucleus
-    - :param orient: "horizontal" or None [default]
+    - :param mode: "portrait" or None/landscape [default]
     - :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
@@ -97,12 +166,12 @@ def plotCV(spiketimes_superset, nucleus=None, orient=None):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-    if orient=="horizontal":
+    if mode=="portrait":
         fig, ax = plt.subplots(figsize=(6, 10))
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plotCV_in_ax(ax, spiketimes_superset, nucleus=nucleus, orient=orient)
+    ax = plotCV_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
 
     plt.show()
 
