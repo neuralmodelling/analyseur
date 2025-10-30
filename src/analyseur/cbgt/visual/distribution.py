@@ -255,20 +255,52 @@ def _get_neuron_count(spiketimes_1neuron):
     return sorted_spikes, cumulative
 
 def _get_pop_count(desired_spiketimes_subset):
-    all_spiketimes = np.array(desired_spiketimes_subset)
-    all_spikes = np.sort(np.concatenate([spiketimes for spiketimes in all_spiketimes if len(spiketimes) > 0]))
+    all_spikes = np.sort(np.concatenate([spiketimes
+                                         for spiketimes in desired_spiketimes_subset
+                                         if len(spiketimes) > 0]))
     pop_cumulative = np.arange(1, len(all_spikes) + 1)
 
     return  all_spikes, pop_cumulative
 
-def spike_counts_distrib_in_ax(ax, spiketimes_superset):
+def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucleus=None, orient=None):
+    """
+    Draws the Spike Count Distribution on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param orient: "horizontal" or None [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if neurons is None:
+        neurons = "all"
+
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
 
-    for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
-        if len(indiv_spiketimes) > 0:
-            [sorted_spikes, indiv_cumulative] = _get_neuron_count(indiv_spiketimes)
+    n_neurons = len(desired_spiketimes_subset)
 
-            ax.step(sorted_spikes, indiv_cumulative, where="post", alpha=0.5, linewidth=1)
+    if orient=="horizontal":
+        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+            if len(indiv_spiketimes) > 0:
+                [sorted_spikes, indiv_cumulative] = _get_neuron_count(indiv_spiketimes)
+
+                ax.stairs(indiv_cumulative, sorted_spikes, orientation=orient, label="")
+    else:
+        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+            if len(indiv_spiketimes) > 0:
+                [sorted_spikes, indiv_cumulative] = _get_neuron_count(indiv_spiketimes)
+
+                ax.step(sorted_spikes, indiv_cumulative, where="post", alpha=0.5, linewidth=1)
 
     [all_spikes, pop_cumulative] = _get_pop_count(desired_spiketimes_subset)
 
@@ -280,15 +312,38 @@ def spike_counts_distrib_in_ax(ax, spiketimes_superset):
 
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("Cumulative Spike Count")
-    ax.set_title("Cumulative Spike Counts")
-    ax.set_legend()
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("Cumulative Spike Counts Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    ax.legend()
 
     return ax
 
-def spike_counts_distrib(spiketimes_superset):
-    fig, ax = plt.subplots(figsize=(10, 6))
+def plot_spike_counts_distrib(spiketimes_superset, neurons=None, nucleus=None, orient=None):
+    """
+    Visualize Spike Count Distribution of the given neuron population.
 
-    ax = spike_counts_distrib_in_ax(ax, spiketimes_superset)
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param orient: "horizontal" or None [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if orient=="horizontal":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plot_spike_counts_distrib_in_ax(ax, spiketimes_superset)
 
     plt.show()
 
@@ -312,7 +367,7 @@ def _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth):
 
     return all_spikes, kde(time_points)
 
-def spike_densitites_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1):
+def plot_spike_density_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1):
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
     time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
 
@@ -322,7 +377,7 @@ def spike_densitites_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), band
 
             ax.step(time_points, neuron_density + i*0.1, alpha=0.7, linewidth=1)
 
-    [all_spikes, pop_density] = _get_pop_count(desired_spiketimes_subset, time_points, bandwidth)
+    [all_spikes, pop_density] = _get_pop_count(desired_spiketimes_subset)
 
     if len(all_spikes) > 0:
         ax.step(time_points, pop_density + len(desired_spiketimes_subset)*0.1, "r-",
@@ -337,47 +392,12 @@ def spike_densitites_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), band
 
     return ax
 
-def spike_densitites_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
+def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = spike_counts_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1)
+    ax = plot_spike_density_distrib_in_ax(ax, spiketimes_superset, window=window, bandwidth=bandwidth)
 
     plt.show()
-
-    return fig, ax
-
-
-##########################################################################
-#    CV PLOT
-##########################################################################
-
-def cv_distrib(spiketimes_superset, orient="vertical", show=True):
-    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
-
-    all_isi = InterSpikeInterval.compute(spiketimes_superset)
-    CVarr = Variations.computeCV(all_isi)
-    vec_CV = CVarr.values()
-
-    if orient=="horizontal":
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.barh(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
-        ax.set_ylabel("Neurons")
-    else:
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.bar(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
-        ax.set_xlabel("Neurons")
-
-    ax.grid(True, alpha=0.3, axis=get_axis(orient))
-
-    # ax.set_ylable()
-    # ax.set_xlable()
-
-    ax.set_title("CV")
-
-    if show:
-        plt.show()
-
-    plt.close()
 
     return fig, ax
 

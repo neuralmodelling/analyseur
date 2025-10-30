@@ -28,6 +28,7 @@ Visualizers
    visual/scalo.rst
    visual/distribution.rst
    visual/markerplot.rst
+   visual/variation.rst
 
 Composite Visualizers
 ---------------------
