@@ -78,6 +78,18 @@ collage of subplots.
 NOTE: This example shows :func:`plot_mean_rate_in_ax` in default setting but this function works like
 :func:`plot_mean_rate` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plot_mean_rate_in_ax`.
 
+===============================
+Plot Average Instantaneous Rate
+===============================
+
+Similar as documented above for plotting Mean Rate but using the function
+:func:`plot_avg_inst_rate` and :func:`plot_avg_inst_rate_in_ax` with the
+additional OPTIONAL argument for `binsz` (otherwise it picks a default value).
+This is imported as
+::
+
+    from analyseur.cbgt.visual.variation import plot_avg_inst_rate, plot_avg_inst_rate_in_ax
+
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">
@@ -113,7 +125,6 @@ def plot_mean_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     OPTIONAL parameters
 
-    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
     - :param nucleus: string; name of the nucleus
     - :param mode: "portrait" or None/landscape [default]
     - :return: object `ax` with Rate Distribution plotting done into it
@@ -161,7 +172,6 @@ def plot_mean_rate(spiketimes_superset, nucleus=None, mode=None):
 
     OPTIONAL parameters
 
-    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
     - :param nucleus: string; name of the nucleus
     - :param mode: "portrait" or None/landscape [default]
     - :return: object `ax` with Rate Distribution plotting done into it
@@ -197,7 +207,7 @@ def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, binsz=None, nucleus=None, 
 
     OPTIONAL parameters
 
-    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param binsz: 0.01 [default]
     - :param nucleus: string; name of the nucleus
     - :param mode: "portrait" or None/landscape [default]
     - :return: object `ax` with Rate Distribution plotting done into it
@@ -254,7 +264,7 @@ def plot_avg_inst_rate(spiketimes_superset, binsz=None, nucleus=None, mode=None)
 
     OPTIONAL parameters
 
-    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param binsz: 0.01 [default]
     - :param nucleus: string; name of the nucleus
     - :param mode: "portrait" or None/landscape [default]
     - :return: object `ax` with Rate Distribution plotting done into it
