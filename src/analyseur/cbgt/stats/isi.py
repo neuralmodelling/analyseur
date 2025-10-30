@@ -216,7 +216,19 @@ class InterSpikeInterval(object):
          :math:`J = \\left\\{\\vec{J}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of time points of all (:math:`n_{Nuc}`) neurons
         =================================================================================== ======================================================
 
-        Using bin-based conditional average
+        For using bin-based conditional average let
+
+        .. table::
+        =================================================================================== ======================================================
+          Definitions                                                                         Interpretation
+        =================================================================================== ======================================================
+         total bins, :math:`n_{bins} = \\mid vec(J) \\mid`                                    total number of time points from all neurons
+         neuron index, :math:`i`                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
+         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+         :math:`\\vec{J}^{(i)}`                                                               array of time points where instantaneous rates of i-th neuron occur
+         :math:`J = \\left\\{\\vec{J}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of time points of all (:math:`n_{Nuc}`) neurons
+        =================================================================================== ======================================================
 
         Then, the instantaneuous rate of i-th neuron is
 
