@@ -140,7 +140,7 @@ class InterSpikeInterval(object):
     @classmethod
     def inst_rates(cls, all_neurons_isi=None):
         """
-        Returns the instantaneuous rates for all individual neurons.
+        Returns the instantaneous rates for all individual neurons.
 
         :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
         :return: dictionary of individual neurons whose values are their respective instantaneous rates
@@ -195,7 +195,7 @@ class InterSpikeInterval(object):
     @classmethod
     def avg_inst_rates(cls, all_inst_rates=None, all_times=None, binsz=None):
         """
-        Returns the instantaneuous rates for all individual neurons.
+        Returns the instantaneous rates for all individual neurons.
 
         :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
         :return: dictionary of individual neurons whose values are their respective instantaneous rates
@@ -203,15 +203,16 @@ class InterSpikeInterval(object):
         **Formula**
 
         .. table:: Formula_mean_freqs_1.1
-        =================================================================================== ======================================================
-          Definitions                                                                         Interpretation
-        =================================================================================== ======================================================
-         total neurons, :math:`n_{nuc}`                                                       total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         total spikes, :math:`n_{spk}^{(i)}`                                                  total number of spikes (spike times) by i-th neuron
-         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
-         :math:`\\mathbf{R} = \\left[\\vec{R}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`      array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
-        =================================================================================== ======================================================
+        ================================================================================================== ======================================================
+          Definitions                                                                                       Interpretation
+        ================================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                                     total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`I = \\left\\{\\overrightarrow{ISI}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`              set of array interspike intervals of all neurons
+        ================================================================================================== ======================================================
 
         Then, the instantaneuous rate of i-th neuron is
 
@@ -227,7 +228,7 @@ class InterSpikeInterval(object):
           Definitions                                                                             Interpretation
         =================================================================================== ======================================================
          :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
-         :math:`\\mathbf{R} = \\left[\\vec{R}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`      array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
         =================================================================================== ======================================================
 
         .. raw:: html
