@@ -219,14 +219,14 @@ class InterSpikeInterval(object):
         For using bin-based conditional average let
 
         .. table::
-        =================================================================================== ======================================================
-          Definitions                                                                         Interpretation
-        =================================================================================== ======================================================
-         total bins, :math:`n_{bins} = \\mid vec(J) \\mid`                                    total number of time points from all neurons
-         bin size, :math:`w`                                                                  fixed bin width for each time bin
-         bin center, :math:`c_{\\forall{t} \\in [0, n_{bins} - 1}`                            center of t-th time bin
-         bin interval, :math:`b_t = \\left[c_t - \\frac{w}{2}, c_t + \\frac{w}{2}\\right)`            interval of t-th time bin
-        =================================================================================== ======================================================
+        ====================================================================================== ======================================================
+          Definitions                                                                            Interpretation
+        ====================================================================================== ======================================================
+         total bins, :math:`n_{bins} = \\mid vec(J) \\mid`                                       total number of time points from all neurons
+         bin size, :math:`w`                                                                     fixed bin width for each time bin
+         bin center, :math:`c_{\\forall{t} \\in [0, n_{bins} - 1}`                               center of t-th time bin
+         bin interval, :math:`bint_t = \\left[c_t - \\frac{w}{2}, c_t + \\frac{w}{2}\\right)`            interval of t-th time bin
+        ====================================================================================== ======================================================
 
         Then, the instantaneuous rate of i-th neuron is
 
