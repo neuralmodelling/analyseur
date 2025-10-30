@@ -147,7 +147,8 @@ class InterSpikeInterval(object):
 
         .. math::
 
-            \\vec{\\Upsilon}^{(i)} = \\frac{1}{\\overrightarrow{ISI}^{(i)}} = \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+            \\vec{\\Upsilon}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
+                                   &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
 
         We therefore get
 
@@ -156,7 +157,7 @@ class InterSpikeInterval(object):
           Definitions                                                                         Interpretation
         =================================================================================== ======================================================
          :math:`\\vec{\\Upsilon}^{(i)}`                                                       array of instantaneous rates of i-th neuron
-         :math:`\\vec{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`             array (matrix) of array of instaneous rate of all (:math:`n_{Nuc}`) neurons
+         :math:`\\mathbf{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`             array (matrix) of array of instaneous rate of all (:math:`n_{Nuc}`) neurons
         =================================================================================== ======================================================
 
         .. raw:: html
