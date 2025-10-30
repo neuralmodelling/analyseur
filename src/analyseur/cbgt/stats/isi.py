@@ -72,7 +72,7 @@ class InterSpikeInterval(object):
         J = InterSpikeInterval.inst_rates(I)
 
     This returns the value for
-    :math:`\\mathbf{J} = \\left[\\vec{\\Upsilon}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
+    :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`;
     see formula :py:meth:`.inst_rates`
 
     2.3. Compute Mean Frequencies (for all neurons)
