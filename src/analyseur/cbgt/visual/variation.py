@@ -5,6 +5,10 @@
 # This contains function for SpikingStats
 #
 
+"""
+Plots
+"""
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,10 +23,6 @@ from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
 
 spikeanal = SpikeAnalysisParams()
 simparams = SimulationParams()
-
-"""
-Plots
-"""
 
 
 ##########################################################################
