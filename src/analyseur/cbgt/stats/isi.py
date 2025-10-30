@@ -203,16 +203,16 @@ class InterSpikeInterval(object):
         **Formula**
 
         .. table::
-        ================================================================================================== ======================================================
-          Definitions                                                                                       Interpretation
-        ================================================================================================== ======================================================
-         total neurons, :math:`n_{nuc}`                                                                     total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
-         interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
-         :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
-         :math:`I = \\left\\{\\overrightarrow{ISI}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`              set of array interspike intervals of all neurons
-        ================================================================================================== ======================================================
+        =================================================================================== ======================================================
+          Definitions                                                                         Interpretation
+        =================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                       total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
+         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+         :math:`\\vec{J}^{(i)}`                                                               array of time points where instantaneous rates of i-th neuron occur
+         :math:`J = \\left\\{\\vec{J}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of time points of all (:math:`n_{Nuc}`) neurons
+        =================================================================================== ======================================================
 
         Then, the instantaneuous rate of i-th neuron is
 
