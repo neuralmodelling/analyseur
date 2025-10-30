@@ -235,7 +235,7 @@ class InterSpikeInterval(object):
         .. math::
 
             \\xi_t &= \\mathbb{E}\\left[\\Xi_p \\mid p \\in b_t\\right] \n
-                &= \\frac{\\sum_{p \\in P}^{}(\\Xi_p \\cdot 1_{\\{p \\in b_t\\}})}{\\sum_{p \\in P}^{} 1_{\\{p \\in b_t\\}}}
+                &= \\frac{\\sum_{p \\in P}^{ }(\\Xi_p \\cdot 1_{\\{p \\in b_t\\}})}{\\sum_{p \\in P}^{ } 1_{\\{p \\in b_t\\}}}
 
         where :math:`\\mathbb{E}` is the expectation function.
 
