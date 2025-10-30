@@ -74,7 +74,7 @@ NOTE: This example shows :func:`plotCV_in_ax` in default setting but this functi
 Plot Local Coefficient of Variations
 ====================================
 
-Same as documented above for plotting CV but using the function :func:`plot_CV2` and :func:`plotCV2_in_ax`
+Same as documented above for plotting CV but using the function :func:`plotCV2` and :func:`plotCV2_in_ax`
 imported as
 ::
 
@@ -84,7 +84,7 @@ imported as
 Plot Local Variations
 =====================
 
-Same as documented above for plotting CV but using the function :func:`plot_LV` and :func:`plotLV_in_ax`
+Same as documented above for plotting CV but using the function :func:`plotLV` and :func:`plotLV_in_ax`
 imported as
 ::
 
