@@ -70,6 +70,26 @@ collage of subplots.
 NOTE: This example shows :func:`plotCV_in_ax` in default setting but this function works like
 :func:`plotCV` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plotCV_in_ax`.
 
+====================================
+Plot Local Coefficient of Variations
+====================================
+
+Same as documented above for plotting CV but using the function :func:`plot_CV2` and :func:`plotCV2_in_ax`
+imported as
+::
+
+    from analyseur.cbgt.visual.variation import plotCV2, plotCV2_in_ax
+
+=====================
+Plot Local Variations
+=====================
+
+Same as documented above for plotting CV but using the function :func:`plot_LV` and :func:`plotLV_in_ax`
+imported as
+::
+
+    from analyseur.cbgt.visual.variation import plotLV, plotLV_in_ax
+
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">
@@ -176,6 +196,186 @@ def plotCV(spiketimes_superset, nucleus=None, mode=None):
         fig, ax = plt.subplots(figsize=(10, 6))
 
     ax = plotCV_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+
+    plt.show()
+
+    return fig, ax
+
+
+##########################################################################
+#    CV2 PLOT
+##########################################################################
+
+def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+    """
+    Draws the Local Coefficient of Variation on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+
+    n_neurons = len(spiketimes_superset)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    CV2arr = Variations.computeCV2(all_isi)
+    vec_CV2 = CV2arr.values()
+
+    window = __spikeanal.window
+    binsz = __spikeanal.binsz_100perbin
+    n_bins = round((window[1] - window[0]) / binsz)
+
+    if orient=="horizontal":
+        ax.barh(range(len(vec_CV2)), vec_CV2, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel(r"CV_2")
+    else:
+        ax.bar(range(len(vec_CV2)), vec_CV2, color="steelblue", edgecolor="black")
+        # ax.hist(vec_CV, bins=n_bins, alpha=0.7, color="green", edgecolor="black", )
+        ax.set_ylabel(r"CV_2")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title(r"CV_2" + " Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
+
+def plotCV2(spiketimes_superset, nucleus=None, mode=None):
+    """
+    Visualize Local Coefficient of Variation of the given neuron population.
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if mode=="portrait":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plotCV2_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+
+    plt.show()
+
+    return fig, ax
+
+
+##########################################################################
+#    LV PLOT
+##########################################################################
+
+def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+    """
+    Draws the Local Variation on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+
+    n_neurons = len(spiketimes_superset)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    all_isi = InterSpikeInterval.compute(spiketimes_superset)
+    LVarr = Variations.computeLV(all_isi)
+    vec_LV = LVarr.values()
+
+    window = __spikeanal.window
+    binsz = __spikeanal.binsz_100perbin
+    n_bins = round((window[1] - window[0]) / binsz)
+
+    if orient=="horizontal":
+        ax.barh(range(len(vec_LV)), vec_LV, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel("LV")
+    else:
+        ax.bar(range(len(vec_LV)), vec_LV, color="steelblue", edgecolor="black")
+        # ax.hist(vec_CV, bins=n_bins, alpha=0.7, color="green", edgecolor="black", )
+        ax.set_ylabel("LV")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("LV Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
+
+def plotLV(spiketimes_superset, nucleus=None, mode=None):
+    """
+    Visualize Local Variation of the given neuron population.
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    if mode=="portrait":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plotLV_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
 
     plt.show()
 
