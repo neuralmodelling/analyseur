@@ -93,11 +93,10 @@ import re
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.isi import InterSpikeInterval
-from analyseur.cbgt.stats.variation import Variations
-# from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
-#
-# __spikeanal = SpikeAnalysisParams()
-# __simparams = SimulationParams()
+from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
+
+__spikeanal = SpikeAnalysisParams()
+__simparams = SimulationParams()
 
 
 ##########################################################################
@@ -208,6 +207,16 @@ def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    # ============== DEFAULT Parameters ==============
+    if window is None:
+        window = __spikeanal.window
+
+    if binsz is None:
+        binsz = __spikeanal.binsz_100perbin
+
+    if neurons is None:
+        neurons = "all"
+
     n_neurons = len(spiketimes_superset)
 
     match mode:
@@ -218,9 +227,32 @@ def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
-    mu_arr = InterSpikeInterval.mean_freqs(all_isi)
-    vec_mu = mu_arr.values()
+    [all_isi, all_times] = InterSpikeInterval.compute(spiketimes_superset)
+    all_inst = InterSpikeInterval.inst_rates(all_isi)
+
+    # Put all times and instantaneuous rates of respective neurons into one list
+    vec_all_times = []
+    vec_all_inst = []
+    [vec_all_times.extend(x) for x in all_times.values()]
+    [vec_all_inst.extend(x) for x in all_inst.values()]
+
+    # Convert the above two lists to arrays
+    arr_all_times = np.array(vec_all_times)
+    arr_all_inst = np.array(vec_all_inst)
+
+    # Create time bins
+    [t_min, t_max] = [np.min(arr_all_times), np.max(arr_all_times)]
+    bins = np.arange(t_min, t_max + binsz, binsz)
+
+    # Digitize time bins
+    bins_indices = np.digitize(arr_all_times, bins) - 1
+
+    # Calculate average instantaneuous rate per bin
+    bins_centers = (bins[:-1] + bins[1:]) / 2
+    avg_rates = []
+    for i in range(len(bins) - 1):
+        rates_in_bin = arr_all_inst[bins_indices == i]
+        avg_rates.append(np.mean(rates_in_bin) if rates_in_bin.size > 0 else 0)
 
     if orient == "horizontal":
         ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")

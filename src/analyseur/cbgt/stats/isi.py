@@ -9,6 +9,9 @@ import numpy as np
 
 # from .compute_shared import compute_grand_mean as cgm
 from analyseur.cbgt.stats.compute_shared import compute_grand_mean as cgm
+from analyseur.cbgt.parameters import SpikeAnalysisParams
+
+__spikeanal = SpikeAnalysisParams()
 
 class InterSpikeInterval(object):
     """
@@ -187,6 +190,79 @@ class InterSpikeInterval(object):
                 inst_rates[n_id] = 1 / isi
 
         return inst_rates
+
+    @classmethod
+    def avg_inst_rates(cls, all_inst_rates=None, all_times=None, binsz=None):
+        """
+        Returns the instantaneuous rates for all individual neurons.
+
+        :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
+        :return: dictionary of individual neurons whose values are their respective instantaneous rates
+
+        **Formula**
+
+        .. table:: Formula_mean_freqs_1.1
+        ================================================================================================== ======================================================
+          Definitions                                                                                       Interpretation
+        ================================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                                     total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
+         interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
+         :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron
+         :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`              array of array interspike intervals of all neurons
+        ================================================================================================== ======================================================
+
+        Then, the instantaneuous rate of i-th neuron is
+
+        .. math::
+
+            \\vec{R}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
+                           &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+
+        We therefore get
+
+        .. table:: Formula_mean_freqs_1.2
+        =================================================================================== ======================================================
+          Definitions                                                                             Interpretation
+        =================================================================================== ======================================================
+         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
+         :math:`\\mathbf{R} = \\left[\\vec{R}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`      array (matrix) of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+        =================================================================================== ======================================================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
+        if binsz is None:
+            binsz = __spikeanal.binsz_100perbin
+
+        # Put all times and instantaneuous rates of respective neurons into one list
+        vec_all_times = []
+        vec_all_inst = []
+        [vec_all_times.extend(x) for x in all_times.values()]
+        [vec_all_inst.extend(x) for x in all_inst_rates.values()]
+
+        # Convert the above two lists to arrays
+        arr_all_times = np.array(vec_all_times)
+        arr_all_inst = np.array(vec_all_inst)
+
+        # Create time bins
+        [t_min, t_max] = [np.min(arr_all_times), np.max(arr_all_times)]
+        bins = np.arange(t_min, t_max + binsz, binsz)
+
+        # Digitize time bins
+        bin_indices = np.digitize(arr_all_times, bins) - 1
+
+        # Calculate average instantaneuous rate per bin
+        bin_centers = (bins[:-1] + bins[1:]) / 2
+        avg_rates = []
+        for i in range(len(bins) - 1):
+            rates_in_bin = arr_all_inst[bin_indices == i]
+            avg_rates.append(np.mean(rates_in_bin) if rates_in_bin.size > 0 else 0)
+
+        return avg_rates, bin_centers
 
     @classmethod
     def mean_freqs(cls, all_neurons_isi=None):
