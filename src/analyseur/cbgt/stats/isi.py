@@ -240,7 +240,7 @@ class InterSpikeInterval(object):
         where
 
         - :math:`\\mathbb{E}` is the expectation function,
-        - :math::`\\sum_{p \\in P} 1_{\\{p \\in b_t\\}}` is the number of time points that fall in the t-th bin
+        - :math:`\\sum_{p \\in P} 1_{\\{p \\in b_t\\}}` is the number of time points that fall in the t-th bin
 
         We therefore get
 
