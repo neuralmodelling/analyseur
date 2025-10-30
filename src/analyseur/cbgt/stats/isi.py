@@ -59,7 +59,7 @@ class InterSpikeInterval(object):
         [I, all_t] = InterSpikeInterval.compute(spiketimes_superset)
 
     This returns the value for :math:`\\vec{I} = \\left[\\overrightarrow{ISI}^{(i)}\\right]_{\\forall{i \\in [1, n_{nuc}]}}`;
-    see :py:meth:`.compute`.
+    see `formula <:py:meth:`.compute>`_.
 
     2.2. Compute Instantaneuous Rates (for all neurons)
     ```````````````````````````````````````````````````
