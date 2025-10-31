@@ -68,7 +68,7 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     **Formula: Rice Rule**
     ::
 
-        n_{bins} &= 2 \\cbrt(N) \n
+        n_{bins} &= 2 \\sqrt[3](N) \n
         binsz &= \\frac{dur}{n_{bins}}
 
     **Formula: Periodic Rule**
