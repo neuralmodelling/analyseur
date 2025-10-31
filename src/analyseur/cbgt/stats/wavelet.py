@@ -117,6 +117,8 @@ class ContinuousWaveletTransform(object):
                            &\\triangleq \\left[ \\sum_{k=1}^{n_{spk}^{(i)}} \\left(B^{(i)}[t_k] \cdot G[t-t_k]\\right) \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]} \n
                            &= \\left[ \\sum_{k=1}^{n_{spk}^{(i)}} G[t-t_k] \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}
 
+        Note that the last line is due to the fact that only non-zero :math:`B^{(i)}[t_k]` occurs at spike positions.
+
         """
         # ============== DEFAULT Parameters ==============
         if sampling_rate is None:
