@@ -30,6 +30,12 @@ DEFAULT_FEEDFORWORD_CURRENTS = {
 }
 
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
+    """
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
     match rule:
         case "Square Root":
             n_bins = round( math.sqrt(total_time) )
@@ -45,6 +51,12 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
 @dataclass
 class SimulationParams:
+    """
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
     duration: float = 10000 # ms
     t_start_recording = 2000 # ms
     dt: float = 0.1 # ms
@@ -68,6 +80,12 @@ class SimulationParams:
 
 @dataclass
 class SpikeAnalysisParams:
+    """
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
     window: Tuple[float, float] = (0, SimulationParams.duration / SimulationParams._1000ms)
     sampling_period_ms: float = SimulationParams.dt
     sampling_period: float = SimulationParams.dt / SimulationParams._1000ms
