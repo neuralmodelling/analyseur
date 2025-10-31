@@ -63,14 +63,14 @@ class CommonLoader(object):
 class LoadSpikeTimes(CommonLoader):
     """
     Loads the csv file containing spike times for all the neurons
-    in a particular nucleus and returns all their spike trains in milliseconds.
+    in a particular nucleus and returns all their spike times in seconds.
 
-    +------------------------------+------------------------------------+--------------------------------------------+
-    | Methods                      | Argument                           | Return                                     |
-    +==============================+====================================+============================================+
-    | :py:meth:`.get_spiketimes_superset`  | - no arguments                     | - dictionary with keys, `n<X>` where       |
-    |                              | - instantiated with full file path | :math:`X \\in [0, N] \\subset \\mathbb{Z}` |
-    +------------------------------+------------------------------------+--------------------------------------------+
+    +-------------------------------------+------------------------------------+--------------------------------------------+
+    | Methods                             | Argument                           | Return                                     |
+    +=====================================+====================================+============================================+
+    | :py:meth:`.get_spiketimes_superset` | - no arguments                     | - dictionary with keys, `n<X>` where       |
+    |                                     | - instantiated with full file path | :math:`X \\in [0, N] \\subset \\mathbb{Z}` |
+    +-------------------------------------+------------------------------------+--------------------------------------------+
 
     **Use Case:**
 
