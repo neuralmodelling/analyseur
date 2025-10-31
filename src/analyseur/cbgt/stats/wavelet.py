@@ -15,8 +15,25 @@ from analyseur.cbgt.curate import get_binary_spiketrains
 
 spikeanal = SpikeAnalysisParams()
 
-class WaveletTransform(object):
+class ContinuousWaveletTransform(object):
+    """
+    Continuous Wavelet Tranform
 
+    ===================================================
+    Comments on Activity and Choices in Performing CWT
+    ===================================================
+
+    +--------------
+    | Activity    | Description  | Purpose
+    +=============+
+    | Signal Smoothing | convert binary spike trains | - some smoothing can help visualize rhythmic spiking |
+    |                  | to continuous signals       | - over smoothing can obscure precise timing          |
+
+    """
+    #===============================================================
+    # Static methods that check for available individual wavelet options
+    # in https://pywavelets.readthedocs.io/en/latest/ref/cwt.html
+    #===============================================================
     @staticmethod
     def _is_cmor_format(w): # "cmorB-C" floating points B, C
         pattern = r"^cmor(-?\d+\.?\d*)-(-?\d+\.?\d*)$"
@@ -44,6 +61,10 @@ class WaveletTransform(object):
 
     @classmethod
     def _check_pywt_wavelet_format(cls, wavelet):
+        """
+        This method checks for wavelet options available in
+        `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_.
+        """
         pywt_wavelets1 = ["mexh", "morl", ]
         pywt_wavelets2 = ["cmor", "gaus", "cgau", "shan", "fbsp"]
 
@@ -54,9 +75,47 @@ class WaveletTransform(object):
                                  + str(pywt_wavelets1 + pywt_wavelets2))
 
 
+
     @staticmethod
-    def __get_smoothed_signal(spiketimes_superset, sampling_rate=None,
-                              window=None, neurons=None, sigma=None):
+    def smooth_signal(spiketimes_superset, sampling_rate=None,
+                      window=None, neurons=None, sigma=None):
+        """
+        This method takes the spike times and converts it into respective binary spike trains
+        which in turn is smoothened. The returned smoothened signal can be used to create a
+        firing rate signal.
+
+        Smoothening is done by Gaussian filtering
+
+        - each binary spike (= 1) is placed into a Gaussian-shaped bump
+        - the Gaussian filter replaces each point (spike = 1) with a Gaussian distribution centered at that position
+            - the overall result is many Gaussian distributions (each per point when spike = 1)
+            - where spikes are close the Gaussians overlap
+        - sum together the overlaping Gaussians (i.e convolution)
+            - this represents the "dense estimate" of the spikes, i.e, smoothened curve
+
+        **Formula**
+
+        .. table:: Formula
+        ===================================================================================== ======================================================
+          Definitions                                                                           Interpretation
+        ===================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                         total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                    total number of spikes (spike times) by i-th neuron
+         :math:`S^{(i)}`                                                                        array of spike times of i-th neuron
+         :math:`S = \\left\\{S^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike times of all neurons
+         :math:`B^{(i)}(t) = \\sum_{k=1}^{n_{spk}^{(i)}} \\delta(t - t_j)`                            binary spike train of i-th neuron for spike times :math:`S^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
+         :math:`B = \\left\\{B^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike trains of all neurons
+        ===================================================================================== ======================================================
+
+        Then, the smoothened signal for i-th neuron is
+
+        .. math::
+
+            \\vec{R}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
+                           &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+
+        """
         # ============== DEFAULT Parameters ==============
         if sampling_rate is None:
             sampling_rate = 1 / spikeanal.sampling_period
@@ -80,11 +139,11 @@ class WaveletTransform(object):
 
 
     @classmethod
-    def compute_cwt_single(cls, spiketimes_superset, sampling_rate=None,
+    def _compute_cwt_single(cls, spiketimes_superset, sampling_rate=None,
                            window=None, sigma=None,
                            scales=None, wavelet=None, neuron_indx=None,):
         """
-        Compute the Continuous Wavelet Transform of a single neuron
+        Compute the Continuous Wavelet Transform for a single neuron
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
@@ -106,8 +165,8 @@ class WaveletTransform(object):
 
         # Convert spike times to spike trains
         [smoothed_signal, yticks, time_axis, sampling_period] = \
-            cls.__get_smoothed_signal(spiketimes_superset, sampling_rate=sampling_rate,
-                                      window=window, neurons="all", sigma=sigma)
+            cls.smooth_signal(spiketimes_superset, sampling_rate=sampling_rate,
+                              window=window, neurons="all", sigma=sigma)
 
         # ============== DEFAULT Parameters ==============
         if neuron_indx is None:
@@ -153,8 +212,8 @@ class WaveletTransform(object):
 
         # Convert spike times to spike trains
         [smoothed_signal, yticks, time_axis, sampling_period] = \
-            cls.__get_smoothed_signal(spiketimes_superset, sampling_rate=sampling_rate,
-                                      window=window, neurons=neurons, sigma=sigma)
+            cls.smooth_signal(spiketimes_superset, sampling_rate=sampling_rate,
+                              window=window, neurons=neurons, sigma=sigma)
 
         # Compute the Continuous Wavelet Transform for every neuron within the chosen neurons option "all" or selective
         all_coefficients = []
@@ -194,8 +253,8 @@ class WaveletTransform(object):
 
         # Convert spike times to spike trains
         [smoothed_signal, yticks, time_axis, sampling_period] = \
-            cls.__get_smoothed_signal(spiketimes_superset, sampling_rate=sampling_rate,
-                                      window=window, neurons=neurons, sigma=sigma)
+            cls.smooth_signal(spiketimes_superset, sampling_rate=sampling_rate,
+                              window=window, neurons=neurons, sigma=sigma)
 
         # Compute Population Firing Rate from the sum of all chosen neurons
         population_train = np.sum(smoothed_signal, axis=0).flatten()

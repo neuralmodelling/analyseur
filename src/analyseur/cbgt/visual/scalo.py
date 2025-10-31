@@ -7,7 +7,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from analyseur.cbgt.stats.wavelet import WaveletTransform
+from analyseur.cbgt.stats.wavelet import ContinuousWaveletTransform as cwt
 
 class Scalogram(object):
 
@@ -18,9 +18,9 @@ class Scalogram(object):
     def plot_single(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
                     sampling_rate=None, window=None, neurons=None, sigma=None, neuron_indx=None):
         [coefficients, frequencies, neuronid, time_axis] = \
-            WaveletTransform.compute_cwt_single(self.spiketimes_superset, sampling_rate=sampling_rate,
-                                                window=window, neurons=neurons, sigma=sigma,
-                                                scales=scales, wavelet=wavelet, neuron_indx=neuron_indx)
+            cwt.compute_cwt_single(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                   window=window, neurons=neurons, sigma=sigma,
+                                   scales=scales, wavelet=wavelet, neuron_indx=neuron_indx)
 
         nucname = "" if nucleus is None else " of " + nucleus
         suptitle = "Scalogram" + nucname + f" ({neuronid})"
@@ -48,9 +48,9 @@ class Scalogram(object):
     def plot_avg(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
                 sampling_rate=None, window=None, neurons=None, sigma=None,):
         [avg_coefficients, frequencies, yticks, time_axis] = \
-            WaveletTransform.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
-                                            window=window, neurons=neurons, sigma=sigma,
-                                            scales=scales, wavelet=wavelet, )
+            cwt.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                window=window, neurons=neurons, sigma=sigma,
+                                scales=scales, wavelet=wavelet, )
 
         nucname = "" if nucleus is None else " of " + nucleus
         suptitle = "Scalogram" + nucname + f"( {len(yticks)} average)"
@@ -78,9 +78,9 @@ class Scalogram(object):
     def plot_sum(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
                 sampling_rate=None, window=None, neurons=None, sigma=None,):
         [coefficients, frequencies, yticks, time_axis] = \
-            WaveletTransform.compute_cwt_sum(self.spiketimes_superset, sampling_rate=sampling_rate,
-                                            window=window, neurons=neurons, sigma=sigma,
-                                            scales=scales, wavelet=wavelet, )
+            vwt.compute_cwt_sum(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                window=window, neurons=neurons, sigma=sigma,
+                                scales=scales, wavelet=wavelet, )
 
         nucname = "" if nucleus is None else " of " + nucleus
         suptitle = "Scalogram" + nucname + f"( {len(yticks)} sum)"
@@ -108,9 +108,9 @@ class Scalogram(object):
     def plot_avg_coi(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
                      sampling_rate=None, window=None, neurons=None, sigma=None, ):
         [avg_coefficients, frequencies, yticks, time_axis] = \
-            WaveletTransform.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
-                                             window=window, neurons=neurons, sigma=sigma,
-                                             scales=scales, wavelet=wavelet, )
+            cwt.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
+                                window=window, neurons=neurons, sigma=sigma,
+                                scales=scales, wavelet=wavelet, )
         magnitude = np.abs(avg_coefficients)
 
         # Create Simple parabolic COI
