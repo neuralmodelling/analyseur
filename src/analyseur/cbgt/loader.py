@@ -69,16 +69,18 @@ class LoadSpikeTimes(CommonLoader):
     | Methods                             | Argument                           | Return                                                            |
     +=====================================+====================================+===================================================================+
     | :py:meth:`.get_spiketimes_superset` | - no arguments                     | - dictionary with keys, `n<X>` where `X ∊ [0, N] ⊂ 𝗭`             |
-    |                                     | - instantiated with full file path | - key value is a list of spike times for respective neuron `n<X>` |
+    |                                     | - instantiated with full file path | - key value is a array of spike times for respective neuron `n<X>`|
     +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
 
-    **Use Case:**
+    ========
+    Use Case
+    ========
 
     ::
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
-      loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
-      spike_trains = loadST.get_spiketimes_superset()
+      loadST = LoadSpikeTimes("spikes_GPi.csv")
+      spiketimes_superset = loadST.get_spiketimes_superset()
 
     .. raw:: html
 
