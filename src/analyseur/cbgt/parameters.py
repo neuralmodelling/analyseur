@@ -39,7 +39,8 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
     - Square Root Rule (`rule="Square Root"`)
         - general purpose, quick estimate
-        - :math:`n_bins = \\sqrt{\\text{total_time}}`
+        - :math:`n_{bins} = \\sqrt{\\text{total_time}}`
+        - :math:`binsz = \\frac{\\text{total_time}}{n_{bins}}`
     - Rice Rule (`rule="Rice Rule"`)
         - suitable for larger datasets
     - Periodic (`rule="Periodic"`)
