@@ -181,6 +181,10 @@ class LoadSpikeTimes(CommonLoader):
 
 class LoadChannelIorG(CommonLoader):
     """
+    ===============
+    LoadChannelIorG
+    ===============
+
     Loads the csv file containing measureables (currents and conductances) meaned across the first 400 neurons
     in a particular nucleus and returns all their measurables in milliseconds by calling :py:meth:`.get_measurables`.
 
@@ -194,9 +198,9 @@ class LoadChannelIorG(CommonLoader):
     **NOTE:** Unlike spike times (from :py:meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`) whose
     time axis is in seconds, the time axis for the measurables is in milliseconds.
 
-    ========
+    --------
     Use Case
-    ========
+    --------
 
     ::
 
