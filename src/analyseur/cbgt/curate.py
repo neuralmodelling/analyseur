@@ -12,6 +12,10 @@ from analyseur.cbgt.parameters import SpikeAnalysisParams
 
 spikeanal = SpikeAnalysisParams()
 
+# ==========================================
+# get_desired_spiketimes_subset
+# ==========================================
+
 def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
     return int(match.group(1))
@@ -61,6 +65,9 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
 
     return valid_indices
 
+# ==========================================
+# get_binary_spiketrains
+# ==========================================
 
 def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None, neurons=None):
     """
