@@ -22,6 +22,10 @@ def __extract_neuron_no(neuron_id):
 
 def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     """
+    =============================
+    get_desired_spiketimes_subset
+    =============================
+
     Returns nested list of spike times (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
@@ -71,6 +75,10 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
 
 def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None, neurons=None):
     """
+    ======================
+    get_binary_spiketrains
+    ======================
+
     Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
