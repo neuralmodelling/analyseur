@@ -31,6 +31,29 @@ DEFAULT_FEEDFORWORD_CURRENTS = {
 
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     """
+    ================
+    bin_size_by_rule
+    ================
+
+    Returns bin size by rule
+
+    - Square Root Rule (`rule="Square Root"`)
+        - general purpose, quick estimate
+    - Rice Rule (`rule="Rice Rule"`)
+        - suitable for larger datasets
+    - Periodic (`rule="Periodic"`)
+        - for periodic signal
+
+    --------
+    Use Case
+    --------
+    ::
+
+        from analyseur.cbgt.parameters import bin_size_by_rule
+
+        simparams = SimulationParams()
+
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
@@ -84,7 +107,7 @@ class SimulationParams:
     Use Case
     --------
     ::
-    
+
         from analyseur.cbgt.parameters import SimulationParams
 
         simparams = SimulationParams()
