@@ -35,9 +35,6 @@ class ContinuousWaveletTransform(object):
     | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
 
-    ===================================================
-    Comments on Activity and Choices in Performing CWT
-    ===================================================
 
     +------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
     | Activity         | Description                   | Purpose                                                                                                    |
@@ -52,6 +49,10 @@ class ContinuousWaveletTransform(object):
     | wavelet choice   | determines trade-off between  | - Morlet (`cmorB-C`) for oscillation                                                                       |
     |                  | time and frequency resolution | - Mexican hat (`mexh`) for transient spike detection                                                       |
     +------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
+
+    ===================================================
+    Comments on Activity and Choices in Performing CWT
+    ===================================================
 
     """
     #===============================================================
