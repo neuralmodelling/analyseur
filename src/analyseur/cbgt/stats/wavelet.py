@@ -102,7 +102,7 @@ class ContinuousWaveletTransform(object):
          total neurons, :math:`n_{nuc}`                                                         total number of neurons in the Nucleus
          neuron index, :math:`i`                                                                i-th neuron in the pool of :math:`n_{Nuc}` neurons
          total spikes, :math:`n_{spk}^{(i)}`                                                    total number of spikes (spike times) by i-th neuron
-         :math:`S^{(i)}`                                                                        array of spike times of i-th neuron
+         :math:`\\vec{S}^{(i)}`                                                                       array of spike times of i-th neuron
          :math:`S = \\left\\{S^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike times of all neurons
          :math:`B^{(i)}[t] = \\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_j]`                            binary spike train of i-th neuron for spike times :math:`S^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
          :math:`B = \\left\\{B^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike trains of all neurons
