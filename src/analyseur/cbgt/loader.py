@@ -83,6 +83,7 @@ class LoadSpikeTimes(CommonLoader):
     ::
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
+      
       loadST = LoadSpikeTimes("spikes_GPi.csv")
       spiketimes_superset = loadST.get_spiketimes_superset()
 
@@ -205,6 +206,7 @@ class LoadChannelIorG(CommonLoader):
     ::
 
       from  analyseur.cbgt.loader import LoadChannelIorG
+
       loadIG = LoadChannelIorG("CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
       I_GABAB_for_CSN = loadIG.get_measurables()
 
