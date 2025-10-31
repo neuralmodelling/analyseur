@@ -83,7 +83,7 @@ class LoadSpikeTimes(CommonLoader):
     ::
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
-      
+
       loadST = LoadSpikeTimes("spikes_GPi.csv")
       spiketimes_superset = loadST.get_spiketimes_superset()
 

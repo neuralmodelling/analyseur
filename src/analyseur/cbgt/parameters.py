@@ -52,6 +52,41 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 @dataclass
 class SimulationParams:
     """
+    ================
+    SimulationParams
+    ================
+
+    Default parameters from CBGT simulation
+
+    +----------------------+--------------------+
+    | Parameter name       | Value              |
+    +======================+====================+
+    | `duration`             | `(0, 10)` seconds  |
+    +----------------------+--------------------+
+    | `sampling_period`    | `0.0001` seconds   |
+    +----------------------+--------------------+
+    | `sampling_period_ms` | `0.1` milliseconds |
+    +----------------------+--------------------+
+    | `binsz_sqrt_rule`    | `100`              |
+    +----------------------+--------------------+
+    | `binsz_rice_rule`    | `232.558`          |
+    +----------------------+--------------------+
+    | `binsz_10perbin`     | `0.001`            |
+    +----------------------+--------------------+
+    | `binsz_100perbin`    | `0.01`             |
+    +----------------------+--------------------+
+    | `binsz_1000perbin`   | `0.1`              |
+    +----------------------+--------------------+
+
+    --------
+    Use Case
+    --------
+    ::
+        from analyseur.cbgt.parameters import SpikeAnalysisParams
+
+        spikeanal = SpikeAnalysisParams()
+
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
@@ -81,27 +116,40 @@ class SimulationParams:
 @dataclass
 class SpikeAnalysisParams:
     """
+    ===================
+    SpikeAnalysisParams
+    ===================
+
     Default parameters for spike analysis
 
-    +----------------------+--------------+
-    | Parameter name       | Value        |
-    +======================+==============+
-    | `window`             | `"cortex"`   |
-    +----------------------+--------------+
-    | `sampling_period`    | `"bg"`       |
-    +----------------------+--------------+
-    | `sampling_period_ms` | `"thalamus"` |
-    +----------------------+--------------+
-    | `binsz_sqrt_rule`    | `"thalamus"` |
-    +----------------------+--------------+
-    | `binsz_rice_rule`    | `"thalamus"` |
-    +----------------------+--------------+
-    | `binsz_10perbin`     | `"thalamus"` |
-    +----------------------+--------------+
-    | `binsz_100perbin`    | `"thalamus"` |
-    +----------------------+--------------+
-    | `binsz_1000perbin`   | `"thalamus"` |
-    +----------------------+--------------+
+    +----------------------+--------------------+
+    | Parameter name       | Value              |
+    +======================+====================+
+    | `window`             | `(0, 10)` seconds  |
+    +----------------------+--------------------+
+    | `sampling_period`    | `0.0001` seconds   |
+    +----------------------+--------------------+
+    | `sampling_period_ms` | `0.1` milliseconds |
+    +----------------------+--------------------+
+    | `binsz_sqrt_rule`    | `100`              |
+    +----------------------+--------------------+
+    | `binsz_rice_rule`    | `232.558`          |
+    +----------------------+--------------------+
+    | `binsz_10perbin`     | `0.001`            |
+    +----------------------+--------------------+
+    | `binsz_100perbin`    | `0.01`             |
+    +----------------------+--------------------+
+    | `binsz_1000perbin`   | `0.1`              |
+    +----------------------+--------------------+
+
+    --------
+    Use Case
+    --------
+    ::
+        from analyseur.cbgt.parameters import SpikeAnalysisParams
+
+        spikeanal = SpikeAnalysisParams()
+
 
     .. raw:: html
 
