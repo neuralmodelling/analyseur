@@ -63,7 +63,7 @@ class CommonLoader(object):
 class LoadSpikeTimes(CommonLoader):
     """
     Loads the csv file containing spike times for all the neurons
-    in a particular nucleus and returns all their spike times in seconds.
+    in a particular nucleus and returns all their spike times in seconds by calling :py:meth:`.get_spiketimes_superset`.
 
     +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
     | Methods                             | Argument                           | Return                                                            |
@@ -178,14 +178,14 @@ class LoadSpikeTimes(CommonLoader):
 class LoadChannelVorG(CommonLoader):
     """
     Loads the csv file containing spike times for all the neurons
-    in a particular nucleus and returns all their spike trains in milliseconds.
+    in a particular nucleus and returns all their spike times in seconds by calling :py:meth:`.get_spiketimes_superset`.
 
-    +------------------------------+------------------------------------+--------------------------------------------+
-    | Methods                      | Argument                           | Return                                     |
-    +==============================+====================================+============================================+
-    | :py:meth:`.get_spiketimes_superset`  | - no arguments                     | - dictionary with keys, `n<X>` where       |
-    |                              | - instantiated with full file path | :math:`X \\in [0, N] \\subset \\mathbb{Z}` |
-    +------------------------------+------------------------------------+--------------------------------------------+
+    +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
+    | Methods                             | Argument                           | Return                                                            |
+    +=====================================+====================================+===================================================================+
+    | :py:meth:`.get_spiketimes_superset` | - no arguments                     | - dictionary with keys, `n<X>` where `X ∊ [0, N] ⊂ 𝗭`             |
+    |                                     | - instantiated with full file path | - key value is a array of spike times for respective neuron `n<X>`|
+    +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
 
     **Use Case:**
 
