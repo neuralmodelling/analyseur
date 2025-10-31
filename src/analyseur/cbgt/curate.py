@@ -29,8 +29,31 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
     :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
-    :param neurons: [OPTIONAL] `"all"` (default)
+    :param neurons: [OPTIONAL] `"all"` (default) or list: range(a, b) or [1, 4, 5, 9]
     :return: 2-tuple; nested_list and label_list
+
+    --------
+    Use Case
+    --------
+    ::
+
+      from  analyseur.cbgt.loader import LoadSpikeTimes
+      from  analyseur.cbgt.curate import get_desired_spiketimes_subset
+
+      loadST = LoadSpikeTimes("spikes_GPi.csv")
+      spiketimes_superset = loadST.get_spiketimes_superset()
+
+    1. Convert superset to nested list of spike times
+    `````````````````````````````````````````````````
+    ::
+
+        [spiketimes_superlist, _] = get_desired_spiketimes_subset(spiketimes_superset)
+
+    2. Get nested list of spike times for desired neurons
+    `````````````````````````````````````````````````````
+    ::
+
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset, neurons=range(30, 100))
 
     .. raw:: html
 
@@ -86,6 +109,30 @@ def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None,
     :param window: Tuple (start, end), `(0, 10)` [default]
     :param sampling_rate: `10000` [default]
     :return: 3-tuple; nested_list, label_list and times_axis
+
+    --------
+    Use Case
+    --------
+    ::
+
+      from  analyseur.cbgt.loader import LoadSpikeTimes
+      from  analyseur.cbgt.curate import get_binary_spiketrains
+
+      loadST = LoadSpikeTimes("spikes_GPi.csv")
+      spiketimes_superset = loadST.get_spiketimes_superset()
+
+    1. Convert superset to nested list of binary spike trains
+    `````````````````````````````````````````````````````````
+    ::
+
+        [spiketrains_superlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_superset)
+
+    2. Get nested list of spike times for desired neurons
+    `````````````````````````````````````````````````````
+    ::
+
+        [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_superset,
+                                                                                    neurons=range(10, 70))
 
     .. raw:: html
 

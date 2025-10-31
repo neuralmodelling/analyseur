@@ -81,6 +81,28 @@ class SimulationParams:
 @dataclass
 class SpikeAnalysisParams:
     """
+    Default parameters for spike analysis
+
+    +----------------------+--------------+
+    | Parameter name       | Value        |
+    +======================+==============+
+    | `window`             | `"cortex"`   |
+    +----------------------+--------------+
+    | `sampling_period`    | `"bg"`       |
+    +----------------------+--------------+
+    | `sampling_period_ms` | `"thalamus"` |
+    +----------------------+--------------+
+    | `binsz_sqrt_rule`    | `"thalamus"` |
+    +----------------------+--------------+
+    | `binsz_rice_rule`    | `"thalamus"` |
+    +----------------------+--------------+
+    | `binsz_10perbin`     | `"thalamus"` |
+    +----------------------+--------------+
+    | `binsz_100perbin`    | `"thalamus"` |
+    +----------------------+--------------+
+    | `binsz_1000perbin`   | `"thalamus"` |
+    +----------------------+--------------+
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
