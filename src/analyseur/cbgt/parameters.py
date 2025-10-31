@@ -165,9 +165,9 @@ class SignalAnalysisParams:
     decimal_places: int = 3
     decimal_places_ephys: int = 5  # very small values for disinhibition experiments
 
-    window: Tuple[float, float] = (0, SimulationParams.duration / SimulationParams._1000ms)
+    window: Tuple[float, float] = (0, SimulationParams.duration / _1000ms)
     sampling_period_ms: float = SimulationParams.dt
-    sampling_period: float = SimulationParams.dt / SimulationParams._1000ms
+    sampling_period: float = SimulationParams.dt / _1000ms
 
     binsz_sqrt_rule: float = bin_size_by_rule(SimulationParams.duration, "Square Root")
     binsz_rice_rule: float = bin_size_by_rule(SimulationParams.duration, "Rice Rule")
