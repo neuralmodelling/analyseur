@@ -175,25 +175,30 @@ class LoadSpikeTimes(CommonLoader):
 
         return spiketimes_superset
 
-class LoadChannelVorG(CommonLoader):
+class LoadChannelIorG(CommonLoader):
     """
-    Loads the csv file containing spike times for all the neurons
-    in a particular nucleus and returns all their spike times in seconds by calling :py:meth:`.get_spiketimes_superset`.
+    Loads the csv file containing measureables (currents and conductances) meaned across the first 400 neurons
+    in a particular nucleus and returns all their measurables in milliseconds by calling :py:meth:`.get_measurables`.
 
-    +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
-    | Methods                             | Argument                           | Return                                                            |
-    +=====================================+====================================+===================================================================+
-    | :py:meth:`.get_spiketimes_superset` | - no arguments                     | - dictionary with keys, `n<X>` where `X ∊ [0, N] ⊂ 𝗭`             |
-    |                                     | - instantiated with full file path | - key value is a array of spike times for respective neuron `n<X>`|
-    +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
+    +-----------------------------+------------------------------------+-------------------------------------------------------------------+
+    | Methods                     | Argument                           | Return                                                            |
+    +=============================+====================================+===================================================================+
+    | :py:meth:`.get_measurables` | - no arguments                     | - 1-D array with respective measuralble sampled at 1 milliseconds |
+    |                             | - instantiated with full file path | - key value is a array of spike times for respective neuron `n<X>`|
+    +-----------------------------+------------------------------------+-------------------------------------------------------------------+
 
-    **Use Case:**
+    **NOTE:** Unlike spike times (from :py:meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`) whose
+    time axis is in seconds, the time axis for the measurables is in milliseconds.
+
+    ========
+    Use Case
+    ========
 
     ::
 
-      from  analyseur.cbgt.loader import LoadSpikeTimes
-      loadST = LoadSpikeTimes("/full/path/to/CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
-      spike_trains = loadST.get_spiketimes_superset()
+      from  analyseur.cbgt.loader import LoadChannelIorG
+      loadIG = LoadChannelIorG("CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
+      I_GABAB_for_CSN = loadIG.get_measurables()
 
     .. raw:: html
 
@@ -204,24 +209,26 @@ class LoadChannelVorG(CommonLoader):
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
                    + "spike times in milliseconds for all the neurons recorded." )
     __pattern_with_nucleus_name = r"(.*?)\_"
-    __pattern_with_attrib_name = r"\_V\_syn\_(.*?)\_1msgrouped"
-    __nonChnl_attributes = ["L", "g_NMDA", "g_GABAA", "g_GABAB", "g_AMPA"]
+    __pattern_with_attrib_name = r"\_V\_syn\_(.*?)\_1msgrouped"     # NOTE: Although name has V, THESE ARE CURRENTS
+    __nonChnl_and_g_attributes = ["L", "g_NMDA", "g_GABAA", "g_GABAB", "g_AMPA"]
 
     def __prepreprocessSize(self, neurotrans_name):  # As there is a shift in indices in the LFP formula
-        full_size = self.simparams.duration - 6 - 1
+        """This is function taken from Jeanne's code."""
+        full_size = simparams.duration - 6 - 1
         if neurotrans_name == 'AMPA':
             start, end = 6, 0
         elif neurotrans_name == 'GABAA':
             start, end = 0, 6
         else:
             start, end = 6, 6
-            full_size = self.simparams.duration - 1
+            full_size = simparams.duration - 1
         start, end = start, full_size - end
 
         return start, end
 
     def _extract_nucleus_attribute_name(self, filename):
-        """Extracts <nucleus> name from `<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv`"""
+        """Extracts <nucleus> name and attribute name
+        from `<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv`"""
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
         match1 = re.search(self.__pattern_with_nucleus_name, filename)
@@ -243,6 +250,9 @@ class LoadChannelVorG(CommonLoader):
 
     def get_measurables(self):
         """
+        Returns a dictionary containing the spike times (numpy.array data type) in seconds
+        for all the neurons recorded into the file as value of the key `n<X>` where
+        :math:`X \\in [0, N] \\subset \\mathbb{Z}`.
 
         .. raw:: html
 
@@ -252,12 +262,12 @@ class LoadChannelVorG(CommonLoader):
         [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
         # region = self.get_region_name(nucleus)
 
-        if attrib in self.simparams.neurotrans + self.__nonChnl_attributes:
+        if attrib in simparams.neurotrans + self.__nonChnl_and_g_attributes:
             start, end = self.__prepreprocessSize(attrib)
             dataframe = pd.read_csv(self.full_filepath).iloc[start:end, [0]]
-            measurables = dataframe.apply(lambda x: round(x, self.simparams.decimal_places_ephys)).values
+            measurables = dataframe.apply(lambda x: round(x, simparams.decimal_places_ephys)).values
         else:
-            print("Attributes must be from " + str(self.simparams.neurotrans + self.__nonChnl_attributes))
+            print("Attributes must be from " + str(simparams.neurotrans + self.__nonChnl_and_g_attributes))
             measurables = None
 
         return measurables

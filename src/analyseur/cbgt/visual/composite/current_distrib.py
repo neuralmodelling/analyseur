@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-from analyseur.cbgt.loader import LoadChannelVorG
+from analyseur.cbgt.loader import LoadChannelIorG
 from analyseur.cbgt.parameters import SimulationParams
 
 
@@ -37,8 +37,8 @@ def _get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
     for attrib in attriblist:
         filepath = rootpath + dirname + "/" + nucleus + "_V_syn_" + \
                    attrib + "_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv"
-        loadVG = LoadChannelVorG(filepath)
-        measurables[attrib] = loadVG.get_measurables()
+        loadIG = LoadChannelIorG(filepath)
+        measurables[attrib] = loadIG.get_measurables()
 
     mean_current_across_t = {"L": np.mean(measurables["L"])}
     for attrib in attriblist:
