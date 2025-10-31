@@ -12,7 +12,9 @@ import numpy as np
 from analyseur.cbgt.parameters import SimulationParams
 
 class CommonLoader(object):
-
+    """
+    This is the parent class for :class:`.LoadSpikeTimes` and :class:`.LoadChannelVorG`
+    """
     def __init__(self, full_filepath=" "):
         self.full_filepath = full_filepath
         self.filename = full_filepath.split("/")[-1]

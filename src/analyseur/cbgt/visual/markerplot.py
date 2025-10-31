@@ -229,7 +229,7 @@ def plot_ratechange(spiketimes_superset, stimulus_onset=None,
     """
     Visualize Rate Change Scatter of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
     OPTIONAL parameters
 

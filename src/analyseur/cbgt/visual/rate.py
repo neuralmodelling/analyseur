@@ -260,7 +260,7 @@ def plot_avg_inst_rate(spiketimes_superset, binsz=None, nucleus=None, mode=None)
     """
     Visualize Mean Rate (1/s) of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
     OPTIONAL parameters
 

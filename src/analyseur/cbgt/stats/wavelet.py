@@ -17,7 +17,7 @@ spikeanal = SpikeAnalysisParams()
 
 class ContinuousWaveletTransform(object):
     """
-    Continuous Wavelet Tranform ≜
+    Continuous Wavelet Tranform
 
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | Methods                      | Argument                                                                                              |
@@ -52,6 +52,10 @@ class ContinuousWaveletTransform(object):
     | wavelet choice   | determines trade-off between  | - Morlet ("cmorB-C") for oscillation                                          |
     |                  | time and frequency resolution | - Mexican hat ("mexh") for transient spike detection                          |
     +------------------+-------------------------------+-------------------------------------------------------------------------------+
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
     #===============================================================
@@ -143,6 +147,10 @@ class ContinuousWaveletTransform(object):
 
         Note that the last line is due to the fact that only non-zero :math:`B^{(i)}[t_k]` occurs at spike positions.
 
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         # ============== DEFAULT Parameters ==============
         if sampling_rate is None:
@@ -172,6 +180,29 @@ class ContinuousWaveletTransform(object):
                            scales=None, wavelet=None, neuron_indx=None,):
         """
         Compute the Continuous Wavelet Transform for a single neuron
+
+        :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+
+        OPTIONAL parameters
+
+        :param sampling_rate: `10000` [default]
+        :param window: Tuple; `(0, 10)` [default]
+        :param sigma: standard deviation value, `2` [default]
+        :param wavelet: `"cmor1.5-1.0"` [default], for possible options see `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
+        :param scales: array `[1, 2, 3, ..., 128]` [default]
+        :param neuron_indx: randomly picks one [default]
+
+        :return: 4-tuple
+
+        - Continuous wavelet transform of the input signal
+        - corresponding frequencies
+        - time axis of the input signal
+        - neuron id
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
@@ -208,7 +239,7 @@ class ContinuousWaveletTransform(object):
         coefficients, frequencies = pywt.cwt(single_neuron_train, scales, wavelet, sampling_period=sampling_period)
 
         # Return the results for a single neuron
-        return coefficients, frequencies, yticks[neuron_indx], time_axis
+        return coefficients, frequencies, time_axis, yticks[neuron_indx]
 
     @classmethod
     def compute_cwt_avg(cls, spiketimes_superset, sampling_rate=None,

@@ -191,7 +191,7 @@ def plotCV(spiketimes_superset, nucleus=None, mode=None):
     """
     Visualize Coefficient of Variation of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
     OPTIONAL parameters
 
@@ -275,7 +275,7 @@ def plotCV2(spiketimes_superset, nucleus=None, mode=None):
     """
     Visualize Local Coefficient of Variation of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
     OPTIONAL parameters
 
@@ -311,7 +311,7 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
     OPTIONAL parameters
 
@@ -359,7 +359,7 @@ def plotLV(spiketimes_superset, nucleus=None, mode=None):
     """
     Visualize Local Variation of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
     OPTIONAL parameters
 
