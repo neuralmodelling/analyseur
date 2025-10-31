@@ -30,7 +30,7 @@ DEFAULT_FEEDFORWORD_CURRENTS = {
 }
 
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
-    f"""
+    """
     ================
     bin_size_by_rule
     ================
@@ -39,7 +39,7 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
     - Square Root Rule (`rule="Square Root"`)
         - general purpose, quick estimate
-        - :math:`n_bins = \\sqrt{s}`
+        - :math:`n_bins = \\sqrt{total_time}`
     - Rice Rule (`rule="Rice Rule"`)
         - suitable for larger datasets
     - Periodic (`rule="Periodic"`)
