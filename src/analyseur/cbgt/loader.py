@@ -19,7 +19,7 @@ class CommonLoader(object):
 
     - Instantiated with the full file path
         - sets atrributes: `full_filepath`, `filename`
-    - Contains static method :meth:`._get_region_name`
+    - Contains static method :meth:`.get_region_name`
 
     .. raw:: html
 
@@ -31,7 +31,7 @@ class CommonLoader(object):
         self.filename = full_filepath.split("/")[-1]
 
     @staticmethod
-    def _get_region_name(nucleus):
+    def get_region_name(nucleus):
         """
         Returns region name for respective nucleus name for which the spike times are for in the file.
 
@@ -48,7 +48,7 @@ class CommonLoader(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-        
+
         """
         if nucleus in simparams.nuclei_ctx:
             region = "cortex"
@@ -153,7 +153,7 @@ class LoadSpikeTimes(CommonLoader):
         [min_id, max_id] = self.__extract_smallest_largest_neuron_id(dataframe)
 
         nucleus = self._extract_nucleus_name(self.filename)
-        region = self._get_region_name(nucleus)
+        region = self.get_region_name(nucleus)
         [multiplicand, subtrahend] = self.__get_multiplicand_subtrahend(region)
 
         spiketimes_superset = {"n" + str(min_id):
@@ -228,7 +228,7 @@ class LoadChannelVorG(CommonLoader):
 
     def get_measurables(self):
         [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
-        # region = self._get_region_name(nucleus)
+        # region = self.get_region_name(nucleus)
 
         if attrib in self.simparams.neurotrans + self.__nonChnl_attributes:
             start, end = self.__prepreprocessSize(attrib)
