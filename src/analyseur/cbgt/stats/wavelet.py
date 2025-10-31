@@ -96,18 +96,18 @@ class ContinuousWaveletTransform(object):
         **Formula**
 
         .. table:: Formula
-        ================================================================================================== ======================================================
-          Definitions                                                                                        Interpretation
-        ================================================================================================== ======================================================
-         total neurons, :math:`n_{nuc}`                                                                      total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                             i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         total spikes, :math:`n_{spk}^{(i)}`                                                                 total number of spikes (spike times) by i-th neuron
-         :math:`\\vec{S}^{(i)}`                                                                              array of spike times of i-th neuron
-         :math:`S = \\left\\{\\vec{S}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                                                    set of spike times of all neurons
-         :math:`\\vec{B}^{(i)} = \\left[\\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_k]\\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}`      binary spike train of i-th neuron for spike times :math:`\\vec{S}^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
-         :math:`B = \\left\\{\\vec{B}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                                                    set of spike trains of all neurons
-         :math:`G[k] = \\frac{1}{\\sigma \\sqrt{2\\pi}}e^{-\\frac{k^2}{2\\sigma^2}}`                                                           Gaussian kernel
-        ================================================================================================== ======================================================
+        =================================================================================================================================== ======================================================
+          Definitions                                                                                                                         Interpretation
+        =================================================================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                                                                       total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         total spikes, :math:`n_{spk}^{(i)}`                                                                                                  total number of spikes (spike times) by i-th neuron
+         :math:`\\vec{S}^{(i)}`                                                                                                               array of spike times of i-th neuron
+         :math:`S = \\left\\{\\vec{S}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                                                   set of spike times of all neurons
+         :math:`\\vec{B}^{(i)} = \\left[\\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_k]\\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}`     binary spike train of i-th neuron for spike times :math:`\\vec{S}^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
+         :math:`B = \\left\\{\\vec{B}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                                                   set of spike trains of all neurons
+         :math:`G[k] = \\frac{1}{\\sigma \\sqrt{2\\pi}}e^{-\\frac{k^2}{2\\sigma^2}}`                                                          Gaussian kernel
+        =================================================================================================================================== ======================================================
 
         Then, the smoothened signal for i-th neuron is
 
