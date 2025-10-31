@@ -106,14 +106,14 @@ class ContinuousWaveletTransform(object):
          :math:`S = \\left\\{S^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike times of all neurons
          :math:`B^{(i)}[t] = \\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_j]`                            binary spike train of i-th neuron for spike times :math:`S^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
          :math:`B = \\left\\{B^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike trains of all neurons
+         :math:`G[k] = \\frac{1}{\\sigma \\sqrt{2\\pi}}e^{-\\frac{k^2}{2\\sigma^2}}`                  Gaussian kernel
         ===================================================================================== ======================================================
 
         Then, the smoothened signal for i-th neuron is
 
         .. math::
 
-            \\vec{R}^{(i)} &= \\frac{1}{\\overrightarrow{ISI}^{(i)}} \n
-                           &= \\left[\\frac{1}{isi_k^{(i)}}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}
+            M^{(i)}() =
 
         """
         # ============== DEFAULT Parameters ==============
