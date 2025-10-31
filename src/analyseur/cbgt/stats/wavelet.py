@@ -103,9 +103,9 @@ class ContinuousWaveletTransform(object):
          neuron index, :math:`i`                                                                i-th neuron in the pool of :math:`n_{Nuc}` neurons
          total spikes, :math:`n_{spk}^{(i)}`                                                    total number of spikes (spike times) by i-th neuron
          :math:`\\vec{S}^{(i)}`                                                                       array of spike times of i-th neuron
-         :math:`S = \\left\\{S^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike times of all neurons
-         :math:`B^{(i)}[t] = \\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_j]`                            binary spike train of i-th neuron for spike times :math:`S^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
-         :math:`B = \\left\\{B^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike trains of all neurons
+         :math:`S = \\left\\{\\vec{S}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike times of all neurons
+         :math:`\\vec{B}^{(i)}[t] = \\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_j]`                            binary spike train of i-th neuron for spike times :math:`\\vec{S}^{(i)}` at :math:`t_1, t_2, ..., t_{n_{spk}^{(i)}}`
+         :math:`B = \\left\\{\\vec{B}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`                  set of spike trains of all neurons
          :math:`G[k] = \\frac{1}{\\sigma \\sqrt{2\\pi}}e^{-\\frac{k^2}{2\\sigma^2}}`                  Gaussian kernel
         ===================================================================================== ======================================================
 
