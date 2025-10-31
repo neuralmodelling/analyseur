@@ -17,7 +17,7 @@ from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
 from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
 
-spikeanal = SignalAnalysisParams()
+siganal = SignalAnalysisParams()
 simparams = SimulationParams()
 
 
@@ -53,10 +53,10 @@ def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
         neurons = "all"
 
     if window is None:
-        window = spikeanal.window
+        window = siganal.window
 
     if binsz is None:
-        binsz = spikeanal.binsz_100perbin
+        binsz = siganal.binsz_100perbin
 
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
 
@@ -157,10 +157,10 @@ def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=N
         neurons = "all"
 
     if window is None:
-        window = spikeanal.window
+        window = siganal.window
 
     if binsz is None:
-        binsz = spikeanal.binsz_100perbin
+        binsz = siganal.binsz_100perbin
 
     if stimulus_onset is None:
         stimulus_onset = 0

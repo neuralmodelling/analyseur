@@ -9,7 +9,7 @@ import numpy as np
 
 from analyseur.cbgt.parameters import SignalAnalysisParams
 
-spikeanal = SignalAnalysisParams()
+siganal = SignalAnalysisParams()
 
 # ==========================================
 # get_desired_spiketimes_subset
@@ -142,10 +142,10 @@ def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None,
     """
     # ============== DEFAULT Parameters ==============
     if sampling_rate is None:
-        sampling_rate = 1 / spikeanal.sampling_period
+        sampling_rate = 1 / siganal.sampling_period
 
     if window is None:
-        window = spikeanal.window
+        window = siganal.window
 
     if neurons is None:
         neurons = "all"

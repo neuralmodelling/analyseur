@@ -13,7 +13,7 @@ import pywt
 from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.curate import get_binary_spiketrains
 
-spikeanal = SignalAnalysisParams()
+siganal = SignalAnalysisParams()
 
 class ContinuousWaveletTransform(object):
     """
@@ -154,18 +154,18 @@ class ContinuousWaveletTransform(object):
         """
         # ============== DEFAULT Parameters ==============
         if sampling_rate is None:
-            sampling_rate = 1 / spikeanal.sampling_period
+            sampling_rate = 1 / siganal.sampling_period
 
         sampling_period = 1.0 / sampling_rate
 
         if window is None:
-            window = spikeanal.window
+            window = siganal.window
 
         if neurons is None:
             neurons = "all"
 
         if sigma is None:
-            sigma = spikeanal.std_Gaussian_kernel
+            sigma = siganal.std_Gaussian_kernel
 
         # Convert spike times to spike train
         [spiketrains, yticks, time_axis] = get_binary_spiketrains(spiketimes_superset, sampling_rate=sampling_rate,
@@ -206,10 +206,10 @@ class ContinuousWaveletTransform(object):
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
-            window = spikeanal.window
+            window = siganal.window
 
         if sigma is None:
-            sigma = spikeanal.std_Gaussian_kernel
+            sigma = siganal.std_Gaussian_kernel
 
         if scales is None:
             scales = np.arange(1, 128)
@@ -253,10 +253,10 @@ class ContinuousWaveletTransform(object):
             neurons = "all"
 
         if window is None:
-            window = spikeanal.window
+            window = siganal.window
 
         if sigma is None:
-            sigma = spikeanal.std_Gaussian_kernel
+            sigma = siganal.std_Gaussian_kernel
 
         if scales is None:
             scales = np.arange(1, 128)
@@ -294,10 +294,10 @@ class ContinuousWaveletTransform(object):
             neurons = "all"
 
         if window is None:
-            window = spikeanal.window
+            window = siganal.window
 
         if sigma is None:
-            sigma = spikeanal.std_Gaussian_kernel
+            sigma = siganal.std_Gaussian_kernel
 
         if scales is None:
             scales = np.arange(1, 128)

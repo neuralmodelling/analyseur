@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from analyseur.cbgt.loader import LoadChannelIorG
-from analyseur.cbgt.parameters import SimulationParams
+from analyseur.cbgt.parameters import SimulationParams, SignalAnalysisParams
 
 
 def __get_region_name(simparams, nucleus):

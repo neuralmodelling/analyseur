@@ -11,7 +11,7 @@ from scipy import signal
 from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.curate import get_binary_spiketrains
 
-spikeanal = SignalAnalysisParams()
+siganal = SignalAnalysisParams()
 
 class PowerSpectrum(object):
     """
@@ -112,7 +112,7 @@ class PowerSpectrum(object):
 
         """
         #============== DEFAULT Parameters ==============
-        sampling_frequency = 1 / spikeanal.sampling_period
+        sampling_frequency = 1 / siganal.sampling_period
         if sampling_rate is None:
             sampling_rate = sampling_frequency
         elif sampling_rate > sampling_frequency:
@@ -120,7 +120,7 @@ class PowerSpectrum(object):
             sampling_rate = sampling_frequency
 
         if window is None:
-            window = spikeanal.window
+            window = siganal.window
 
         if neurons is None:
             neurons = "all"

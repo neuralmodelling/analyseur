@@ -107,7 +107,7 @@ from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
 
-__spikeanal = SignalAnalysisParams()
+__siganal = SignalAnalysisParams()
 __simparams = SimulationParams()
 
 
@@ -219,7 +219,7 @@ def plot_avg_inst_rate_in_ax(ax, spiketimes_superset, binsz=None, nucleus=None, 
     """
     # ============== DEFAULT Parameters ==============
     if binsz is None:
-        binsz = __spikeanal.binsz_100perbin
+        binsz = __siganal.binsz_100perbin
 
     n_neurons = len(spiketimes_superset)
 

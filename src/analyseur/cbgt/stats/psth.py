@@ -9,7 +9,7 @@ from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.analytics.ratesparsity import Sparsity
 
-__spikeanal = SignalAnalysisParams()
+__siganal = SignalAnalysisParams()
 
 
 class PSTH(object):
@@ -238,10 +238,10 @@ class PSTH(object):
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
-            window = __spikeanal.window
+            window = __siganal.window
 
         if binsz is None:
-            binsz = __spikeanal.binsz_100perbin
+            binsz = __siganal.binsz_100perbin
 
         if neurons is None:
             neurons = "all"
@@ -300,10 +300,10 @@ class PSTH(object):
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
-            window = __spikeanal.window
+            window = __siganal.window
 
         if binsz is None:
-            binsz = __spikeanal.binsz_100perbin
+            binsz = __siganal.binsz_100perbin
 
         if neurons is None:
             neurons = "all"

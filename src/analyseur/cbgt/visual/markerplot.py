@@ -29,7 +29,7 @@ from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
 from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
 
-__spikeanal = SignalAnalysisParams()
+__siganal = SignalAnalysisParams()
 __simparams = SimulationParams()
 
 
@@ -170,7 +170,7 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
         neurons = "all"
 
     if window is None:
-        window = __spikeanal.window
+        window = __siganal.window
 
     if stimulus_onset is None:
         stimulus_onset = 0

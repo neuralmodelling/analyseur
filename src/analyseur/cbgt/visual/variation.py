@@ -122,9 +122,9 @@ import re
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
-# from analyseur.cbgt.parameters import SpikeAnalysisParams, SimulationParams
+# from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
 #
-# __spikeanal = SpikeAnalysisParams()
+# __siganal = SignalAnalysisParams()
 # __simparams = SimulationParams()
 
 
