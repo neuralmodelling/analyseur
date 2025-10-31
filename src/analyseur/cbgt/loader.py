@@ -11,21 +11,47 @@ import numpy as np
 
 from analyseur.cbgt.parameters import SimulationParams
 
+simparams = SimulationParams()
+
 class CommonLoader(object):
     """
     This is the parent class for :class:`.LoadSpikeTimes` and :class:`.LoadChannelVorG`
+
+    - Instantiated with the full file path
+        - sets atrributes: `full_filepath`, `filename`
+    - Contains static method :meth:`._get_region_name`
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
     """
     def __init__(self, full_filepath=" "):
         self.full_filepath = full_filepath
         self.filename = full_filepath.split("/")[-1]
-        self.simparams = SimulationParams()
 
+    @staticmethod
+    def _get_region_name(nucleus):
+        """
+        Returns region name for respective nucleus name for which the spike times are for in the file.
 
-    def _get_region_name(self, nucleus):
-        """Returns region name for respective nucleus name for which the spike times are for in the file."""
-        if nucleus in self.simparams.nuclei_ctx:
+        +---------------------------------------+--------------+
+        | Nuclei                                | Region name  |
+        +=======================================+==============+
+        | `["CSN", "PTN", "IN"]`                | `"cortex"`   |
+        +---------------------------------------+--------------+
+        | `["FSI", "GPe", "GPi", "MSN", "STN"]` | `"bg"`       |
+        +---------------------------------------+--------------+
+        | `['AMPA', 'NMDA', 'GABAA', 'GABAB']`  | `"thalamus"` |
+        +---------------------------------------+--------------+
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        if nucleus in simparams.nuclei_ctx:
             region = "cortex"
-        elif nucleus in self.simparams.nuclei_bg:
+        elif nucleus in simparams.nuclei_bg:
             region = "bg"
         else:
             region = "thalamus"
