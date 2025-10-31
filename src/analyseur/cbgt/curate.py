@@ -25,6 +25,11 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons="all"):
     :param spiketimes_superset: Dictionary returned using :py:class:`LoadSpikeTimes`
     :param neurons: [OPTIONAL] None or name of the nucleus (string)
     :return: nested_list, label_list
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
     """
     desired_spiketimes_subset = []
     yticks = []
@@ -64,6 +69,11 @@ def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None,
     :param window: Tuple (start, end)
     :param sampling_rate: number
     :return: nested_list, label_list, times_axis
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
     """
     # if window is None:
     #     window = spikeanal.window
