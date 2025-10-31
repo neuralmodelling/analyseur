@@ -250,9 +250,8 @@ class LoadChannelIorG(CommonLoader):
 
     def get_measurables(self):
         """
-        Returns a dictionary containing the spike times (numpy.array data type) in seconds
-        for all the neurons recorded into the file as value of the key `n<X>` where
-        :math:`X \\in [0, N] \\subset \\mathbb{Z}`.
+        Returns a 1-D array (numpy.array data type) containing the measureables (currents and conductances) whose
+        time axis is in milliseconds.
 
         .. raw:: html
 
