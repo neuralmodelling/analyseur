@@ -48,6 +48,7 @@ class CommonLoader(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
+        
         """
         if nucleus in simparams.nuclei_ctx:
             region = "cortex"
