@@ -114,7 +114,7 @@ class ContinuousWaveletTransform(object):
         .. math::
 
             \\vec{M}^{(i)} &= \\vec{B}^{(i)} \\ast \\vec{G} \n
-                           &= \\left[ \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}
+                           &\\triangleq \\left[ \\left(B^{(i)}[t] \dot G[t-t_k]\\right) \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}
 
         """
         # ============== DEFAULT Parameters ==============
