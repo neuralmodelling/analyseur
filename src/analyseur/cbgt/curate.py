@@ -2,7 +2,6 @@
 #
 # Documentation by Lungsi 17 Oct 2025
 #
-#
 
 import re
 
