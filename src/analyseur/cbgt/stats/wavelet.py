@@ -17,7 +17,7 @@ spikeanal = SpikeAnalysisParams()
 
 class ContinuousWaveletTransform(object):
     """
-    Continuous Wavelet Tranform &larr;
+    Continuous Wavelet Tranform ≜
 
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | Methods                      | Argument                                                                                              |
