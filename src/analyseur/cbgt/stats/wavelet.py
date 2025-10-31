@@ -10,10 +10,10 @@ import numpy as np
 from scipy.ndimage import gaussian_filter1d
 import pywt
 
-from analyseur.cbgt.parameters import SpikeAnalysisParams
+from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.curate import get_binary_spiketrains
 
-spikeanal = SpikeAnalysisParams()
+spikeanal = SignalAnalysisParams()
 
 class ContinuousWaveletTransform(object):
     """

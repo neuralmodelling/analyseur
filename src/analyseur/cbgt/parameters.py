@@ -58,33 +58,35 @@ class SimulationParams:
 
     Default parameters from CBGT simulation
 
-    +----------------------+--------------------+
-    | Parameter name       | Value              |
-    +======================+====================+
-    | `duration`             | `(0, 10)` seconds  |
-    +----------------------+--------------------+
-    | `sampling_period`    | `0.0001` seconds   |
-    +----------------------+--------------------+
-    | `sampling_period_ms` | `0.1` milliseconds |
-    +----------------------+--------------------+
-    | `binsz_sqrt_rule`    | `100`              |
-    +----------------------+--------------------+
-    | `binsz_rice_rule`    | `232.558`          |
-    +----------------------+--------------------+
-    | `binsz_10perbin`     | `0.001`            |
-    +----------------------+--------------------+
-    | `binsz_100perbin`    | `0.01`             |
-    +----------------------+--------------------+
-    | `binsz_1000perbin`   | `0.1`              |
-    +----------------------+--------------------+
+    +----------------------+---------------------------------------+
+    | Parameter name       | Value                                 |
+    +======================+=======================================+
+    | `duration`           | `10000` milliseconds                  |
+    +----------------------+---------------------------------------+
+    | `t_start_recording`  | `2000` milliseconds                   |
+    +----------------------+---------------------------------------+
+    | `dt`                 | `0.1` milliseconds                    |
+    +----------------------+---------------------------------------+
+    | `nuclei_ctx`         | `["CSN", "PTN", "IN"]`                |
+    +----------------------+---------------------------------------+
+    | `nuclei_bg`          | `["FSI", "GPe", "GPi", "MSN", "STN"]` |
+    +----------------------+---------------------------------------+
+    | `nuclei_thal`        | `["TRN", "MD"]`                       |
+    +----------------------+---------------------------------------+
+    | `neurotrans`         | `['AMPA', 'NMDA', 'GABAA', 'GABAB']`  |
+    +----------------------+---------------------------------------+
+    | `conductance`        | `DEFAULT_CONDUCTANCES`                |
+    +----------------------+---------------------------------------+
+    | `ff_currents`        | `DEFAULT_FEEDFORWORD_CURRENTS`        |
+    +----------------------+---------------------------------------+
 
     --------
     Use Case
     --------
     ::
-        from analyseur.cbgt.parameters import SpikeAnalysisParams
+        from analyseur.cbgt.parameters import SimulationParams
 
-        spikeanal = SpikeAnalysisParams()
+        simparams = SimulationParams()
 
 
     .. raw:: html
@@ -95,12 +97,9 @@ class SimulationParams:
     duration: float = 10000 # ms
     t_start_recording = 2000 # ms
     dt: float = 0.1 # ms
-    _1000ms: int = 1000
-    decimal_places: int = 3
-    decimal_places_ephys: int = 5  # very small values for disinhibition experiments
     nuclei_ctx: List[str] = None
     nuclei_bg: List[str] = None
-    # nuclei_thal: List[str] = None
+    nuclei_thal: List[str] = None
     neurotrans: List[str] = None
     conductance: dict = field(default_factory=lambda: DEFAULT_CONDUCTANCES.copy())
     ff_currents: dict = field(default_factory=lambda: DEFAULT_FEEDFORWORD_CURRENTS.copy())
@@ -114,41 +113,47 @@ class SimulationParams:
             self.neurotrans = ['AMPA', 'NMDA', 'GABAA', 'GABAB']
 
 @dataclass
-class SpikeAnalysisParams:
+class SignalAnalysisParams:
     """
-    ===================
-    SpikeAnalysisParams
-    ===================
+    ====================
+    SignalAnalysisParams
+    ====================
 
-    Default parameters for spike analysis
+    Default parameters for signal analysis
 
-    +----------------------+--------------------+
-    | Parameter name       | Value              |
-    +======================+====================+
-    | `window`             | `(0, 10)` seconds  |
-    +----------------------+--------------------+
-    | `sampling_period`    | `0.0001` seconds   |
-    +----------------------+--------------------+
-    | `sampling_period_ms` | `0.1` milliseconds |
-    +----------------------+--------------------+
-    | `binsz_sqrt_rule`    | `100`              |
-    +----------------------+--------------------+
-    | `binsz_rice_rule`    | `232.558`          |
-    +----------------------+--------------------+
-    | `binsz_10perbin`     | `0.001`            |
-    +----------------------+--------------------+
-    | `binsz_100perbin`    | `0.01`             |
-    +----------------------+--------------------+
-    | `binsz_1000perbin`   | `0.1`              |
-    +----------------------+--------------------+
+    +------------------------+---------------------+
+    | Parameter name         | Value               |
+    +========================+=====================+
+    | `_1000ms`              | `1000` milliseconds |
+    +------------------------+---------------------+
+    | `decimal_places`       | `3`                 |
+    +------------------------+---------------------+
+    | `decimal_places_ephys` | `5`                 |
+    +------------------------+---------------------+
+    | `window`               | `(0, 10)` seconds   |
+    +------------------------+---------------------+
+    | `sampling_period`      | `0.0001` seconds    |
+    +------------------------+---------------------+
+    | `sampling_period_ms`   | `0.1` milliseconds  |
+    +------------------------+---------------------+
+    | `binsz_sqrt_rule`      | `100`               |
+    +------------------------+---------------------+
+    | `binsz_rice_rule`      | `232.558`           |
+    +------------------------+---------------------+
+    | `binsz_10perbin`       | `0.001`             |
+    +------------------------+---------------------+
+    | `binsz_100perbin`      | `0.01`              |
+    +------------------------+---------------------+
+    | `binsz_1000perbin`     | `0.1`               |
+    +------------------------+---------------------+
 
     --------
     Use Case
     --------
     ::
-        from analyseur.cbgt.parameters import SpikeAnalysisParams
+        from analyseur.cbgt.parameters import SignalAnalysisParams
 
-        spikeanal = SpikeAnalysisParams()
+        siganal = SignalAnalysisParams()
 
 
     .. raw:: html
@@ -156,6 +161,10 @@ class SpikeAnalysisParams:
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    _1000ms: int = 1000
+    decimal_places: int = 3
+    decimal_places_ephys: int = 5  # very small values for disinhibition experiments
+
     window: Tuple[float, float] = (0, SimulationParams.duration / SimulationParams._1000ms)
     sampling_period_ms: float = SimulationParams.dt
     sampling_period: float = SimulationParams.dt / SimulationParams._1000ms

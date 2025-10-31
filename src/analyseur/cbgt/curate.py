@@ -7,9 +7,9 @@ import re
 
 import numpy as np
 
-from analyseur.cbgt.parameters import SpikeAnalysisParams
+from analyseur.cbgt.parameters import SignalAnalysisParams
 
-spikeanal = SpikeAnalysisParams()
+spikeanal = SignalAnalysisParams()
 
 # ==========================================
 # get_desired_spiketimes_subset

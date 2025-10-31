@@ -9,9 +9,9 @@ import numpy as np
 
 # from .compute_shared import compute_grand_mean as cgm
 from analyseur.cbgt.stats.compute_shared import compute_grand_mean as cgm
-from analyseur.cbgt.parameters import SpikeAnalysisParams
+from analyseur.cbgt.parameters import SignalAnalysisParams
 
-__spikeanal = SpikeAnalysisParams()
+__spikeanal = SignalAnalysisParams()
 
 class InterSpikeInterval(object):
     """

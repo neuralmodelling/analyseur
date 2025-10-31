@@ -6,10 +6,10 @@
 import numpy as np
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
-from analyseur.cbgt.parameters import SpikeAnalysisParams
+from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.analytics.ratesparsity import Sparsity
 
-__spikeanal = SpikeAnalysisParams()
+__spikeanal = SignalAnalysisParams()
 
 
 class PSTH(object):

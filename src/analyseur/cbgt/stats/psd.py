@@ -8,10 +8,10 @@
 import numpy as np
 from scipy import signal
 
-from analyseur.cbgt.parameters import SpikeAnalysisParams
+from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.curate import get_binary_spiketrains
 
-spikeanal = SpikeAnalysisParams()
+spikeanal = SignalAnalysisParams()
 
 class PowerSpectrum(object):
     """
