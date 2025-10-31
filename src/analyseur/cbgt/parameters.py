@@ -57,22 +57,22 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
     **Formula: Square Root Rule**
 
-    ::
+    .. math::
 
         n_{bins} &= \\sqrt(N) \n
         binsz &= \\frac{dur}{n_{bins}}
 
     **Formula: Rice Rule**
 
-    ::
+    .. math::
 
         n_{bins} &= 2 \\sqrt[3](N) \n
         binsz &= \\frac{dur}{n_{bins}}
 
     **Formula: Periodic Rule**
     Let the periodic signal be oscillating at :math:`\\nu` frequency, then
-    
-    ::
+
+    .. math::
 
         T &= \\frac{1}{\\nu} \n
         binsz &= m \\times T
