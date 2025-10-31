@@ -80,6 +80,10 @@ class LoadSpikeTimes(CommonLoader):
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
       spike_trains = loadST.get_spiketimes_superset()
 
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
     """
     _description = ( "LoadSpikeTimes loads the spike times containing csv file "
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
@@ -148,6 +152,11 @@ class LoadSpikeTimes(CommonLoader):
         Returns a dictionary containing the spike times (numpy.array data type) in seconds
         for all the neurons recorded into the file as value of the key `n<X>` where
         :math:`X \\in [0, N] \\subset \\mathbb{Z}`.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         dataframe = pd.read_csv(self.full_filepath)
         [min_id, max_id] = self.__extract_smallest_largest_neuron_id(dataframe)
@@ -183,6 +192,10 @@ class LoadChannelVorG(CommonLoader):
       from  analyseur.cbgt.loader import LoadSpikeTimes
       loadST = LoadSpikeTimes("/full/path/to/CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
       spike_trains = loadST.get_spiketimes_superset()
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
     _description = ( "LoadSpikeTimes loads the spike times containing csv file "
@@ -227,6 +240,13 @@ class LoadChannelVorG(CommonLoader):
         return nucleus, attrib
 
     def get_measurables(self):
+        """
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
         [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
         # region = self.get_region_name(nucleus)
 
