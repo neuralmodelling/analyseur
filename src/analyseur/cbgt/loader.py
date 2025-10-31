@@ -76,9 +76,9 @@ class LoadSpikeTimes(CommonLoader):
     |                                     | - instantiated with full file path | - key value is a array of spike times for respective neuron `n<X>`|
     +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
 
-    ========
+    --------
     Use Case
-    ========
+    --------
 
     ::
 
