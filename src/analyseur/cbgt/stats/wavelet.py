@@ -36,19 +36,19 @@ class ContinuousWaveletTransform(object):
     +------------------------------+-------------------------------------------------------------------------------------------------------+
 
 
-    +------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
-    | Activity         | Description                   | Purpose                                                                                                    |
-    +==================+===============================+============================================================================================================+
-    | Signal Smoothing | converts binary spike trains  | - some smoothing can help visualize rhythmic spiking                                                       |
-    |                  | to continuous signals         | - over smoothing can obscure precise timing                                                                |
-    +------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
-    | scales           | defines the frequencies       | - smaller scales for high frequencies and larger for lower frequencies                                     |
-    |                  | analyzed                      | - voices per ocatve :math:`\\triangleq` number of scales between 2 frequencies (:math:`\\triangleq` octave)|
-    |                  |                               | - higher voices per octave give smoother scalogram but increased computation                               |
-    +------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
-    | wavelet choice   | determines trade-off between  | - Morlet (`cmorB-C`) for oscillation                                                                       |
-    |                  | time and frequency resolution | - Mexican hat (`mexh`) for transient spike detection                                                       |
-    +------------------+-------------------------------+------------------------------------------------------------------------------------------------------------+
+    +------------------+-------------------------------+-------------------------------------------------------------------------------+
+    | Activity         | Description                   | Purpose                                                                       |
+    +==================+===============================+===============================================================================+
+    | Signal Smoothing | converts binary spike trains  | - some smoothing can help visualize rhythmic spiking                          |
+    |                  | to continuous signals         | - over smoothing can obscure precise timing                                   |
+    +------------------+-------------------------------+-------------------------------------------------------------------------------+
+    | scales           | defines the frequencies       | - smaller scales for high frequencies and larger for lower frequencies        |
+    |                  | analyzed                      | - voices per ocatve ≜ number of scales between 2 frequencies (≜ octave)       |
+    |                  |                               | - higher voices per octave give smoother scalogram but increased computation  |
+    +------------------+-------------------------------+-------------------------------------------------------------------------------+
+    | wavelet choice   | determines trade-off between  | - Morlet (`cmorB-C`) for oscillation                                          |
+    |                  | time and frequency resolution | - Mexican hat (`mexh`) for transient spike detection                          |
+    +------------------+-------------------------------+-------------------------------------------------------------------------------+
 
     ===================================================
     Comments on Activity and Choices in Performing CWT
