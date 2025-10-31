@@ -84,6 +84,7 @@ class SimulationParams:
     Use Case
     --------
     ::
+    
         from analyseur.cbgt.parameters import SimulationParams
 
         simparams = SimulationParams()
@@ -151,6 +152,7 @@ class SignalAnalysisParams:
     Use Case
     --------
     ::
+
         from analyseur.cbgt.parameters import SignalAnalysisParams
 
         siganal = SignalAnalysisParams()
