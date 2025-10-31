@@ -43,8 +43,42 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
         - :math:`binsz = \\frac{\\text{total_time}}{n_{bins}}`
     - Rice Rule (`rule="Rice Rule"`)
         - suitable for larger datasets
+        - :math:`n_{bins} = 2\\cbrt{\\text{total_time}}`
+        - :math:`binsz = \\frac{\\text{total_time}}{n_{bins}}`
     - Periodic (`rule="Periodic"`)
         - for periodic signal
+
+    **Formula**
+
+    .. table::
+    ============================================ ======================================================
+      Definitions                                 Interpretation
+    ============================================ ======================================================
+     duration, :math:`dur`                        total time in seconds
+     sampling period, :math:`T`                   sampling period in seconds
+     total samples, :math:`N = dur / T`           total number of samples
+    ============================================ ======================================================
+
+    **Formula: Square Root Rule**
+    ::
+
+        n_{bins} &= \\sqrt(N) \n
+        binsz &= \\frac{dur}{n_{bins}}
+
+    **Formula: Rice Rule**
+    ::
+
+        n_{bins} &= 2 \\cbrt(N) \n
+        binsz &= \\frac{dur}{n_{bins}}
+
+    **Formula: Periodic Rule**
+    Let the periodic signal be oscillating at :math:`\\nu` frequency, then
+    ::
+
+        T &= \\frac{1}{\\nu} \n
+        binsz &= m \\times T
+
+    where `m` is the number of periods. Generally, :math:`m=2`.
 
     --------
     Use Case
