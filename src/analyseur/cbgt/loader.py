@@ -9,9 +9,10 @@ import re
 import pandas as pd
 import numpy as np
 
-from analyseur.cbgt.parameters import SimulationParams
+from analyseur.cbgt.parameters import SimulationParams, SignalAnalysisParams
 
 simparams = SimulationParams()
+siganal = SignalAnalysisParams()
 
 class CommonLoader(object):
     """
@@ -119,9 +120,9 @@ class LoadSpikeTimes(CommonLoader):
         if region in ("bg", "thalamus"):
             multiplicand = 1
         else:
-            multiplicand = 1 / self.simparams._1000ms
+            multiplicand = 1 / self.siganal._1000ms
 
-        subtrahend = self.simparams.t_start_recording / self.simparams._1000ms
+        subtrahend = self.simparams.t_start_recording / self.siganal._1000ms
 
         return [multiplicand, subtrahend]
 
@@ -148,7 +149,7 @@ class LoadSpikeTimes(CommonLoader):
         if len(raw_neuron_id_times) == 0:
             spike_times = np.array([])
         else:
-            spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.simparams.decimal_places)).values
+            spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.siganal.decimal_places)).values
                            * multiplicand - subtrahend)
 
         return spike_times
@@ -274,7 +275,7 @@ class LoadChannelIorG(CommonLoader):
         if attrib in simparams.neurotrans + self.__nonChnl_and_g_attributes:
             start, end = self.__prepreprocessSize(attrib)
             dataframe = pd.read_csv(self.full_filepath).iloc[start:end, [0]]
-            measurables = dataframe.apply(lambda x: round(x, simparams.decimal_places_ephys)).values
+            measurables = dataframe.apply(lambda x: round(x, siganal.decimal_places_ephys)).values
         else:
             print("Attributes must be from " + str(simparams.neurotrans + self.__nonChnl_and_g_attributes))
             measurables = None
