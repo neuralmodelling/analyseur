@@ -53,7 +53,8 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     `````````````````````````````````````````````````````
     ::
 
-        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset, neurons=range(30, 100))
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset,
+                                                                               neurons=range(30, 100))
 
     .. raw:: html
 
