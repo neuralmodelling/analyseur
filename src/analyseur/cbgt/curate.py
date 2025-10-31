@@ -2,7 +2,6 @@
 #
 # Documentation by Lungsi 17 Oct 2025
 #
-# This contains function for loading the files
 #
 
 import re
@@ -17,20 +16,24 @@ def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
     return int(match.group(1))
 
-def get_desired_spiketimes_subset(spiketimes_superset, neurons="all"):
+def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     """
     Returns nested list of spike times (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
-    :param spiketimes_superset: Dictionary returned using :py:class:`LoadSpikeTimes`
-    :param neurons: [OPTIONAL] None or name of the nucleus (string)
-    :return: nested_list, label_list
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+    :param neurons: [OPTIONAL] `"all"` (default)
+    :return: 2-tuple; nested_list and label_list
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    # ============== DEFAULT Parameters ==============
+    if neurons is None:
+        neurons = "all"
+
     desired_spiketimes_subset = []
     yticks = []
 
@@ -59,27 +62,31 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
     return valid_indices
 
 
-def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None, neurons="all"):
+def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None, neurons=None):
     """
     Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
-    :param spiketimes_superset: Dictionary returned using :py:class:`LoadSpikeTimes`
-    :param neurons: [OPTIONAL] "all" [default] or list: range(a, b) or [1, 4, 5, 9]
-    :param window: Tuple (start, end)
-    :param sampling_rate: number
-    :return: nested_list, label_list, times_axis
+    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+    :param neurons: [OPTIONAL] `"all"` [default] or list: range(a, b) or [1, 4, 5, 9]
+    :param window: Tuple (start, end), `(0, 10)` [default]
+    :param sampling_rate: `10000` [default]
+    :return: 3-tuple; nested_list, label_list and times_axis
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-    # if window is None:
-    #     window = spikeanal.window
-    #
-    # if sampling_rate is None:
-    #     sampling_rate = 1 / spikeanal.sampling_period
+    # ============== DEFAULT Parameters ==============
+    if sampling_rate is None:
+        sampling_rate = 1 / spikeanal.sampling_period
+
+    if window is None:
+        window = spikeanal.window
+
+    if neurons is None:
+        neurons = "all"
 
     total_duration = window[1] - window[0]
 
