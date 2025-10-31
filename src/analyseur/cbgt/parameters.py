@@ -86,7 +86,14 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
         from analyseur.cbgt.parameters import bin_size_by_rule
 
-        simparams = SimulationParams()
+        dur = 10  # seconds
+        nu = 80  # Hz
+
+        binsz_sqrt = bin_size_by_rule(total_time=dur, rule="Square Root")
+
+        binsz_rice = bin_size_by_rule(total_time=dur, rule="Rice Rule")
+
+        binsz_osc = bin_size_by_rule(frequency=nu, rule="Periodic")
 
 
     .. raw:: html
