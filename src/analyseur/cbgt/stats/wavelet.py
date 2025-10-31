@@ -113,7 +113,8 @@ class ContinuousWaveletTransform(object):
 
         .. math::
 
-            \\vec{M}^{(i)} = \\vec{B}^{(i)} \\ast \\vec{G}
+            \\vec{M}^{(i)} &= \\vec{B}^{(i)} \\ast \\vec{G} \n
+                           &= \\left[\\left(\\sum_{k=1}^{n_{spk}^{(i)}} \\delta[t - t_k]\\right) \dot \\left(\\frac{1}{\\sigma \\sqrt{2\\pi}}e^{-\\frac{(t-t_k)^2}{2\\sigma^2}}`\\right)\\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}
 
         """
         # ============== DEFAULT Parameters ==============
