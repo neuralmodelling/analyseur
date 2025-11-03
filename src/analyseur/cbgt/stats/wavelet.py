@@ -188,9 +188,8 @@ class ContinuousWaveletTransform(object):
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
         :param sampling_rate: [OPTIONAL] `10000` [default]
 
-        =====
         Scale
-        =====
+        `````
 
         Scale is the dilation/compression factor applied to the wavelet.
 
