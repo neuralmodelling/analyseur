@@ -17,7 +17,9 @@ siganal = SignalAnalysisParams()
 
 class ContinuousWaveletTransform(object):
     """
+    ===========================
     Continuous Wavelet Tranform
+    ===========================
 
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | Methods                      | Argument                                                                                              |
@@ -35,9 +37,9 @@ class ContinuousWaveletTransform(object):
     | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
 
-    ===================================================
+    --------------------------------------------------
     Comments on Activity and Choices in Performing CWT
-    ===================================================
+    --------------------------------------------------
 
     +------------------+-------------------------------+-------------------------------------------------------------------------------+
     | Activity         | Description                   | Purpose                                                                       |
@@ -177,7 +179,10 @@ class ContinuousWaveletTransform(object):
     @staticmethod
     def scale_to_freq(scale=None, wavelet=None, sampling_rate=None):
         """
-        Converts scale to frequency.
+        ---------------------------
+        Converts scale to frequency
+        ---------------------------
+        Converts a scale value to its corresponding frequency value.
 
         :param scale: a scalar
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
