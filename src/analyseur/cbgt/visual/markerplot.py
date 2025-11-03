@@ -61,6 +61,26 @@ Raster Plot of Spike Times
 
     plot_raster(spiketimes_superset, neurons=range(50, 100))
 
+2.4. Create the plot for customization
+``````````````````````````````````````
+This is for power users who for instance want to insert the raster plot in their
+collage of subplots.
+::
+
+    import matplotlib.pyplot as plt
+    from analyseur.cbgt.visual.markerplot import plot_raster_in_ax
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Horizontally stacked subplots')
+
+    ax1 = plot_raster_in_ax(ax1, spiketimes_superset)
+    ax2 = plot_raster_in_ax(ax2, spiketimes_superset)
+
+    plt.show()
+
+NOTE: This example shows :func:`plot_raster_in_ax` in default setting but this function works like
+:func:`plot_raster` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plot_raster_in_ax`.
+
 ------------------------
 Plot Rate Change Scatter
 ------------------------
