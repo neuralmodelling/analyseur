@@ -180,15 +180,11 @@ class ContinuousWaveletTransform(object):
     @staticmethod
     def scale_to_freq(scale=None, wavelet=None, sampling_rate=None):
         """
-        Converts scale to frequency
-        ===========================
         Converts a scale value to its corresponding frequency value.
 
         :param scale: a scalar
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
         :param sampling_rate: [OPTIONAL] `10000` [default]
-
-
 
         .. list-table:: **Scale is the dilation/compression factor applied to the wavelet.**
            :widths: 15 15
