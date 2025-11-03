@@ -179,16 +179,15 @@ class ContinuousWaveletTransform(object):
     @staticmethod
     def scale_to_freq(scale=None, wavelet=None, sampling_rate=None):
         """
-        ===========================
         Converts scale to frequency
         ===========================
+
         Converts a scale value to its corresponding frequency value.
 
         :param scale: a scalar
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
         :param sampling_rate: [OPTIONAL] `10000` [default]
 
-        -----
         Scale
         -----
 
@@ -222,9 +221,9 @@ class ContinuousWaveletTransform(object):
     @staticmethod
     def freq_window_to_scales(freq_window=None, voices_per_octave=None, wavelet=None, sampling_rate=None):
         """
-        ======================
         Create array of scales
         ======================
+
         Returns the array of scales between octaves given
 
         :param freq_window: Tuple `(min_freq, max_freq)`
@@ -243,7 +242,6 @@ class ContinuousWaveletTransform(object):
         | wavelet choice    | - time/frequency resolution trade-off | `"cmorB-C"` (good for neural data) |
         +-------------------+---------------------------------------+------------------------------------+
 
-        -----
         Scale
         -----
 
