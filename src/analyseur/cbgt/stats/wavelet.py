@@ -37,7 +37,6 @@ class ContinuousWaveletTransform(object):
     | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
 
-    --------------------------------------------------
     Comments on Activity and Choices in Performing CWT
     --------------------------------------------------
 
