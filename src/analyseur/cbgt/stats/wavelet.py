@@ -251,6 +251,15 @@ class ContinuousWaveletTransform(object):
            - In other words, the number of scales between octaves is the voices per octave
         ====================================================================================================================
 
+        =====  =====  =======
+        A      B      A and B
+        =====  =====  =======
+        False  False  False
+        True   False  False
+        False  True   False
+        True   True   True
+        =====  =====  =======
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
