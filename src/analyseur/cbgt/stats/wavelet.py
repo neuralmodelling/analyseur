@@ -251,14 +251,30 @@ class ContinuousWaveletTransform(object):
            - In other words, the number of scales between octaves is the voices per octave
         ====================================================================================================================
 
-        =====  =====  =======
-        A      B      A and B
-        =====  =====  =======
-        False  False  False
-        True   False  False
-        False  True   False
-        True   True   True
-        =====  =====  =======
+        .. list-table:: **Scale is the dilation/compression factor applied to the wavelet.**
+           :widths: 15 10 30
+           :header-rows: 1
+
+           * - Scale vs Frequency
+             - *Scale vs Voices/Octave*
+           * - Scales defines the frequencies in the wavelet transform analysis.
+             - Voices per octave controls the number of scales between consecutive frequencies (≜ octave)
+           * - :math:`s_a < s_b \\overset{\\frown}{=} f_a < f_b` where scale :math:`s_x` corresponds to frequency :math:`f_x`
+             - In other words, the number of scales between octaves is the voices per octave
+
+           * - Treat
+             - Quantity
+             - Description
+           * - Albatross
+             - 2.99
+             - On a stick!
+           * - Crunchy Frog
+             - 1.49
+             - If we took the bones out, it wouldn't be
+               crunchy, now would it?
+           * - Gannet Ripple
+             - 1.99
+             - On a stick!
 
         .. list-table:: Frozen Delights!
            :widths: 15 10 30
