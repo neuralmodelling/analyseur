@@ -11,8 +11,6 @@ import numpy as np
 from analyseur.cbgt.stats.compute_shared import compute_grand_mean as cgm
 from analyseur.cbgt.parameters import SignalAnalysisParams
 
-__siganal = SignalAnalysisParams()
-
 class InterSpikeInterval(object):
     """
     Computes interspike intervals for the given spike times
@@ -110,6 +108,7 @@ class InterSpikeInterval(object):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    __siganal = SignalAnalysisParams()
 
     @classmethod
     def compute(cls, all_neurons_spiketimes=None):
@@ -277,7 +276,7 @@ class InterSpikeInterval(object):
 
         """
         if binsz is None:
-            binsz = __siganal.binsz_100perbin
+            binsz = cls.__siganal.binsz_100perbin
 
         # Put all times and instantaneuous rates of respective neurons into one list
         vec_all_times = []

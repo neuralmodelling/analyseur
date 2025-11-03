@@ -10,6 +10,8 @@ import pandas as pd
 import numpy as np
 
 from analyseur.cbgt.parameters import SimulationParams, SignalAnalysisParams
+from docs.cbgt.examples.scripts.collage_raster import spiketimes_superset
+
 
 class CommonLoader(object):
     """
@@ -98,7 +100,7 @@ class LoadSpikeTimes(CommonLoader):
     __pattern_with_nucleus_name = r"\_(.*?)\."
 
 
-    def _extract_nucleus_name(self, filename):
+    def extract_nucleus_name(self, filename):
         """Extracts <nucleus> name from `spikes_<nucleus>.csv`"""
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
@@ -168,7 +170,7 @@ class LoadSpikeTimes(CommonLoader):
         dataframe = pd.read_csv(self.full_filepath)
         [min_id, max_id] = self.__extract_smallest_largest_neuron_id(dataframe)
 
-        nucleus = self._extract_nucleus_name(self.filename)
+        nucleus = self.extract_nucleus_name(self.filename)
         region = self.get_region_name(nucleus)
         [multiplicand, subtrahend] = self.__get_multiplicand_subtrahend(region)
 
@@ -179,6 +181,31 @@ class LoadSpikeTimes(CommonLoader):
             spiketimes_superset["n" + str(n_id)] = self.__get_spike_times_for_a_neuron(dataframe, n_id, multiplicand, subtrahend)
 
         return spiketimes_superset
+
+    @staticmethod
+    def get_spiketimes_subset(spiketimes_superset, neurons=None):
+        """
+        Returns a dictionary containing the spike times (in seconds) of desired neurons.
+
+        :param spiketimes_superset: Dictionary returned using :meth:`.get_spiketimes_superset`
+        :param neurons: `"all"` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
+        :return: dictionary
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
+        if neurons=="all":
+            return spiketimes_superset
+        else:
+            keys_to_remove = ["n"+str(i) for i in neurons]
+
+            # Convert to set for faster lookup
+            remove_set = set(keys_to_remove)
+
+            return {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
+
 
 class LoadChannelIorG(CommonLoader):
     """
