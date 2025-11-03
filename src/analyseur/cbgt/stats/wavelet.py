@@ -109,11 +109,15 @@ class ContinuousWaveletTransform(object):
     def smooth_signal(spiketimes_superset, sampling_rate=None,
                       window=None, neurons=None, sigma=None):
         """
-        Smoothen spike times signal
-        ===========================
         This method takes the spike times and converts it into respective binary spike trains
         which in turn is smoothened. The returned smoothened signal can be used to create a
         firing rate signal.
+
+        :param spiketimes_superset: a scalar
+        :param window:
+        :param neurons:
+        :param sigma:
+        :param sampling_rate: [OPTIONAL] `10000` [default]
 
         Smoothening is done by Gaussian filtering
 
@@ -145,7 +149,7 @@ class ContinuousWaveletTransform(object):
         .. math::
 
             \\vec{M}^{(i)} &= \\vec{B}^{(i)} \\ast \\vec{G} \n
-                           &\\triangleq \\left[ \\sum_{k=1}^{n_{spk}^{(i)}} \\left(B^{(i)}[t_k] \cdot G[t-t_k]\\right) \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]} \n
+                           &\\triangleq \\left[ \\sum_{k=1}^{n_{spk}^{(i)}} \\left(B^{(i)}[t_k] \\cdot G[t-t_k]\\right) \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]} \n
                            &= \\left[ \\sum_{k=1}^{n_{spk}^{(i)}} G[t-t_k] \\right]_{\\forall{t} \\in [t_1, t_{n_{spk}^{(i)}}]}
 
         Note that the last line is due to the fact that only non-zero :math:`B^{(i)}[t_k]` occurs at spike positions.
@@ -284,7 +288,7 @@ class ContinuousWaveletTransform(object):
         :param window: Tuple; `(0, 10)` [default]
         :param sigma: standard deviation value, `2` [default]
         :param wavelet: `"cmor1.5-1.0"` [default], for possible options see `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
-        :param scales: array `[1, 2, 3, ..., 128]` [default]
+        :param scales: Tuple; `(1, 128)` [default]
         :param neuron_indx: randomly picks one [default]
 
         :return: 4-tuple

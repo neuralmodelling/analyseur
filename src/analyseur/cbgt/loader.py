@@ -11,9 +11,6 @@ import numpy as np
 
 from analyseur.cbgt.parameters import SimulationParams, SignalAnalysisParams
 
-simparams = SimulationParams()
-siganal = SignalAnalysisParams()
-
 class CommonLoader(object):
     """
     This is the parent class for :class:`.LoadSpikeTimes` and :class:`.LoadChannelVorG`
@@ -30,9 +27,11 @@ class CommonLoader(object):
     def __init__(self, full_filepath=" "):
         self.full_filepath = full_filepath
         self.filename = full_filepath.split("/")[-1]
+        self.simparams = SimulationParams()
+        self.siganal = SignalAnalysisParams()
 
-    @staticmethod
-    def get_region_name(nucleus):
+
+    def get_region_name(self, nucleus):
         """
         Returns region name for respective nucleus name for which the spike times are for in the file.
 
@@ -51,9 +50,9 @@ class CommonLoader(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-        if nucleus in simparams.nuclei_ctx:
+        if nucleus in self.simparams.nuclei_ctx:
             region = "cortex"
-        elif nucleus in simparams.nuclei_bg:
+        elif nucleus in self.simparams.nuclei_bg:
             region = "bg"
         else:
             region = "thalamus"
