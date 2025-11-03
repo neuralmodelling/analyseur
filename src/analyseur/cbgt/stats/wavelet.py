@@ -174,6 +174,42 @@ class ContinuousWaveletTransform(object):
         return gaussian_filter1d(spiketrains, sigma=sigma), yticks, time_axis, sampling_period
 
 
+    @staticmethod
+    def scale_to_freq(scale=None, wavelet=None, sampling_rate=None):
+        """
+        Converts scale to frequency.
+
+        :param scale: a scalar
+        :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
+        :param sampling_rate: [OPTIONAL] `10000` [default]
+
+        =====
+        Scale
+        =====
+
+        Scale is the dilation/compression factor applied to the wavelet.
+
+        - Scale vs Frequency
+            - Scales defines the frequencies in the wavelet transform analysis.
+            - :math:`s_a < s_b \\overset{\\frown}{=} f_a < f_b` where scale :math:`s_x` corresponds to frequency :math:`f_x`
+        - Scale vs Voices/Octave
+            - Voices per octave controls the number of scales between consecutive frequencies (≜ octave)
+
+        """
+        # ============== DEFAULT Parameters ==============
+        if sampling_rate is None:
+            # sampling_rate = 1 / siganal.sampling_period
+            sampling_period = siganal.sampling_period
+        else:
+            sampling_period = 1.0 / sampling_rate
+
+        center_freq = pywt.central_frequency(wavelet)  # Property of a specific wavelet
+        frequency = center_freq / (scale * sampling_period)
+
+        return frequency
+
+
+
     @classmethod
     def _compute_cwt_single(cls, spiketimes_superset, sampling_rate=None,
                            window=None, sigma=None,

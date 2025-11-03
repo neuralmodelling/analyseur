@@ -72,7 +72,7 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     **Formula: Periodic Rule**
 
     Let the periodic signal be oscillating at :math:`\\nu` frequency, then
-    
+
     .. math::
 
         T &= \\frac{1}{\\nu} \n
