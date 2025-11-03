@@ -252,7 +252,7 @@ class ContinuousWaveletTransform(object):
         ====================================================================================================================
 
         .. list-table:: **Scale is the dilation/compression factor applied to the wavelet.**
-           :widths: 20 20
+           :widths: 15 15
            :header-rows: 1
 
            * - Scale vs Frequency
@@ -261,25 +261,6 @@ class ContinuousWaveletTransform(object):
              - Voices per octave controls the number of scales between consecutive frequencies (≜ octave)
            * - :math:`s_a < s_b \\overset{\\frown}{=} f_a < f_b` where scale :math:`s_x` corresponds to frequency :math:`f_x`
              - In other words, the number of scales between octaves is the voices per octave
-
-
-        .. list-table:: Frozen Delights!
-           :widths: 15 10 30
-           :header-rows: 1
-
-           * - Treat
-             - Quantity
-             - Description
-           * - Albatross
-             - 2.99
-             - On a stick!
-           * - Crunchy Frog
-             - 1.49
-             - If we took the bones out, it wouldn't be
-               crunchy, now would it?
-           * - Gannet Ripple
-             - 1.99
-             - On a stick!
 
         .. raw:: html
 
