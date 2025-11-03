@@ -152,6 +152,7 @@ def plot_mean_rate_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
         ax.set_ylabel("Neurons")
         ax.set_xlabel("Mean Rate (1/s)")
+        ax.margins(y=0)
     else:
         ax.bar(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
         ax.set_ylabel("Mean Rate (1/s)")

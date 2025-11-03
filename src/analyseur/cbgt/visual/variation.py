@@ -174,6 +174,7 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         ax.barh(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
         ax.set_ylabel("Neurons")
         ax.set_xlabel("CV")
+        ax.margins(y=0)
     else:
         ax.bar(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
         # ax.hist(vec_CV, bins=n_bins, alpha=0.7, color="green", edgecolor="black", )
