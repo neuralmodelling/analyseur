@@ -179,9 +179,8 @@ class ContinuousWaveletTransform(object):
     @staticmethod
     def scale_to_freq(scale=None, wavelet=None, sampling_rate=None):
         """
-        ---------------------------
         Converts scale to frequency
-        ---------------------------
+        ===========================
         Converts a scale value to its corresponding frequency value.
 
         :param scale: a scalar
