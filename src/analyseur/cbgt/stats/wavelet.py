@@ -194,6 +194,11 @@ class ContinuousWaveletTransform(object):
             - :math:`s_a < s_b \\overset{\\frown}{=} f_a < f_b` where scale :math:`s_x` corresponds to frequency :math:`f_x`
         - Scale vs Voices/Octave
             - Voices per octave controls the number of scales between consecutive frequencies (≜ octave)
+            - In other words, the number of scales between octaves is the voices per octave
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
         # ============== DEFAULT Parameters ==============
@@ -208,6 +213,51 @@ class ContinuousWaveletTransform(object):
 
         return frequency
 
+
+    @staticmethod
+    def freq_window_to_scales(freq_window=None, voices_per_octave=None, wavelet=None, sampling_rate=None):
+        """
+        Returns the array of scales between octaves given
+
+        :param freq_window: Tuple `(min_freq, max_freq)`
+        :param voices_per_octave: scalar
+        :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
+        :param sampling_rate: [OPTIONAL] `10000` [default]
+
+        +-------------------+---------------------------------------+------------------------------------+
+        | Parameter         | Description                           | Comment                            |
+        +===================+=======================================+====================================+
+        | frequency range   | - match signal's expected content     | - 1-100 Hz (neuron spikes)         |
+        +-------------------+---------------------------------------+------------------------------------+
+        | Voices Per Octave | - VPO ∝ frequency resolution          | - 10-16 (general)                  |
+        | (VPO)             | - VPO ∝ 1/computational cost          | - 32 (high precision analysis)     |
+        +-------------------+---------------------------------------+------------------------------------+
+        | wavelet choice    | - time/frequency resolution trade-off | `"cmorB-C"` (good for neural data) |
+        +-------------------+---------------------------------------+------------------------------------+
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
+        # ============== DEFAULT Parameters ==============
+        if sampling_rate is None:
+            sampling_rate = 1 / siganal.sampling_period
+
+        min_freq = freq_window[0]
+        max_freq = freq_window[1]
+
+        num_of_octaves = np.log2(max_freq / min_freq)
+        num_of_scales = int(num_of_octaves * voices_per_octave)
+
+        # Convert frequencies to approximate scales
+        min_scale = pywt.frequency2scale(wavelet, min_freq, sampling_period=1.0/sampling_rate)
+        max_scale = pywt.frequency2scale(wavelet, max_freq, sampling_period=1.0 / sampling_rate)
+
+        # Generate scales
+        scales = np.geomspace(min_scale, max_scale, num=num_of_scales)
+
+        return scales
 
 
     @classmethod
