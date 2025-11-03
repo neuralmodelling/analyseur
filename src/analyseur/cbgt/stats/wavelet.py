@@ -17,9 +17,9 @@ siganal = SignalAnalysisParams()
 
 class ContinuousWaveletTransform(object):
     """
-    ===========================
-    Continuous Wavelet Tranform
-    ===========================
+    ============================
+    Continuous Wavelet Transform
+    ============================
 
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | Methods                      | Argument                                                                                              |
@@ -188,8 +188,9 @@ class ContinuousWaveletTransform(object):
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
         :param sampling_rate: [OPTIONAL] `10000` [default]
 
+        -----
         Scale
-        `````
+        -----
 
         Scale is the dilation/compression factor applied to the wavelet.
 
@@ -242,8 +243,9 @@ class ContinuousWaveletTransform(object):
         | wavelet choice    | - time/frequency resolution trade-off | `"cmorB-C"` (good for neural data) |
         +-------------------+---------------------------------------+------------------------------------+
 
+        -----
         Scale
-        `````
+        -----
 
         Scale is the dilation/compression factor applied to the wavelet.
 
@@ -352,6 +354,11 @@ class ContinuousWaveletTransform(object):
                         scales=None, wavelet=None, ):
         """
         Compute the Continuous Wavelet Transform of a single neuron
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
         """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
@@ -394,6 +401,13 @@ class ContinuousWaveletTransform(object):
     def compute_cwt_sum(cls, spiketimes_superset, sampling_rate=None,
                         window=None, neurons=None, sigma=None,
                         scales=None, wavelet=None, ):
+        """
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
             neurons = "all"
