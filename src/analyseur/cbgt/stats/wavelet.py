@@ -222,9 +222,9 @@ class ContinuousWaveletTransform(object):
     @staticmethod
     def freq_window_to_scales(freq_window=None, voices_per_octave=None, wavelet=None, sampling_rate=None):
         """
-        ----------------------
+        ======================
         Create array of scales
-        ----------------------
+        ======================
         Returns the array of scales between octaves given
 
         :param freq_window: Tuple `(min_freq, max_freq)`
