@@ -109,6 +109,8 @@ class ContinuousWaveletTransform(object):
     def smooth_signal(spiketimes_superset, sampling_rate=None,
                       window=None, neurons=None, sigma=None):
         """
+        Smoothen spike times signal
+        ===========================
         This method takes the spike times and converts it into respective binary spike trains
         which in turn is smoothened. The returned smoothened signal can be used to create a
         firing rate signal.
@@ -180,7 +182,6 @@ class ContinuousWaveletTransform(object):
         """
         Converts scale to frequency
         ===========================
-
         Converts a scale value to its corresponding frequency value.
 
         :param scale: a scalar
@@ -222,7 +223,6 @@ class ContinuousWaveletTransform(object):
         """
         Create array of scales
         ======================
-
         Returns the array of scales between octaves given
 
         :param freq_window: Tuple `(min_freq, max_freq)`
