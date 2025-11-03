@@ -26,6 +26,7 @@ def get_observables(rootpath, filename, decayfolderid):
         filepath = rootpath + dirname + filename
         loadST = LoadSpikeTimes(filepath)
         spiketimes_superset = loadST.get_spiketimes_superset()
+        n_neurons = len(spiketimes_superset)
 
         ss = SpikingStats(spiketimes_superset)
         pact = PopAct(spiketimes_superset)
@@ -39,13 +40,14 @@ def get_observables(rootpath, filename, decayfolderid):
         stat_values[3, i] = sstats["grand_LV"]
 
         stat_values[4, i] = dimstat["pca"].n_components_  # Dimensionality
+        stat_values[5, i] = stat_values[4, i] / n_neurons # Complexity
 
-        stat_values[5, i] = Synchrony.compute_basic(spiketimes_superset)
+        stat_values[6, i] = Synchrony.compute_basic(spiketimes_superset)
 
         [fanofact, _, _] = Synchrony.compute_fano_factor(spiketimes_superset)
-        stat_values[6, i] = fanofact
+        stat_values[7, i] = fanofact
 
-    return stat_values, loadST._extract_nucleus_name(filename)
+    return stat_values, loadST.extract_nucleus_name(filename)
 
 
 def __create_multiple_y_axes(ax, num_axes, base_offset=50, right=True):
@@ -82,8 +84,8 @@ def plot_observables(rootpath, filename, decayfolderid, show=True, save=False):
 
     x_axis = np.round(np.array(list(decayfolderid.values())) * 100, decimals=1)
 
-    labels = [r"$\overline{f}$", "CV", r"$CV_2$", "LV", "Dim", r"$S_{sync}$", r"$F_{sync}$"]
-    colors = ["blue", "red", "green", "violet", "sienna", "teal", "darkorange"]
+    labels = [r"$\overline{f}$", "CV", r"$CV_2$", "LV", "Dim", "Complex", r"$S_{sync}$", r"$F_{sync}$"]
+    colors = ["blue", "red", "green", "violet", "sienna", "slategray", "teal", "darkorange"]
     num_axes = len(labels)
     suptitle = "Spiking statistics of "+ nucleus
 
@@ -128,14 +130,14 @@ def plot_observables(rootpath, filename, decayfolderid, show=True, save=False):
     lines2, labels2 = __get_multiple_axes_legends(axes2)
     axes2[0].legend(lines2, labels2, loc="upper left")
 
-    axes3[0].plot(x_axis, stat_values[5, :], color=colors[5], label=labels[5])
+    axes3[0].plot(x_axis, stat_values[6, :], color=colors[6], label=labels[6])
     axes3[0].set_xlabel("disinhibition (percentage)")
-    axes3[0].set_ylabel(labels[5], color=colors[5])
-    axes3[0].tick_params(axis="y", labelcolor=colors[5])
+    axes3[0].set_ylabel(labels[6], color=colors[6])
+    axes3[0].tick_params(axis="y", labelcolor=colors[6])
 
-    axes3[1].plot(x_axis, stat_values[6, :], color=colors[6], label=labels[6])
-    axes3[1].set_ylabel(labels[6], color=colors[6])
-    axes3[1].tick_params(axis="y", labelcolor=colors[6])
+    axes3[1].plot(x_axis, stat_values[7, :], color=colors[7], label=labels[7])
+    axes3[1].set_ylabel(labels[7], color=colors[7])
+    axes3[1].tick_params(axis="y", labelcolor=colors[7])
 
     lines3, labels3 = __get_multiple_axes_legends(axes3)
     axes3[0].legend(lines3, labels3, loc="upper left")
@@ -156,8 +158,8 @@ def __plot_observables2(rootpath, filename, decayfolderid):
 
     x_axis = np.round(np.array(list(decayfolderid.values())) * 100, decimals=1)
 
-    labels = [r"$\overline{f}$", "CV", r"$CV_2$", "LV", "Dim", r"$S_{sync}$", r"$F_{sync}$"]
-    colors = ["blue", "red", "green", "violet", "sienna", "teal", "darkorange"]
+    labels = [r"$\overline{f}$", "CV", r"$CV_2$", "LV", "Dim", "Complex", r"$S_{sync}$", r"$F_{sync}$"]
+    colors = ["blue", "red", "green", "violet", "sienna", "slategray", "teal", "darkorange"]
     num_axes = len(labels)
 
     total_offset = 300
@@ -219,15 +221,15 @@ def __plot_observables2(rootpath, filename, decayfolderid):
     ax3a = fig.add_subplot(2, 2, 4)
 
     # Plot grand_mean_freqs on ax1
-    ax3a.plot(x_axis, stat_values[5, :], color=colors[5], label=labels[5])
+    ax3a.plot(x_axis, stat_values[6, :], color=colors[6], label=labels[6])
     ax3a.set_xlabel("disinhibition (percentage)")
-    ax3a.set_ylabel(labels[5], color=colors[5])
-    ax3a.tick_params(axis="y", labelcolor=colors[5])
+    ax3a.set_ylabel(labels[6], color=colors[6])
+    ax3a.tick_params(axis="y", labelcolor=colors[6])
 
     ax3b = ax1a.twinx()
-    ax3b.plot(x_axis, stat_values[6, :], color=colors[6], label=labels[6])
-    ax3b.set_ylabel(labels[6], color=colors[6])
-    ax3b.tick_params(axis="y", labelcolor=colors[6])
+    ax3b.plot(x_axis, stat_values[7, :], color=colors[7], label=labels[7])
+    ax3b.set_ylabel(labels[7], color=colors[7])
+    ax3b.tick_params(axis="y", labelcolor=colors[7])
 
     ax3b.spines["right"].set_position(("outward", 60))
 
@@ -245,8 +247,8 @@ def __plot_observables3(rootpath, filename, decayfolderid):
 
     x_axis = np.round(np.array(list(decayfolderid.values())) * 100, decimals=1)
 
-    labels = [r"$\overline{f}$", "CV", r"$CV_2$", "LV", "Dim", r"$S_{sync}$", r"$F_{sync}$"]
-    colors = ["blue", "red", "green", "violet", "sienna", "teal", "darkorange"]
+    labels = [r"$\overline{f}$", "CV", r"$CV_2$", "LV", "Dim", "Complex", r"$S_{sync}$", r"$F_{sync}$"]
+    colors = ["blue", "red", "green", "violet", "sienna", "slategray", "teal", "darkorange"]
     num_axes = len(labels)
 
     total_offset = 300

@@ -11,8 +11,6 @@ from scipy import signal
 from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.curate import get_binary_spiketrains
 
-siganal = SignalAnalysisParams()
-
 class PowerSpectrum(object):
     """
     Computes the power spectra
@@ -75,16 +73,18 @@ class PowerSpectrum(object):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    __siganal = SignalAnalysisParams()
+
     @classmethod
     def compute(cls, spiketimes_superset, sampling_rate=None,
                 window=None, neurons=None, resolution=None):
         """
         Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
-        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param sampling_rate: 1000/dt = 10000 Hz [default]; sampling_rate ∊ (0, 10000)
-        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
-        :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
+        :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param neurons: `"all"` [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
         :return: a tuple in the following order
         - array of sample frequencies
@@ -112,7 +112,7 @@ class PowerSpectrum(object):
 
         """
         #============== DEFAULT Parameters ==============
-        sampling_frequency = 1 / siganal.sampling_period
+        sampling_frequency = 1 / cls.__siganal.sampling_period
         if sampling_rate is None:
             sampling_rate = sampling_frequency
         elif sampling_rate > sampling_frequency:
@@ -120,7 +120,7 @@ class PowerSpectrum(object):
             sampling_rate = sampling_frequency
 
         if window is None:
-            window = siganal.window
+            window = cls.__siganal.window
 
         if neurons is None:
             neurons = "all"

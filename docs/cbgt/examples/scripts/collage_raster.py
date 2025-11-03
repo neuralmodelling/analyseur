@@ -21,6 +21,9 @@ filenames = ["/spikes_PTN.csv", "/spikes_CSN.csv",
              "/spikes_GPi.csv", "/spikes_GPe.csv",
              "/spikes_TRN.csv", "/spikes_MD.csv", ]
 
+neurons = "all"
+# neurons = range(1, 50)
+
 for i, region in enumerate(regionfolders):
     use_rootpath = rootpath + region
     use_filename = filenames[i]
@@ -31,6 +34,8 @@ for i, region in enumerate(regionfolders):
         loadST = LoadSpikeTimes(fullfilepath)
         spiketimes_superset = loadST.get_spiketimes_superset()
 
+        spiketimes_set = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
         nucleus = loadST.extract_nucleus_name(use_filename)
 
         plt.clf()
@@ -39,10 +44,9 @@ for i, region in enumerate(regionfolders):
             gridspec_kw={"width_ratios": [3, 1, 1]},
             figsize=(25, 12))
 
-        ax1 = plot_raster_in_ax(ax1, spiketimes_superset, nucleus=nucleus)
-        ax2 = plotCV_in_ax(ax2, spiketimes_superset, mode="portrait")
-        ax3 = plot_mean_rate_in_ax(ax3, spiketimes_superset, mode="portrait")
+        ax1 = plot_raster_in_ax(ax1, spiketimes_set, nucleus=nucleus, neurons=neurons)
+        ax2 = plotCV_in_ax(ax2, spiketimes_set, mode="portrait")
+        ax3 = plot_mean_rate_in_ax(ax3, spiketimes_set, mode="portrait")
 
         plt.tight_layout()
-        # plt.savefig("Raster_of_"+nucleus+"_"+id+".svg", format="svg")
         plt.savefig("Raster_of_" + nucleus + "_" + id + ".png")

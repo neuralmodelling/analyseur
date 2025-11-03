@@ -148,10 +148,10 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucle
 
     OPTIONAL parameters
 
-    - :param colors: `False` [default] or True
-    - :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
-    - :param nucleus: string; name of the nucleus
-    - :return: object `ax` with Raster plotting done into it
+    :param colors: `False` [default] or True
+    :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
+    :param nucleus: string; name of the nucleus
+    :return: object `ax` with Raster plotting done into it
 
     .. raw:: html
 
@@ -216,10 +216,10 @@ def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None,):
 
     OPTIONAL parameters
 
-    - :param colors: `False` [default] or True
-    - :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
-    - :param nucleus: string; name of the nucleus
-    - :return: object `ax` with Raster plotting done into it
+    :param colors: `False` [default] or True
+    :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
+    :param nucleus: string; name of the nucleus
+    :return: object `ax` with Raster plotting done into it
 
     .. raw:: html
 
@@ -250,12 +250,12 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
 
     OPTIONAL parameters
 
-    - :param stimulus_onset: float; 0 [default]
-    - :param window: 2-tuple; (0, 10) [default]
-    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param stimulus_onset: float; 0 [default]
+    :param window: 2-tuple; (0, 10) [default]
+    :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
@@ -330,12 +330,12 @@ def plot_ratechange(spiketimes_superset, stimulus_onset=None,
 
     OPTIONAL parameters
 
-    - :param stimulus_onset: float
-    - :param window: 2-tuple; defines upper and lower range of the bins
-    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param stimulus_onset: float
+    :param window: 2-tuple; defines upper and lower range of the bins
+    :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
