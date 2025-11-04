@@ -15,21 +15,22 @@ class InterSpikeInterval(object):
     """
     Computes interspike intervals for the given spike times
 
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | Methods                      | Argument                                                                                              |
-    +==============================+=======================================================================================================+
-    | :py:meth:`.compute`          | - `all_neurons_spiketimes`: Dictionary returned; see :class:`~analyseur.cbgt.loader.LoadSpikeTimes`   |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.inst_rates`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.avg_inst_rates`   | - `all_inst_rates`: Dictionary returned; see :py:meth:`.inst_rates`                                   |
-    |                              | - `all_times`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                               |
-    |                              | - `binsz`: [OPTIONAL] 0.01 (default)                                                                  |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.mean_freqs`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
+    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | Methods                      | Argument                                                                                                           |
+    +==============================+====================================================================================================================+
+    | :py:meth:`.compute`          | - `spiketimes_set`: Dictionary returned; see :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset` |
+    |                              | - also see :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                                     |
+    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.inst_rates`       | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
+    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.avg_inst_rates`   | - `inst_rates_set`: Dictionary returned; see :py:meth:`.inst_rates`                                                |
+    |                              | - `all_times`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                                            |
+    |                              | - `binsz`: [OPTIONAL] 0.01 (default)                                                                               |
+    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.mean_freqs`       | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
+    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.grand_mean_freq`  | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
+    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
     =========
     Use Cases
@@ -111,11 +112,12 @@ class InterSpikeInterval(object):
     __siganal = SignalAnalysisParams()
 
     @classmethod
-    def compute(cls, all_neurons_spiketimes=None):
+    def compute(cls, spiketimes_set=None):
         """
         Returns the interspike interval for all individual neurons.
 
-        :param all_neurons_spiketimes: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
         :return: 2-tuple
 
         - dictionary of individual neurons whose values are their respective interspike interval
@@ -141,20 +143,20 @@ class InterSpikeInterval(object):
 
         """
         interspike_intervals = {}
-        all_times = {}
+        tbins_set = {}
 
-        for n_id, spiketimes in all_neurons_spiketimes.items():
+        for n_id, spiketimes in spiketimes_set.items():
             interspike_intervals[n_id] = np.diff(spiketimes)
-            all_times[n_id] = spiketimes[1:]
+            tbins_set[n_id] = spiketimes[1:]
 
-        return interspike_intervals, all_times
+        return interspike_intervals, tbins_set
 
     @classmethod
-    def inst_rates(cls, all_neurons_isi=None):
+    def inst_rates(cls, isi_set=None):
         """
         Returns the instantaneous rates for all individual neurons.
 
-        :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
+        :param isi_set: Dictionary returned using :py:meth:`.compute`
         :return: dictionary of individual neurons whose values are their respective instantaneous rates
 
         **Formula**
@@ -195,7 +197,7 @@ class InterSpikeInterval(object):
         """
         inst_rates = {}
 
-        for n_id, isi in all_neurons_isi.items():
+        for n_id, isi in isi_set.items():
             # n_spikes = len(isi) + 1
             if len(isi) == 0:
                 inst_rates[n_id] = 0
@@ -205,12 +207,12 @@ class InterSpikeInterval(object):
         return inst_rates
 
     @classmethod
-    def avg_inst_rates(cls, all_inst_rates=None, all_times=None, binsz=None):
+    def avg_inst_rates(cls, inst_rates_set=None, tbins_set=None, binsz=None):
         """
         Returns the average instantaneous rates for all individual neurons.
 
-        :param all_times: Dictionary returned using :py:meth:`.compute`
-        :param all_inst_rates: Dictionary returned using :py:meth:`.inst_rates`
+        :param tbins_set: Dictionary returned using :py:meth:`.compute`
+        :param inst_rates_set: Dictionary returned using :py:meth:`.inst_rates`
         :param binsz: [OPTIONAL] 0.01 (default)
         :return: 3-tuple
 
@@ -281,8 +283,8 @@ class InterSpikeInterval(object):
         # Put all times and instantaneuous rates of respective neurons into one list
         vec_all_times = []
         vec_all_inst = []
-        [vec_all_times.extend(x) for x in all_times.values()]
-        [vec_all_inst.extend(x) for x in all_inst_rates.values()]
+        [vec_all_times.extend(x) for x in tbins_set.values()]
+        [vec_all_inst.extend(x) for x in inst_rates_set.values()]
 
         # Convert the above two lists to arrays
         arr_all_times = np.array(vec_all_times)
@@ -312,11 +314,11 @@ class InterSpikeInterval(object):
         return avg_rates, bin_centers, bin_counts
 
     @classmethod
-    def mean_freqs(cls, all_neurons_isi=None):
+    def mean_freqs(cls, isi_set=None):
         """
         Returns the mean frequencies for all individual neurons.
 
-        :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
+        :param isi_set: Dictionary returned using :py:meth:`.compute`
         :return: dictionary of individual neurons whose values are their respective mean frequencies
 
         **Formula**
@@ -356,7 +358,7 @@ class InterSpikeInterval(object):
         """
         mean_spiking_freq = {}
 
-        for n_id, isi in all_neurons_isi.items():
+        for n_id, isi in isi_set.items():
             # n_spikes = len(isi) + 1
             if len(isi) == 0:
                 mean_spiking_freq[n_id] = 0
@@ -366,11 +368,11 @@ class InterSpikeInterval(object):
         return mean_spiking_freq
 
     @classmethod
-    def grand_mean_freq(cls, all_neurons_isi=None):
+    def grand_mean_freq(cls, isi_set=None):
         """
         Returns the grand mean frequency which is the mean of mean frequencies of all the neurons
         
-        :param all_neurons_isi: Dictionary returned using :py:meth:`.compute`
+        :param isi_set: Dictionary returned using :py:meth:`.compute`
         :return: a number
 
         **Formula**
@@ -395,5 +397,5 @@ class InterSpikeInterval(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-        all_neurons_mean_freq = cls.mean_freqs(all_neurons_isi)
+        all_neurons_mean_freq = cls.mean_freqs(isi_set)
         return cgm(all_neurons_mean_freq)
