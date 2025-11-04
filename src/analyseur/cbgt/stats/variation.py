@@ -14,21 +14,21 @@ class Variations(object):
     """
     Computes variation or dispersion in the data
 
-    +------------------------+-----------------------------------------------------------------------------------------------------+
-    | Methods                | Argument                                                                                            |
-    +========================+=====================================================================================================+
-    | :py:meth:`.computeCV`  | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
-    +------------------------+-----------------------------------------------------------------------------------------------------+
-    | :py:meth:`.computeCV2` | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
-    +------------------------+-----------------------------------------------------------------------------------------------------+
-    | :py:meth:`.computeLV`  | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
-    +------------------------+-----------------------------------------------------------------------------------------------------+
-    | :py:meth:`grandCV`     | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
-    +------------------------+-----------------------------------------------------------------------------------------------------+
-    | :py:meth:`grandCV2`    | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
-    +------------------------+-----------------------------------------------------------------------------------------------------+
-    | :py:meth:`grandLV`     | `all_neurons_isi`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
-    +------------------------+-----------------------------------------------------------------------------------------------------+
+    +------------------------+---------------------------------------------------------------------------------------------+
+    | Methods                | Argument                                                                                    |
+    +========================+=============================================================================================+
+    | :py:meth:`.computeCV`  | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------+---------------------------------------------------------------------------------------------+
+    | :py:meth:`.computeCV2` | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------+---------------------------------------------------------------------------------------------+
+    | :py:meth:`.computeLV`  | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------+---------------------------------------------------------------------------------------------+
+    | :py:meth:`grandCV`     | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------+---------------------------------------------------------------------------------------------+
+    | :py:meth:`grandCV2`    | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------+---------------------------------------------------------------------------------------------+
+    | :py:meth:`grandLV`     | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgt.stats.isi.InterSpikeInterval`   |
+    +------------------------+---------------------------------------------------------------------------------------------+
 
     =========
     Use Cases
@@ -57,7 +57,7 @@ class Variations(object):
     ``````````````````````````````````````
     ::
 
-        I = InterSpikeInterval.compute(spiketimes_superset)
+        [I, _] = InterSpikeInterval.compute(spiketimes_superset)
 
     ---------
     2. Cases
@@ -102,11 +102,11 @@ class Variations(object):
     """
 
     @classmethod
-    def computeCV(cls, all_neurons_isi=None):
+    def computeCV(cls, isi_set=None):
         """
         Returns the coefficient of variation for all individual neurons.
 
-        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: dictionary of individual neurons whose values are their respective coefficient of variation value
 
         **Formula**
@@ -149,7 +149,7 @@ class Variations(object):
         """
         all_CV = {}
 
-        for n_id, isi in all_neurons_isi.items():
+        for n_id, isi in isi_set.items():
             if len(isi) == 0:
                 all_CV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
@@ -158,11 +158,11 @@ class Variations(object):
         return all_CV
 
     @classmethod
-    def computeCV2(cls, all_neurons_isi=None):
+    def computeCV2(cls, isi_set=None):
         """
         Returns the local coefficient of variation for all individual neurons.
 
-        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: dictionary of individual neurons whose values are their respective local coefficient of variation value
 
         **Formula**
@@ -204,7 +204,7 @@ class Variations(object):
         """
         all_CV2 = {}
 
-        for n_id, isi in all_neurons_isi.items():
+        for n_id, isi in isi_set.items():
             if len(isi) == 0:
                 all_CV2[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
@@ -214,11 +214,11 @@ class Variations(object):
         return all_CV2
 
     @classmethod
-    def computeLV(cls, all_neurons_isi=None):
+    def computeLV(cls, isi_set=None):
         """
         Returns the local variation for all individual neurons.
 
-        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: dictionary of individual neurons whose values are their respective local variation value
 
         **Formula**
@@ -260,7 +260,7 @@ class Variations(object):
         """
         all_LV = {}
 
-        for n_id, isi in all_neurons_isi.items():
+        for n_id, isi in isi_set.items():
             if len(isi) == 0:
                 all_LV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
@@ -270,11 +270,11 @@ class Variations(object):
         return all_LV
 
     @classmethod
-    def grandCV(cls, all_neurons_isi=None):
+    def grandCV(cls, isi_set=None):
         """
         Returns the grand coefficient of variation which is the mean of coefficient of variation of all the neurons
 
-        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: a number
 
         **Formula**
@@ -298,15 +298,15 @@ class Variations(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        all_neurons_CV = cls.computeCV(all_neurons_isi)
+        all_neurons_CV = cls.computeCV(isi_set)
         return cgm(all_neurons_CV)
 
     @classmethod
-    def grandCV2(cls, all_neurons_isi=None):
+    def grandCV2(cls, isi_set=None):
         """
         Returns the grand local coefficient of variation which is the mean of local coefficient of variation of all the neurons
 
-        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: a number
 
         **Formula**
@@ -330,15 +330,15 @@ class Variations(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        all_neurons_CV2 = cls.computeCV2(all_neurons_isi)
+        all_neurons_CV2 = cls.computeCV2(isi_set)
         return cgm(all_neurons_CV2)
 
     @classmethod
-    def grandLV(cls, all_neurons_isi=None):
+    def grandLV(cls, isi_set=None):
         """
         Returns the grand local variation which is the mean of local variation of all the neurons
 
-        :param all_neurons_isi: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+        :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
         :return: a number
 
         **Formula**
@@ -362,5 +362,5 @@ class Variations(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        all_neurons_LV = cls.computeLV(all_neurons_isi)
+        all_neurons_LV = cls.computeLV(isi_set)
         return cgm(all_neurons_LV)
