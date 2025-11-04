@@ -306,13 +306,14 @@ def plotCV2(spiketimes_superset, nucleus=None, mode=None):
 #    LV PLOT
 ##########################################################################
 
-def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
     Draws the Local Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -326,7 +327,7 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-    n_neurons = len(spiketimes_superset)
+    n_neurons = len(spiketimes_set)
 
     match mode:
         case "portrait":
@@ -336,7 +337,7 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
     LVarr = Variations.computeLV(all_isi)
     vec_LV = LVarr.values()
 
