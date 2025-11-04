@@ -6,6 +6,8 @@
 #
 
 import re
+import numbers
+
 import pandas as pd
 import numpy as np
 
@@ -182,12 +184,17 @@ class LoadSpikeTimes(CommonLoader):
         return spiketimes_superset
 
     @staticmethod
-    def get_spiketimes_subset(spiketimes_superset, first_n_neurons=None):
+    def get_spiketimes_subset(spiketimes_superset, neurons=None):
         """
         Returns a dictionary containing the spike times (in seconds) of desired neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`.get_spiketimes_superset`
-        :param neurons: `"all"` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
+        :param neurons: `"all"` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
         :return: dictionary
 
         .. raw:: html
@@ -195,16 +202,17 @@ class LoadSpikeTimes(CommonLoader):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-        if first_n_neurons=="all":
+        if neurons=="all":
             return spiketimes_superset
+        elif isinstance(neurons, numbers.Number):
+            return dict(list(spiketimes_superset.items())[:neurons])  # first N = neurons
         else:
-            # keys_to_remove = ["n"+str(i) for i in neurons]
+            keys_to_remove = ["n"+str(i) for i in neurons]
 
             # Convert to set for faster lookup
-            # remove_set = set(keys_to_remove)
+            remove_set = set(keys_to_remove)
 
-            # return {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
-            return dict(list(spiketimes_superset.items())[:first_n_neurons])
+            return {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
 
 
 class LoadChannelIorG(CommonLoader):
@@ -251,14 +259,14 @@ class LoadChannelIorG(CommonLoader):
 
     def __prepreprocessSize(self, neurotrans_name):  # As there is a shift in indices in the LFP formula
         """This is function taken from Jeanne's code."""
-        full_size = simparams.duration - 6 - 1
+        full_size = self.simparams.duration - 6 - 1
         if neurotrans_name == 'AMPA':
             start, end = 6, 0
         elif neurotrans_name == 'GABAA':
             start, end = 0, 6
         else:
             start, end = 6, 6
-            full_size = simparams.duration - 1
+            full_size = self.simparams.duration - 1
         start, end = start, full_size - end
 
         return start, end
@@ -298,12 +306,12 @@ class LoadChannelIorG(CommonLoader):
         [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
         # region = self.get_region_name(nucleus)
 
-        if attrib in simparams.neurotrans + self.__nonChnl_and_g_attributes:
+        if attrib in self.simparams.neurotrans + self.__nonChnl_and_g_attributes:
             start, end = self.__prepreprocessSize(attrib)
             dataframe = pd.read_csv(self.full_filepath).iloc[start:end, [0]]
-            measurables = dataframe.apply(lambda x: round(x, siganal.decimal_places_ephys)).values
+            measurables = dataframe.apply(lambda x: round(x, self.siganal.decimal_places_ephys)).values
         else:
-            print("Attributes must be from " + str(simparams.neurotrans + self.__nonChnl_and_g_attributes))
+            print("Attributes must be from " + str(self.simparams.neurotrans + self.__nonChnl_and_g_attributes))
             measurables = None
 
         return measurables

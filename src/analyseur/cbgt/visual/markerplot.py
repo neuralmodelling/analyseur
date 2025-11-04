@@ -137,7 +137,7 @@ def _get_line_colors(colors=False, no_neurons=None):
     else:
         return "black"
 
-def plot_raster_in_ax(ax, spiketimes_superset, colors=False, first_n_neurons=None, nucleus=None,):
+def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucleus=None,):
     """
     Draws the Rasterplot (`matplotlib.pyplot.eventplot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.eventplot.html>`_)
     on the given
@@ -159,10 +159,8 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, first_n_neurons=Non
 
     """
     # ============== DEFAULT Parameters ==============
-    if first_n_neurons is None:
+    if neurons is None:
         neurons = "all"
-    else:
-        neurons = range(first_n_neurons)
 
     [desired_spiketimes_subset, yticks] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
 
@@ -210,7 +208,7 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, first_n_neurons=Non
 
     return ax
 
-def plot_raster(spiketimes_superset, colors=False, first_n_neurons=None, nucleus=None,):
+def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None,):
     """
     Visualize Raster plot for the given neuron population.
 
@@ -230,7 +228,7 @@ def plot_raster(spiketimes_superset, colors=False, first_n_neurons=None, nucleus
     """
     fig, ax = plt.subplots(figsize=(18, 12))
 
-    ax = plot_raster_in_ax(ax, spiketimes_superset, colors=colors, first_n_neurons=first_n_neurons, nucleus=nucleus,)
+    ax = plot_raster_in_ax(ax, spiketimes_superset, colors=colors, neurons=neurons, nucleus=nucleus,)
 
     plt.show()
 
