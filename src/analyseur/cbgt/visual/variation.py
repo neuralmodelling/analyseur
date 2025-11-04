@@ -112,20 +112,10 @@ imported as
 
 """
 
-import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
-from scipy.stats import gaussian_kde, alpha
 
-import re
-
-from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.isi import InterSpikeInterval
 from analyseur.cbgt.stats.variation import Variations
-# from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
-#
-# __siganal = SignalAnalysisParams()
-# __simparams = SimulationParams()
 
 
 ##########################################################################
