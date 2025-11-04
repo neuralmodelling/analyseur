@@ -4,6 +4,7 @@
 #
 # This contains function for loading the files
 #
+import numbers
 
 import numpy as np
 from scipy import signal
@@ -86,7 +87,12 @@ class PowerSpectrum(object):
 
         :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param neurons: `"all"` [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
+        :param neurons: `"all" [default]` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
         :return: a tuple in the following order
         - array of sample frequencies
@@ -127,6 +133,8 @@ class PowerSpectrum(object):
 
         if neurons is None:
             neurons = "all"
+        elif isinstance(neurons, numbers.Number):
+            neurons = range(neurons)
 
         if resolution is None:
             points_per_segment = 1024
