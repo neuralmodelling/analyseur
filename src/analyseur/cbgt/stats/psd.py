@@ -23,6 +23,7 @@ class PowerSpectrum(object):
     | Methods                    | Argument                                                                                        |
     +============================+=================================================================================================+
     | :py:meth:`.compute`        | - `spiketimes_set`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`  |
+    |                            |      -  also :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                |
     |                            | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                    |
     |                            | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                        |
     |                            | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]        |
@@ -87,7 +88,7 @@ class PowerSpectrum(object):
 
         :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param neurons: `"all" [default]` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
             - `"all"` means subset = superset
             - `N` (a scalar) means subset of first N neurons in the superset
