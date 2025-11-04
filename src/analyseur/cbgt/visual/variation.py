@@ -312,7 +312,7 @@ def plotLV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+    :param spiketimes_superset: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
 
     OPTIONAL parameters
 

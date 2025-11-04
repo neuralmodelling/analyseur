@@ -268,6 +268,8 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
     # ============== DEFAULT Parameters ==============
     if neurons is None:
         neurons = "all"
+    elif isinstance(neurons, numbers.Number):
+        neurons = range(neurons)
 
     if window is None:
         window = __siganal.window
