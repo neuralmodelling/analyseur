@@ -227,6 +227,7 @@ class PSTH(object):
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+        
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param binsz: integer or float; 0.01 (= 100 per bin) [default]
         :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
@@ -234,7 +235,7 @@ class PSTH(object):
             - `"all"` means subset = superset
             - `N` (a scalar) means subset of first N neurons in the superset
             - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
-        
+
         :return: a tuple in the following order
         - array of the values (counts) of the histogram
         - dictionary of bin information
