@@ -9,8 +9,6 @@ from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.parameters import SignalAnalysisParams
 from analyseur.cbgt.analytics.ratesparsity import Sparsity
 
-__siganal = SignalAnalysisParams()
-
 
 class PSTH(object):
     """
@@ -167,19 +165,23 @@ class PSTH(object):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    __siganal = SignalAnalysisParams()
+
     @classmethod
-    def _compute_true_avg_firing_rate(cls, window, spiketimes_superset):
+    def _compute_true_avg_firing_rate(cls, window, spiketimes_set):
         """
         Computes the average of each neuron's firing rate over the entire period
 
-        :param window:
-        :param spiketimes_superset:
+        :param window: Tuple in the form `(start_time, end_time)`
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
         :return: dictionary with keys: firing_rates, mean_firing_rate, std_firing_rate
         """
         firing_rates = []
         total_duration = window[1] - window[0]
 
-        for indiv_spiketimes in spiketimes_superset:
+        for indiv_spiketimes in spiketimes_set:
             spiketimes = np.array(indiv_spiketimes)
             spikes_in_window = spiketimes[(spiketimes >= window[0]) & (spiketimes <= window[1])]
             indiv_rate = len(spikes_in_window) / total_duration  # kHz
@@ -195,6 +197,11 @@ class PSTH(object):
     def _compute_avg_firing_rate_from_PSTH(cls, window, n_neurons, pop_counts):
         """
         Computes the average of each neuron's firing rate from PSTH data
+
+        :param window: Tuple in the form `(start_time, end_time)`
+        :param n_neurons: scalar
+        :param pop_counts: array of counts
+
         """
         total_duration = window[1] - window[0]
         return np.sum(pop_counts) / (n_neurons * total_duration) # Hz
@@ -206,18 +213,28 @@ class PSTH(object):
         Therefore, this is the TIME-VARYING population rate (since its at each bin).
         Hence, mean of the population rates across the bins is NOT average firing rate.
         It is the AVERAGE of the TIME-VARYING rates across all bins.
+
+        :param n_neurons: scalar
+        :param binsz: scalar
+        :param pop_counts: array of counts
         """
         return pop_counts / (n_neurons * binsz)  # in Hz
 
     @classmethod
-    def compute_poolPSTH(cls, spiketimes_superset, neurons=None, binsz=None, window=None):
+    def compute_poolPSTH(cls, spiketimes_set, neurons=None, binsz=None, window=None):
         """
         Computation of Pooled Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
 
-        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param window: Tuple in the form `(start_time, end_time)`; e.g (0, 10)
-        :param binsz: e.g 0.01 (= 100 per bin)
-        :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param binsz: integer or float; 0.01 (= 100 per bin) [default]
+        :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+        
         :return: a tuple in the following order
         - array of the values (counts) of the histogram
         - dictionary of bin information
@@ -238,15 +255,15 @@ class PSTH(object):
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
-            window = __siganal.window
+            window = cls.__siganal.window
 
         if binsz is None:
-            binsz = __siganal.binsz_100perbin
+            binsz = cls.__siganal.binsz_100perbin
 
         if neurons is None:
             neurons = "all"
 
-        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
 
         # Poole spikes from ALL neurons
         allspikes = np.concatenate(desired_spiketimes_subset)
