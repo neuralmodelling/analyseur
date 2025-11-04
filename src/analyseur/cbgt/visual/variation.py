@@ -132,27 +132,33 @@ from analyseur.cbgt.stats.variation import Variations
 #    CV PLOT
 ##########################################################################
 
-def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+def plotCV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
     Draws the Coefficient of Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
-    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-    n_neurons = len(spiketimes_superset)
+    n_neurons = len(spiketimes_set)
 
     match mode:
         case "portrait":
@@ -162,7 +168,7 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
     CVarr = Variations.computeCV(all_isi)
     vec_CV = CVarr.values()
 
@@ -188,18 +194,24 @@ def plotCV_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     return ax
 
-def plotCV(spiketimes_superset, nucleus=None, mode=None):
+def plotCV(spiketimes_set, nucleus=None, mode=None):
     """
     Visualize Coefficient of Variation of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
-    OPTIONAL parameters
+    [OPTIONAL]
 
-    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
@@ -211,7 +223,7 @@ def plotCV(spiketimes_superset, nucleus=None, mode=None):
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plotCV_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+    ax = plotCV_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
 
     plt.show()
 
@@ -222,27 +234,33 @@ def plotCV(spiketimes_superset, nucleus=None, mode=None):
 #    CV2 PLOT
 ##########################################################################
 
-def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
+def plotCV2_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
     Draws the Local Coefficient of Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
-    OPTIONAL parameters
+    [OPTIONAL]
 
-    - :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
-    n_neurons = len(spiketimes_superset)
+    n_neurons = len(spiketimes_set)
 
     match mode:
         case "portrait":
@@ -252,7 +270,7 @@ def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    [all_isi, _] = InterSpikeInterval.compute(spiketimes_superset)
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
     CV2arr = Variations.computeCV2(all_isi)
     vec_CV2 = CV2arr.values()
 
@@ -272,18 +290,24 @@ def plotCV2_in_ax(ax, spiketimes_superset, nucleus=None, mode=None):
 
     return ax
 
-def plotCV2(spiketimes_superset, nucleus=None, mode=None):
+def plotCV2(spiketimes_set, nucleus=None, mode=None):
     """
     Visualize Local Coefficient of Variation of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
-    OPTIONAL parameters
+    [OPTIONAL]
 
-    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
@@ -295,7 +319,7 @@ def plotCV2(spiketimes_superset, nucleus=None, mode=None):
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plotCV2_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+    ax = plotCV2_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
 
     plt.show()
 
@@ -317,7 +341,12 @@ def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
     [OPTIONAL]
 
-    :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
     :param nucleus: string; name of the nucleus
     :param mode: "portrait" or None/landscape [default]
     :return: object `ax` with Rate Distribution plotting done into it
@@ -366,12 +395,12 @@ def plotLV(spiketimes_set, nucleus=None, mode=None):
 
     [OPTIONAL]
 
-    :param neurons: `"all"` or scalar or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
             - `"all"` means subset = superset
             - `N` (a scalar) means subset of first N neurons in the superset
             - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
-    
+
     :param nucleus: string; name of the nucleus
     :param mode: "portrait" or None/landscape [default]
     :return: object `ax` with Rate Distribution plotting done into it
