@@ -107,26 +107,6 @@ class PowerSpectrum(object):
 
         where the constant of proportionality is the number of points per segment `nperseg`.
 
-        `resolution` or desired frequency resolution is the smallest difference between two frequencies
-        that can be distinguished in the power spectrum.
-        The sampling rate is proportional to the desired frequency resolution
-        
-        .. math::
-        
-            \\text{sampling_rate} &\\propto \\text{resolution} \n
-            \\text{sampling_rate} &= \\text{nperseg} \\times \\text{resolution}
-        
-        where the constant of proportionality is the number of points per segment `nperseg`.
-
-        .. list-table:: **Notes on resolution:**
-           :widths: 30
-           :header-rows: 1
-
-           * - `resolution` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
-           * - The sampling rate is proportional to the desired frequency resolution
-           * - :math:`\\text{sampling_rate} \\propto \\text{resolution}`
-           * - :math:`\\text{sampling_rate} = \\text{nperseg} \\times \\text{resolution}`
-
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
