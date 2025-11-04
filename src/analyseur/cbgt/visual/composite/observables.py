@@ -20,7 +20,7 @@ def get_observables(rootpath, filename, decayfolderid):
 
     #nucleus_title = "PTN ("+str(np.round(decayfolderid[dirlist[frame]]*100, decimals=1))+"% decay)"
 
-    stat_values = np.zeros((7, len(decayfolderid)))
+    stat_values = np.zeros((8, len(decayfolderid)))
 
     for i, dirname in enumerate(decayfolderid.keys()):
         filepath = rootpath + dirname + filename
