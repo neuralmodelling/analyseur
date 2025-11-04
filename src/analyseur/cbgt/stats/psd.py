@@ -18,15 +18,15 @@ class PowerSpectrum(object):
     `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)
     of all the neurons with given spike times
 
-    +----------------------------+----------------------------------------------------------------------------------------------------------+
-    | Methods                    | Argument                                                                                                 |
-    +============================+==========================================================================================================+
-    | :py:meth:`.compute`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                            | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                             |
-    |                            | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                 |
-    |                            | - `neurons` [OPTIONAL]: "all" [default] or list: range(a, b) or [1, 4, 5, 9]                             |
-    |                            | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                                    |
-    +----------------------------+----------------------------------------------------------------------------------------------------------+
+    +----------------------------+-------------------------------------------------------------------------------------------------+
+    | Methods                    | Argument                                                                                        |
+    +============================+=================================================================================================+
+    | :py:meth:`.compute`        | - `spiketimes_set`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`  |
+    |                            | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                    |
+    |                            | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                        |
+    |                            | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]        |
+    |                            | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
+    +----------------------------+-------------------------------------------------------------------------------------------------+
 
     =========
     Use Cases
@@ -48,7 +48,7 @@ class PowerSpectrum(object):
     ::
 
         loadST = LoadSpikeTimes("spikes_GPi.csv")
-        spiketimes_superset = loadST.get_spiketimes_superset()
+        spiketimes_set = loadST.get_spiketimes_superset()
 
     ---------
     2. Cases
@@ -58,13 +58,13 @@ class PowerSpectrum(object):
     ``````````````````````````````````````````````````````
     ::
 
-        B = PowerSpectrum.compute(spiketimes_superset)
+        B = PowerSpectrum.compute(spiketimes_set)
 
     2.2. Compute power spectral density for chosen neurons with desired frequency resolution
     ````````````````````````````````````````````````````````````````````````````````````````
     ::
 
-        B = PowerSpectrum.compute(spiketimes_superset, neurons=range(30, 120), resolution=5)
+        B = PowerSpectrum.compute(spiketimes_set, neurons=range(30, 120), resolution=5)
 
     Power spectral density for neurons 30 to 120 with the desired frequency resolution of 5 Hz.
 
@@ -76,12 +76,14 @@ class PowerSpectrum(object):
     __siganal = SignalAnalysisParams()
 
     @classmethod
-    def compute(cls, spiketimes_superset, sampling_rate=None,
+    def compute(cls, spiketimes_set, sampling_rate=None,
                 window=None, neurons=None, resolution=None):
         """
         Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
-        :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
         :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param neurons: `"all"` [default] or list: range(a, b) or [1, 4, 5, 9]                                                                |
@@ -132,7 +134,7 @@ class PowerSpectrum(object):
             points_per_segment = sampling_rate / resolution
 
         # Spike times > Spike Train
-        [spiketrains, yticks, time_axis] = get_binary_spiketrains(spiketimes_superset, sampling_rate=sampling_rate,
+        [spiketrains, yticks, time_axis] = get_binary_spiketrains(spiketimes_set, sampling_rate=sampling_rate,
                                                                   window=window, neurons=neurons)
 
         # Calculate Power Spectra (a.k.a power spectral density, PSD)
