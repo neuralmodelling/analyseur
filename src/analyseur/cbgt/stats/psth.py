@@ -308,7 +308,7 @@ class PSTH(object):
 
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param binsz: integer or float; `0.01` (= 100 per bin) [default]
-        :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
             - `"all"` means subset = superset
             - `N` (a scalar) means subset of first N neurons in the superset
