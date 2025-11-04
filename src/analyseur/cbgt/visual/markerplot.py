@@ -116,6 +116,7 @@ Plot Rate Change Scatter
     <hr style="border: 2px solid red; margin: 20px 0;">
 
 """
+import numbers
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -161,6 +162,8 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucle
     # ============== DEFAULT Parameters ==============
     if neurons is None:
         neurons = "all"
+    elif isinstance(neurons, numbers.Number):
+        neurons = range(neurons)
 
     [desired_spiketimes_subset, yticks] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
 

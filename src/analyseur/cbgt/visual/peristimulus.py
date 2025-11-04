@@ -41,20 +41,18 @@ class VizPSTH(object):
 
       from analyseur.cbgt.visual.peristimulus import vizPSTH
 
-      my_psth = vizPSTH(spiketimes_superset)
-
     2. Peri-Stimulus Time Histogram for the whole simulation window
 
     ::
 
-      my_psth.plot()
+      vizPSTH.plot(spiketimes_superset)
 
     3. PSTH for desired window and bin size
 
     ::
 
-      my_psth.plot(window=(0,5), binsz=1)  # time unit in seconds
-      my_psth.plot(window=(0,5), binsz=0.05)
+      vizPSTH.plot(spiketimes_superset, window=(0,5), binsz=1)  # time unit in seconds
+      vizPSTH.plot(spiketimes_superset, window=(0,5), binsz=0.05)
 
     .. raw:: html
 
@@ -62,11 +60,8 @@ class VizPSTH(object):
 
     """
 
-    def __init__(self, spiketimes_superset):
-        self.spiketimes_superset = spiketimes_superset
-
-    @staticmethod
-    def plot_in_ax(ax, spiketimes_superset, binsz=None, window=(), neurons=None, nucleus=None):
+    @classmethod
+    def plot_in_ax(cls, ax, spiketimes_superset, binsz=None, window=(), neurons=None, nucleus=None):
         """
         Draws the Peri-Stimulus Time Histogram (PSTH) on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
@@ -104,7 +99,8 @@ class VizPSTH(object):
         return ax
 
 
-    def plot(self, binsz=0.01, window=(0, 10), neurons="all", nucleus=None, show=True):
+    @classmethod
+    def plot(cls, spiketimes_superset, binsz=0.01, window=(0, 10), neurons="all", nucleus=None, show=True):
         """
         Displays the Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
@@ -126,12 +122,12 @@ class VizPSTH(object):
         
         """
         # Set binsz and window as the instance attributes
-        self.binsz = binsz
-        self.window = window
+        cls.binsz = binsz
+        cls.window = window
 
         # Plot
         fig, ax = plt.subplots(figsize=(10, 6))
-        ax = self.plot_in_ax(ax, self.spiketimes_superset, binsz=binsz, window=window, neurons=neurons, nucleus=nucleus)
+        ax = cls.plot_in_ax(ax, spiketimes_superset, binsz=binsz, window=window, neurons=neurons, nucleus=nucleus)
 
         if show:
             plt.show()
