@@ -112,8 +112,8 @@ class PowerSpectrum(object):
 
            * - `resolution` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
            * - The sampling rate is proportional to the desired frequency resolution
-           * - :math:`\\text{sampling_rate} &\\propto \\text{resolution}`
-           * - :math:`\\text{sampling_rate} &= \\text{nperseg} \\times \\text{resolution}`
+           * - :math:`\\text{sampling_rate} \\propto \\text{resolution}`
+           * - :math:`\\text{sampling_rate} = \\text{nperseg} \\times \\text{resolution}`
 
         .. raw:: html
 
