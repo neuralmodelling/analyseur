@@ -22,7 +22,7 @@ class PSTH(object):
     | Methods                        | Argument                                                                                                           |
     +================================+====================================================================================================================+
     | :py:meth:`.compute_poolPSTH`   | - `spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset` |
-    |                                | or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                                       |
+    |                                |      -  or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                               |
     |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                                           |
     |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                                               |
     |                                | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]                           |
