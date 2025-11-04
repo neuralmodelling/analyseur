@@ -24,7 +24,7 @@ class InterSpikeInterval(object):
     | :py:meth:`.inst_rates`       | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
     +------------------------------+--------------------------------------------------------------------------------------------------------------------+
     | :py:meth:`.avg_inst_rates`   | - `inst_rates_set`: Dictionary returned; see :py:meth:`.inst_rates`                                                |
-    |                              | - `all_times`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                                            |
+    |                              | - `tbins_set`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                                            |
     |                              | - `binsz`: [OPTIONAL] 0.01 (default)                                                                               |
     +------------------------------+--------------------------------------------------------------------------------------------------------------------+
     | :py:meth:`.mean_freqs`       | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
