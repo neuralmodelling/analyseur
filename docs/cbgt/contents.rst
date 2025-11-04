@@ -30,6 +30,7 @@ Visualizers
    visual/markerplot.rst
    visual/variation.rst
    visual/rate.rst
+   visual/powspec.rst
 
 Composite Visualizers
 ---------------------
