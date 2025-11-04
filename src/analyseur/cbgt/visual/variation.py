@@ -316,7 +316,7 @@ def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     [OPTIONAL]
-    
+
     :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
     :param nucleus: string; name of the nucleus
     :param mode: "portrait" or None/landscape [default]
@@ -357,18 +357,24 @@ def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
     return ax
 
-def plotLV(spiketimes_superset, nucleus=None, mode=None):
+def plotLV(spiketimes_set, nucleus=None, mode=None):
     """
     Visualize Local Variation of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
-    OPTIONAL parameters
+    [OPTIONAL]
 
-    - :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param neurons: `"all"` or scalar or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+    
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
 
@@ -380,7 +386,7 @@ def plotLV(spiketimes_superset, nucleus=None, mode=None):
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plotLV_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+    ax = plotLV_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
 
     plt.show()
 

@@ -189,7 +189,7 @@ class LoadSpikeTimes(CommonLoader):
         Returns a dictionary containing the spike times (in seconds) of desired neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`.get_spiketimes_superset`
-        :param neurons: `"all"` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+        :param neurons: `"all"` or scalar or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
             - `"all"` means subset = superset
             - `N` (a scalar) means subset of first N neurons in the superset
