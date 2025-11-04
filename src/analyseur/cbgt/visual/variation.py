@@ -316,6 +316,7 @@ def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     [OPTIONAL]
+    
     :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
     :param nucleus: string; name of the nucleus
     :param mode: "portrait" or None/landscape [default]
