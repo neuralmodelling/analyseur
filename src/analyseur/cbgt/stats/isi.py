@@ -117,6 +117,7 @@ class InterSpikeInterval(object):
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
         :return: 2-tuple
 
         - dictionary of individual neurons whose values are their respective interspike interval
