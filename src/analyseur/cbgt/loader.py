@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 
 from analyseur.cbgt.parameters import SimulationParams, SignalAnalysisParams
-from docs.cbgt.examples.scripts.collage_raster import spiketimes_superset
 
 
 class CommonLoader(object):
@@ -183,7 +182,7 @@ class LoadSpikeTimes(CommonLoader):
         return spiketimes_superset
 
     @staticmethod
-    def get_spiketimes_subset(spiketimes_superset, neurons=None):
+    def get_spiketimes_subset(spiketimes_superset, first_n_neurons=None):
         """
         Returns a dictionary containing the spike times (in seconds) of desired neurons.
 
@@ -196,15 +195,16 @@ class LoadSpikeTimes(CommonLoader):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-        if neurons=="all":
+        if first_n_neurons=="all":
             return spiketimes_superset
         else:
-            keys_to_remove = ["n"+str(i) for i in neurons]
+            # keys_to_remove = ["n"+str(i) for i in neurons]
 
             # Convert to set for faster lookup
-            remove_set = set(keys_to_remove)
+            # remove_set = set(keys_to_remove)
 
-            return {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
+            # return {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
+            return dict(list(spiketimes_superset.items())[:first_n_neurons])
 
 
 class LoadChannelIorG(CommonLoader):

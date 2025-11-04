@@ -151,7 +151,7 @@ class Variations(object):
 
         for n_id, isi in all_neurons_isi.items():
             if len(isi) == 0:
-                all_CV[n_id] = np.zeros(1)
+                all_CV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
                 all_CV[n_id] = np.std(isi) / np.mean(isi)
 
@@ -206,7 +206,7 @@ class Variations(object):
 
         for n_id, isi in all_neurons_isi.items():
             if len(isi) == 0:
-                all_CV2[n_id] = np.zeros(1)
+                all_CV2[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
                 abs_diff_over_sum = np.abs( np.diff(isi) ) / (isi[1:] + isi[:-1])
                 all_CV2[n_id] = np.mean(2 * abs_diff_over_sum)
@@ -262,7 +262,7 @@ class Variations(object):
 
         for n_id, isi in all_neurons_isi.items():
             if len(isi) == 0:
-                all_LV[n_id] = np.zeros(1)
+                all_LV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
                 sq_diff_over_sum = np.square(np.diff(isi)) / np.square((isi[1:] + isi[:-1]))
                 all_LV[n_id] = np.mean(3 * sq_diff_over_sum)
