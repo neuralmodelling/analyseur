@@ -2,7 +2,6 @@
 #
 # Documentation by Lungsi 2 Oct 2025
 #
-# This contains function for loading the files
 #
 
 import numpy as np
@@ -277,6 +276,7 @@ class InterSpikeInterval(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
+        # ============== DEFAULT Parameters ==============
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
