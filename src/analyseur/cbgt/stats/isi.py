@@ -106,7 +106,6 @@ class InterSpikeInterval(object):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     __siganal = SignalAnalysisParams()
 
@@ -140,7 +139,6 @@ class InterSpikeInterval(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         interspike_intervals = {}
         tbins_set = {}
@@ -193,7 +191,6 @@ class InterSpikeInterval(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         inst_rates = {}
 
@@ -213,7 +210,7 @@ class InterSpikeInterval(object):
 
         :param tbins_set: Dictionary returned using :py:meth:`.compute`
         :param inst_rates_set: Dictionary returned using :py:meth:`.inst_rates`
-        :param binsz: [OPTIONAL] 0.01 (default)
+        :param binsz: integer or float; `0.01` [default]
         :return: 3-tuple
 
         - list of average instantaneous rates
@@ -275,7 +272,6 @@ class InterSpikeInterval(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if binsz is None:
@@ -355,7 +351,6 @@ class InterSpikeInterval(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         mean_spiking_freq = {}
 
@@ -396,7 +391,6 @@ class InterSpikeInterval(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         all_neurons_mean_freq = cls.mean_freqs(isi_set)
         return cgm(all_neurons_mean_freq)
