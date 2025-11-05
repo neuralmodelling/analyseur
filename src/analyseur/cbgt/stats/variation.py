@@ -97,7 +97,6 @@ class Variations(object):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
 
     @classmethod
@@ -144,7 +143,6 @@ class Variations(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         all_CV = {}
 
@@ -199,7 +197,6 @@ class Variations(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         all_CV2 = {}
 
@@ -255,7 +252,6 @@ class Variations(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         all_LV = {}
 
