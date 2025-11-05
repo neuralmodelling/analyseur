@@ -24,7 +24,8 @@ class ContinuousWaveletTransform(object):
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | Methods                      | Argument                                                                                              |
     +==============================+=======================================================================================================+
-    | :py:meth:`.compute`          | - `all_neurons_spiketimes`: Dictionary returned; see :class:`~analyseur.cbgt.loader.LoadSpikeTimes`   |
+    | :py:meth:`.compute`          | - `spiketimes_set`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`        |
+    |                              |      -  also :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                      |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.inst_rates`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +------------------------------+-------------------------------------------------------------------------------------------------------+
@@ -131,6 +132,7 @@ class ContinuousWaveletTransform(object):
         - sampling period
 
         Smoothening is done by Gaussian filtering
+        =========================================
 
         - each binary spike (= 1) is placed into a Gaussian-shaped bump
         - the Gaussian filter replaces each point (spike = 1) with a Gaussian distribution centered at that position
@@ -422,7 +424,7 @@ class ContinuousWaveletTransform(object):
                         scales=None, wavelet=None, ):
         """
         Compute the Continuous Wavelet Transform of a single neuron
-        
+
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
