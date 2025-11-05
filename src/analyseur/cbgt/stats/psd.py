@@ -73,7 +73,6 @@ class PowerSpectrum(object):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     __siganal = SignalAnalysisParams()
 
@@ -119,7 +118,6 @@ class PowerSpectrum(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         #============== DEFAULT Parameters ==============
         sampling_frequency = 1 / cls.__siganal.sampling_period
