@@ -57,7 +57,6 @@ class ContinuousWaveletTransform(object):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     #===============================================================
     # Static methods that check for available individual wavelet options
@@ -106,18 +105,30 @@ class ContinuousWaveletTransform(object):
 
 
     @staticmethod
-    def smooth_signal(spiketimes_superset, sampling_rate=None,
+    def smooth_signal(spiketimes_set, sampling_rate=None,
                       window=None, neurons=None, sigma=None):
         """
         This method takes the spike times and converts it into respective binary spike trains
         which in turn is smoothened. The returned smoothened signal can be used to create a
         firing rate signal.
 
-        :param spiketimes_superset: a scalar
-        :param window:
-        :param neurons:
-        :param sigma:
-        :param sampling_rate: [OPTIONAL] `10000` [default]
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+        :param sigma: standard deviation amount from a mean; `2` [default]
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :return: 4-tuple
+        - smooth signal
+        - list of neuron id's
+        - time axis
+        - sampling period
 
         Smoothening is done by Gaussian filtering
 
@@ -157,7 +168,6 @@ class ContinuousWaveletTransform(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if sampling_rate is None:
@@ -175,7 +185,7 @@ class ContinuousWaveletTransform(object):
             sigma = siganal.std_Gaussian_kernel
 
         # Convert spike times to spike train
-        [spiketrains, yticks, time_axis] = get_binary_spiketrains(spiketimes_superset, sampling_rate=sampling_rate,
+        [spiketrains, yticks, time_axis] = get_binary_spiketrains(spiketimes_set, sampling_rate=sampling_rate,
                                                                   window=window, neurons=neurons)
         # Return the smoothened spike train
         return gaussian_filter1d(spiketrains, sigma=sigma), yticks, time_axis, sampling_period
@@ -188,7 +198,9 @@ class ContinuousWaveletTransform(object):
 
         :param scale: a scalar
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
-        :param sampling_rate: [OPTIONAL] `10000` [default]
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :return: a frequency value
+
 
         .. list-table:: **Scale is the dilation/compression factor applied to the wavelet.**
            :widths: 15 15
@@ -227,7 +239,7 @@ class ContinuousWaveletTransform(object):
         :param freq_window: Tuple `(min_freq, max_freq)`
         :param voices_per_octave: scalar
         :param wavelet: name of wavelet type available in `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
-        :param sampling_rate: [OPTIONAL] `10000` [default]
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
 
         +-------------------+---------------------------------------+------------------------------------+
         | Parameter         | Description                           | Comment                            |
@@ -274,25 +286,25 @@ class ContinuousWaveletTransform(object):
 
 
     @classmethod
-    def _compute_cwt_single(cls, spiketimes_superset, sampling_rate=None,
+    def _compute_cwt_single(cls, spiketimes_set, sampling_rate=None,
                            window=None, sigma=None,
                            scales=None, wavelet=None, neuron_indx=None,):
         """
         Compute the Continuous Wavelet Transform for a single neuron
 
-        :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
-        OPTIONAL parameters
+        [OPTIONAL]
 
-        :param sampling_rate: `10000` [default]
-        :param window: Tuple; `(0, 10)` [default]
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param sigma: standard deviation value, `2` [default]
         :param wavelet: `"cmor1.5-1.0"` [default], for possible options see `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
         :param scales: Tuple; `(1, 128)` [default]
         :param neuron_indx: randomly picks one [default]
 
         :return: 4-tuple
-
         - Continuous wavelet transform of the input signal
         - corresponding frequencies
         - time axis of the input signal
@@ -301,7 +313,6 @@ class ContinuousWaveletTransform(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
@@ -323,7 +334,7 @@ class ContinuousWaveletTransform(object):
 
         # Convert spike times to spike trains
         [smoothed_signal, yticks, time_axis, sampling_period] = \
-            cls.smooth_signal(spiketimes_superset, sampling_rate=sampling_rate,
+            cls.smooth_signal(spiketimes_set, sampling_rate=sampling_rate,
                               window=window, neurons="all", sigma=sigma)
 
         # ============== DEFAULT Parameters ==============
@@ -341,16 +352,32 @@ class ContinuousWaveletTransform(object):
         return coefficients, frequencies, time_axis, yticks[neuron_indx]
 
     @classmethod
-    def compute_cwt_avg(cls, spiketimes_superset, sampling_rate=None,
+    def compute_cwt_avg(cls, spiketimes_set, sampling_rate=None,
                         window=None, neurons=None, sigma=None,
                         scales=None, wavelet=None, ):
         """
         Compute the Continuous Wavelet Transform of a single neuron
 
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        [OPTIONAL]
+
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param sigma: standard deviation value, `2` [default]
+        :param wavelet: `"cmor1.5-1.0"` [default], for possible options see `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
+        :param scales: Tuple; `(1, 128)` [default]
+
+        :return: 4-tuple
+        - array of mean of coefficients of power spectral density
+        - array of sample frequencies
+        - list of neuron id's
+        - array of time
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
@@ -375,7 +402,7 @@ class ContinuousWaveletTransform(object):
 
         # Convert spike times to spike trains
         [smoothed_signal, yticks, time_axis, sampling_period] = \
-            cls.smooth_signal(spiketimes_superset, sampling_rate=sampling_rate,
+            cls.smooth_signal(spiketimes_set, sampling_rate=sampling_rate,
                               window=window, neurons=neurons, sigma=sigma)
 
         # Compute the Continuous Wavelet Transform for every neuron within the chosen neurons option "all" or selective
@@ -390,15 +417,38 @@ class ContinuousWaveletTransform(object):
         return np.mean(all_coefficients, axis=0), frequencies, yticks, time_axis
 
     @classmethod
-    def compute_cwt_sum(cls, spiketimes_superset, sampling_rate=None,
+    def compute_cwt_sum(cls, spiketimes_set, sampling_rate=None,
                         window=None, neurons=None, sigma=None,
                         scales=None, wavelet=None, ):
         """
+        Compute the Continuous Wavelet Transform of a single neuron
+        
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        [OPTIONAL]
+
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+        :param sigma: standard deviation value, `2` [default]
+        :param wavelet: `"cmor1.5-1.0"` [default], for possible options see `pywt.cwt <https://pywavelets.readthedocs.io/en/latest/ref/cwt.html>`_
+        :param scales: Tuple; `(1, 128)` [default]
+
+        :return: 4-tuple
+        - array of mean of coefficients of power spectral density
+        - array of sample frequencies
+        - list of neuron id's
+        - array of time
 
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
@@ -423,7 +473,7 @@ class ContinuousWaveletTransform(object):
 
         # Convert spike times to spike trains
         [smoothed_signal, yticks, time_axis, sampling_period] = \
-            cls.smooth_signal(spiketimes_superset, sampling_rate=sampling_rate,
+            cls.smooth_signal(spiketimes_set, sampling_rate=sampling_rate,
                               window=window, neurons=neurons, sigma=sigma)
 
         # Compute Population Firing Rate from the sum of all chosen neurons
