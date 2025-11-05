@@ -8,6 +8,7 @@
 import numpy as np
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
+from analyseur.cbgt.parameters import SignalAnalysisParams
 
 class Synchrony(object):
     """
@@ -17,13 +18,13 @@ class Synchrony(object):
     | Methods                          | Argument                                                                                                 |
     +==================================+==========================================================================================================+
     | :py:meth:`.compute_basic`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                                  | - OPTIONAL: `binsz` (0.05 [default]), `window` ((0, 10) [default])                                       |
+    |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default])                                       |
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
     | :py:meth:`.compute_basic_slide`  | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                                  | - OPTIONAL: `binsz` (0.05 [default]), `window` ((0, 10) [default]), `windowsz` (0.5 [default])           |
+    |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default]), `windowsz` (0.5 [default])           |
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
     | :py:meth:`.compute_fano_factor`  | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                                  | - OPTIONAL: `binsz` (0.05 [default]), `window` ((0, 10) [default]), `bins_option` ("all_bins" [default]) |
+    |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default])                                       |
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
 
     =========
@@ -93,6 +94,7 @@ class Synchrony(object):
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    __siganal = SignalAnalysisParams()
 
     @staticmethod
     def __get_spike_matrix(spiketimes_set, window, binsz, neurons="all"):
@@ -153,28 +155,6 @@ class Synchrony(object):
 
         return S
 
-    # @staticmethod
-    # def __compute_fano(pop_spike_count_matrix, bins_option="non_zero"):
-    #     if bins_option == "non_zero":
-    #         # Remove bins with no activity
-    #         non_zero_mask = pop_spike_count_matrix > 0
-    #         S_t = pop_spike_count_matrix[non_zero_mask]
-    #     else:  # include all bins
-    #         S_t = pop_spike_count_matrix
-    #
-    #     if len(S_t) > 0:
-    #         colmn_wise_sums = np.sum(S_t, axis=0)
-    #         variance_S = np.var(colmn_wise_sums)
-    #         mean_S = np.mean(colmn_wise_sums)
-    #
-    #         if mean_S == 0:
-    #             fanofactor = 0.0
-    #         else:
-    #             fanofactor = variance_S / mean_S
-    #     else:
-    #         fanofactor = 0.0  # variance_S = 0.0, mean_S = 0.0
-    #
-    #     return fanofactor, S_t
 
     @staticmethod
     def __compute_fano(pop_spike_count_matrix):
@@ -196,13 +176,15 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_basic(cls, spiketimes_superset, binsz=0.05, window=(0, 10)):
+    def compute_basic(cls, spiketimes_set, binsz=None, window=None):
         """
         Returns the basic measure of synchrony of spiking from all neurons.
 
-        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param binsz: 0.05 [default]
-        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :return: a number
 
         **Formula**
@@ -289,7 +271,14 @@ class Synchrony(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
+        # ============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
+
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
         n_neurons = len(spike_arrays)
 
         time_bins = np.arange(window[0], window[1] + binsz, binsz)
@@ -305,13 +294,16 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_basic_slide(cls, spiketimes_superset, binsz=0.05, window=(0, 10), windowsz=0.5):
+    def compute_basic_slide(cls, spiketimes_set, binsz=None, window=None, windowsz=None):
         """
         Returns the basic measure of synchrony of spiking from all neurons.
 
-        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param binsz: 0.05 [default]
-        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param windowsz: integer or float, sliding window size; `0.5` [default]
         :return: a number
 
         NOTE: The computation is done on a sliding window resulting in a smoother frequency estimation otherwise
@@ -319,7 +311,17 @@ class Synchrony(object):
         of overlapping windows (sliding windows) results in a smoother frequency estimation.
 
         """
-        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
+        # ============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
+
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        if windowsz is None:
+            windowsz = 0.5
+
+        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
         n_neurons = len(spike_arrays)
 
         eval_times = np.arange(window[0] + windowsz/2, window[1] - windowsz, binsz)
@@ -339,13 +341,15 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_fano_factor(cls, spiketimes_superset, binsz=0.05, window=(0, 10), bins_option="all_bins"):
+    def compute_fano_factor(cls, spiketimes_set, binsz=None, window=None):
         """
         Returns the Fano factor as a measure of synchrony of spiking from all neurons.
 
-        :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
-        :param binsz: 0.05 [default]
-        :param window: Tuple in the form `(start_time, end_time)`; (0, 10) [default]
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :return: a number
 
         **Formula**
@@ -405,27 +409,14 @@ class Synchrony(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-        # print(f"n_neurons = {len(spiketimes_superset)}")
-        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
-        # print(f"Array length = {len(spike_arrays)}")
+        #============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
 
-        # time_bins = np.arange(window[0], window[1] + binsz, binsz)
-        # n_bins = len(time_bins) - 1
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
 
-        # time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
-
-        # Population spike count array
-        # S_t = np.zeros(n_bins)
-        #
-        # for spike_times in spike_arrays:
-        #     counts, _ = np.histogram(spike_times, bins=time_bins)
-        #     S_t += counts
-
-        # [fanofactor, S_t] = cls.__compute_fano(S_t, bins_option=bins_option)
-
-        # return fanofactor, S_t, time_bins_center
-
-        spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_superset, window, binsz, neurons="all")
+        spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz, neurons="all")
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
