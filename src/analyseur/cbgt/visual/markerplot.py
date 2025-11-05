@@ -163,7 +163,8 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucle
     if neurons is None:
         neurons = "all"
     elif isinstance(neurons, numbers.Number):
-        neurons = range(neurons)
+        neuron_ids = dict(list(spiketimes_superset.items())[:neurons]).keys()
+        neurons = [int(item[1:]) for item in neuron_ids]
 
     [desired_spiketimes_subset, yticks] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
 
