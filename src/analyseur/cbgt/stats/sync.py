@@ -90,7 +90,6 @@ class Synchrony(object):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     __siganal = SignalAnalysisParams()
 
@@ -267,7 +266,6 @@ class Synchrony(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
@@ -308,6 +306,9 @@ class Synchrony(object):
         this is the same as :py:meth:`.compute_basic`. Therefore, unlike the simple histogram-based approach the use
         of overlapping windows (sliding windows) results in a smoother frequency estimation.
 
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         # ============== DEFAULT Parameters ==============
         if window is None:
@@ -405,7 +406,6 @@ class Synchrony(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         #============== DEFAULT Parameters ==============
         if window is None:
