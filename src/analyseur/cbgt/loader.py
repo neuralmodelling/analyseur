@@ -161,7 +161,7 @@ class LoadSpikeTimes(CommonLoader):
         if match:
             nucleus = match.group(1)
         else:
-            print("Filename is not in the form 'spikes_<nuclues>.csv'.")
+            print("Filename is not in the form 'spikes_<nucleus>.csv'.")
             nucleus = None
 
         return nucleus
