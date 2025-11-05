@@ -170,7 +170,6 @@ class PSTH(object):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     __siganal = SignalAnalysisParams()
 
@@ -246,7 +245,7 @@ class PSTH(object):
         - array of the values (counts) of the histogram
         - dictionary of bin information
             - "window": window used for computing the PSTH
-            - "binsz": binsz used for computing the PSTH
+            - "binsz": bin size used for computing the PSTH
             - "bin_centers": array of bin centers
         - array of population firing rate (at each bin)
         - dictionary of firing rates
@@ -316,7 +315,7 @@ class PSTH(object):
         - array of the values (counts) of the histogram
         - dictionary of bin information
             - "window": window used for computing the PSTH
-            - "binsz": binsz used for computing the PSTH
+            - "binsz": bin size used for computing the PSTH
             - "bin_centers": array of bin centers
         - array of population firing rate (at each bin)
         - dictionary of firing rates
