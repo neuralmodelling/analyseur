@@ -208,7 +208,6 @@ class PSTH(object):
         :param window: Tuple in the form `(start_time, end_time)`
         :param n_neurons: scalar
         :param pop_counts: array of counts
-
         """
         total_duration = window[1] - window[0]
         return np.sum(pop_counts) / (n_neurons * total_duration) # Hz
@@ -259,7 +258,6 @@ class PSTH(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
@@ -330,7 +328,6 @@ class PSTH(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
@@ -380,9 +377,9 @@ class PSTH(object):
         :param desired_spiketimes_subset: a nested list of spike times (for computing the PSTH) obtained using
         :func:`~analyseur.cbgt.curate.get_desired_spiketimes_subset`
 
-        :param popfirerates: array of population firing rate (at each bin)
-        :param bin_centers: array of bin centers
-        :param binsz: bin size used for the PSTH
+        :param popfirerates: array of population firing rate (at each bin) in the PSTH; see return values of :meth:`.compute_poolPSTH`
+        :param bin_centers: array of bin centers in the PSTH; see return values of :meth:`.compute_poolPSTH`
+        :param binsz: bin size used for the PSTH; see return values of :meth:`.compute_poolPSTH`
         :param stimulus_onset: [OPTIONAL] `0` (default)
         :return: dictionary
 
@@ -407,7 +404,6 @@ class PSTH(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         pre_stimulus_rates = popfirerates[bin_centers < stimulus_onset]
         post_stimulus_rates = popfirerates[bin_centers >= stimulus_onset]
@@ -476,8 +472,9 @@ class PSTH(object):
         :func:`~analyseur.cbgt.curate.get_desired_spiketimes_subset`
 
         :param true_avg_rate: returned using :py:meth:`._compute_true_avg_firing_rate`
-        :param popfirerates: array of population firing rate (at each bin)
-        :param window: Tuple in the form `(start_time, end_time)`; window used for the PSTH
+        :param popfirerates: array of population firing rate (at each bin) in the PSTH; see return values of :meth:`.compute_poolPSTH`
+        :param bin_centers: array of bin centers in the PSTH; see return values of :meth:`.compute_poolPSTH`
+        :param window: window used for the PSTH; see return values of :meth:`.compute_poolPSTH`
         :param stimulus_onset: [OPTIONAL] `0` (default)
         :return: dictionary
 
@@ -512,7 +509,6 @@ class PSTH(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         mean_firing_rate = true_avg_rate["mean_firing_rate"]
         std_firing_rate = true_avg_rate["std_firing_rate"]
@@ -599,7 +595,6 @@ class PSTH(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         firing_rates = true_avg_rate["firing_rates"]
         total_activity = np.sum(firing_rates)
