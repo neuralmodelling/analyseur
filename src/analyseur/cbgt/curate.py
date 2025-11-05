@@ -19,13 +19,20 @@ def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
     return int(match.group(1))
 
-def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
+def get_desired_spiketimes_subset(spiketimes_set, neurons=None):
     """
     Returns nested list of spike times (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
-    :param neurons: [OPTIONAL] `"all"` (default) or list: range(a, b) or [1, 4, 5, 9]
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+        - `"all"` means subset = superset
+        - `N` (a scalar) means subset of first N neurons in the superset
+        - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
     :return: 2-tuple; nested_list and label_list
 
     =========
@@ -49,7 +56,6 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
 
         loadST = LoadSpikeTimes("spikes_GPi.csv")
         spiketimes_superset = loadST.get_spiketimes_superset()
-        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=N)
 
     ---------
     2. Cases
@@ -130,14 +136,14 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     yticks = []
 
     if neurons=="all":
-        for nX, data in spiketimes_superset.items():
+        for nX, data in spiketimes_set.items():
             desired_spiketimes_subset.append( list(data) )
             # yticks.append( _extract_neuron_no(nX) )
             yticks.append(nX)
     else: # neurons = range(a, b) or neurons = [1, 4, 5, 9]
         for i in neurons:
             neuron_id = "n" + str(i)
-            desired_spiketimes_subset.append( list(spiketimes_superset[neuron_id]) )
+            desired_spiketimes_subset.append( list(spiketimes_set[neuron_id]) )
             # yticks.append( _extract_neuron_no(neuron_id) )
             yticks.append(neuron_id)
     return desired_spiketimes_subset, yticks
@@ -157,49 +163,113 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
 # get_binary_spiketrains
 # ==========================================
 
-def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None, neurons=None):
+def get_binary_spiketrains(spiketimes_set, window=None, sampling_rate=None, neurons=None):
     """
-    ======================
-    get_binary_spiketrains
-    ======================
-
     Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
-    :param neurons: [OPTIONAL] `"all"` [default] or list: range(a, b) or [1, 4, 5, 9]
-    :param window: Tuple (start, end), `(0, 10)` [default]
-    :param sampling_rate: `10000` [default]
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+        - `"all"` means subset = superset
+        - `N` (a scalar) means subset of first N neurons in the superset
+        - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+    :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
     :return: 3-tuple; nested_list, label_list and times_axis
 
-    --------
-    Use Case
-    --------
+    =========
+    Use Cases
+    =========
+
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules
+    ```````````````````
     ::
 
-      from  analyseur.cbgt.loader import LoadSpikeTimes
-      from  analyseur.cbgt.curate import get_binary_spiketrains
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from  analyseur.cbgt.curate import get_binary_spiketrains
 
-      loadST = LoadSpikeTimes("spikes_GPi.csv")
-      spiketimes_superset = loadST.get_spiketimes_superset()
+    1.2. Load file and get spike times
+    ```````````````````````````````````
+    ::
 
-    1. Convert superset to nested list of binary spike trains
-    `````````````````````````````````````````````````````````
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Convert spike times set to nested list of binary spike trains
+    ``````````````````````````````````````````````````````````````````
     ::
 
         [spiketrains_superlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_superset)
 
-    2. Get nested list of spike times for desired neurons
-    `````````````````````````````````````````````````````
+    2.2. Get nested list of binary spike trains for desired neurons; specific range
+    ```````````````````````````````````````````````````````````````````````````````
     ::
 
+        neurons = range(30, 62)  # neuron id from "n30" to "n62"
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+        [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_subset,
+                                                                                    neurons="all")
+
+    Alternatively,
+    ::
+
+        neurons = range(30, 62)  # neuron id from "n30" to "n62"
         [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_superset,
-                                                                                    neurons=range(10, 70))
+                                                                                    neurons=neurons)
+
+    2.3. Get nested list of binary spike trains for desired neurons; specific list
+    ``````````````````````````````````````````````````````````````````````````````
+    ::
+
+        neurons = [1, 2, 3, 6, 9, 10, 11, 21, 31]  # neuron ids "n1", "n2", ..., "n21", "n31"
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+        [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_subset,
+                                                                                    neurons="all")
+
+    Alternatively,
+    ::
+
+        neurons = [1, 2, 3, 6, 9, 10, 11, 21, 31]  # neuron ids "n1", "n2", ..., "n21", "n31"
+        [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_superset,
+                                                                                    neurons=neurons)
+
+    2.4. Get nested list of binary spike trains for desired neurons; first N neurons
+    ````````````````````````````````````````````````````````````````````````````````
+    ::
+
+        N = 50  # first 50 neurons regardless of the neuron id
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=N)
+
+        [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_subset,
+                                                                                    neurons="all")
+
+    Alternatively,
+    ::
+
+        N = 50  # first 50 neurons regardless of the neuron id
+        neuron_ids = dict(list(spiketimes_superset.items())[:neurons]).keys()
+        neurons = [int(item[1:]) for item in neuron_ids]
+
+        [spiketrains_nestedlist, neuron_labels, time_axis] = get_binary_spiketrains(spiketimes_superset,
+                                                                                    neurons=neurons)
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     # ============== DEFAULT Parameters ==============
     if sampling_rate is None:
@@ -215,14 +285,14 @@ def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None,
 
     num_samples = int(total_duration * sampling_rate)
     time_axis = np.linspace(window[0], window[1], num_samples)
-    num_neurons = len(spiketimes_superset)
+    num_neurons = len(spiketimes_set)
 
     yticks = []
 
     if neurons=="all":
         spiketrains = np.zeros((num_neurons, num_samples))
         row = 0
-        for nX, indiv_spiketimes in spiketimes_superset.items():
+        for nX, indiv_spiketimes in spiketimes_set.items():
             index = __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples)
             spiketrains[row, index] = 1.0
             yticks.append(nX)
@@ -232,7 +302,7 @@ def get_binary_spiketrains(spiketimes_superset, window=None, sampling_rate=None,
         row = 0
         for i in neurons:
             neuron_id = "n" + str(i)
-            indiv_spiketimes = spiketimes_superset[neuron_id]
+            indiv_spiketimes = spiketimes_set[neuron_id]
             index = __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples)
             spiketrains[row, index] = 1.0  # row != i because neurons can be = [13, 14, 15 ,16 ...]
             yticks.append(neuron_id)
