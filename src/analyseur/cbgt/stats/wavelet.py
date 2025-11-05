@@ -21,22 +21,22 @@ class ContinuousWaveletTransform(object):
     Continuous Wavelet Transform
     ============================
 
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | Methods                      | Argument                                                                                              |
-    +==============================+=======================================================================================================+
-    | :py:meth:`.compute`          | - `spiketimes_set`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`        |
-    |                              |      -  also :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                      |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.inst_rates`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.avg_inst_rates`   | - `all_inst_rates`: Dictionary returned; see :py:meth:`.inst_rates`                                   |
-    |                              | - `all_times`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                               |
-    |                              | - `binsz`: [OPTIONAL] 0.01 (default)                                                                  |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.mean_freqs`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.grand_mean_freq`  | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
-    +------------------------------+-------------------------------------------------------------------------------------------------------+
+    +-----------------------------------+-------------------------------------------------------------------------------------------------------+
+    | Methods                           | Argument                                                                                              |
+    +===================================+=======================================================================================================+
+    | :py:meth:`.smooth_signal`         | - `spiketimes_set`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`        |
+    |                                   |      -  also :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                      |
+    +-----------------------------------+-------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.scale_to_freq`         | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
+    +-----------------------------------+-------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.freq_window_to_scales` | - `all_inst_rates`: Dictionary returned; see :py:meth:`.inst_rates`                                   |
+    |                                   | - `all_times`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                               |
+    |                                   | - `binsz`: [OPTIONAL] 0.01 (default)                                                                  |
+    +-----------------------------------+-------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.compute_cwt_avg`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
+    +-----------------------------------+-------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.compute_cwt_sum`       | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
+    +-----------------------------------+-------------------------------------------------------------------------------------------------------+
 
     Comments on Activity and Choices in Performing CWT
     --------------------------------------------------
