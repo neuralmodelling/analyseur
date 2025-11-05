@@ -95,6 +95,25 @@ class Synchrony(object):
     """
 
     @staticmethod
+    def __get_spike_matrix(spiketimes_set, window, binsz, neurons="all"):
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
+        n_neurons = len(desired_spiketimes_subset)
+
+        time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        n_bins = len(time_bins)
+
+        spike_matrix = np.zeros((n_neurons, n_bins))
+
+        # Fill the spike matrix
+        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+            for spiketime in indiv_spiketimes:
+                if window[0] <= spiketime < window[1]:
+                    j = int((spiketime - window[0]) // binsz)
+                    spike_matrix[i, j] = 1
+
+        return spike_matrix, time_bins
+
+    @staticmethod
     def __get_spikearray_and_window(spiketimes_superset, window, neurons="all"):
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
         n_neurons = len(desired_spiketimes_subset)
@@ -134,17 +153,35 @@ class Synchrony(object):
 
         return S
 
-    @staticmethod
-    def __compute_fano(pop_spike_count_matrix, bins_option="non_zero"):
-        if bins_option == "non_zero":
-            # Remove bins with no activity
-            non_zero_mask = pop_spike_count_matrix > 0
-            S_t = pop_spike_count_matrix[non_zero_mask]
-        else:  # include all bins
-            S_t = pop_spike_count_matrix
+    # @staticmethod
+    # def __compute_fano(pop_spike_count_matrix, bins_option="non_zero"):
+    #     if bins_option == "non_zero":
+    #         # Remove bins with no activity
+    #         non_zero_mask = pop_spike_count_matrix > 0
+    #         S_t = pop_spike_count_matrix[non_zero_mask]
+    #     else:  # include all bins
+    #         S_t = pop_spike_count_matrix
+    #
+    #     if len(S_t) > 0:
+    #         colmn_wise_sums = np.sum(S_t, axis=0)
+    #         variance_S = np.var(colmn_wise_sums)
+    #         mean_S = np.mean(colmn_wise_sums)
+    #
+    #         if mean_S == 0:
+    #             fanofactor = 0.0
+    #         else:
+    #             fanofactor = variance_S / mean_S
+    #     else:
+    #         fanofactor = 0.0  # variance_S = 0.0, mean_S = 0.0
+    #
+    #     return fanofactor, S_t
 
-        if len(S_t) > 0:
-            colmn_wise_sums = np.sum(S_t, axis=0)
+    @staticmethod
+    def __compute_fano(pop_spike_count_matrix):
+        if len(pop_spike_count_matrix) > 0:
+            # Sum of spike counts across neurons for all t
+            colmn_wise_sums = np.sum(pop_spike_count_matrix, axis=0)
+
             variance_S = np.var(colmn_wise_sums)
             mean_S = np.mean(colmn_wise_sums)
 
@@ -155,7 +192,7 @@ class Synchrony(object):
         else:
             fanofactor = 0.0  # variance_S = 0.0, mean_S = 0.0
 
-        return fanofactor, S_t
+        return fanofactor, colmn_wise_sums
 
 
     @classmethod
@@ -368,21 +405,31 @@ class Synchrony(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
+        # print(f"n_neurons = {len(spiketimes_superset)}")
         [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_superset, window, neurons="all")
+        # print(f"Array length = {len(spike_arrays)}")
 
-        time_bins = np.arange(window[0], window[1] + binsz, binsz)
-        n_bins = len(time_bins) - 1
+        # time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        # n_bins = len(time_bins) - 1
+
+        # time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
+
+        # Population spike count array
+        # S_t = np.zeros(n_bins)
+        #
+        # for spike_times in spike_arrays:
+        #     counts, _ = np.histogram(spike_times, bins=time_bins)
+        #     S_t += counts
+
+        # [fanofactor, S_t] = cls.__compute_fano(S_t, bins_option=bins_option)
+
+        # return fanofactor, S_t, time_bins_center
+
+        spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_superset, window, binsz, neurons="all")
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        # Population spike count array
-        S_t = np.zeros(n_bins)
-
-        for spike_times in spike_arrays:
-            counts, _ = np.histogram(spike_times, bins=time_bins)
-            S_t += counts
-
-        [fanofactor, S_t] = cls.__compute_fano(S_t, bins_option=bins_option)
+        [fanofactor, S_t] = cls.__compute_fano(spike_matrix)
 
         return fanofactor, S_t, time_bins_center
 
