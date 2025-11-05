@@ -147,7 +147,13 @@ class LoadSpikeTimes(CommonLoader):
 
 
     def extract_nucleus_name(self, filename):
-        """Extracts <nucleus> name from `spikes_<nucleus>.csv`"""
+        """
+        Extracts <nucleus> name from `spikes_<nucleus>.csv`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
         match = re.search(self.__pattern_with_nucleus_name, filename)
