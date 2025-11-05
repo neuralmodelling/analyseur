@@ -358,7 +358,7 @@ class ContinuousWaveletTransform(object):
                         window=None, neurons=None, sigma=None,
                         scales=None, wavelet=None, ):
         """
-        Compute the Continuous Wavelet Transform of a single neuron
+        Compute the Continuous Wavelet Transform as the average of the wavelet transform of the neurons in a population
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -423,7 +423,7 @@ class ContinuousWaveletTransform(object):
                         window=None, neurons=None, sigma=None,
                         scales=None, wavelet=None, ):
         """
-        Compute the Continuous Wavelet Transform of a single neuron
+        Compute the Continuous Wavelet Transform on the sum of signals across neurons in a population.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
