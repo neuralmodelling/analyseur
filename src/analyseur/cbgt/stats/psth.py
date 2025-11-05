@@ -25,29 +25,29 @@ class PSTH(object):
     |                                |      -  using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`         |
     |                                |      -  or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`        |
     |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                    |
-    |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                        |
-    |                                | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]    |
+    |                                | - `binsz` [OPTIONAL]: `0.01` (= 100 per bin) [default]                                      |
+    |                                | - `neurons` [OPTIONAL]: `"all"` [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]  |
     +--------------------------------+---------------------------------------------------------------------------------------------+
     | :py:meth:`.compute_avgPSTH`    | -  spiketimes_set`: Dictionary returned                                                     |
     |                                |      -  using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`         |
     |                                |      -  or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`        |
     |                                | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                    |
-    |                                | - `binsz` [OPTIONAL]: 0.01 (= 100 per bin) [default]                                        |
-    |                                | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]    |
+    |                                | - `binsz` [OPTIONAL]: `0.01` (= 100 per bin) [default]                                      |
+    |                                | - `neurons` [OPTIONAL]: `"all"` [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]  |
     +--------------------------------+---------------------------------------------------------------------------------------------+
     | :py:meth:`.analyze_temporal`   | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH     |
     |                                |      -  obtained using :func:`~analyseur.cbgt.curate.get_desired_spiketimes_subset`         |
     |                                | - `popfirerates`: array of population firing rate (at each bin)                             |
     |                                | - `bin_centers`: array of bin centers                                                       |
     |                                | - `binsz`: bin size used for the PSTH                                                       |
-    |                                | - `stimulus_onset` [OPTIONAL]: 0 [default]                                                  |
+    |                                | - `stimulus_onset` [OPTIONAL]: `0` [default]                                                |
     +--------------------------------+---------------------------------------------------------------------------------------------+
     | :py:meth:`.analyze_rate`       | - `desired_spiketimes_subset`: a nested list of spike times used for computing the PSTH     |
     |                                |      -  obtained using :func:`~analyseur.cbgt.curate.get_desired_spiketimes_subset`         |
     |                                | - `true_avg_rate`: dictionary of firing rates; see return value of :py:meth:`.compute`      |
     |                                | - `popfirerates`: array of population firing rate (at each bin)                             |
     |                                | - `window`: window used for the PSTH                                                        |
-    |                                | - `stimulus_onset` [OPTIONAL]: 0 [default]                                                  |
+    |                                | - `stimulus_onset` [OPTIONAL]: `0` [default]                                                |
     +--------------------------------+---------------------------------------------------------------------------------------------+
     | :py:meth:`.analyze_energy`     | - `true_avg_rate`: dictionary of firing rates; return value of :py:meth:`.compute_poolPSTH` |
     +--------------------------------+---------------------------------------------------------------------------------------------+
