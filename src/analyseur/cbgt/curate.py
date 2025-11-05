@@ -114,9 +114,9 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
 
     Comments
     ````````
-    In 2.2 to 2.4 the alternative method passes the mother set (superset) of spike times.
-    For 2.2 and 2.3 cases the method choice will depend on the use scenario but
-    for 2.4 I prefer the first method (not alternative method) because it is more intuitive.
+    - In 2.2 to 2.4 the alternative method passes the mother set (superset) of spike times.
+    - For 2.2 and 2.3 cases the method choice will depend on the use scenario.
+    - But for 2.4 I prefer the first method (not alternative method) because it is more intuitive.
 
     .. raw:: html
 
