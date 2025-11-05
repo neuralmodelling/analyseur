@@ -232,10 +232,10 @@ class VizPSD(object):
         ax_confidence_intervals.set_ylabel(cls.__ylabelPSD)
 
         if neurons == "all":
-            ax_confidence_intervals.set_title(f"Median Power Spectrum with {confidence:/0%} Confidence Interval of all ("
+            ax_confidence_intervals.set_title(f"Median Power Spectrum with {confidence:.0%} Confidence Interval of all ("
                                               + allno + ") the neurons" + nucname)
         else:
-            ax_confidence_intervals.set_title(f"Median Power Spectrum with {confidence:/0%} Confidence Interval of "
+            ax_confidence_intervals.set_title(f"Median Power Spectrum with {confidence:.0%} Confidence Interval of "
                                               + str(neurons[0]) + " to " + str(neurons[-1]) + " neurons" + nucname)
 
         ax_confidence_intervals.legend()
@@ -284,12 +284,13 @@ class VizPSD(object):
         return fig, [ax1, ax2, ax3]
 
     @classmethod
-    def plot_heatmap_in_ax(cls, axes, spiketimes_set, neurons=None, nucleus=None,
+    def plot_heatmap_in_ax(cls, fig, axes, spiketimes_set, neurons=None, nucleus=None,
                            window=None, sampling_rate=None, resolution=None,):
         """
         Draws the Heatmap of the Power Spectral Density of the given neuron population on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
+        :param fig: object `matplotlib.figure <https://matplotlib.org/stable/api/figure_api.html>`_
         :param axes: 2-objects of the type `matplotlib.pyplot.axis``
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -306,7 +307,7 @@ class VizPSD(object):
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
-        :return: two axes with respective plotting
+        :return: fig object and the two axes with respective plotting
 
         .. raw:: html
 
@@ -351,11 +352,11 @@ class VizPSD(object):
         allno = str(n_neurons)
 
         # Plot1: Log scale heat map
-        im = axes[0].imshow(np.log10(sorted_power),
+        im = axes[0].imshow(np.log10(sorted_power + 1e-8),  # avoid RuntimeWarning: divide by zero
                             aspect="auto",
                             extent=[freqs[0], freqs[-1], 0, n_neurons],
                             cmap="viridis")
-        axes[0].colorbar(im, label="Log10(Power)")
+        fig.colorbar(im, ax=axes[0], label="Log10(Power)")
 
         axes[0].set_xlabel(cls.__xlabelHz)
         axes[0].set_ylabel("Neuron (sorted by peak freq.)")
@@ -415,9 +416,9 @@ class VizPSD(object):
         """
         fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(12, 8))
 
-        axes = cls.plot_heatmap_in_ax(axes, spiketimes_set,
-                                      neurons=neurons, nucleus=nucleus,
-                                      window=window, sampling_rate=sampling_rate, resolution=resolution, )
+        fig, axes = cls.plot_heatmap_in_ax(fig, axes, spiketimes_set,
+                                           neurons=neurons, nucleus=nucleus,
+                                           window=window, sampling_rate=sampling_rate, resolution=resolution, )
 
         plt.show()
 

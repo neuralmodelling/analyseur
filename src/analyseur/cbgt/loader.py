@@ -72,23 +72,68 @@ class LoadSpikeTimes(CommonLoader):
     Loads the csv file containing spike times for all the neurons
     in a particular nucleus and returns all their spike times in seconds by calling :py:meth:`.get_spiketimes_superset`.
 
-    +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
-    | Methods                             | Argument                           | Return                                                            |
-    +=====================================+====================================+===================================================================+
-    | :py:meth:`.get_spiketimes_superset` | - no arguments                     | - dictionary with keys, `n<X>` where `X ∊ [0, N] ⊂ 𝗭`             |
-    |                                     | - instantiated with full file path | - key value is a array of spike times for respective neuron `n<X>`|
-    +-------------------------------------+------------------------------------+-------------------------------------------------------------------+
+    +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
+    | Methods                             | Argument                                                | Return                                                            |
+    +=====================================+=========================================================+===================================================================+
+    | :py:meth:`.get_spiketimes_superset` | - no arguments                                          | - dictionary with keys, `n<X>` where `X ∊ [0, N] ⊂ 𝗭`             |
+    |                                     | - instantiated with full file path                      | - key value is a array of spike times for respective neuron `n<X>`|
+    +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
+    | :py:meth:`.get_spiketimes_subset`   | - superset (return of :meth:`.get_spiketimes_superset`) | - dictionary with keys, `n<X>` where `X ∊ neurons`                |
+    |                                     | - `"neurons"` ("all", range or list)                    | - key value is a array of spike times for respective neuron `n<X>`|
+    +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
 
-    --------
-    Use Case
-    --------
+    =========
+    Use Cases
+    =========
 
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules and Instantiate
+    ```````````````````````````````````
     ::
 
-      from  analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgt.loader import LoadSpikeTimes
 
-      loadST = LoadSpikeTimes("spikes_GPi.csv")
-      spiketimes_superset = loadST.get_spiketimes_superset()
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Load file and get the whole spike times
+    `````````````````````````````````````````````
+    ::
+
+        spiketimes_superset = loadST.get_spiketimes_superset()
+
+    2.2. From the whole spike times get a subset; specific range
+    ````````````````````````````````````````````````````````````
+    ::
+
+        neurons = range(30, 62)  # neuron id from "n30" to "n62"
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    2.3. From the whole spike times get a subset; specific list
+    ```````````````````````````````````````````````````````````
+    ::
+
+        neurons = [1, 2, 3, 6, 9, 10, 11, 21, 31]  # neuron ids "n1", "n2", ..., "n21", "n31"
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    2.4. From the whole spike times get a subset; first N neurons
+    `````````````````````````````````````````````````````````````
+    ::
+
+        N = 50  # first 50 neurons regardless of the neuron id
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=N)
+
+    2.5 Superset and subset are the same
+    ````````````````````````````````````
+    ::
+
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons="all")
 
     .. raw:: html
 
@@ -150,6 +195,8 @@ class LoadSpikeTimes(CommonLoader):
 
         if len(raw_neuron_id_times) == 0:
             spike_times = np.array([])
+            print(raw_neuron_id_times)
+            print(spike_times)
         else:
             spike_times = (raw_neuron_id_times.apply(lambda x: round(x, self.siganal.decimal_places)).values
                            * multiplicand - subtrahend)
