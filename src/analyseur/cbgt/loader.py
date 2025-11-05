@@ -70,7 +70,7 @@ class LoadSpikeTimes(CommonLoader):
     ==============
 
     Loads the csv file containing spike times for all the neurons
-    in a particular nucleus and returns all their spike times in seconds by calling :py:meth:`.get_spiketimes_superset`.
+    in a particular nucleus and **returns all their spike times in seconds** by calling :py:meth:`.get_spiketimes_superset`.
 
     +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
     | Methods                             | Argument                                                | Return                                                            |
@@ -138,7 +138,6 @@ class LoadSpikeTimes(CommonLoader):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     _description = ( "LoadSpikeTimes loads the spike times containing csv file "
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
