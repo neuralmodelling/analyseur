@@ -21,10 +21,6 @@ def __extract_neuron_no(neuron_id):
 
 def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     """
-    =============================
-    get_desired_spiketimes_subset
-    =============================
-
     Returns nested list of spike times (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
@@ -32,34 +28,99 @@ def get_desired_spiketimes_subset(spiketimes_superset, neurons=None):
     :param neurons: [OPTIONAL] `"all"` (default) or list: range(a, b) or [1, 4, 5, 9]
     :return: 2-tuple; nested_list and label_list
 
-    --------
-    Use Case
-    --------
+    =========
+    Use Cases
+    =========
+
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules
+    ```````````````````
     ::
 
-      from  analyseur.cbgt.loader import LoadSpikeTimes
-      from  analyseur.cbgt.curate import get_desired_spiketimes_subset
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from  analyseur.cbgt.curate import get_desired_spiketimes_subset
 
-      loadST = LoadSpikeTimes("spikes_GPi.csv")
-      spiketimes_superset = loadST.get_spiketimes_superset()
+    1.2. Load file and get spike times
+    ```````````````````````````````````
+    ::
 
-    1. Convert superset to nested list of spike times
-    `````````````````````````````````````````````````
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=N)
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Convert spike times set to nested list of spike times
+    ``````````````````````````````````````````````````````````
     ::
 
         [spiketimes_superlist, _] = get_desired_spiketimes_subset(spiketimes_superset)
 
-    2. Get nested list of spike times for desired neurons
-    `````````````````````````````````````````````````````
+    2.2. Get nested list of spike times for desired neurons; specific range
+    ```````````````````````````````````````````````````````````````````````
     ::
 
-        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset,
-                                                                               neurons=range(30, 100))
+        neurons = range(30, 62)  # neuron id from "n30" to "n62"
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_subset,
+                                                                               neurons="all")
+
+    Alternatively,
+    ::
+
+        neurons = range(30, 62)  # neuron id from "n30" to "n62"
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    2.3. Get nested list of spike times for desired neurons; specific list
+    ``````````````````````````````````````````````````````````````````````
+    ::
+
+        neurons = [1, 2, 3, 6, 9, 10, 11, 21, 31]  # neuron ids "n1", "n2", ..., "n21", "n31"
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_subset,
+                                                                               neurons="all")
+
+    Alternatively,
+    ::
+
+        neurons = [1, 2, 3, 6, 9, 10, 11, 21, 31]  # neuron ids "n1", "n2", ..., "n21", "n31"
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    2.4. Get nested list of spike times for desired neurons; first N neurons
+    ````````````````````````````````````````````````````````````````````````
+    ::
+
+        N = 50  # first 50 neurons regardless of the neuron id
+        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=N)
+
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_subset,
+                                                                               neurons="all")
+
+    Alternatively,
+    ::
+
+        N = 50  # first 50 neurons regardless of the neuron id
+        neuron_ids = dict(list(spiketimes_superset.items())[:neurons]).keys()
+        neurons = [int(item[1:]) for item in neuron_ids]
+
+        [spiketimes_nestedlist, neuron_labels] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+
+    Comments
+    ````````
+    In 2.2 to 2.4 the alternative method passes the mother set (superset) of spike times.
+    For 2.2 and 2.3 cases the method choice will depend on the use scenario but
+    for 2.4 I prefer the first method (not alternative method) because it is more intuitive.
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     # ============== DEFAULT Parameters ==============
     if neurons is None:
