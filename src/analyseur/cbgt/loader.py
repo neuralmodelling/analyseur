@@ -214,7 +214,6 @@ class LoadSpikeTimes(CommonLoader):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         dataframe = pd.read_csv(self.full_filepath)
         [min_id, max_id] = self.__extract_smallest_largest_neuron_id(dataframe)
@@ -248,7 +247,6 @@ class LoadSpikeTimes(CommonLoader):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         if neurons=="all":
             return spiketimes_superset
@@ -265,10 +263,6 @@ class LoadSpikeTimes(CommonLoader):
 
 class LoadChannelIorG(CommonLoader):
     """
-    ===============
-    LoadChannelIorG
-    ===============
-
     Loads the csv file containing measureables (currents and conductances) meaned across the first 400 neurons
     in a particular nucleus and returns all their measurables in milliseconds by calling :py:meth:`.get_measurables`.
 
@@ -282,28 +276,43 @@ class LoadChannelIorG(CommonLoader):
     **NOTE:** Unlike spike times (from :py:meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`) whose
     time axis is in seconds, the time axis for the measurables is in milliseconds.
 
-    --------
-    Use Case
-    --------
+    =========
+    Use Cases
+    =========
 
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules and Instantiate
+    ```````````````````````````````````
     ::
 
-      from  analyseur.cbgt.loader import LoadChannelIorG
+        from analyseur.cbgt.loader import LoadChannelIorG
 
-      loadIG = LoadChannelIorG("CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
+        loadIG = LoadChannelIorG("CSN_V_syn_GABAA_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv")
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Load file and get the whole spike times
+    `````````````````````````````````````````````
+    ::
+
       I_GABAB_for_CSN = loadIG.get_measurables()
 
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     _description = ( "LoadSpikeTimes loads the spike times containing csv file "
                    + "and `get_spiketimes_superset` returns a dictionary containing the "
                    + "spike times in milliseconds for all the neurons recorded." )
     __pattern_with_nucleus_name = r"(.*?)\_"
     __pattern_with_attrib_name = r"\_V\_syn\_(.*?)\_1msgrouped"     # NOTE: Although name has V, THESE ARE CURRENTS
-    __nonChnl_and_g_attributes = ["L", "g_NMDA", "g_GABAA", "g_GABAB", "g_AMPA"]
+    __leakyChnl_attributes = ["L", "v_leak", "I_L",]
+    __g_attributes = ["g_NMDA", "g_GABAA", "g_GABAB", "g_AMPA"]
 
     def __prepreprocessSize(self, neurotrans_name):  # As there is a shift in indices in the LFP formula
         """This is function taken from Jeanne's code."""
@@ -354,12 +363,14 @@ class LoadChannelIorG(CommonLoader):
         [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
         # region = self.get_region_name(nucleus)
 
-        if attrib in self.simparams.neurotrans + self.__nonChnl_and_g_attributes:
+        if attrib in self.simparams.neurotrans + self.__leakyChnl_attributes + self.__g_attributes:
             start, end = self.__prepreprocessSize(attrib)
             dataframe = pd.read_csv(self.full_filepath).iloc[start:end, [0]]
             measurables = dataframe.apply(lambda x: round(x, self.siganal.decimal_places_ephys)).values
         else:
-            print("Attributes must be from " + str(self.simparams.neurotrans + self.__nonChnl_and_g_attributes))
+            print("Attributes must be from " + str(self.simparams.neurotrans +
+                                                   self.__leakyChnl_attributes +
+                                                   self.__g_attributes))
             measurables = None
 
         return measurables

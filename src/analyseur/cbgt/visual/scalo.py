@@ -16,11 +16,11 @@ class Scalogram(object):
         self.spiketimes_superset = spiketimes_superset
         # get_binary_spiketrains(spiketimes_superset, window=(0, 10), sampling_rate=None, neurons="all"):
 
-    def plot_single(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
-                    sampling_rate=None, window=None, neurons=None, sigma=None, neuron_indx=None):
+    def plot_single(self, scales=None, wavelet=None, sampling_rate=None, window=None, sigma=None,
+                    neuron_indx=None, show=True, save=False, nucleus=None,):
         [coefficients, frequencies, neuronid, time_axis] = \
             cwt.compute_cwt_single(self.spiketimes_superset, sampling_rate=sampling_rate,
-                                   window=window, neurons=neurons, sigma=sigma,
+                                   window=window, sigma=sigma,
                                    scales=scales, wavelet=wavelet, neuron_indx=neuron_indx)
 
         nucname = "" if nucleus is None else " of " + nucleus
@@ -46,10 +46,17 @@ class Scalogram(object):
 
         return fig, ax
 
-    def plot_avg(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
-                sampling_rate=None, window=None, neurons=None, sigma=None,):
+    @classmethod
+    def plot_avg(cls, spiketimes_set, sampling_rate=None, window=None,
+                 sigma=None, scales=None, wavelet=None, neurons=None,
+                 nucleus=None, show=True, save=False,):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         [avg_coefficients, frequencies, yticks, time_axis] = \
-            cwt.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
+            cwt.compute_cwt_avg(spiketimes_set, sampling_rate=sampling_rate,
                                 window=window, neurons=neurons, sigma=sigma,
                                 scales=scales, wavelet=wavelet, )
 
@@ -76,10 +83,17 @@ class Scalogram(object):
 
         return fig, ax
 
-    def plot_sum(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
-                sampling_rate=None, window=None, neurons=None, sigma=None,):
+    @classmethod
+    def plot_sum(cls, spiketimes_set, sampling_rate=None, window=None,
+                 sigma=None, scales=None, wavelet=None, neurons=None,
+                 nucleus=None, show=True, save=False,):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         [coefficients, frequencies, yticks, time_axis] = \
-            vwt.compute_cwt_sum(self.spiketimes_superset, sampling_rate=sampling_rate,
+            cwt.compute_cwt_sum(self.spiketimes_superset, sampling_rate=sampling_rate,
                                 window=window, neurons=neurons, sigma=sigma,
                                 scales=scales, wavelet=wavelet, )
 
@@ -106,10 +120,17 @@ class Scalogram(object):
 
         return fig, ax
 
-    def plot_avg_coi(self, scales=None, wavelet=None, show=True, save=False, nucleus=None,
-                     sampling_rate=None, window=None, neurons=None, sigma=None, ):
+    @classmethod
+    def plot_avg_coi(cls, spiketimes_set, sampling_rate=None, window=None,
+                     sigma=None, scales=None, wavelet=None, neurons=None,
+                     nucleus=None, show=True, save=False,):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         [avg_coefficients, frequencies, yticks, time_axis] = \
-            cwt.compute_cwt_avg(self.spiketimes_superset, sampling_rate=sampling_rate,
+            cwt.compute_cwt_avg(spiketimes_set, sampling_rate=sampling_rate,
                                 window=window, neurons=neurons, sigma=sigma,
                                 scales=scales, wavelet=wavelet, )
         magnitude = np.abs(avg_coefficients)

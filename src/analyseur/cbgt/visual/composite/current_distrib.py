@@ -40,7 +40,14 @@ def _get_mean_current(rootpath, dirname, nucleus, attriblist, simparams):
         loadIG = LoadChannelIorG(filepath)
         measurables[attrib] = loadIG.get_measurables()
 
-    mean_current_across_t = {"L": np.mean(measurables["L"])}
+    match region:
+        case "cortex":
+            mean_current_across_t = {"L": np.mean(measurables["L"])}
+        case "bg":
+            mean_current_across_t = {"v_leak": np.mean(measurables["v_leak"])}
+        case "thalamus":
+            mean_current_across_t = {"I_L": np.mean(measurables["I_L"])}
+
     for attrib in attriblist:
         if attrib in simparams.neurotrans:
             mean_current_across_t[attrib] = np.mean(measurables[attrib])

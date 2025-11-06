@@ -354,9 +354,8 @@ class ContinuousWaveletTransform(object):
         return coefficients, frequencies, time_axis, yticks[neuron_indx]
 
     @classmethod
-    def compute_cwt_avg(cls, spiketimes_set, sampling_rate=None,
-                        window=None, neurons=None, sigma=None,
-                        scales=None, wavelet=None, ):
+    def compute_cwt_avg(cls, spiketimes_set, sampling_rate=None, window=None,
+                        sigma=None, scales=None, wavelet=None, neurons=None,):
         """
         Compute the Continuous Wavelet Transform as the average of the wavelet transform of the neurons in a population
 
@@ -419,9 +418,8 @@ class ContinuousWaveletTransform(object):
         return np.mean(all_coefficients, axis=0), frequencies, yticks, time_axis
 
     @classmethod
-    def compute_cwt_sum(cls, spiketimes_set, sampling_rate=None,
-                        window=None, neurons=None, sigma=None,
-                        scales=None, wavelet=None, ):
+    def compute_cwt_sum(cls, spiketimes_set, sampling_rate=None, window=None,
+                        sigma=None, scales=None, wavelet=None, neurons=None,):
         """
         Compute the Continuous Wavelet Transform on the sum of signals across neurons in a population.
 

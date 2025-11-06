@@ -375,9 +375,9 @@ class VizPSD(object):
         axes[1].set_ylabel(cls.__ylabelPSD)
 
         if neurons == "all":
-            axes[1].set_title("Population Average (median w/ iQR) of all (" + allno + ") the neurons" + nucname)
+            axes[1].set_title("Population Average (median w/ IQR) of all (" + allno + ") the neurons" + nucname)
         else:
-            axes[1].set_title("Population Average (median w/ iQR) of " + str(neurons[0]) +
+            axes[1].set_title("Population Average (median w/ IQR) of " + str(neurons[0]) +
                               " to " + str(neurons[-1]) + " neurons" + nucname)
 
         axes[1].grid(True, alpha=0.3)
