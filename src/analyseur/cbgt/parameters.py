@@ -20,21 +20,27 @@ DEFAULT_CONDUCTANCES = {
 }
 
 DEFAULT_FEEDFORWORD_CURRENTS = {
-    "cortex": {
+    "cortex": { # Case: NOT 'cortex_alone'
         "CSN": 1.124,
         "PTN": 1.25,
         "IN": 1.178,
     },
-    "bg": {},
-    "thalamus": {},
+    "bg": { # Case: NOT 'bg_alone'
+        "MSN": 28.3, # * mvolt
+        "FSI": 12.0, # * mvolt
+        "STN": 19.5, # * mvolt
+        "GPe": 26.0, # * mvolt
+        "GPi": 15.0, # * mvolt
+        # NOTE: for bg these are NOT current values
+    },
+    "thalamus": { # Case: NOT 'thalamus_alone'
+        "MD": 1.15,
+        "TRN": 1.2,
+    },
 }
 
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     """
-    ================
-    bin_size_by_rule
-    ================
-
     Returns bin size by rule
 
     - Square Root Rule (`rule="Square Root"`)
@@ -44,7 +50,9 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     - Periodic (`rule="Periodic"`)
         - for periodic signal
 
-    **Formula**
+    -------
+    Formula
+    -------
 
     .. table::
     ============================================ ======================================================
@@ -55,21 +63,24 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
      total samples, :math:`N = dur / T`           total number of samples
     ============================================ ======================================================
 
-    **Formula: Square Root Rule**
+    Formula: Square Root Rule
+    -------------------------
 
     .. math::
 
         n_{bins} &= \\sqrt(N) \n
         binsz &= \\frac{dur}{n_{bins}}
 
-    **Formula: Rice Rule**
+    Formula: Rice Rule
+    ------------------
 
     .. math::
 
         n_{bins} &= 2 \\sqrt[3](N) \n
         binsz &= \\frac{dur}{n_{bins}}
 
-    **Formula: Periodic Rule**
+    Formula: Periodic Rule
+    ----------------------
 
     Let the periodic signal be oscillating at :math:`\\nu` frequency, then
 
@@ -100,7 +111,6 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     match rule:
         case "Square Root":
