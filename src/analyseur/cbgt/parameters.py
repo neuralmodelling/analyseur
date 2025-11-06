@@ -39,6 +39,30 @@ DEFAULT_FEEDFORWORD_CURRENTS = {
     },
 }
 
+DEFAULT_EQUILIBRIUM_POTENTIALS = {
+    "cortex": {
+        "V_L": -70.0, # mV
+        "V_AMPA": 0.0, # mV
+        "V_GABAA": -70.0, # mV
+        "V_NMDA": 0.0, # mV
+        "V_GABAB": -90.0, # mV
+    },
+    "bg": {
+        "V_L": -70.0, # mV
+        "V_AMPA": 0.0, # mV
+        "V_NMDA": 0.0, # mV
+        "V_GABAA": -70.0, # mV
+        "V_GABAB": -90.0, # mV
+    },
+    "thalamus": {
+        "V_L": -70.0, # mV
+        "V_AMPA": 0.0, # mV
+        "V_GABAA": -70.0, # mV
+        "V_NMDA": 0.0, # mV
+        "V_GABAB": -90.0, # mV
+    }
+}
+
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     """
     Returns bin size by rule
