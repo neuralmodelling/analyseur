@@ -28,7 +28,8 @@ sys.path.insert(0, os.path.abspath("../src"))
 
 # -- Project information -----------------------------------------------------
 
-project = 'analyseur'
+project = 'test'
+# project = 'analyseur'
 copyright = '2025, Lungsi'
 author = 'Lungsi'
 
@@ -70,7 +71,7 @@ autodoc_mock_imports = [
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 # https://www.sphinx-doc.org/en/master/usage/theming.html#builtin-themes
-html_theme = 'pyramid'
+html_theme = 'scrolls'  # pyramid
 
 html_theme_options = {
     "body_min_width": "70%",
