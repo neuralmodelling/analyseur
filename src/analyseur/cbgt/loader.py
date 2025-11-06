@@ -263,8 +263,9 @@ class LoadSpikeTimes(CommonLoader):
 
 class LoadChannelIorG(CommonLoader):
     """
-    Loads the csv file containing measureables (currents and conductances) meaned across the first 400 neurons
-    in a particular nucleus and returns all their measurables in milliseconds by calling :py:meth:`.get_measurables`.
+    Loads the csv file containing measureables (*currents* and *conductances*) **mean across the first 400 neurons**
+    in a particular nucleus and returns all their measurables in :underline:`milliseconds`
+    by calling :py:meth:`.get_measurables`.
 
     +-----------------------------+------------------------------------+-------------------------------------------------------------------+
     | Methods                     | Argument                           | Return                                                            |
@@ -358,7 +359,6 @@ class LoadChannelIorG(CommonLoader):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
         # region = self.get_region_name(nucleus)
