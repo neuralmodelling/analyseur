@@ -94,8 +94,8 @@ class Synchrony(object):
     __siganal = SignalAnalysisParams()
 
     @staticmethod
-    def __get_spike_matrix(spiketimes_set, window, binsz, neurons="all"):
-        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
+    def __get_spike_matrix(spiketimes_set, window, binsz):
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
         n_neurons = len(desired_spiketimes_subset)
 
         time_bins = np.arange(window[0], window[1] + binsz, binsz)
@@ -113,6 +113,25 @@ class Synchrony(object):
         return spike_matrix, time_bins
 
     @staticmethod
+    def __get_count_rate_matrix(spiketimes_set, window, binsz):
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
+        n_neurons = len(desired_spiketimes_subset)
+
+        time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        n_bins = len(time_bins) - 1
+
+        count_matrix = np.zeros((n_neurons, n_bins))
+        rate_matrix = np.zeros((n_neurons, n_bins))
+
+        # Fill the count and rate matrix
+        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+            counts, _ = np.histogram(indiv_spiketimes, bins=time_bins)
+            count_matrix[i, :] = counts
+            rate_matrix[i, :] = counts / binsz
+
+        return count_matrix, rate_matrix, time_bins
+
+    @staticmethod
     def __get_spikearray_and_window(spiketimes_superset, window, neurons="all"):
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
         n_neurons = len(desired_spiketimes_subset)
@@ -125,32 +144,52 @@ class Synchrony(object):
 
         return spike_arrays, window
 
+    # @staticmethod
+    # def __compute_for_basic(freq_matrix):
+    #     # Remove time bins with no activity
+    #     valid_bins = np.sum(freq_matrix, axis=0) > 0
+    #     freq_matrix = freq_matrix[:, valid_bins]
+    #
+    #     if freq_matrix.size == 0:
+    #         return 0.0
+    #
+    #     # Compute A: variance over time of mean frequency across neurons
+    #     mean_across_neurons = np.mean(freq_matrix, axis=0)  # μ_k(freq_k(t)) for each t
+    #     A = np.var(mean_across_neurons)  # var_t of above
+    #
+    #     # Compute B: mean over time of variance across neurons
+    #     variance_across_neurons = np.var(freq_matrix, axis=0)  # var_k(freq_k(t)) for each t
+    #     B = np.mean(variance_across_neurons)  # μ_t of above
+    #
+    #     if B == 0:
+    #         if A == 0:
+    #             S = 0.0  # perfect synchrony edge case
+    #         else:
+    #             S = np.inf  # infinite synchrony (theoretical)
+    #     else:
+    #         S = np.sqrt(A / B)
+    #
+    #     return S
+
     @staticmethod
     def __compute_for_basic(freq_matrix):
-        # Remove time bins with no activity
-        valid_bins = np.sum(freq_matrix, axis=0) > 0
-        freq_matrix = freq_matrix[:, valid_bins]
+        if len(freq_matrix) > 0:
+            # Mean of rates across neurons for all t
+            colmn_wise_means = np.mean(freq_matrix, axis=0)
+            # Variance of rates across neurons for all t
+            colmn_wise_vars = np.var(freq_matrix, axis=0)
 
-        if freq_matrix.size == 0:
-            return 0.0
+            variance_F = np.var(colmn_wise_means)
+            mean_F = np.mean(colmn_wise_vars)
 
-        # Compute A: variance over time of mean frequency across neurons
-        mean_across_neurons = np.mean(freq_matrix, axis=0)  # μ_k(freq_k(t)) for each t
-        A = np.var(mean_across_neurons)  # var_t of above
-
-        # Compute B: mean over time of variance across neurons
-        variance_across_neurons = np.var(freq_matrix, axis=0)  # var_k(freq_k(t)) for each t
-        B = np.mean(variance_across_neurons)  # μ_t of above
-
-        if B == 0:
-            if A == 0:
-                S = 0.0  # perfect synchrony edge case
+            if mean_F == 0:
+                s_sync = 0.0
             else:
-                S = np.inf  # infinite synchrony (theoretical)
+                s_sync = variance_F / mean_F
         else:
-            S = np.sqrt(A / B)
+            s_sync = 0.0  # variance_F = 0.0, mean_F = 0.0
 
-        return S
+        return s_sync, colmn_wise_means, colmn_wise_vars
 
 
     @staticmethod
@@ -267,26 +306,40 @@ class Synchrony(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        # ============== DEFAULT Parameters ==============
+        # # ============== DEFAULT Parameters ==============
+        # if window is None:
+        #     window = cls.__siganal.window
+        #
+        # if binsz is None:
+        #     binsz = cls.__siganal.binsz_100perbin
+        #
+        # [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
+        # n_neurons = len(spike_arrays)
+        #
+        # time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        # n_bins = len(time_bins) - 1
+        #
+        # freq_matrix = np.zeros((n_neurons, n_bins))
+        #
+        # for i, spike_times in enumerate(spike_arrays):
+        #     counts, _ = np.histogram(spike_times, bins=time_bins)
+        #     freq_matrix[i, :] = counts / binsz
+        #
+        # return cls.__compute_for_basic(freq_matrix)
+        #============== DEFAULT Parameters ==============
         if window is None:
             window = cls.__siganal.window
 
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
-        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
-        n_neurons = len(spike_arrays)
+        _, freq_matrix, time_bins = cls.__get_count_rate_matrix(spiketimes_set, window, binsz)
 
-        time_bins = np.arange(window[0], window[1] + binsz, binsz)
-        n_bins = len(time_bins) - 1
+        time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        freq_matrix = np.zeros((n_neurons, n_bins))
+        [s_sync, _, _] = cls.__compute_for_basic(freq_matrix)
 
-        for i, spike_times in enumerate(spike_arrays):
-            counts, _ = np.histogram(spike_times, bins=time_bins)
-            freq_matrix[i, :] = counts / binsz
-
-        return cls.__compute_for_basic(freq_matrix)
+        return s_sync, freq_matrix, time_bins_center
 
 
     @classmethod
@@ -414,13 +467,14 @@ class Synchrony(object):
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
-        spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz, neurons="all")
+        # spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz)
+        spike_matrix, _, time_bins = cls.__get_count_rate_matrix(spiketimes_set, window, binsz)
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [fanofactor, S_t] = cls.__compute_fano(spike_matrix)
+        [fanofactor, _] = cls.__compute_fano(spike_matrix)
 
-        return fanofactor, S_t, time_bins_center
+        return fanofactor, spike_matrix, time_bins_center
 
 
 

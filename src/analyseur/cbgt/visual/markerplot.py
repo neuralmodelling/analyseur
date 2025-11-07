@@ -138,7 +138,7 @@ def _get_line_colors(colors=False, no_neurons=None):
     else:
         return "black"
 
-def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucleus=None,):
+def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neurons=None, nucleus=None,):
     """
     Draws the Rasterplot (`matplotlib.pyplot.eventplot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.eventplot.html>`_)
     on the given
@@ -149,6 +149,7 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucle
 
     OPTIONAL parameters
 
+    :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
     :param colors: `False` [default] or True
     :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
     :param nucleus: string; name of the nucleus
@@ -166,7 +167,9 @@ def plot_raster_in_ax(ax, spiketimes_superset, colors=False, neurons=None, nucle
         neuron_ids = dict(list(spiketimes_superset.items())[:neurons]).keys()
         neurons = [int(item[1:]) for item in neuron_ids]
 
-    [desired_spiketimes_subset, yticks] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+    [desired_spiketimes_subset, yticks] = get_desired_spiketimes_subset(spiketimes_superset,
+                                                                        window=window,
+                                                                        neurons=neurons)
 
     n_neurons = len(desired_spiketimes_subset)
 

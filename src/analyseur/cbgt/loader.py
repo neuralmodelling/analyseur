@@ -231,11 +231,12 @@ class LoadSpikeTimes(CommonLoader):
         return spiketimes_superset
 
     @staticmethod
-    def get_spiketimes_subset(spiketimes_superset, neurons=None):
+    def get_spiketimes_subset(spiketimes_superset, window=None, neurons=None):
         """
         Returns a dictionary containing the spike times (in seconds) of desired neurons.
 
         :param spiketimes_superset: Dictionary returned using :meth:`.get_spiketimes_superset`
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param neurons: `"all"` or scalar or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
             - `"all"` means subset = superset
@@ -249,16 +250,25 @@ class LoadSpikeTimes(CommonLoader):
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
         if neurons=="all":
-            return spiketimes_superset
+            spiketimes_set = spiketimes_superset
         elif isinstance(neurons, numbers.Number):
-            return dict(list(spiketimes_superset.items())[:neurons])  # first N = neurons
+            spiketimes_set = dict(list(spiketimes_superset.items())[:neurons])  # first N = neurons
         else:
             keys_to_remove = ["n"+str(i) for i in neurons]
 
             # Convert to set for faster lookup
             remove_set = set(keys_to_remove)
 
-            return {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
+            spiketimes_set = {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
+
+        if window is not None:
+            filtered_spikes = {
+                neuron_id: [t_spike for t_spike in indiv_spiketimes if window[0] <= t_spike <= window[1]]
+                for neuron_id, indiv_spiketimes in spiketimes_set.items()
+            }
+            spiketimes_set = filtered_spikes
+
+        return spiketimes_set
 
 
 class LoadChannelIorG(CommonLoader):

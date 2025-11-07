@@ -13,6 +13,7 @@ from sklearn.preprocessing import StandardScaler
 
 # from ..curate import get_desired_spiketimes_superset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
+from analyseur.cbgt.parameters import SignalAnalysisParams
 
 class PopAct(object):
     """
@@ -56,6 +57,8 @@ class PopAct(object):
       my_pact.plot(spike_trains, window=(0,5), binsz=0.05)
 
     """
+    __siganal = SignalAnalysisParams()
+
     def __init__(self, spiketimes_superset):
         self.spiketimes_superset = spiketimes_superset
 
@@ -209,3 +212,49 @@ class PopAct(object):
                 "pca_trajectory": pca_traj,
                 "explained_variance": pca.explained_variance_ratio_,
             }
+
+    @staticmethod
+    def __get_spike_matrix(spiketimes_set, binsz, window):
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
+
+        time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        n_bins = len(time_bins) - 1
+
+        activity = np.zeros((len(desired_spiketimes_subset), n_bins))
+
+        # Activity Matrix
+        for i, spikes in enumerate(desired_spiketimes_subset):
+            counts, _ = np.histogram(spikes, bins=time_bins)
+            activity[i] = counts
+        activity = activity[::-1, :]  # reverse it so that neuron 0 is at the bottom
+
+        return activity, time_bins
+
+    @staticmethod
+    def __compute_PCA(activity_matrix, n_comp):
+        scaler = StandardScaler()
+        scaled_activity = scaler.fit_transform(activity_matrix)
+        pca = PCA(n_components=n_comp)
+        pca_trajectory = pca.fit_transform(scaled_activity)
+
+        return scaler, pca, pca_trajectory
+
+    @classmethod
+    def compute(cls, spiketimes_set, binsz=None, window=None, n_comp=None):
+        #============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
+
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        if n_comp is None:
+            n_comp = 3
+
+        activity_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz)
+
+        time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
+
+        [scaler, pca, pca_trajectory] = cls._compute_PCA(activity_matrix, n_comp)
+
+        return scaler, pca, pca_trajectory, activity_matrix, time_bins

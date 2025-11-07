@@ -42,7 +42,8 @@ def get_observables(rootpath, filename, decayfolderid):
         stat_values[4, i] = dimstat["pca"].n_components_  # Dimensionality
         stat_values[5, i] = stat_values[4, i] / n_neurons # Complexity
 
-        stat_values[6, i] = Synchrony.compute_basic(spiketimes_superset)
+        [s_sync, _, _] = Synchrony.compute_basic(spiketimes_superset)
+        stat_values[6, i] = s_sync
 
         [fanofact, _, _] = Synchrony.compute_fano_factor(spiketimes_superset)
         stat_values[7, i] = fanofact

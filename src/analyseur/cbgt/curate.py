@@ -19,7 +19,17 @@ def __extract_neuron_no(neuron_id):
     match = re.search(r'n(\d+)', neuron_id)
     return int(match.group(1))
 
-def get_desired_spiketimes_subset(spiketimes_set, neurons=None):
+def __filter_spiketimes(desired_spiketimes_subset, window):
+    in_window = lambda t_spike: window[0] <= t_spike <= window[1]
+
+    filtered_spikes = [
+        list(filter(in_window, indiv_spiketimes))
+        for indiv_spiketimes in desired_spiketimes_subset
+    ]
+
+    return filtered_spikes
+
+def get_desired_spiketimes_subset(spiketimes_set, window=None, neurons=None):
     """
     Returns nested list of spike times (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
@@ -27,6 +37,7 @@ def get_desired_spiketimes_subset(spiketimes_set, neurons=None):
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
+    :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
     :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
         - `"all"` means subset = superset
@@ -146,6 +157,10 @@ def get_desired_spiketimes_subset(spiketimes_set, neurons=None):
             desired_spiketimes_subset.append( list(spiketimes_set[neuron_id]) )
             # yticks.append( _extract_neuron_no(neuron_id) )
             yticks.append(neuron_id)
+
+    if window is not None:
+        desired_spiketimes_subset = __filter_spiketimes(desired_spiketimes_subset, window)
+
     return desired_spiketimes_subset, yticks
 
 
