@@ -146,7 +146,6 @@ def plotCV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     n_neurons = len(spiketimes_set)
 
@@ -206,7 +205,6 @@ def plotCV(spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if mode=="portrait":
         fig, ax = plt.subplots(figsize=(6, 10))

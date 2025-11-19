@@ -14,22 +14,22 @@ class InterSpikeInterval(object):
     """
     Computes interspike intervals for the given spike times
 
-    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
-    | Methods                      | Argument                                                                                                           |
-    +==============================+====================================================================================================================+
-    | :py:meth:`.compute`          | - `spiketimes_set`: Dictionary returned; see :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset` |
-    |                              | - also see :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                                     |
-    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.inst_rates`       | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
-    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.avg_inst_rates`   | - `inst_rates_set`: Dictionary returned; see :py:meth:`.inst_rates`                                                |
-    |                              | - `tbins_set`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                                            |
-    |                              | - `binsz`: [OPTIONAL] 0.01 (default)                                                                               |
-    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.mean_freqs`       | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
-    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.grand_mean_freq`  | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
-    +------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    +---------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | Methods                         | Argument                                                                                                           |
+    +=================================+====================================================================================================================+
+    | :py:meth:`.compute`             | - `spiketimes_set`: Dictionary returned; see :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset` |
+    |                                 | - also see :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                                     |
+    +---------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.inst_rates`          | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
+    +---------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.pool_avg_inst_rates` | - `inst_rates_set`: Dictionary returned; see :py:meth:`.inst_rates`                                                |
+    |                                 | - `tbins_set`: 2nd tuple (Dictionary) returned; see :py:meth:`.compute`                                            |
+    |                                 | - `binsz`: [OPTIONAL] 0.01 (default)                                                                               |
+    +---------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.mean_freqs`          | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
+    +---------------------------------+--------------------------------------------------------------------------------------------------------------------+
+    | :py:meth:`.grand_mean_freq`     | - `isi_set`: Dictionary returned; see :py:meth:`.compute`                                                          |
+    +---------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
     =========
     Use Cases
@@ -81,10 +81,10 @@ class InterSpikeInterval(object):
     ```````````````````````````````````````````````````````````
     ::
 
-        E = InterSpikeInterval.avg_inst_rates(J, all_t)
+        E = InterSpikeInterval.pool_avg_inst_rates(J, all_t)
 
     This returns the value for :math:`\\vec{\\Xi} = [\\xi_t]_{\\forall{t}}`;
-    see formula :py:meth:`.avg_inst_rates`
+    see formula :py:meth:`.avg_pool_inst_rates`
 
     2.4. Compute Mean Frequencies (for all neurons)
     ````````````````````````````````````````````````
@@ -144,8 +144,12 @@ class InterSpikeInterval(object):
         tbins_set = {}
 
         for n_id, spiketimes in spiketimes_set.items():
-            interspike_intervals[n_id] = np.diff(spiketimes)
-            tbins_set[n_id] = spiketimes[1:]
+            if len(spiketimes) <= 1:
+                interspike_intervals[n_id] = np.zeros(10)
+                tbins_set[n_id] = np.zeros(10)
+            else:
+                interspike_intervals[n_id] = np.diff(spiketimes)
+                tbins_set[n_id] = spiketimes[1:]
 
         return interspike_intervals, tbins_set
 
@@ -199,14 +203,14 @@ class InterSpikeInterval(object):
             if len(isi) == 0:
                 inst_rates[n_id] = 0
             else:
-                inst_rates[n_id] = 1 / isi
+                inst_rates[n_id] = 1 / (isi + 1e-8)
 
         return inst_rates
 
     @classmethod
-    def avg_inst_rates(cls, inst_rates_set=None, tbins_set=None, binsz=None):
+    def pool_avg_inst_rates(cls, inst_rates_set=None, tbins_set=None, binsz=None):
         """
-        Returns the average instantaneous rates for all individual neurons.
+        Returns the pooled average instantaneous rates for all individual neurons.
 
         :param tbins_set: Dictionary returned using :py:meth:`.compute`
         :param inst_rates_set: Dictionary returned using :py:meth:`.inst_rates`
@@ -311,6 +315,87 @@ class InterSpikeInterval(object):
         return avg_rates, bin_centers, bin_counts
 
     @classmethod
+    def true_avg_inst_rates(cls, inst_rates_set=None):
+        """
+        Returns the true average instantaneous rates for all individual neurons.
+
+        :param tbins_set: Dictionary returned using :py:meth:`.compute`
+        :param inst_rates_set: Dictionary returned using :py:meth:`.inst_rates`
+        :param binsz: integer or float; `0.01` [default]
+        :return: 3-tuple
+
+        - list of average instantaneous rates
+        - array of centers for all the time bins (use this as time axis for plotting)
+        - list of number of data point per bin (can be useful for colorbar)
+
+        **Formula**
+
+        .. table::
+        =================================================================================== ======================================================
+          Definitions                                                                         Interpretation
+        =================================================================================== ======================================================
+         total neurons, :math:`n_{nuc}`                                                       total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                              i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         :math:`\\vec{R}^{(i)}`                                                               array of instantaneous rates of i-th neuron
+         :math:`R = \\left\\{\\vec{R}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of instaneous rates of all (:math:`n_{Nuc}`) neurons
+         :math:`\\vec{J}^{(i)}`                                                               array of time points where instantaneous rates of i-th neuron occur
+         :math:`J = \\left\\{\\vec{J}^{(i)} \\mid \\forall{i \\in [1, n_{nuc}]} \\right\\}`           set of array of time points of all (:math:`n_{Nuc}`) neurons
+        =================================================================================== ======================================================
+
+        For using bin-based conditional average let
+
+        .. table::
+        ====================================================================================== ======================================================
+          Definitions                                                                            Interpretation
+        ====================================================================================== ======================================================
+         :math:`\\vec{P} = vec(J)`                                                               array containing all the time points from all the neurons
+         :math:`\\vec{\\Xi} = vec(R)`                                                            array containing all the instantaneous rates from all the neurons
+         total bins, :math:`n_{bins} = \\mid vec(J) \\mid`                                       total number of time points from all neurons
+         bin size, :math:`w`                                                                     fixed bin width for each time bin
+         bin center, :math:`c_{\\forall{t} \\in [0, n_{bins} - 1]}`                              center of t-th time bin
+         bin interval, :math:`b_t = \\left[c_t - \\frac{w}{2}, c_t + \\frac{w}{2}\\right)`            interval of t-th time bin
+        ====================================================================================== ======================================================
+
+        Then, the average instantaneuous rate for t-th bin is
+
+        .. math::
+
+            \\xi_t &= \\mathbb{E}\\left[\\Xi_p \\mid p \\in b_t\\right] \n
+                &= \\frac{\\sum_{p \\in P}(\\Xi_p \\cdot 1_{\\{p \\in b_t\\}})}{\\sum_{p \\in P} 1_{\\{p \\in b_t\\}}}
+
+        where
+
+        - :math:`\\mathbb{E}` is the expectation function,
+        - :math:`1_{\\{p \\in b_t\\}}` is the indicator function; 1 if condition is true otherwise 0,
+        - :math:`\\sum_{p \\in P} 1_{\\{p \\in b_t\\}}` is the number of time points that fall in the t-th bin
+        - numerator is the sum of instantaneous rates that fall in the t-th bin
+
+        We therefore get
+
+        .. table::
+        ================================================== ======================================================
+          Definitions                                        Interpretation
+        ================================================== ======================================================
+         :math:`\\xi_t`                                      average instantaneous rate for t-th bin
+         :math:`\\vec{\\Xi} = [\\xi_t]_{\\forall{t}}`           array of average instantaneous rates for all bins
+        ================================================== ======================================================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        # Take average of the instantaneuous rates of each neuron
+        all_avg_inst_rates = {}
+
+        for n_id, inst_rates in inst_rates_set.items():
+            if len(inst_rates) == 0:
+                all_avg_inst_rates[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
+            else:
+                all_avg_inst_rates[n_id] = np.mean(inst_rates)
+
+        return all_avg_inst_rates
+
+    @classmethod
     def mean_freqs(cls, isi_set=None):
         """
         Returns the mean frequencies for all individual neurons.
@@ -359,7 +444,7 @@ class InterSpikeInterval(object):
             if len(isi) == 0:
                 mean_spiking_freq[n_id] = 0
             else:
-                mean_spiking_freq[n_id] = (1 / len(isi)) * np.sum(1 / isi)
+                mean_spiking_freq[n_id] = (1 / (len(isi) + 1e-8)) * np.sum(1 / (isi + 1e-8))
 
         return mean_spiking_freq
 

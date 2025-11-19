@@ -383,3 +383,55 @@ class LoadChannelIorG(CommonLoader):
             measurables = None
 
         return measurables
+
+
+class LoadMembraneVorI(CommonLoader):
+    __pattern_with_nucleus_name = r"(.*?)\_"
+    __pattern_with_attrib_name = r"\_V\_syn\_(.*?)\_1msgrouped"  # NOTE: Although name has V, THESE ARE CURRENTS
+    __membrane_attributes = ["v", "ionic", ]
+
+    def _extract_nucleus_attribute_name(self, filename):
+        """Extracts <nucleus> name and attribute name
+        from `<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv`"""
+        # flist = filename.split("_")
+        # nucleus = flist[1].split(".")[0]
+        match1 = re.search(self.__pattern_with_nucleus_name, filename)
+        match2 = re.search(self.__pattern_with_attrib_name, filename)
+
+        if match1:
+            nucleus = match1.group(1)
+            if match2:
+                attrib = match2.group(1)
+            else:
+                print(
+                    "Filename is not in the form '<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv'")
+                attrib = None
+        else:
+            print(
+                "Filename is not in the form '<nucleus>_V_syn_<attribute>_1msgrouped_mean_preprocessed4Matlab_SHIFT.csv'")
+            nucleus = None
+            attrib = None
+
+        return nucleus, attrib
+
+    def get_measurables(self):
+        """
+        Returns a 1-D array (numpy.array data type) containing the measureables (currents and conductances) whose
+        time axis is in milliseconds.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        [nucleus, attrib] = self._extract_nucleus_attribute_name(self.filename)
+        # region = self.get_region_name(nucleus)
+
+        if attrib in self.__membrane_attributes:
+            # start, end = self.__prepreprocessSize(attrib)
+            dataframe = pd.read_csv(self.full_filepath).iloc[:, [0]]
+            measurables = dataframe.apply(lambda x: round(x, self.siganal.decimal_places_ephys)).values
+        else:
+            print("Attributes must be from " + str(self.__membrane_attributes))
+            measurables = None
+
+        return measurables

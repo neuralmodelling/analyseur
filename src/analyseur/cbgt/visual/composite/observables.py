@@ -17,6 +17,7 @@ from analyseur.cbgt.stats.sync import Synchrony
 
 
 def get_observables(rootpath, filename, decayfolderid):
+    ## CHANGES MADE in PopAct and must change this file (not just this function)
 
     #nucleus_title = "PTN ("+str(np.round(decayfolderid[dirlist[frame]]*100, decimals=1))+"% decay)"
 

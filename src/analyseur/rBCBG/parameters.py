@@ -1,67 +1,12 @@
-# ~/analyseur/cbgt/parameters.py
+# ~/analyseur/rbcbg/parameters.py
 #
-# Documentation by Lungsi 20 Oct 2025
-#
-# This contains function for loading the files
+# Documentation by Lungsi 18 Nov 2025
 #
 
 from dataclasses import dataclass, field
 from typing import List, Tuple
 import math
 
-DEFAULT_CONDUCTANCES = {
-    "cortex": { # 0.05
-        "g_L": 1.0, # This is called g_L_mean in CBGTC and unit is mS.cm-2
-    },
-    "bg": {},
-    "thalamus": {
-        "g_L": 0.05, # This is called g_L_mean in CBGTC and unit is mS.cm-2
-    },
-}
-
-DEFAULT_FEEDFORWORD_CURRENTS = {
-    "cortex": { # Case: NOT 'cortex_alone'
-        "CSN": 1.124,
-        "PTN": 1.25,
-        "IN": 1.178,
-    },
-    "bg": { # Case: NOT 'bg_alone'
-        "MSN": 28.3, # * mvolt
-        "FSI": 12.0, # * mvolt
-        "STN": 19.5, # * mvolt
-        "GPe": 26.0, # * mvolt
-        "GPi": 15.0, # * mvolt
-        # NOTE: for bg these are NOT current values
-    },
-    "thalamus": { # Case: NOT 'thalamus_alone'
-        "MD": 1.15,
-        "TRN": 1.2,
-    },
-}
-
-DEFAULT_EQUILIBRIUM_POTENTIALS = {
-    "cortex": {
-        "V_L": -70.0, # mV
-        "V_AMPA": 0.0, # mV
-        "V_GABAA": -70.0, # mV
-        "V_NMDA": 0.0, # mV
-        "V_GABAB": -90.0, # mV
-    },
-    "bg": {
-        "V_L": -70.0, # mV
-        "V_AMPA": 0.0, # mV
-        "V_NMDA": 0.0, # mV
-        "V_GABAA": -70.0, # mV
-        "V_GABAB": -90.0, # mV
-    },
-    "thalamus": {
-        "V_L": -70.0, # mV
-        "V_AMPA": 0.0, # mV
-        "V_GABAA": -70.0, # mV
-        "V_NMDA": 0.0, # mV
-        "V_GABAB": -90.0, # mV
-    }
-}
 
 DEFAULT_FREQUENCY_BANDS = {
     "Delta": (1, 4),
@@ -206,24 +151,19 @@ class SimulationParams:
 
     """
     duration: float = 10000 # ms
-    t_start_recording = 2000 # ms
-    dt: float = 0.1 # ms
+    dt: float = 1.0 # ms
+    modelID: int = 9
     nuclei_ctx: List[str] = None
     nuclei_bg: List[str] = None
     nuclei_thal: List[str] = None
-    neurotrans: List[str] = None
-    conductance: dict = field(default_factory=lambda: DEFAULT_CONDUCTANCES.copy())
-    ff_currents: dict = field(default_factory=lambda: DEFAULT_FEEDFORWORD_CURRENTS.copy())
 
     def __post_init__(self):
         if self.nuclei_ctx is None:
-            self.nuclei_ctx = ["CSN", "PTN", "IN",]
+            self.nuclei_ctx = ["CSN", "PTN",]
         if self.nuclei_bg is None:
-            self.nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN",]
+            self.nuclei_bg = ["FSI", "GPe", "GPiSNr", "MSNd1", "MSNd2", "STN",]
         if self.nuclei_thal is None:
-            self.nuclei_thal = ["MD", "TRN",]
-        if self.neurotrans is None:
-            self.neurotrans = ['AMPA', 'NMDA', 'GABAA', 'GABAB']
+            self.nuclei_thal = ["CmPf",]
 
 @dataclass
 class SignalAnalysisParams:

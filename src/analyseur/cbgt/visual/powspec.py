@@ -9,6 +9,7 @@ import numbers
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+from scipy import signal
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
@@ -16,6 +17,7 @@ import re
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.psd import PowerSpectrum
+from analyseur.cbgt.stats.rate import Rate
 from analyseur.cbgt.parameters import SignalAnalysisParams
 # from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
 #
@@ -52,8 +54,8 @@ class VizPSD(object):
                 orient = "landscape"
 
         frequencies, power_spectra, spiketrains, yticks, time_axis = \
-            PowerSpectrum.compute(spiketimes_superset, neurons=neurons, window=window,
-                                  sampling_rate=sampling_rate, resolution=resolution)
+            PowerSpectrum.compute_for_spike(spiketimes_superset, neurons=neurons, window=window,
+                                            sampling_rate=sampling_rate, resolution=resolution)
 
         colors = ["red", "blue", "green"]
         for i, (f, Pxx) in enumerate(zip(frequencies, power_spectra)):
@@ -162,8 +164,8 @@ class VizPSD(object):
         n_neurons = len(spiketimes_set)
 
         frequencies, power_spectra, spiketrains, yticks, time_axis = \
-            PowerSpectrum.compute(spiketimes_set, neurons=neurons, window=window,
-                                  sampling_rate=sampling_rate, resolution=resolution)
+            PowerSpectrum.compute_for_spike(spiketimes_set, neurons=neurons, window=window,
+                                            sampling_rate=sampling_rate, resolution=resolution)
 
         power_matrix = np.array(power_spectra)
         freqs = frequencies[0]  # all have same frequency axis
@@ -328,8 +330,8 @@ class VizPSD(object):
         n_neurons = len(spiketimes_set)
 
         frequencies, power_spectra, spiketrains, yticks, time_axis = \
-            PowerSpectrum.compute(spiketimes_set, neurons=neurons, window=window,
-                                  sampling_rate=sampling_rate, resolution=resolution)
+            PowerSpectrum.compute_for_spike(spiketimes_set, neurons=neurons, window=window,
+                                            sampling_rate=sampling_rate, resolution=resolution)
 
         power_matrix = np.array(power_spectra)
         freqs = frequencies[0]  # all have same frequency axis
@@ -471,8 +473,8 @@ class VizPSD(object):
         n_neurons = len(spiketimes_set)
 
         frequencies, power_spectra, spiketrains, yticks, time_axis = \
-            PowerSpectrum.compute(spiketimes_set, neurons=neurons, window=window,
-                                  sampling_rate=sampling_rate, resolution=resolution)
+            PowerSpectrum.compute_for_spike(spiketimes_set, neurons=neurons, window=window,
+                                            sampling_rate=sampling_rate, resolution=resolution)
 
         power_matrix = np.array(power_spectra)
         freqs = frequencies[0]  # all have same frequency axis
@@ -565,3 +567,127 @@ class VizPSD(object):
         plt.show()
 
         return fig, axes
+
+
+    @staticmethod
+    def plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=None, window=None,
+                               nucleus=None, resolution=None, method=None):
+        # ============== DEFAULT Parameters ==============
+        __siganal = SignalAnalysisParams()
+        if window is None:
+            window = __siganal.window
+
+        if binsz is None:
+            binsz = __siganal.binsz_100perbin
+
+        freq_bands = __siganal.freq_bands
+        del freq_bands["Low Gamma"]
+        del freq_bands["High Gamma"]
+
+        # _, rate_matrix, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+        #                                                        window=window, binsz=binsz,
+        #                                                        neurons="all")
+        mu_rate_arr, time_bins = Rate.mean_rate(spiketimes_set=spiketimes_set,
+                                                window=window, binsz=binsz,
+                                                neurons="all")
+        # Compute power spectrum using Welch's method
+        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, method=method, resolution=resolution)
+
+        # Plot power spectrum
+        ax.semilogy(freqs, power, "b-", linewidth=1, label="Power Spectrum")
+        ax.set_xlabel("Frequency (Hz)")
+        ax.set_ylabel("Power Spectral Density")
+
+        nucname = "" if nucleus is None else " in " + nucleus
+        ax.set_title("Power Spectrum of neurons" + nucname)
+
+        ax.grid(True, alpha=0.3)
+
+        # Add vertical lines and annotations for band boundaries
+        band_boundaries = []
+        band_labels = []
+        for k, v in freq_bands.items():
+            band_labels.append(k)
+            if k=="Delta":
+                band_boundaries.append(v[0])
+                band_boundaries.append(v[1])
+            else:
+                band_boundaries.append(v[1])
+
+        for boundary in band_boundaries:
+            ax.axvline(x=boundary, color="red", linestyle="--", alpha=0.5, linewidth=0.8)
+
+        # Add band labels at the top
+        for i, (label, start, end) in enumerate(zip(band_labels, band_boundaries[:-1], band_boundaries[1:])):
+            mid = (start + end) / 2
+            ax.text(mid, ax.get_ylim()[1] * 0.9, label, ha="center", va="top", fontweight="bold",
+                    bbox=dict(boxstyle="round,pad=0.3", facecolor="yellow", alpha=0.7))
+        ax.set_xlim(0, 100)
+
+        return ax
+
+
+    @staticmethod
+    def plot_PSD_of_rate_in_ax_v2(ax, spiketimes_set, binsz=None, window=None,
+                               nucleus=None, resolution=None, method=None):
+        # ============== DEFAULT Parameters ==============
+        __siganal = SignalAnalysisParams()
+        if window is None:
+            window = __siganal.window
+
+        if binsz is None:
+            binsz = __siganal.binsz_100perbin
+
+        freq_bands = __siganal.freq_bands
+        del freq_bands["Low Gamma"]
+        del freq_bands["High Gamma"]
+
+        # _, rate_matrix, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+        #                                                        window=window, binsz=binsz,
+        #                                                        neurons="all")
+        mu_rate_arr, time_bins = Rate.mean_rate(spiketimes_set=spiketimes_set,
+                                                window=window, binsz=binsz,
+                                                neurons="all")
+        # Compute power spectrum using Welch's method
+        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, method=method, resolution=resolution)
+
+        # Plot power spectrum
+        ax.semilogy(freqs, power, "b-", linewidth=1, label="Power Spectrum")
+        ax.set_xlabel("Frequency (Hz)")
+        ax.set_ylabel("Power Spectral Density")
+
+        nucname = "" if nucleus is None else " in " + nucleus
+        ax.set_title("Power Spectrum of neurons" + nucname)
+
+        ax.grid(True, alpha=0.3)
+
+        # Plot frequency bands
+        colors = ["lightblue", "lightgreen", "lightyellow", "lightcoral", "lightpink"]
+
+        for (band, (low, high)), color in zip(freq_bands.items(), colors):
+            # Find indices within current band
+            band_mask = (freqs >= low) & (freqs <= high)
+
+            if np.any(band_mask):
+                # Fill the band region
+                ax.fill_between(freqs[band_mask], power[band_mask], alpha=0.3,
+                                color=color, label=band)
+
+                # Add text annotation in the middle of the band
+                mid_freq = (low + high) / 2
+
+                # Find the power value near the middle frequency for positioning
+                mid_idx = np.argmin(np.abs(freqs - mid_freq))
+                if mid_idx < len(power):
+                    ax.text(mid_freq, power[mid_idx] * 2, band,
+                            ha="center", va="bottom", fontweight="bold", fontsize=10,
+                            bbox=dict(boxstyle="round, pad=0.3",
+                                      facecolor="white", alpha=0.8))
+
+        # Set reasonable limits (focus on relevant frequency range)
+        ax.set_xlim(0, 100)
+        ax.set_ylim(bottom=power[power > 0].min() * 0.1) # Avoid log(0) issues
+
+        ax.legend(loc="upper right")
+
+        return ax

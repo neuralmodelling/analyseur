@@ -177,17 +177,21 @@ def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neuron
 
     # ====== PLOT PARAMETERS ======
     n_yticks = 20
-    linelengths = 0.5  # default: 1
-    linewidths = 0.5  # default: 1.5
+    # linelengths = 0.25  # default: 1
+    # linewidths = 3.0  # default: 1.5
+    spacing = 0.1 # 0.25
+    linelengths = spacing * 0.7  # 60-80% of spacing to avoid overlapping
+    linewidths = 10 * (spacing / 0.8)
     # ytick_trigger = 50
+
     if n_neurons > 50:
         ytick_interval = int(n_neurons / n_yticks)
     else:
         ytick_interval = 1
 
     # lineoffsets = 0.5  # default: 1
-    # lineoffsets = np.arange(1, n_neurons + 1)
-    lineoffsets = np.arange(n_neurons) * 0.8 + 0.5  # minimal spacing between neurons
+    lineoffsets = np.arange(1, n_neurons + 1) * spacing # 0.5 spacing = below
+    # lineoffsets = np.arange(n_neurons) * 0.8 + 0.5  # minimal spacing between neurons
 
     # Plot
     ax.eventplot(desired_spiketimes_subset, colors=linecolors,

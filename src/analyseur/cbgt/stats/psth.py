@@ -212,9 +212,9 @@ class PSTH(object):
         return np.sum(pop_counts) / (n_neurons * total_duration) # Hz
 
     @classmethod
-    def _compute_pop_firing_rate(cls, n_neurons, binsz, pop_counts):
+    def _compute_pop_avg_firing_rate(cls, n_neurons, binsz, pop_counts):
         """
-        Computes the  firing rate of the whole population at each bin.
+        Computes the  average firing rate of the whole population at each bin.
         Therefore, this is the TIME-VARYING population rate (since its at each bin).
         Hence, mean of the population rates across the bins is NOT average firing rate.
         It is the AVERAGE of the TIME-VARYING rates across all bins.
@@ -247,6 +247,7 @@ class PSTH(object):
             - "window": window used for computing the PSTH
             - "binsz": bin size used for computing the PSTH
             - "bin_centers": array of bin centers
+            - "bins": array of bins
         - array of population firing rate (at each bin)
         - dictionary of firing rates
             - "firing_rates": array of firing rates for each neuron
@@ -262,7 +263,9 @@ class PSTH(object):
         if neurons is None:
             neurons = "all"
         elif isinstance(neurons, numbers.Number):
-            neurons = range(neurons)
+            # neurons = range(neurons)
+            neuron_ids = dict(list(spiketimes_set.items())[:neurons]).keys()
+            neurons = [int(item[1:]) for item in neuron_ids]
 
         if window is None:
             window = cls.__siganal.window
@@ -270,7 +273,9 @@ class PSTH(object):
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
-        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set,
+                                                                       window=window,
+                                                                       neurons=neurons)
 
         # Poole spikes from ALL neurons
         allspikes = np.concatenate(desired_spiketimes_subset)
@@ -286,14 +291,15 @@ class PSTH(object):
         bin_info = {
             "window": window,
             "binsz": binsz,
-            "bin_centers": (bin_edges[:-1] + bin_edges[1:]) / 2  # should be = (bins[:-1] + bins[1:]) / 2
+            "bin_centers": (bin_edges[:-1] + bin_edges[1:]) / 2,  # should be = (bins[:-1] + bins[1:]) / 2
+            "bins": bins,
         }
 
         # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)
-        popfirerates = cls._compute_pop_firing_rate(len(desired_spiketimes_subset), binsz, counts)
+        pop_avg_rate = cls._compute_pop_avg_firing_rate(len(desired_spiketimes_subset), binsz, counts)
         true_avg_rate = cls._compute_true_avg_firing_rate(window, desired_spiketimes_subset)
 
-        return counts, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset #, allspikes_in_window
+        return counts, bin_info, pop_avg_rate, true_avg_rate, allspikes_in_window #, allspikes_in_window
 
     @classmethod
     def compute_avgPSTH(cls, spiketimes_set, neurons=None, binsz=None, window=None):
@@ -317,6 +323,7 @@ class PSTH(object):
             - "window": window used for computing the PSTH
             - "binsz": bin size used for computing the PSTH
             - "bin_centers": array of bin centers
+            - "bins": array of bins
         - array of population firing rate (at each bin)
         - dictionary of firing rates
             - "firing_rates": array of firing rates for each neuron
@@ -332,7 +339,9 @@ class PSTH(object):
         if neurons is None:
             neurons = "all"
         elif isinstance(neurons, numbers.Number):
-            neurons = range(neurons)
+            # neurons = range(neurons)
+            neuron_ids = dict(list(spiketimes_set.items())[:neurons]).keys()
+            neurons = [int(item[1:]) for item in neuron_ids]
 
         if window is None:
             window = cls.__siganal.window
@@ -347,12 +356,14 @@ class PSTH(object):
 
         # PSTH for EACH neuron
         n_neurons = len(desired_spiketimes_subset)
-        neuron_psths = np.zeros(n_neurons)
+        neuron_psths = []
         for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
             counts, _ = np.histogram(indiv_spiketimes, bins=bins)
             rates = counts / binsz # Hz
-            neuron_psths[i] = rates
+            neuron_psths.append(rates)
+
         # Average the PSTH across neurons
+        neuron_psths = np.array(neuron_psths)
         average_psth = np.mean(neuron_psths, axis=0)
         std_err_psth = np.std(neuron_psths, axis=0) / np.sqrt(n_neurons)
 
@@ -360,6 +371,7 @@ class PSTH(object):
             "window": window,
             "binsz": binsz,
             "bin_centers": bin_centers,
+            "bins": bins,
         }
 
         # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)

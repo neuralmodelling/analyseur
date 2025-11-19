@@ -150,7 +150,7 @@ class Variations(object):
             if len(isi) == 0:
                 all_CV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
-                all_CV[n_id] = np.std(isi) / np.mean(isi)
+                all_CV[n_id] = np.std(isi) / (np.mean(isi) + 1e-8)
 
         return all_CV
 
@@ -204,7 +204,7 @@ class Variations(object):
             if len(isi) == 0:
                 all_CV2[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
-                abs_diff_over_sum = np.abs( np.diff(isi) ) / (isi[1:] + isi[:-1])
+                abs_diff_over_sum = np.abs( np.diff(isi) ) / ((isi[1:] + isi[:-1]) + 1e-8)
                 if len(abs_diff_over_sum) == 0:
                     all_CV2[n_id] = np.zeros(1)[0]
                 else:
@@ -262,7 +262,7 @@ class Variations(object):
             if len(isi) == 0:
                 all_LV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
             else:
-                sq_diff_over_sum = np.square(np.diff(isi)) / np.square((isi[1:] + isi[:-1]))
+                sq_diff_over_sum = np.square(np.diff(isi)) / (np.square((isi[1:] + isi[:-1])) + 1e-8)
                 if len(sq_diff_over_sum) == 0:
                     all_LV[n_id] = np.zeros(1)[0]
                 else:

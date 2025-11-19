@@ -7,6 +7,9 @@ import numpy as np
 
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.parameters import SignalAnalysisParams
+from analyseur.cbgt.stats.rate import Rate
+from analyseur.cbgt.stats.psth import PSTH
+from scipy.stats import pearsonr
 
 class Synchrony(object):
     """
@@ -113,25 +116,6 @@ class Synchrony(object):
         return spike_matrix, time_bins
 
     @staticmethod
-    def __get_count_rate_matrix(spiketimes_set, window, binsz):
-        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
-        n_neurons = len(desired_spiketimes_subset)
-
-        time_bins = np.arange(window[0], window[1] + binsz, binsz)
-        n_bins = len(time_bins) - 1
-
-        count_matrix = np.zeros((n_neurons, n_bins))
-        rate_matrix = np.zeros((n_neurons, n_bins))
-
-        # Fill the count and rate matrix
-        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
-            counts, _ = np.histogram(indiv_spiketimes, bins=time_bins)
-            count_matrix[i, :] = counts
-            rate_matrix[i, :] = counts / binsz
-
-        return count_matrix, rate_matrix, time_bins
-
-    @staticmethod
     def __get_spikearray_and_window(spiketimes_superset, window, neurons="all"):
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
         n_neurons = len(desired_spiketimes_subset)
@@ -144,32 +128,6 @@ class Synchrony(object):
 
         return spike_arrays, window
 
-    # @staticmethod
-    # def __compute_for_basic(freq_matrix):
-    #     # Remove time bins with no activity
-    #     valid_bins = np.sum(freq_matrix, axis=0) > 0
-    #     freq_matrix = freq_matrix[:, valid_bins]
-    #
-    #     if freq_matrix.size == 0:
-    #         return 0.0
-    #
-    #     # Compute A: variance over time of mean frequency across neurons
-    #     mean_across_neurons = np.mean(freq_matrix, axis=0)  # μ_k(freq_k(t)) for each t
-    #     A = np.var(mean_across_neurons)  # var_t of above
-    #
-    #     # Compute B: mean over time of variance across neurons
-    #     variance_across_neurons = np.var(freq_matrix, axis=0)  # var_k(freq_k(t)) for each t
-    #     B = np.mean(variance_across_neurons)  # μ_t of above
-    #
-    #     if B == 0:
-    #         if A == 0:
-    #             S = 0.0  # perfect synchrony edge case
-    #         else:
-    #             S = np.inf  # infinite synchrony (theoretical)
-    #     else:
-    #         S = np.sqrt(A / B)
-    #
-    #     return S
 
     @staticmethod
     def __compute_for_basic(freq_matrix):
@@ -209,6 +167,21 @@ class Synchrony(object):
             fanofactor = 0.0  # variance_S = 0.0, mean_S = 0.0
 
         return fanofactor, colmn_wise_sums
+
+    @staticmethod
+    def __compute_pairwise_corr(pop_spike_count_matrix):
+        correlations = []
+        pairs = []
+
+        n_neurons = pop_spike_count_matrix.shape[0]
+
+        for i in range(n_neurons):
+            for j in range(i+1, n_neurons):
+                corr, p_val = pearsonr(pop_spike_count_matrix[i], pop_spike_count_matrix[j])
+                correlations.append(corr)
+                pairs.append((i,j))
+
+        return np.array(correlations), pairs
 
 
     @classmethod
@@ -333,7 +306,9 @@ class Synchrony(object):
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
-        _, freq_matrix, time_bins = cls.__get_count_rate_matrix(spiketimes_set, window, binsz)
+        _, freq_matrix, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+                                                                window=window, binsz=binsz,
+                                                                neurons="all")
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
@@ -468,7 +443,9 @@ class Synchrony(object):
             binsz = cls.__siganal.binsz_100perbin
 
         # spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz)
-        spike_matrix, _, time_bins = cls.__get_count_rate_matrix(spiketimes_set, window, binsz)
+        spike_matrix, _, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+                                                                window=window, binsz=binsz,
+                                                                neurons="all")
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
@@ -476,5 +453,157 @@ class Synchrony(object):
 
         return fanofactor, spike_matrix, time_bins_center
 
+    @classmethod
+    def compute_sync_index_from_PSTH(cls, spiketimes_set, binsz=None, window=None):
+        """
+        Synchrony as variance of total population rate
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        [counts, bin_info, _, _, _] = PSTH.compute_poolPSTH(spiketimes_set, neurons="all",
+                                                            binsz=binsz, window=window)
+        # Total Population Rate
+        pop_rate = counts / bin_info["binsz"]
+
+        # Synchrony as variance of total population rate
+        sync_index = np.var(pop_rate)
+
+        return sync_index
+
+    @classmethod
+    def compute_corr_index(cls, spiketimes_set, binsz=None, window=None):
+        """
+        Calculate average pairwise correlation index.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        # ============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
+
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
+        n_neurons = len(desired_spiketimes_subset)
+        duration = window[1] - window[0]
+        pairwise_ci = []
+
+        for i in range(n_neurons):
+            for j in range(i+1, n_neurons):
+                # Calculate firing rates
+                r_i = len(desired_spiketimes_subset[i]) / duration
+                r_j = len(desired_spiketimes_subset[j]) / duration
+
+                # Count coincidences
+                coincidences = 0
+                for spike_i in desired_spiketimes_subset[i]:
+                    for spike_j in desired_spiketimes_subset[j]:
+                        if abs(spike_i - spike_j) <= binsz:
+                            coincidences += 1
+                            break  # count each spike only once
+
+                # Expected coincidences by chance
+                expected = 2 * binsz * duration * r_i * r_j
+
+                # Correlation Index
+                if expected > 0:
+                    ci = (coincidences - expected) / expected
+                else:
+                    ci = 0
+                pairwise_ci.append(ci)
+
+        return np.mean(pairwise_ci) if pairwise_ci else 0
+
+
+    @classmethod
+    def compute_pairwise_corr(cls, spiketimes_set, binsz=None, window=None):
+        """
+        Returns the Fano factor as a measure of synchrony of spiking from all neurons.
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :return: a number
+
+        **Formula**
+
+        .. table:: Formula
+        ====================================================================================================================== =====================================================================
+          Definitions                                                                                                             Interpretation
+        ====================================================================================================================== =====================================================================
+         total neurons, :math:`n_{Nuc}`                                                                                           total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                                                  i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         spike count, :math:`p^{(i)}(t)`                                                                                          spike count of the i-th neuron at time :math:`t`
+         count matrix, :math:`P = \\left[p(a,b) = p^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`                spike counts of all (:math:`n_{Nuc}`) neurons for all times
+        ====================================================================================================================== =====================================================================
+
+        Let the :math:`var(\\cdot)`, `variance function <https://numpy.org/doc/stable/reference/generated/numpy.var.html>`_ and
+        the :math:`\\mu(\\cdot)`, `arithmetic mean function <https://numpy.org/doc/stable/reference/generated/numpy.mean.html>`_
+        be implemented as shown
+
+        .. math::
+
+            P = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
+                {\\underset{
+                    \\begin{matrix}
+                        \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
+                        \\quad\\pi_{t_0} & \\quad\\quad\\quad & \\pi_{t_1} & \\quad &\\ldots & & & \\pi_{t_T} & \\rightarrow var_{\\forall{t}} \n
+                        \\quad\\pi_{t_0} & \\quad\\quad\\quad & \\pi_{t_1} & \\quad &\\ldots & & & \\pi_{t_T} & \\rightarrow \\mu_{\\forall{t}}
+                    \\end{matrix}}
+               {\\begin{bmatrix}
+                 p^{(1)}(t_0) & p^{(1)}(t_1) & \\ldots & p^{(1)}(t_T) \n
+                 p^{(2)}(t_0) & p^{(2)}(t_1) & \\ldots & p^{(2)}(t_T) \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 p^{(i)}(t_0) & p^{(i)}(t_1) & \\ldots & p^{(i)}(t_T) \n
+                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 p^{(n_{Nuc})}(t_0) & p^{(n_{Nuc})}(t_1) & \\ldots & p^{(n_{Nuc})}(t_T)
+                \\end{bmatrix}
+                }}
+
+        We define
+
+        .. math::
+
+            A &\\triangleq var\\left(\\begin{bmatrix}
+                                       \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
+                                     \\end{bmatrix}\\right) = var_{\\forall{t}} \n
+            B &\\triangleq \\mu\\left(\\begin{bmatrix}
+                                       \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
+                                     \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
+
+        Then, synchrony is measured as
+
+        .. math::
+
+            F_{Sync} = \\frac{A}{B} = \\frac{var\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}{\\mu\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        #============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
+
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        spike_matrix, _, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+                                                                window=window, binsz=binsz,
+                                                                neurons="all")
+
+
+        time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
+
+        [correlations, pairs] = cls.__compute_pairwise_corr(spike_matrix)
+
+        return correlations, pairs, spike_matrix, time_bins_center
 
 

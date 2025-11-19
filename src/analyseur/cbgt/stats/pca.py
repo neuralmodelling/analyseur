@@ -97,7 +97,7 @@ class PCA(object):
     __siganal = SignalAnalysisParams()
 
     @staticmethod
-    def __get_spike_matrix(spiketimes_set, window, binsz):
+    def get_spike_activity_matrix(spiketimes_set, window, binsz):
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
 
         time_bins = np.arange(window[0], window[1] + binsz, binsz)
@@ -134,7 +134,7 @@ class PCA(object):
         if n_comp is None:
             n_comp = 3
 
-        activity_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz)
+        activity_matrix, time_bins = cls.get_spike_activity_matrix(spiketimes_set, window, binsz)
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
