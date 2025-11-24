@@ -96,16 +96,15 @@ class Rate(object):
         .. math::
 
             F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
-                {\\underset{}
-               {\\begin{bmatrix}
-                 f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
-                 f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
-                 f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
-                \\end{bmatrix}
-                }}
+                {\\begin{bmatrix}
+                  f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
+                  f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
+                  \\vdots & \\vdots & \\ldots & \\vdots \n
+                  f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
+                  \\vdots & \\vdots & \\ldots & \\vdots \n
+                  f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
+                 \\end{bmatrix}
+                }
                 \\begin{matrix}
                  \\rightarrow & \\mu^{(1)} \n
                  \\rightarrow & \\mu^{(2)} \n
