@@ -79,7 +79,7 @@ class Rate(object):
                 {\\underset{
                     \\begin{matrix}
                         \\quad\\quad\\downarrow & \\quad\\quad\\quad & \\downarrow & \\quad &\\ldots & & & \\downarrow \n
-                        \\quad\\mu_{t_0} & \\quad\\quad\\quad & \\mu_{t_1} & \\quad &\\ldots & & & \\mu_{t_T} & \\rightarrow var_{\\forall{t}}
+                        \\quad\\mu_{t_0} & \\quad\\quad\\quad & \\mu_{t_1} & \\quad &\\ldots & & & \\mu_{t_T} &
                     \\end{matrix}}
                {\\begin{bmatrix}
                  f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
