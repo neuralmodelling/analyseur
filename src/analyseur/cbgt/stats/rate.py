@@ -40,7 +40,8 @@ class Rate(object):
         ======================================================================================================================== ===============================================================
          total neurons, :math:`n_{Nuc}`                                                                                             total number of neurons in the Nucleus
          neuron index, :math:`i`                                                                                                    i-th neuron in the pool of :math:`n_{Nuc}` neurons
-         spike count, :math:`c^{(i)}(t)`                                                                                              number of spikes of the i-th neuron at time :math:`t`
+         spike time, :math:`s^{(i)}`                                                                                                an arbitrary spike time of i-th neuron
+         spike count, :math:`c^{(i)}(t) = \\sum_{k} I(i\\beta \\le s^{(i)}_k < (i+1)\\beta)`                                        number of spikes of the i-th neuron at time :math:`t`
          spike count matrix, :math:`C = \\left[c(a,b) = c^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`            spike counts of all (:math:`n_{Nuc}`) neurons for all times
          firing rate, :math:`f^{(i)}(t) = \\frac{c^{(i)}(t)}{(t_k - t_{k-1})}`                                                        firing rate of the i-th neuron at time :math:`t` with bin size :math:`(t_k - t_{k-1})`
          firing rate matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`            rates of all (:math:`n_{Nuc}`) neurons for all times
