@@ -46,7 +46,7 @@ class Rate(object):
          firing rate matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`            rates of all (:math:`n_{Nuc}`) neurons for all times
         ======================================================================================================================== ===============================================================
 
-        **Formula: Spike Count Matrix**
+        **Spike Count Matrix**
 
         .. math::
 
@@ -61,7 +61,7 @@ class Rate(object):
                  \\end{bmatrix}
                 }
 
-        **Formula: Firing Rate Matrix**
+        **Firing Rate Matrix**
 
         .. math::
 
