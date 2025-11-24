@@ -129,7 +129,7 @@ def plot_rate_all_channels_across_time_in_ax(ax, rates_set, window=None,
     line_styles = cycle(["-", "--", "-.", ":"])
     # Plot
     for i, (key, array) in enumerate(rates_set.items()):
-        style = line_styles[i % len(line_styles)]
+        style = next(line_styles)
         color = colors[i % len(colors)]
         ax.plot(array, label=key, linestyle=style, color=color, linewidth=2)
     ax.grid(True, alpha=0.3)
@@ -139,6 +139,8 @@ def plot_rate_all_channels_across_time_in_ax(ax, rates_set, window=None,
 
     nucname = "" if nucleus is None else " in " + nucleus
     ax.set_title("Firing Rate Over Time for all channels of " + " neurons" + nucname)
+
+    ax.legend(bbox_to_anchor=(1.05,1), loc="upper left")
 
     return ax
 

@@ -96,6 +96,7 @@ This is imported as
 
 """
 
+import numbers
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -110,6 +111,87 @@ from analyseur.cbgt.parameters import SignalAnalysisParams, SimulationParams
 
 __siganal = SignalAnalysisParams()
 __simparams = SimulationParams()
+
+
+##########################################################################
+#    PLOT Mean Rate Based on Spike Counts
+##########################################################################
+
+def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None,
+                                     nucleus=None, mode=None):
+    """
+    Draws the Mean Rate (1/s) on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+
+    """
+    # ============== DEFAULT Parameters ==============
+    if window is None:
+        window = __siganal.window
+
+    if binsz is None:
+        binsz = __siganal.binsz_100perbin
+
+    # if neurons is None:
+    #     neurons = "all"
+    # elif isinstance(neurons, numbers.Number):
+    #
+    # if neurons == "all":
+    #     spiketimes_set = spiketimes_superset
+    # elif isinstance(neurons, numbers.Number):
+    #     spiketimes_set = dict(list(spiketimes_set.items())[:neurons])  # first N = neurons
+    # else:
+    #     keys_to_remove = ["n" + str(i) for i in neurons]
+    #
+    #     # Convert to set for faster lookup
+    #     remove_set = set(keys_to_remove)
+    #
+    #     spiketimes_set = {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
+
+    n_neurons = len(spiketimes_set)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    _, rate_matrix, _ = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set, window=window, binsz=binsz,)
+    mu_rate_vec = rate_matrix.mean(axis=1)
+
+    print(len(mu_rate_vec))
+
+    if orient == "horizontal":
+        ax.barh(range(len(mu_rate_vec)), mu_rate_vec, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel("Mean Rate (1/s)")
+        ax.margins(y=0)
+    else:
+        ax.bar(range(len(mu_rate_vec)), mu_rate_vec, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Mean Rate (1/s)")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("Mean Rate Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
 
 
 ##########################################################################

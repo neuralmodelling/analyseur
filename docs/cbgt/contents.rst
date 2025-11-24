@@ -54,6 +54,7 @@ Statistics
    stats/wavelet.rst
    stats/psd.rst
    stats/psth.rst
+   stats/rate.rst
 
 Analytics
 ==========

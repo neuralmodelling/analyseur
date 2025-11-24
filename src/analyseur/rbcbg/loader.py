@@ -156,7 +156,7 @@ class LoadRates(CommonLoader):
         if match:
             nucleus = match.group(1)
         else:
-            print("Filename is not in the form '<nucleus>_model_\d+_percent_\d+.csv'.")
+            print("Filename is not in the form '<nucleus>_model_<ID>_percent_<value>.csv'.")
             nucleus = None
 
         return nucleus
@@ -174,7 +174,7 @@ class LoadRates(CommonLoader):
         if match:
             modelID = int(match.group(1))
         else:
-            print("Filename is not in the form '<nucleus>_model_<ID>_percent_\d+.csv'.")
+            print("Filename is not in the form '<nucleus>_model_<ID>_percent_<value>.csv'.")
             modelID = None
 
         return modelID
@@ -193,7 +193,7 @@ class LoadRates(CommonLoader):
         if match:
             percentage = int(match.group(1))
         else:
-            print("Filename is not in the form '<nucleus>_model_\d+_percent_<value>.csv'.")
+            print("Filename is not in the form '<nucleus>_model_<ID>_percent_<value>.csv'.")
             percentage = None
 
         return percentage
