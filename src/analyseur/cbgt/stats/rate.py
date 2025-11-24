@@ -32,6 +32,50 @@ class Rate(object):
 
         :return: spike count matrix, firing rate matrix and time bins
 
+        **Formula**
+
+        .. table:: Formula
+        ======================================================================================================================== ===============================================================
+          Definitions                                                                                                               Interpretation
+        ======================================================================================================================== ===============================================================
+         total neurons, :math:`n_{Nuc}`                                                                                             total number of neurons in the Nucleus
+         neuron index, :math:`i`                                                                                                    i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         spike count, :math:`c^{(i)}(t)`                                                                                              number of spikes of the i-th neuron at time :math:`t`
+         spike count matrix, :math:`C = \\left[c(a,b) = c^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`            spike counts of all (:math:`n_{Nuc}`) neurons for all times
+         firing rate, :math:`f^{(i)}(t) = \\frac{c^{(i)}(t)}{(t_k - t_{k-1})}`                                                        firing rate of the i-th neuron at time :math:`t` with bin size :math:`t_k - t_{k-1}`
+         firing rate matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`            rates of all (:math:`n_{Nuc}`) neurons for all times
+        ======================================================================================================================== ===============================================================
+
+        **Formula: Spike Count Matrix**
+
+        .. math::
+
+            C = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
+                {\\begin{bmatrix}
+                  c^{(1)}(t_0) & c^{(1)}(t_1) & \\ldots & c^{(1)}(t_T) \n
+                  c^{(2)}(t_0) & c^{(2)}(t_1) & \\ldots & c^{(2)}(t_T) \n
+                  \\vdots & \\vdots & \\ldots & \\vdots \n
+                  c^{(i)}(t_0) & c^{(i)}(t_1) & \\ldots & c^{(i)}(t_T) \n
+                  \\vdots & \\vdots & \\ldots & \\vdots \n
+                  c^{(n_{Nuc})}(t_0) & c^{(n_{Nuc})}(t_1) & \\ldots & c^{(n_{Nuc})}(t_T)
+                 \\end{bmatrix}
+                }
+
+        **Formula: Firing Rate Matrix**
+
+        .. math::
+
+            F = \\overset{\\begin{matrix}t_0 & \\quad\\quad & t_1 & & & &\\ldots & & & t_T\\end{matrix}}
+                {\\begin{bmatrix}
+                  f^{(1)}(t_0) & f^{(1)}(t_1) & \\ldots & f^{(1)}(t_T) \n
+                  f^{(2)}(t_0) & f^{(2)}(t_1) & \\ldots & f^{(2)}(t_T) \n
+                  \\vdots & \\vdots & \\ldots & \\vdots \n
+                  f^{(i)}(t_0) & f^{(i)}(t_1) & \\ldots & f^{(i)}(t_T) \n
+                  \\vdots & \\vdots & \\ldots & \\vdots \n
+                  f^{(n_{Nuc})}(t_0) & f^{(n_{Nuc})}(t_1) & \\ldots & f^{(n_{Nuc})}(t_T)
+                 \\end{bmatrix}
+                }
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
