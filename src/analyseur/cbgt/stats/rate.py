@@ -45,7 +45,7 @@ class Rate(object):
          function, :math:`I(x) = \\{1 \\text{ if } x \\text{ is true else } 0\\}`                                                      indicator function which equals 1 if condition inside is true and 0 otherwise
          spike count, :math:`c^{(i)}(t) = \\sum_{k} I(t \\cdot \\beta \\le s^{(i)}_k < (t+1) \\cdot \\beta)`                                 number of spikes of the i-th neuron at time :math:`t`
          spike count matrix, :math:`C = \\left[c(a,b) = c^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`               spike counts of all (:math:`n_{Nuc}`) neurons for all times
-         firing rate, :math:`f^{(i)}(t) = \\frac{c^{(i)}(t)}{\\beta}`                                                           firing rate of the i-th neuron at time :math:`t` with bin size :math:`\\beta`
+         firing rate, :math:`f^{(i)}(t) = \\frac{c^{(i)}(t)}{\\beta}`                                                                  firing rate of the i-th neuron at time :math:`t` with bin size :math:`\\beta`
          firing rate matrix, :math:`F = \\left[f(a,b) = f^{(a)}(b)\\right]_{\\forall{a \\in [1, n_{Nuc}], b \\in [t_0, t_T]}}`               rates of all (:math:`n_{Nuc}`) neurons for all times
         ========================================================================================================================== ===============================================================
 
