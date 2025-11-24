@@ -108,9 +108,9 @@ class Rate(object):
                 \\begin{matrix}
                  \\rightarrow \\mu^{(1)} \n
                  \\rightarrow \\mu^{(2)} \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 \\vdots \n
                  \\rightarrow \\mu^{(i)} \n
-                 \\vdots & \\vdots & \\ldots & \\vdots \n
+                 \\vdots \n
                  \\rightarrow \\mu^{(n_{Nuc})}
                 \\end{matrix}
 
