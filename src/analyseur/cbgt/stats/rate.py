@@ -15,6 +15,27 @@ class Rate(object):
 
     @classmethod
     def get_count_rate_matrix(cls, spiketimes_set=None, window=None, binsz=None, neurons="all"):
+        """
+        Returns the spike count and firing rate matrices for all neurons.
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+
+        :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+        :return: spike count matrix, firing rate matrix and time bins
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         # ============== DEFAULT Parameters ==============
         if window is None:
             window = cls.__siganal.window
@@ -42,7 +63,7 @@ class Rate(object):
     @classmethod
     def mean_rate(cls, spiketimes_set=None, window=None, binsz=None, neurons="all", across=None):
         """
-        Returns the basic measure of synchrony of spiking from all neurons.
+        Returns the mean firing rate from all neurons.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -57,7 +78,7 @@ class Rate(object):
             - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
 
         :param across: "neurons" or "times"
-        :return: a number
+        :return: mean rate and time bins
 
         **Formula**
 
