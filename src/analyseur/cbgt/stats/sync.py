@@ -422,8 +422,8 @@ class Synchrony(object):
                 {\\underset{
                     \\begin{matrix}
                         \\quad\\quad\\uparrow & \\quad\\quad\\quad & \\uparrow & \\quad &\\ldots & & & \\uparrow \n
-                        \\quad\\pi_{t_0} & \\quad\\quad\\quad & \\pi_{t_1} & \\quad &\\ldots & & & \\pi_{t_T} & \\rightarrow var_{\\forall{t}} \n
-                        \\quad\\pi_{t_0} & \\quad\\quad\\quad & \\pi_{t_1} & \\quad &\\ldots & & & \\pi_{t_T} & \\rightarrow \\mu_{\\forall{t}}
+                        \\quad\\Sigma_{t_0} & \\quad\\quad\\quad & \\Sigma_{t_1} & \\quad &\\ldots & & & \\Sigma_{t_T} & \\rightarrow var_{\\forall{t}} \n
+                        \\quad\\Sigma_{t_0} & \\quad\\quad\\quad & \\Sigma_{t_1} & \\quad &\\ldots & & & \\Sigma_{t_T} & \\rightarrow \\mu_{\\forall{t}}
                     \\end{matrix}}
                {\\begin{bmatrix}
                  p^{(1)}(t_0) & p^{(1)}(t_1) & \\ldots & p^{(1)}(t_T) \n
@@ -440,10 +440,10 @@ class Synchrony(object):
         .. math::
 
             A &\\triangleq var\\left(\\begin{bmatrix}
-                                       \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
+                                       \\Sigma_{t_0} & \\Sigma_{t_1} & \\ldots & \\Sigma_{t_T}
                                      \\end{bmatrix}\\right) = var_{\\forall{t}} \n
             B &\\triangleq \\mu\\left(\\begin{bmatrix}
-                                       \\pi_{t_0} & \\pi_{t_1} & \\ldots & \\pi_{t_T}
+                                       \\Sigma_{t_0} & \\Sigma_{t_1} & \\ldots & \\Sigma_{t_T}
                                      \\end{bmatrix}\\right) = \\mu_{\\forall{t}}
 
         Then, synchrony is measured as
