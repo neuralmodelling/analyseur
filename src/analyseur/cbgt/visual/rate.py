@@ -145,22 +145,6 @@ def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None
     if binsz is None:
         binsz = __siganal.binsz_100perbin
 
-    # if neurons is None:
-    #     neurons = "all"
-    # elif isinstance(neurons, numbers.Number):
-    #
-    # if neurons == "all":
-    #     spiketimes_set = spiketimes_superset
-    # elif isinstance(neurons, numbers.Number):
-    #     spiketimes_set = dict(list(spiketimes_set.items())[:neurons])  # first N = neurons
-    # else:
-    #     keys_to_remove = ["n" + str(i) for i in neurons]
-    #
-    #     # Convert to set for faster lookup
-    #     remove_set = set(keys_to_remove)
-    #
-    #     spiketimes_set = {k: v for k, v in spiketimes_superset.items() if k not in remove_set}
-
     n_neurons = len(spiketimes_set)
 
     match mode:
@@ -171,10 +155,8 @@ def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None
 
     get_axis = lambda orient: "x" if orient=="horizontal" else "y"
 
-    _, rate_matrix, _ = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set, window=window, binsz=binsz,)
-    mu_rate_vec = rate_matrix.mean(axis=1)
-
-    print(len(mu_rate_vec))
+    mu_rate_vec, _ = Rate.mean_rate(spiketimes_set=spiketimes_set, window=window,
+                                    binsz=binsz, neurons="all", across="times")
 
     if orient == "horizontal":
         ax.barh(range(len(mu_rate_vec)), mu_rate_vec, color="steelblue", edgecolor="black")
@@ -189,16 +171,16 @@ def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None
     ax.grid(True, alpha=0.3, axis=get_axis(orient))
 
     nucname = "" if nucleus is None else " in " + nucleus
-    ax.set_title("Mean Rate Distribution of " + str(n_neurons) + " neurons" + nucname)
+    ax.set_title("Mean Rate (Counts) Distribution of " + str(n_neurons) + " neurons" + nucname)
 
     return ax
 
 
 ##########################################################################
-#    PLOT Mean Rate
+#    PLOT Mean Rate Based on ISI
 ##########################################################################
 
-def plot_mean_rate_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
+def plot_mean_rate_isi_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
     Draws the Mean Rate (1/s) on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
@@ -230,7 +212,11 @@ def plot_mean_rate_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
     [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
     mu_arr = InterSpikeInterval.mean_freqs(all_isi)
-    vec_mu = mu_arr.values()
+
+    if len(mu_arr)==0:
+        vec_mu = [0]
+    else:
+        vec_mu = mu_arr.values()
 
     if orient == "horizontal":
         ax.barh(range(len(vec_mu)), vec_mu, color="steelblue", edgecolor="black")
@@ -245,11 +231,11 @@ def plot_mean_rate_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     ax.grid(True, alpha=0.3, axis=get_axis(orient))
 
     nucname = "" if nucleus is None else " in " + nucleus
-    ax.set_title("Mean Rate Distribution of " + str(n_neurons) + " neurons" + nucname)
+    ax.set_title("Mean Rate (ISI) Distribution of " + str(n_neurons) + " neurons" + nucname)
 
     return ax
 
-def plot_mean_rate(spiketimes_superset, nucleus=None, mode=None):
+def plot_mean_rate_isi(spiketimes_superset, nucleus=None, mode=None):
     """
     Visualize Mean Rate (1/s) of the given neuron population.
 
@@ -271,7 +257,7 @@ def plot_mean_rate(spiketimes_superset, nucleus=None, mode=None):
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_mean_rate_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
+    ax = plot_mean_rate_isi_in_ax(ax, spiketimes_superset, nucleus=nucleus, mode=mode)
 
     plt.show()
 

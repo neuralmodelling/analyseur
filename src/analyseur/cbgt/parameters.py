@@ -73,6 +73,94 @@ DEFAULT_FREQUENCY_BANDS = {
     "High Gamma": (80, 150),
 }
 
+DEFAULT_SIZE_INFO = {
+    "cortex": {
+        "TOTAL_NUMBER_OF_POPULATIONS": 4,  # TOTAL_NUMBER_OF_CHANNELS_MODEL
+        "scale": 4,  # The number of neurons will be multiplied by this value
+        "TOTAL_NUMBER_OF_CHANNELS": 4,
+    },
+    "bg": {
+        "TOTAL_NUMBER_OF_POPULATIONS": 4,
+        "scale": 4,
+        "TOTAL_NUMBER_OF_CHANNELS": 4,
+    },
+    "thalamus": {
+        "TOTAL_NUMBER_OF_POPULATIONS": 4,
+        "scale": 4,
+        "TOTAL_NUMBER_OF_CHANNELS": 4,
+    }
+}
+
+DEFAULT_PROJECTIONS_TYPES = {
+    "bg": {
+        'MD->MSN' : 'focused', # TODO check if should be diffuse instead?
+        'MD->FSI' : 'focused', # TODO check if should be diffuse instead?
+        'ProtGPe->STN':          'focused', # ^
+        'GPe->STN':           'focused', # ^
+        'PTN->MSN':           'focused', # ^
+        'CSN->MSN':           'focused', #
+        'CMPf->MSN':          'diffuse', # ^
+        'MSN->MSN':           'diffuse', # ^
+        'FSI->MSN':           'diffuse', # ^
+        'STN->MSN':           'diffuse', # ^
+        'GPe->MSN':           'diffuse', # ^
+        'CSN->FSI':           'focused', # ^
+        'PTN->FSI':           'focused', # ^
+        'CMPf->FSI':          'diffuse', # ^
+        'FSI->FSI':           'diffuse', # ^
+        'STN->FSI':           'diffuse', # ^
+        'GPe->FSI':           'diffuse', # ^
+        'PTN->STN':           'focused', # ^
+        'CMPf->STN':          'diffuse', # ^
+        'GPe->STN':           'focused', # ^
+        'CMPf->GPe':          'diffuse', # ^
+        'MSN->GPe':           'focused', # ^
+        'STN->GPe':           'diffuse', # ^
+        'GPe->GPe':           'diffuse', # ^
+        'CMPf->GPi':          'diffuse', # ^
+        'MSN->GPi':           'focused', # ^
+        'STN->GPi':           'diffuse', # ^
+        'GPe->GPi':           'diffuse', #
+        'ArkyGPe->MSN':          'diffuse', # ^
+        'ArkyGPe->FSI':          'diffuse', # ^
+        'CMPf->ArkyGPe':         'diffuse', # ^
+        'MSN->ArkyGPe':          'focused', # ^
+        'STN->ArkyGPe':          'diffuse', # ^
+        'ArkyGPe->ArkyGPe':         'diffuse', # ^
+        'ProtGPe->ArkyGPe':         'diffuse', # ^
+        'CMPf->ProtGPe':         'diffuse', # ^
+        'MSN->ProtGPe':          'focused', # ^
+        'STN->ProtGPe':          'diffuse', # ^
+        'ArkyGPe->ProtGPe':         'diffuse', # ^
+        'ProtGPe->ProtGPe':         'diffuse', # ^
+        'ProtGPe->GPi':          'diffuse', # ^
+    },
+    "cortex": {
+        'CSN->CSN': 'diffuse',
+        'CSN->PTN': 'diffuse',
+        'CSN->IN': 'diffuse',
+        'PTN->CSN': 'diffuse',
+        'PTN->PTN': 'diffuse',
+        'PTN->IN': 'diffuse',
+        'IN->CSN': 'diffuse',
+        'IN->IN': 'diffuse',
+        'IN->PTN': 'diffuse',
+        'MD->IN': 'diffuse',
+        'MD->PTN': 'focused',
+        'MD->CSN': 'focused'
+    },
+    "thalamus": {
+        'TRN->MD': 'diffuse',
+        'MD->TRN': 'focused',
+        'TRN->TRN' : 'diffuse',
+        'GPi->MD': 'focused',
+        'PTN->MD': 'focused',
+        'PTN->TRN': 'focused',
+        'CMPf->TRN': 'diffuse'
+    },
+}
+
+
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     """
     Returns bin size by rule
@@ -214,6 +302,9 @@ class SimulationParams:
     neurotrans: List[str] = None
     conductance: dict = field(default_factory=lambda: DEFAULT_CONDUCTANCES.copy())
     ff_currents: dict = field(default_factory=lambda: DEFAULT_FEEDFORWORD_CURRENTS.copy())
+    size_info: dict = field(default_factory=lambda: DEFAULT_SIZE_INFO.copy())
+    modelParamsID: int = 9
+    projection_types: dict = field(default_factory=lambda: DEFAULT_PROJECTIONS_TYPES.copy())
 
     def __post_init__(self):
         if self.nuclei_ctx is None:

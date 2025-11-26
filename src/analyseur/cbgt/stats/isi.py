@@ -442,7 +442,7 @@ class InterSpikeInterval(object):
         for n_id, isi in isi_set.items():
             # n_spikes = len(isi) + 1
             if len(isi) == 0:
-                mean_spiking_freq[n_id] = 0
+                mean_spiking_freq[n_id] = np.array([0.0])[0]
             else:
                 mean_spiking_freq[n_id] = (1 / (len(isi) + 1e-8)) * np.sum(1 / (isi + 1e-8))
 

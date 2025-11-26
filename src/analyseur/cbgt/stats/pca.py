@@ -108,13 +108,14 @@ class PCA(object):
         # Activity Matrix
         for i, spikes in enumerate(desired_spiketimes_subset):
             counts, _ = np.histogram(spikes, bins=time_bins)
-            activity[i] = counts
+            activity[i, :] = counts
         activity = activity[::-1, :]  # reverse it so that neuron 0 is at the bottom
 
         return activity, time_bins
 
     @staticmethod
     def __compute_PCA(activity_matrix, n_comp):
+        print(f"Shape of Activity Matrix = {activity_matrix.shape}")
         scaler = StandardScaler()
         scaled_activity = scaler.fit_transform(activity_matrix)
         pca = sklPCA(n_components=n_comp)

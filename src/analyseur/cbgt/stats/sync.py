@@ -130,7 +130,10 @@ class Synchrony(object):
 
 
     @staticmethod
-    def __compute_for_basic(freq_matrix):
+    def __compute_for_basic(freq_matrix, filter_freqs=False):
+        if filter_freqs: # population frequencies during active periods, i.e, excluding time bins with no activity
+            freq_matrix = freq_matrix[freq_matrix > 0]
+
         if len(freq_matrix) > 0:
             # Mean of rates across neurons for all t
             colmn_wise_means = np.mean(freq_matrix, axis=0)
@@ -141,9 +144,12 @@ class Synchrony(object):
             mean_F = np.mean(colmn_wise_vars)
 
             if mean_F == 0:
-                s_sync = 0.0
+                if variance_F == 0:
+                    s_sync = 0.0     # Edge Case: Perfect synchrony
+                else:
+                    s_sync = np.inf  # Theoretical: Infinite synchrony
             else:
-                s_sync = variance_F / mean_F
+                s_sync = np.sqrt(variance_F / mean_F)
         else:
             s_sync = 0.0  # variance_F = 0.0, mean_F = 0.0
 
@@ -151,7 +157,10 @@ class Synchrony(object):
 
 
     @staticmethod
-    def __compute_fano(pop_spike_count_matrix):
+    def __compute_fano(pop_spike_count_matrix, filter_spikes=False):
+        if filter_spikes: # population spike counts during active periods, i.e, excluding time bins with no activity
+            pop_spike_count_matrix = pop_spike_count_matrix[pop_spike_count_matrix > 0]
+
         if len(pop_spike_count_matrix) > 0:
             # Sum of spike counts across neurons for all t
             colmn_wise_sums = np.sum(pop_spike_count_matrix, axis=0)
@@ -185,7 +194,7 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_basic(cls, spiketimes_set, binsz=None, window=None):
+    def compute_basic(cls, spiketimes_set, binsz=None, window=None, filter_freqs=True):
         """
         Returns the basic measure of synchrony of spiking from all neurons.
 
@@ -194,7 +203,12 @@ class Synchrony(object):
 
         :param binsz: integer or float; `0.01` [default]
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :return: a number
+        :param filter_freqs: boolean; `True` [default]
+        :return:
+
+        * s_sync : float
+        * freq_matrix : numpy array, Population frequencies per time bin
+        * time_bins_center : numpy array, Center times of each bin
 
         **Formula**
 
@@ -275,30 +289,32 @@ class Synchrony(object):
 
         NOTE: This method is a simple histogram-based approach that uses fixed bins.
 
+        **INTERPRETATION**
+
+        .. table:: Interpretation
+        ======================= =============================================
+         :math:`S_{sync}`          Interpretation
+        ======================= =============================================
+          :math:`\\approx 0`       Low synchrony (independent firing)
+          :math:`\\ge 1`           High synchrony (neurons fire together)
+          :math:`= \\infty`        Perfect synchrony
+        ======================= =============================================
+
+        COMMENTS:
+
+        * Fano factor can indicate population-level synchrony
+            - higher values correspond to more synchrony
+        * Fano factor depends on time bin size.
+
+        **Notes on Filtering**
+
+        The default argument `filter_freqs=True` means only frequencies during active periods are accounted for
+        making the computation.
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        # # ============== DEFAULT Parameters ==============
-        # if window is None:
-        #     window = cls.__siganal.window
-        #
-        # if binsz is None:
-        #     binsz = cls.__siganal.binsz_100perbin
-        #
-        # [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
-        # n_neurons = len(spike_arrays)
-        #
-        # time_bins = np.arange(window[0], window[1] + binsz, binsz)
-        # n_bins = len(time_bins) - 1
-        #
-        # freq_matrix = np.zeros((n_neurons, n_bins))
-        #
-        # for i, spike_times in enumerate(spike_arrays):
-        #     counts, _ = np.histogram(spike_times, bins=time_bins)
-        #     freq_matrix[i, :] = counts / binsz
-        #
-        # return cls.__compute_for_basic(freq_matrix)
         #============== DEFAULT Parameters ==============
         if window is None:
             window = cls.__siganal.window
@@ -312,7 +328,7 @@ class Synchrony(object):
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [s_sync, _, _] = cls.__compute_for_basic(freq_matrix)
+        [s_sync, _, _] = cls.__compute_for_basic(freq_matrix, filter_freqs=filter_freqs)
 
         return s_sync, freq_matrix, time_bins_center
 
@@ -368,7 +384,7 @@ class Synchrony(object):
 
 
     @classmethod
-    def compute_fano_factor(cls, spiketimes_set, binsz=None, window=None):
+    def compute_fano_factor(cls, spiketimes_set, binsz=None, window=None, filter_spikes=True):
         """
         Returns the Fano factor as a measure of synchrony of spiking from all neurons.
 
@@ -377,7 +393,12 @@ class Synchrony(object):
 
         :param binsz: integer or float; `0.01` [default]
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :return: a number
+        :param filter_spikes: boolean; `True` [default]
+        :return:
+
+        * fanofactor : float = variance / mean of population spike counts
+        * spike_matrix : numpy array, Population spike counts per time bin
+        * time_bins_center : numpy array, Center times of each bin
 
         **Formula**
 
@@ -431,6 +452,35 @@ class Synchrony(object):
 
             F_{Sync} = \\frac{A}{B} = \\frac{var\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}{\\mu\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}
 
+        **INTERPRETATION**
+
+        .. table:: Interpretation
+        ================= ===================================================
+          Fano Factor       Interpretation
+        ================= ===================================================
+          :math:`= 1`       Poisson-like variability
+          :math:`< 1`       More regular/periodic than Poisson (Sub-Poisson)
+          :math:`> 1`       More variable/bursty than Poisson (Super-Poisson)
+        ================= ===================================================
+
+        COMMENTS:
+
+        * Fano factor can indicate population-level synchrony
+            - higher values correspond to more synchrony
+        * Fano factor depends on time bin size.
+
+        **Notes on Filtering**
+
+        The default argument `filter_spikes=True` means only spike counts during active periods are accounted for
+        making the computation. This is the default because,
+
+        * Biological relevance
+            - interest in variability of activity during firing periods **not during silent periods**.
+        * Statistical robustness
+            - zero bins artificially lower both variance and mean values.
+        * Practical interpretation
+            - Fano factor is more meaningful when computed over active periods.
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
@@ -449,9 +499,66 @@ class Synchrony(object):
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [fanofactor, _] = cls.__compute_fano(spike_matrix)
+        [fanofactor, _] = cls.__compute_fano(spike_matrix, filter_spikes=filter_spikes)
 
         return fanofactor, spike_matrix, time_bins_center
+
+    @classmethod
+    def compute_fano_factor_multibins(cls, spiketimes_set, binsz_list=None, window=None):
+        """
+        Returns the Fano factor for multiple bin sizes
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz_list: list of integer or float
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :return: For each binsz in binsz_list
+
+        * fanofactor : float = variance / mean of population spike counts
+        * spike_matrix : numpy array, Population spike counts per time bin
+        * time_bins_center : numpy array, Center times of each bin
+
+        **Formula**
+
+        see :py:meth:`.compute_fano_factor`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        # ============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
+
+        if binsz_list is None:
+            binsz_list = [
+                cls.__siganal.binsz_10perbin,
+                cls.__siganal.binsz_100perbin,
+                cls.__siganal.binsz_1000perbin
+            ]
+
+        results = {}
+        for binsz in binsz_list:
+            # spike_matrix, time_bins = cls.__get_spike_matrix(spiketimes_set, window, binsz)
+            spike_matrix, _, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+                                                                    window=window, binsz=binsz,
+                                                                    neurons="all")
+            time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
+
+            [fanofactor, _] = cls.__compute_fano(spike_matrix)
+
+            results[binsz] = {
+                "fanofactor": fanofactor,
+                "spike_matrix": spike_matrix,
+                "time_bins_center": time_bins_center,
+                # variance of population spike counts during active periods, i.e, excluding time bins with no activity
+                # "variance": np.var(spike_matrix[spike_matrix > 0]) if np.any(spike_matrix > 0) else 0,
+                # mean of population spike counts during active periods, i.e, excluding time bins with no activity
+                # "mean": np.mean(spike_matrix[spike_matrix > 0]) if np.any(spike_matrix > 0) else 0,
+            }
+
+        return results
 
     @classmethod
     def compute_sync_index_from_PSTH(cls, spiketimes_set, binsz=None, window=None):
