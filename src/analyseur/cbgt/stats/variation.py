@@ -168,7 +168,7 @@ class Variations(object):
 
             \\overrightarrow{cv}_2^{(i)} = \\begin{cases}
                                              \\text{NaN} & \\text{if } n_{ISI}^{(i)} \\le 1 \n
-                                             \\frac{1}{\\left(n_{ISI}^{(i)} - 1\\right)} \\sum_{k=2}^{n_{ISI}^{(i)}} 2 \\cdot \\frac{\\left| isi_k^{(i)} - isi_{k-1}^{(i)} \\right|}{\\text{max}\\left(isi_k^{(i)} - isi_{k-1}^{(i)}, 10^{-8} \\right)} & \\text{otherwise}
+                                             \\frac{1}{\\left(n_{ISI}^{(i)} - 1\\right)} \\sum_{k=2}^{n_{ISI}^{(i)}} \\left[2 \\cdot \\frac{\\left| isi_k^{(i)} - isi_{k-1}^{(i)} \\right|}{\\text{max}\\left(isi_k^{(i)} - isi_{k-1}^{(i)}, 10^{-8} \\right)}\\right] & \\text{otherwise}
                                            \\end{cases}
 
         Returns the local coefficient of variation for all individual neurons.
@@ -233,7 +233,7 @@ class Variations(object):
 
             \\overrightarrow{lv}^{(i)} = \\begin{cases}
                                            \\text{NaN} & \\text{if } n_{ISI}^{(i)} \\le 1 \n
-                                           \\frac{1}{\\left(n_{ISI}^{(i)} - 1\\right)} \\sum_{k=2}^{n_{ISI}^{(i)}} 3 \\cdot \\frac{\\left(isi_k^{(i)} - isi_{k-1}^{(i)}\\right)^2}{\\text{max}\\left(\\left(isi_k^{(i)} - isi_{k-1}^{(i)}\\right)^2, 10^{-8} \\right)} & \\text{otherwise}
+                                           \\frac{1}{\\left(n_{ISI}^{(i)} - 1\\right)} \\sum_{k=2}^{n_{ISI}^{(i)}} \\left[3 \\cdot \\frac{\\left(isi_k^{(i)} - isi_{k-1}^{(i)}\\right)^2}{\\text{max}\\left(\\left(isi_k^{(i)} - isi_{k-1}^{(i)}\\right)^2, 10^{-8} \\right)}\\right] & \\text{otherwise}
                                           \\end{cases}
 
         Returns the local variation for all individual neurons.
