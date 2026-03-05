@@ -148,9 +148,9 @@ class Variations(object):
 
         for n_id, isi in isi_set.items():
             if len(isi) == 0:
-                all_CV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
+                all_CV[n_id] = np.nan  # np.float(0.) to avoid error
             else:
-                all_CV[n_id] = np.std(isi) / (np.mean(isi) + 1e-8)
+                all_CV[n_id] = np.std(isi) / np.maximum(np.mean(isi), 1e-8)
 
         return all_CV
 
@@ -202,11 +202,11 @@ class Variations(object):
 
         for n_id, isi in isi_set.items():
             if len(isi) == 0:
-                all_CV2[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
+                all_CV2[n_id] = np.nan  # np.float(0.) to avoid error
             else:
-                abs_diff_over_sum = np.abs( np.diff(isi) ) / ((isi[1:] + isi[:-1]) + 1e-8)
+                abs_diff_over_sum = np.abs( np.diff(isi) ) / np.maximum((isi[1:] + isi[:-1]), 1e-8)
                 if len(abs_diff_over_sum) == 0:
-                    all_CV2[n_id] = np.zeros(1)[0]
+                    all_CV2[n_id] = np.nan
                 else:
                     all_CV2[n_id] = np.mean(2 * abs_diff_over_sum)
 
@@ -260,11 +260,11 @@ class Variations(object):
 
         for n_id, isi in isi_set.items():
             if len(isi) == 0:
-                all_LV[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
+                all_LV[n_id] = np.nan  # np.float(0.) to avoid error
             else:
-                sq_diff_over_sum = np.square(np.diff(isi)) / (np.square((isi[1:] + isi[:-1])) + 1e-8)
+                sq_diff_over_sum = np.square(np.diff(isi)) / np.maximum(np.square((isi[1:] + isi[:-1])), 1e-8)
                 if len(sq_diff_over_sum) == 0:
-                    all_LV[n_id] = np.zeros(1)[0]
+                    all_LV[n_id] = np.nan
                 else:
                     all_LV[n_id] = np.mean(3 * sq_diff_over_sum)
 
