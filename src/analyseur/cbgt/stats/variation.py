@@ -102,6 +102,13 @@ class Variations(object):
     @classmethod
     def computeCV(cls, isi_set=None):
         """
+        .. math::
+
+            \\overrightarrow{cv}^{(i)} = \\begin{cases}
+                                            \\text{NaN} & \\text{if } n_{ISI}^{(i)} = 0 \n
+                                            \\frac{\\sqrt{\\frac{1}{n_{ISI}^{(i)}} \\sum_{k=1}^n_{ISI}^{(i)} \\left(isi_k^{(i)} - \\mu_i\\right)^2 }}{\\text{max}\\left\\frac{1}{n_{ISI}^{(i)}} \\sum_{k=1}^n_{ISI}^{(i)} isi_k^{(i)}, 10^{-8} \\right)} & \\text{otherwise}
+                                          \\end{cases}
+
         Returns the coefficient of variation for all individual neurons.
 
         :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
