@@ -116,6 +116,28 @@ class Synchrony(object):
         return spike_matrix, time_bins
 
     @staticmethod
+    def __count_matrix_and_active_neurons(spiketimes_set, window, binsz):
+        min_spikes = 1
+        n_neurons = len(spiketimes_set)
+        duration = window[1] - window[0]
+
+        # Create time bins
+        n_bins = int(duration / binsz)
+        t_bins = np.linspace(0, duration, n_bins)
+
+        # Create spike count matrix and identify active neurons
+        spike_counts = np.zeros((n_neurons, n_bins-1))
+        active_neurons = []
+
+        for i, (nX, indiv_spiketimes) in enumerate(spiketimes_set.items()):
+            counts = np.histogram(indiv_spiketimes, bins=t_bins)[0]
+            if np.sum(counts) >= min_spikes and np.std(counts) > 0:
+                spike_counts[i, :] = counts
+                active_neurons.append(i)
+
+        return spike_counts, active_neurons, t_bins
+
+    @staticmethod
     def __get_spikearray_and_window(spiketimes_superset, window, neurons="all"):
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
         n_neurons = len(desired_spiketimes_subset)
@@ -130,71 +152,115 @@ class Synchrony(object):
 
 
     @staticmethod
-    def __compute_for_basic(freq_matrix, filter_freqs=False):
-        if filter_freqs: # population frequencies during active periods, i.e, excluding time bins with no activity
-            freq_matrix = freq_matrix[freq_matrix > 0]
+    def __compute_for_basic(freq_matrix, filter_zeros=False):
+        # if filter_zeros: # population frequencies during active periods, i.e, excluding time bins with no activity
+            # freq_matrix = freq_matrix[freq_matrix > 0]
+            # freq_matrix[:, np.all(freq_matrix > 0, axis=0)]
 
-        if len(freq_matrix) > 0:
-            # Mean of rates across neurons for all t
+        if filter_zeros:
+            n = freq_matrix.shape[1]
+            colmn_wise_means = np.zeros(n)
+            colmn_wise_vars = np.zeros(n)
+            for j in range(n):
+                freqs = freq_matrix[:,j]
+                # Mean of rates across neurons for all t
+                colmn_wise_means[j] = np.mean(freqs[freqs > 0])
+                # Variance of rates across neurons for all t
+                colmn_wise_vars[j] = np.var(freqs[freqs > 0])
+        else:
+            # Mean of rates across t
             colmn_wise_means = np.mean(freq_matrix, axis=0)
-            # Variance of rates across neurons for all t
+            # Variance of rates across t
             colmn_wise_vars = np.var(freq_matrix, axis=0)
 
-            variance_F = np.var(colmn_wise_means)
-            mean_F = np.mean(colmn_wise_vars)
+        variance_F = np.var(colmn_wise_means)
+        mean_F = np.mean(colmn_wise_vars)
 
-            if mean_F == 0:
-                if variance_F == 0:
-                    s_sync = 0.0     # Edge Case: Perfect synchrony
-                else:
-                    s_sync = np.inf  # Theoretical: Infinite synchrony
+        if mean_F == 0:
+            if variance_F == 0:
+                s_sync = 0.0     # Edge Case: Perfect synchrony
             else:
-                s_sync = np.sqrt(variance_F / mean_F)
+                s_sync = np.inf  # Theoretical: Infinite synchrony
         else:
-            s_sync = 0.0  # variance_F = 0.0, mean_F = 0.0
+            s_sync = np.sqrt(variance_F / mean_F)
 
         return s_sync, colmn_wise_means, colmn_wise_vars
 
 
     @staticmethod
-    def __compute_fano(pop_spike_count_matrix, filter_spikes=False):
-        if filter_spikes: # population spike counts during active periods, i.e, excluding time bins with no activity
-            pop_spike_count_matrix = pop_spike_count_matrix[pop_spike_count_matrix > 0]
+    def __compute_fano(pop_spike_count_matrix, filter_zeros=False):
+        # if filter_spikes: # population spike counts during active periods, i.e, excluding time bins with no activity
+        #     pop_spike_count_matrix = pop_spike_count_matrix[pop_spike_count_matrix > 0]
 
-        if len(pop_spike_count_matrix) > 0:
-            # Sum of spike counts across neurons for all t
-            colmn_wise_sums = np.sum(pop_spike_count_matrix, axis=0)
+        # if len(pop_spike_count_matrix) > 0:
+        #     # Sum of spike counts across neurons for all t
+        #     colmn_wise_sums = np.sum(pop_spike_count_matrix, axis=0)
+        #
+        #     variance_S = np.var(colmn_wise_sums)
+        #     mean_S = np.mean(colmn_wise_sums)
+        #
+        #     if mean_S == 0:
+        #         fanofactor = 0.0
+        #     else:
+        #         fanofactor = variance_S / mean_S
+        # else:
+        #     colmn_wise_sums = np.array([0])
+        #     fanofactor = 0.0  # variance_S = 0.0, mean_S = 0.0
 
-            variance_S = np.var(colmn_wise_sums)
-            mean_S = np.mean(colmn_wise_sums)
+        colmn_wise_sums = np.sum(pop_spike_count_matrix, axis=0)
 
-            if mean_S == 0:
-                fanofactor = 0.0
-            else:
-                fanofactor = variance_S / mean_S
+        if filter_zeros:
+            colmn_wise_sums = colmn_wise_sums[colmn_wise_sums > 0]
+
+        variance_S = np.var(colmn_wise_sums)
+        mean_S = np.mean(colmn_wise_sums)
+
+        if mean_S == 0:
+            fanofactor = 0.0
         else:
-            fanofactor = 0.0  # variance_S = 0.0, mean_S = 0.0
+            fanofactor = variance_S / mean_S
 
         return fanofactor, colmn_wise_sums
 
+    # @staticmethod
+    # def __compute_pairwise_corr(pop_spike_count_matrix):
+    #     correlations = []
+    #     pairs = []
+    #
+    #     n_neurons = pop_spike_count_matrix.shape[0]
+    #
+    #     for i in range(n_neurons):
+    #         for j in range(i+1, n_neurons):
+    #             corr, p_val = pearsonr(pop_spike_count_matrix[i], pop_spike_count_matrix[j])
+    #             correlations.append(corr)
+    #             pairs.append((i,j))
+    #
+    #     return np.array(correlations), pairs
     @staticmethod
-    def __compute_pairwise_corr(pop_spike_count_matrix):
+    def __compute_pairwise_corr(spike_count_matrix, active_neurons):
         correlations = []
         pairs = []
 
-        n_neurons = pop_spike_count_matrix.shape[0]
+        active_counts = spike_count_matrix[active_neurons, :]
+        n_active = len(active_neurons)
 
-        for i in range(n_neurons):
-            for j in range(i+1, n_neurons):
-                corr, p_val = pearsonr(pop_spike_count_matrix[i], pop_spike_count_matrix[j])
-                correlations.append(corr)
-                pairs.append((i,j))
+        for i in range(n_active):
+            for j in range(i+1, n_active):
+                # Check if either neuron has constant activity
+                if np.std(active_counts[i]) > 0 and np.std(active_counts[j]) > 0:
+                    try:
+                        corr, p_val = pearsonr(active_counts[i], active_counts[j])
+                        correlations.append(corr)
+                        pairs.append((active_neurons[i], active_neurons[j]))
+                    except:
+                        correlations.append(0)
+                        pairs.append((0,0))
 
         return np.array(correlations), pairs
 
 
     @classmethod
-    def compute_basic(cls, spiketimes_set, binsz=None, window=None, filter_freqs=True):
+    def compute_basic(cls, spiketimes_set, binsz=None, window=None, filter_zeros=True):
         """
         Returns the basic measure of synchrony of spiking from all neurons.
 
@@ -203,7 +269,7 @@ class Synchrony(object):
 
         :param binsz: integer or float; `0.01` [default]
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param filter_freqs: boolean; `True` [default]
+        :param filter_zeros: boolean; `True` [default]
         :return:
 
         * s_sync : float
@@ -308,7 +374,7 @@ class Synchrony(object):
 
         **Notes on Filtering**
 
-        The default argument `filter_freqs=True` means only frequencies during active periods are accounted for
+        The default argument `filter_zeros=True` means only frequencies during active periods are accounted for
         making the computation.
 
         .. raw:: html
@@ -328,7 +394,7 @@ class Synchrony(object):
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [s_sync, _, _] = cls.__compute_for_basic(freq_matrix, filter_freqs=filter_freqs)
+        [s_sync, _, _] = cls.__compute_for_basic(freq_matrix, filter_zeros=filter_zeros)
 
         return s_sync, freq_matrix, time_bins_center
 
@@ -364,9 +430,11 @@ class Synchrony(object):
         if windowsz is None:
             windowsz = 0.5
 
-        [spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
+        #[spike_arrays, window] = cls.__get_spikearray_and_window(spiketimes_set, window, neurons="all")
+        spike_arrays = [np.array(neuron_spikes) for neuron_spikes in spiketimes_set.values()]
         n_neurons = len(spike_arrays)
 
+        # Create evaluation time points
         eval_times = np.arange(window[0] + windowsz/2, window[1] - windowsz, binsz)
         n_times = len(eval_times)
 
@@ -380,11 +448,23 @@ class Synchrony(object):
                 spikes_in_slidingwindow = np.sum((spike_times >= start) & (spike_times <= stop))
                 freq_matrix[i, t] = spikes_in_slidingwindow / windowsz
 
-        return cls.__compute_for_basic(freq_matrix)
+        # Remove time points with no activity
+        valid_points = np.sum(freq_matrix, axis=0) > 0
+        freq_matrix = freq_matrix[:, valid_points]
+
+        if freq_matrix.size == 0:
+            return 0.0, np.array([0]), np.array([0])
+
+        time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
+
+        [s_sync, _, _] = cls.__compute_for_basic(freq_matrix, filter_zeros=True)
+
+        return s_sync, freq_matrix, time_bins_center
 
 
     @classmethod
-    def compute_fano_factor(cls, spiketimes_set, binsz=None, window=None, filter_spikes=True):
+    def compute_fano_factor(cls, spiketimes_set, binsz=None, window=None, filter_zeros=True):
         """
         Returns the Fano factor as a measure of synchrony of spiking from all neurons.
 
@@ -393,7 +473,7 @@ class Synchrony(object):
 
         :param binsz: integer or float; `0.01` [default]
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param filter_spikes: boolean; `True` [default]
+        :param filter_zeros: boolean; `True` [default]
         :return:
 
         * fanofactor : float = variance / mean of population spike counts
@@ -471,7 +551,7 @@ class Synchrony(object):
 
         **Notes on Filtering**
 
-        The default argument `filter_spikes=True` means only spike counts during active periods are accounted for
+        The default argument `filter_zeros=True` means only spike counts during active periods are accounted for
         making the computation. This is the default because,
 
         * Biological relevance
@@ -499,7 +579,9 @@ class Synchrony(object):
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [fanofactor, _] = cls.__compute_fano(spike_matrix, filter_spikes=filter_spikes)
+        # print(f"Unfiltered spike matrix: {spike_matrix}")
+
+        [fanofactor, _] = cls.__compute_fano(spike_matrix, filter_zeros=filter_zeros)
 
         return fanofactor, spike_matrix, time_bins_center
 
@@ -580,7 +662,7 @@ class Synchrony(object):
         return sync_index
 
     @classmethod
-    def compute_corr_index(cls, spiketimes_set, binsz=None, window=None):
+    def compute_pairwise_ci(cls, spiketimes_set, binsz=None, window=None):
         """
         Calculate average pairwise correlation index.
 
@@ -630,7 +712,7 @@ class Synchrony(object):
     @classmethod
     def compute_pairwise_corr(cls, spiketimes_set, binsz=None, window=None):
         """
-        Returns the Fano factor as a measure of synchrony of spiking from all neurons.
+        Returns the Pairwise correlation as a measure of synchrony of spiking from all neurons.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -702,14 +784,15 @@ class Synchrony(object):
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
-        spike_matrix, _, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
-                                                                window=window, binsz=binsz,
-                                                                neurons="all")
+        # spike_matrix, _, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
+        #                                                         window=window, binsz=binsz,
+        #                                                         neurons="all")
 
+        spike_matrix, active_neurons, time_bins = cls.__count_matrix_and_active_neurons(spiketimes_set, window, binsz)
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [correlations, pairs] = cls.__compute_pairwise_corr(spike_matrix)
+        [correlations, pairs] = cls.__compute_pairwise_corr(spike_matrix, active_neurons)
 
         return correlations, pairs, spike_matrix, time_bins_center
 

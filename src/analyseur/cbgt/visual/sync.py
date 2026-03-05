@@ -13,7 +13,7 @@ class VizSynchrony(object):
     __siganal = SignalAnalysisParams()
 
     @classmethod
-    def plot_ci_in_ax(cls, ax, spiketimes_set, binsz=None, window=None, neurons=None, nucleus=None):
+    def plot_ci_in_ax(cls, ax, sync_measures, binsz=None, window=None, neurons=None, nucleus=None):
         pass
 
     @classmethod

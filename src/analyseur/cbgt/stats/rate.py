@@ -90,8 +90,22 @@ class Rate(object):
         if binsz is None:
             binsz = cls.__siganal.binsz_100perbin
 
-        [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
-        n_neurons = len(desired_spiketimes_subset)
+        # [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
+        # n_neurons = len(desired_spiketimes_subset)
+        #
+        # time_bins = np.arange(window[0], window[1] + binsz, binsz)
+        # n_bins = len(time_bins) - 1
+        #
+        # count_matrix = np.zeros((n_neurons, n_bins))
+        # rate_matrix = np.zeros((n_neurons, n_bins))
+        #
+        # # Fill the count and rate matrix
+        # for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+        #     counts, _ = np.histogram(indiv_spiketimes, bins=time_bins)
+        #     count_matrix[i, :] = counts
+        #     rate_matrix[i, :] = counts / binsz
+
+        n_neurons = len(spiketimes_set)
 
         time_bins = np.arange(window[0], window[1] + binsz, binsz)
         n_bins = len(time_bins) - 1
@@ -100,7 +114,7 @@ class Rate(object):
         rate_matrix = np.zeros((n_neurons, n_bins))
 
         # Fill the count and rate matrix
-        for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
+        for i, (nX, indiv_spiketimes) in enumerate(spiketimes_set.items()):
             counts, _ = np.histogram(indiv_spiketimes, bins=time_bins)
             count_matrix[i, :] = counts
             rate_matrix[i, :] = counts / binsz

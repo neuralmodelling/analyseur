@@ -1,0 +1,1 @@
+# ~/analyseur/analyseur/rbcbg/stat/__init__.py

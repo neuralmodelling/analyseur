@@ -159,11 +159,12 @@ class SimulationParams:
 
     def __post_init__(self):
         if self.nuclei_ctx is None:
-            self.nuclei_ctx = ["CSN", "PTN",]
+            self.nuclei_ctx = ["CSN", "PTN", "CTX_E", "CTX_I",]
         if self.nuclei_bg is None:
-            self.nuclei_bg = ["FSI", "GPe", "GPiSNr", "MSNd1", "MSNd2", "STN",]
+            self.nuclei_bg = ["FSI", "STN", "GPe", "GPiSNr",]
         if self.nuclei_thal is None:
-            self.nuclei_thal = ["CmPf",]
+            self.nuclei_thal = ["TRN", "TH"]
+
 
 @dataclass
 class SignalAnalysisParams:

@@ -112,6 +112,13 @@ class InterSpikeInterval(object):
     @classmethod
     def compute(cls, spiketimes_set=None):
         """
+        .. math::
+
+            \\overrightarrow{ISI}^{(i)} = \\begin{cases}
+                                            \\varnothing & n_{spk}^{(i)} < 2
+                                            \\left[t_{k+1}^{(i)} - t_k^{(i)}\\right] & \\text{otherwise}
+                                          \\end{cases}
+
         Returns the interspike interval for all individual neurons.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
@@ -144,10 +151,11 @@ class InterSpikeInterval(object):
         tbins_set = {}
 
         for n_id, spiketimes in spiketimes_set.items():
-            if len(spiketimes) <= 1:
-                interspike_intervals[n_id] = np.zeros(10)
-                tbins_set[n_id] = np.zeros(10)
+            if len(spiketimes) < 2:
+                interspike_intervals[n_id] = np.array([])
+                tbins_set[n_id] = np.array([])
             else:
+                spiketimes = sorted(spiketimes)  # Should already be sorted but just in case
                 interspike_intervals[n_id] = np.diff(spiketimes)
                 tbins_set[n_id] = spiketimes[1:]
 
@@ -201,9 +209,9 @@ class InterSpikeInterval(object):
         for n_id, isi in isi_set.items():
             # n_spikes = len(isi) + 1
             if len(isi) == 0:
-                inst_rates[n_id] = 0
+                inst_rates[n_id] = np.array([])
             else:
-                inst_rates[n_id] = 1 / (isi + 1e-8)
+                inst_rates[n_id] = 1 / np.maximum(isi, 1e-8)
 
         return inst_rates
 
@@ -287,6 +295,9 @@ class InterSpikeInterval(object):
         [vec_all_times.extend(x) for x in tbins_set.values()]
         [vec_all_inst.extend(x) for x in inst_rates_set.values()]
 
+        if len(vec_all_times) == 0:
+            return [], [], []
+
         # Convert the above two lists to arrays
         arr_all_times = np.array(vec_all_times)
         arr_all_inst = np.array(vec_all_inst)
@@ -309,7 +320,7 @@ class InterSpikeInterval(object):
                 avg_rates.append(np.mean(rates_in_bin))
                 bin_counts.append(rates_in_bin.size)
             else:
-                avg_rates.append(0)
+                avg_rates.append(np.nan)
                 bin_counts.append(0)
 
         return avg_rates, bin_centers, bin_counts
@@ -389,9 +400,9 @@ class InterSpikeInterval(object):
 
         for n_id, inst_rates in inst_rates_set.items():
             if len(inst_rates) == 0:
-                all_avg_inst_rates[n_id] = np.zeros(1)[0]  # np.float(0.) to avoid error
+                all_avg_inst_rates[n_id] = np.array([])  # np.float(0.) to avoid error
             else:
-                all_avg_inst_rates[n_id] = np.mean(inst_rates)
+                all_avg_inst_rates[n_id] = np.nanmean(list(inst_rates)) # np.mean(inst_rates)
 
         return all_avg_inst_rates
 
@@ -442,9 +453,9 @@ class InterSpikeInterval(object):
         for n_id, isi in isi_set.items():
             # n_spikes = len(isi) + 1
             if len(isi) == 0:
-                mean_spiking_freq[n_id] = np.array([0.0])[0]
+                mean_spiking_freq[n_id] = np.nan
             else:
-                mean_spiking_freq[n_id] = (1 / (len(isi) + 1e-8)) * np.sum(1 / (isi + 1e-8))
+                mean_spiking_freq[n_id] = (1 / np.maximum(len(isi), 1e-8)) * np.sum(1 / np.maximum(isi, 1e-8))
 
         return mean_spiking_freq
 

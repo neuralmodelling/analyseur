@@ -165,3 +165,34 @@ def plot_mean_rate_all_channels_across_time_in_ax(ax, mu_rate_arr, window=None, 
     ax.set_title("Firing Rate Over Time of " + " neurons" + nucname)
 
     return ax
+
+def plot_rate_across_time_in_ax(ax, rates_set, window=None,
+                                nucleus=None, n_neurons=None):
+    # ============== DEFAULT Parameters ==============
+    if window is None:
+        window = __siganal.window
+
+    filtered_set = filter_rates_set(rates_set=rates_set, window=window)
+
+    if n_neurons is not None:
+        filtered_set = {k: filtered_set[k] for k in list(filtered_set)[:n_neurons]}
+
+    # Generate colors from colormap
+    num_colors = len(filtered_set)
+    colors = plt.cm.tab20(np.linspace(0, 1, num_colors))
+    line_styles = cycle(["-", "--", "-.", ":"])
+    # Plot
+    for i, (key, array) in enumerate(rates_set.items()):
+        style = next(line_styles)
+        color = colors[i % len(colors)]
+        ax.plot(array, label=key, linestyle=style, color=color, linewidth=2)
+    ax.grid(True, alpha=0.3)
+
+    ax.set_xlabel("Time (seconds)")
+    ax.set_ylabel("Firing Rate (Hz)")
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("Firing Rate Over Time for all channels of " + " neurons" + nucname)
+
+    ax.legend(bbox_to_anchor=(1.05,1), loc="upper left")
+

@@ -4,18 +4,22 @@
 #
 # This contains function for Population Activity Heatmap
 #
+from typing import Collection
 
 import numpy as np
 import matplotlib.pyplot as plt
+from collections import Counter
+from scipy.stats import skew, kurtosis
 
 from sklearn.decomposition import PCA
 
 # from ..curate import get_desired_spiketimes_superset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.pca import PCA
+from analyseur.cbgt.stats.popact import PopAct
 from analyseur.cbgt.parameters import SignalAnalysisParams
 
-class PopAct(object):
+class VizPopAct(object):
     """
     The PopAct Class is instantiated by passing
 
@@ -268,3 +272,152 @@ class PopAct(object):
     #             "pca_trajectory": pca_traj,
     #             "explained_variance": pca.explained_variance_ratio_,
     #         }
+
+
+    @classmethod
+    def plot_popcount_dist_in_ax(cls, ax, spiketimes_set, binsz=None, nucleus=None, mode=None):
+        """
+        Draws the Distribution of Population Spike Counts (complexity) across time bin on the given
+        `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+
+        OPTIONAL parameters
+
+        - :param nucleus: string; name of the nucleus
+        - :param mode: "portrait" or None/landscape [default]
+        - :return: object `ax` with Rate Distribution plotting done into it
+
+        **INTERPRETATION**
+
+        .. table:: Interpretation
+        ====================== ===============================
+          Distribution Shape     Interpretation
+        ====================== ===============================
+          Poisson-like           Random Independent firing
+          Right skew             Bursty/synchronous activity
+          Narrow distribution    Regular/independent firing
+        ====================== ===============================
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        # ============== DEFAULT Parameters ==============
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        n_neurons = len(spiketimes_set)
+
+        match mode:
+            case "portrait":
+                orient = "horizontal"
+            case _:
+                orient = "landscape"
+
+        get_axis = lambda orient: "x" if orient == "horizontal" else "y"
+
+        spike_counts_per_bin, _ = PopAct.count_allspikes_per_bin(spiketimes_set, binsz)
+
+        complexities, complexity_counts, pdf = PopAct.compute_complexity_pdf(spike_counts_per_bin)
+
+        mean_complexity = np.mean(spike_counts_per_bin)
+
+        # Calculate statistics
+        mean = np.mean(spike_counts_per_bin)
+        var = np.var(spike_counts_per_bin)
+        sk = skew(spike_counts_per_bin)
+        kurt = kurtosis(spike_counts_per_bin)
+
+        # Plot
+        if orient == "horizontal":
+            ax.barh(complexities, pdf, alpha=0.7)
+            # Add statistics
+            ax.axhline(y=mean_complexity, color="red", linestyle="--",
+                       label=f"Mean: {mean_complexity:.2f}")
+            ax.legend()
+
+            ax.set_ylabel("Spike Counts per Bin (Complexity)")
+            ax.set_xlabel("Probability Density")
+            ax.margins(y=0)
+        else:
+            ax.bar(complexities, pdf, alpha=0.7)
+            # Add statistics
+            ax.axvline(mean_complexity, color="red", linestyle="--",
+                       label=f"Mean: {mean_complexity:.2f}")
+            ax.legend()
+
+            ax.set_xlabel("Spike Counts per Bin (Complexity)")
+            ax.set_ylabel("Probability Density")
+
+        # Add statistics
+        stats_text = f"Variance: {var:.2f}\n"
+        stats_text += f"Fano: {var / (mean + 1e-8):.2f}\n"
+        stats_text += f"Skew: {sk:.2f}\n"
+        stats_text += f"Kurtosis: {kurt:.2f}"
+
+        ax.text(0.65, 0.95, stats_text, transform=ax.transAxes,
+                fontsize=9, verticalalignment="top",
+                bbox=dict(boxstyle="round", facecolor="wheat",
+                          alpha=0.5))
+        ax.legend(loc="upper left")
+
+        ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+        nucname = "" if nucleus is None else " in " + nucleus
+        ax.set_title("Population Spike Counts Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+        return ax
+
+    @classmethod
+    def plot_popcount_vs_time_in_ax(cls, ax, spiketimes_set, binsz=None, nucleus=None):
+        """
+        Draws the Population Spike Counts over time on the given
+        `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: integer or float; `0.01` [default]
+
+        OPTIONAL parameters
+
+        - :param nucleus: string; name of the nucleus
+        - :return: object `ax` with Rate Distribution plotting done into it
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        # ============== DEFAULT Parameters ==============
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
+
+        n_neurons = len(spiketimes_set)
+
+        spike_counts_per_bin, bin_centers = PopAct.count_allspikes_per_bin(spiketimes_set, binsz)
+
+        complexities, complexity_counts, pdf = PopAct.compute_complexity_pdf(spike_counts_per_bin)
+
+        mean_complexity = np.mean(spike_counts_per_bin)
+
+        # Plot
+        ax.bar(bin_centers, spike_counts_per_bin, width = binsz*0.9,
+               alpha=0.7, color="steelblue", edgecolor="navy")
+        # Add statistics
+        ax.axhline(y=mean_complexity, color="red", linestyle="--",
+                   label=f"Mean: {mean_complexity:.2f}")
+        ax.legend()
+
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Spike Count")
+
+        ax.grid(True, alpha=0.3)
+
+        nucname = "" if nucleus is None else " in " + nucleus
+        ax.set_title(f"Population Spike Counts (bin size={binsz}s) of " + str(n_neurons) + " neurons" + nucname)
+
+        return ax
