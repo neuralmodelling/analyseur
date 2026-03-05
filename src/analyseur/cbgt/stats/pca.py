@@ -115,9 +115,12 @@ class PCA(object):
 
     @staticmethod
     def __compute_PCA(activity_matrix, n_comp):
-        print(f"Shape of Activity Matrix = {activity_matrix.shape}")
+        # print(f"Shape of Activity Matrix = {activity_matrix.shape}")
+        activity_matrix = activity_matrix.T
+
         scaler = StandardScaler()
-        scaled_activity = scaler.fit_transform(activity_matrix)
+        # scaled_activity = scaler.fit_transform(activity_matrix)
+        scaled_activity = activity_matrix - activity_matrix.mean(axis=0)
         pca = sklPCA(n_components=n_comp)
         pca_trajectory = pca.fit_transform(scaled_activity)
 
@@ -133,7 +136,7 @@ class PCA(object):
             binsz = cls.__siganal.binsz_100perbin
 
         if n_comp is None:
-            n_comp = 3
+            n_comp = 0.95 # 3
 
         activity_matrix, time_bins = cls.get_spike_activity_matrix(spiketimes_set, window, binsz)
 
