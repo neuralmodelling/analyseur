@@ -164,6 +164,13 @@ class Variations(object):
     @classmethod
     def computeCV2(cls, isi_set=None):
         """
+        .. math::
+
+            \\overrightarrow{cv}_2^{(i)} = \\begin{cases}
+                                             \\text{NaN} & \\text{if } n_{ISI}^{(i)} \\le 1 \n
+                                             \\frac{1}{\\left(n_{ISI}^{(i)} - 1\\right)} \\sum_{k=2}^{n_{ISI}^{(i)}} 2 \\cdot \\frac{\\left\\mid isi_k^{(i)} - isi_{k-1}^{(i)} \\right\\mid}{\\text{max}\\left(isi_k^{(i)} - isi_{k-1}^{(i)}, 10^{-8} \\right)} & \\text{otherwise}
+                                           \\end{cases}
+
         Returns the local coefficient of variation for all individual neurons.
 
         :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
@@ -222,6 +229,13 @@ class Variations(object):
     @classmethod
     def computeLV(cls, isi_set=None):
         """
+        .. math::
+
+            \\overrightarrow{lv}^{(i)} = \\begin{cases}
+                                           \\text{NaN} & \\text{if } n_{ISI}^{(i)} \\le 1 \n
+                                           \\frac{1}{\\left(n_{ISI}^{(i)} - 1\\right)} \\sum_{k=2}^{n_{ISI}^{(i)}} 3 \\cdot \\frac{\\left(isi_k^{(i)} - isi_{k-1}^{(i)}\\right)^2}{\\text{max}\\left(\\left(isi_k^{(i)} - isi_{k-1}^{(i)}\\right)^2, 10^{-8} \\right)} & \\text{otherwise}
+                                          \\end{cases}
+
         Returns the local variation for all individual neurons.
 
         :param isi_set: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
