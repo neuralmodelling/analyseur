@@ -115,7 +115,7 @@ class InterSpikeInterval(object):
         .. math::
 
             \\overrightarrow{ISI}^{(i)} = \\begin{cases}
-                                            \\varnothing & n_{spk}^{(i)} < 2
+                                            \\varnothing & n_{spk}^{(i)} < 2 \\\
                                             \\left[t_{k+1}^{(i)} - t_k^{(i)}\\right] & \\text{otherwise}
                                           \\end{cases}
 
