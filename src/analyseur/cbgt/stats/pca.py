@@ -60,6 +60,18 @@ class PCA(object):
                                                    n_comp=0.95,
                                                    sigma_bins=2)
 
+    2.3. Get participation ratio
+    ````````````````````````````
+    ::
+
+        pr = PCA.participation_ratio(pca)
+
+    2.4. Get eigen spectrum
+    ```````````````````````
+    ::
+
+        eig_spec, cum_spec = PCA.eigenspectrum(pca)
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
@@ -255,6 +267,7 @@ class PCA(object):
         **Step-4:**
 
         Smallest $P$ chosen such that
+
         .. math::
 
             \\sum_{p=1}^{P}\\lambda_p \\ge q \\sum_{i=1}^{n_\\text{nuc}}\\lambda_i
@@ -302,5 +315,60 @@ class PCA(object):
 
         return pca, pca_trajectory, activity_matrix, time_bins
 
+    @staticmethod
+    def participation_ratio(pca):
+        """
+        Given the computed `PCA model <https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html>`_
+
+        .. math::
+
+            D_\\text{PR} = \\frac{\\left(\\sum_{i=1}^P \\lambda_i\\right)}{\\sum_{i=1}^P \\lambda_i^2}
+
+        measures how spread the variance is across components. Consequently, the complexity is
+
+        .. math::
+
+            \\text{complexity} = \\frac{D_\\text{PR}}{n_\\text{nuc}}
+
+        **NOTE:**
+
+        The `n_comp` in :py:meth:`.compute` can be either a **fixed components**, :math:`dim=` `n_comp` or a bound for **variance threshold**, :math:`\\sum_{i=1}^{P}\\lambda_i \\ge` `n_comp`. This estimate for dimensionality depends on arbitrary threshold.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        eigvals = pca.explained_variance_
+
+        return (eigvals.sum() ** 2) / (np.sum(eigvals ** 2))
+
+    @staticmethod
+    def eigenspectrum(pca):
+        """
+        Given the computed `PCA model <https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html>`_
+
+        .. math::
+
+            \\tilde{\\lambda_p} = \\frac{\\lambda_p}{\\sum_{i}\\lambda_i}
+
+        is the fraction of explained variance which is a function of component index :math:`p`. The cumulative spectrum is
+
+        .. math::
+
+            S_p = \\sum_{i=1}^p \\tilde{\\lambda_i}
+
+        **COMMENT:**
+
+        Plot of the eigenspectrum can reveal activity as low-dimensional or high-dimensional.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        eigvals = pca.explained_variance_
+        var_ratio = eigvals / eigvals.sum()
+        cumvar = np.cumsum(var_ratio)
+
+        return var_ratio, cumvar
 
 
