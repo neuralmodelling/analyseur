@@ -237,7 +237,7 @@ class PCA(object):
 
         where :math:`a(i,t)` is the number of spikes of neuron :math:`i` in bin :math:`t`. :math:`A` is a noisy matrix because :math:`var(a(i,t)) \\approx \\mathbb{E}[a(i,t)]`.
 
-        **Step-1:** Temporal smoothing
+        **Step-1: Temporal smoothing**
 
         .. math::
 
@@ -249,7 +249,7 @@ class PCA(object):
 
             K(\\Delta t) = \\frac{1}{\\sqrt{2\\pi\\sigma}} \\cdot e^\\frac{\\Delta t^2}{2\\sigma^2}
 
-        **Step-2:** Mean subtraction
+        **Step-2: Mean subtraction**
 
         .. math::
 
@@ -257,7 +257,7 @@ class PCA(object):
 
         removes global population activity.
 
-        **Step-3:** Transpose activity matrix
+        **Step-3: Transpose activity matrix**
 
         .. math::
 
@@ -276,7 +276,7 @@ class PCA(object):
 
         where :math:`q \\sum_{i=1}^{n_\\text{nuc}}\\lambda_i` is the parameter *n_comp*.
 
-        **Step-5:** PCA model
+        **Step-5: PCA model**
 
         .. math::
 
@@ -286,7 +286,7 @@ class PCA(object):
 
         where :math:`\\vec{w}_p \\in \\mathbb{R}^{n_\\text{nuc}}` is a principal component direction across neurons and :math:`W` is the basis matrix.
 
-        **Step-6:** PCA trajectory
+        **Step-6: PCA trajectory**
 
         .. math::
 
