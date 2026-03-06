@@ -169,7 +169,7 @@ class PCA(object):
 
             \\sum_{p=1}^{P}\\lambda_p \\ge q \\sum_{i=1}^{n_\\text{nuc}}\\lambda_i
 
-        where *q* is the parameter *n_comp*.
+        where :math:`q \\sum_{i=1}^{n_\\text{nuc}}\\lambda_i` is the parameter *n_comp*.
 
         **Step-5:** PCA model
         .. math::
@@ -274,7 +274,7 @@ class PCA(object):
 
             \\sum_{p=1}^{P}\\lambda_p \\ge q \\sum_{i=1}^{n_\\text{nuc}}\\lambda_i
 
-        where *q* is the parameter *n_comp*.
+        where :math:`q \\sum_{i=1}^{n_\\text{nuc}}\\lambda_i` is the parameter *n_comp*.
 
         **Step-5:** PCA model
 
