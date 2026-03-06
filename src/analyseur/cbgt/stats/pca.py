@@ -101,12 +101,21 @@ class PCA(object):
         """
         .. math::
 
-            t_0, t_1, t_2, ..., t_{n_\\text{bins}}} \\in \\mathbb{R}
+            t_0, t_1, t_2, ..., t_{n_\\text{bins}} \\in \\mathbb{R}
             A \\in \\mathbb{R}^{n_\\text{nuc} \\times n_\\text{bins}}
 
         where :math:`n_\\text{nuc}` is the number of neurons, :math:`n_\\text{bins}` is the number of time bins,  :math:`t_j = t_0 + j \\cdot \\Delta t` for :math:`j = 0,1, ..., n_\\text{bins}`, :math:`\\Delta t` is bin width, and :math:`a(i,t)` is the number of spikes of neuron :math:`i` in bin :math:`t`.
 
         Returns the activity matrix and time bins.
+
+        Note that given the activity matrix :math:`A`
+
+        - PCA(:math:`A`) measures *neuron correlation* structure
+        - PCA(:math:`A^T`) measures *population activity trajectories over time*.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
 
@@ -133,20 +142,35 @@ class PCA(object):
         return activity, time_bins
 
     @staticmethod
-    def __compute_PCA(activity_matrix, n_comp):
-        # print(f"Shape of Activity Matrix = {activity_matrix.shape}")
+    def __compute_PCA(activity_matrix, n_comp, sigma_bins):
+        """
+        PCA pipeline-2
+
+        - temporal smoothing to spike counts before PCA
+        - Without smoothing, PCA tends to capture Poisson noise
+
+        """
         activity_matrix = activity_matrix.T
 
-        scaler = StandardScaler()
-        # scaled_activity = scaler.fit_transform(activity_matrix)
-        scaled_activity = activity_matrix - activity_matrix.mean(axis=0)
-        pca = sklPCA(n_components=n_comp)
-        pca_trajectory = pca.fit_transform(scaled_activity)
+        # PCA pipeline-1
+        # scaler = StandardScaler()
+        # # scaled_activity = scaler.fit_transform(activity_matrix)
+        # scaled_activity = activity_matrix - activity_matrix.mean(axis=0)
+        # pca = sklPCA(n_components=n_comp)
+        # pca_trajectory = pca.fit_transform(scaled_activity)
+
+        # PCA pipeline-2 (temporal smoothing of spike counts)
+        activity_matrix = gaussian_filter1d(activity_matrix,
+                                            sigma=sigma_bins, # = 2 => 2 x binsz = 2 x 0.01 = 20 ms smoothing
+                                            axis=0,)
+        activity_matrix = activity_matrix - activity_matrix.mean(axis=0)
+        pca = sklPCA(n_components=n_comp) # 0.95 variance
+        pca_trajectory = pca.fit_transform(activity_matrix)
 
         return scaler, pca, pca_trajectory
 
     @classmethod
-    def compute(cls, spiketimes_set, binsz=None, window=None, n_comp=None):
+    def compute(cls, spiketimes_set, binsz=None, window=None, n_comp=None, sigma_bins=None):
         #============== DEFAULT Parameters ==============
         if window is None:
             window = cls.__siganal.window
@@ -156,6 +180,9 @@ class PCA(object):
 
         if n_comp is None:
             n_comp = 0.95 # 3
+
+        if sigma_bins is None:
+            sigma_bins = 2
 
         activity_matrix, time_bins = cls.get_spike_activity_matrix(spiketimes_set, window, binsz)
 
