@@ -55,6 +55,7 @@ Statistics
    stats/psd.rst
    stats/psth.rst
    stats/rate.rst
+   stats/pca.rst
 
 Analytics
 ==========

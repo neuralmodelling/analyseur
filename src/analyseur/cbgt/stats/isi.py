@@ -136,7 +136,7 @@ class InterSpikeInterval(object):
           Definitions                                                                                       Interpretation
         ================================================================================================== ======================================================
          total neurons, :math:`n_{nuc}`                                                                     total number of neurons in the Nucleus
-         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{Nuc}` neurons
+         neuron index, :math:`i`                                                                            i-th neuron in the pool of :math:`n_{nuc}` neurons
          total spikes, :math:`n_{spk}^{(i)}`                                                                total number of spikes (spike times) by i-th neuron
          interspike interval, :math:`isi_{k}^{(i)}`                                                         k-th absolute interval between successive spike times
          :math:`\\overrightarrow{ISI}^{(i)} = \\left[isi_k^{(i)}\\right]_{\\forall{k \\in [1, n_{spk}^{(i)})}}`       array of all interspike intervals of i-th neuron

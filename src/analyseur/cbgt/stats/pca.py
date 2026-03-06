@@ -98,17 +98,36 @@ class PCA(object):
 
     @staticmethod
     def get_spike_activity_matrix(spiketimes_set, window, binsz):
+        """
+        .. math::
+
+            t_0, t_1, t_2, ..., t_{n_\\text{bins}}} \\in \\mathbb{R}
+            A \\in \\mathbb{R}^{n_\\text{nuc} \\times n_\\text{bins}}
+
+        where :math:`n_\\text{nuc}` is the number of neurons, :math:`n_\\text{bins}` is the number of time bins,  :math:`t_j = t_0 + j \\cdot \\Delta t` for :math:`j = 0,1, ..., n_\\text{bins}`, :math:`\\Delta t` is bin width, and :math:`a(i,t)` is the number of spikes of neuron :math:`i` in bin :math:`t`.
+
+        Returns the activity matrix and time bins.
+        """
         [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
 
-        time_bins = np.arange(window[0], window[1] + binsz, binsz)
-        n_bins = len(time_bins) - 1
+        n_bins = int((window[1] - window[0]) / binsz)
+        time_bins = np.linspace(window[0], window[1], n_bins + 1)
 
         activity = np.zeros((len(desired_spiketimes_subset), n_bins))
 
         # Activity Matrix
         for i, spikes in enumerate(desired_spiketimes_subset):
-            counts, _ = np.histogram(spikes, bins=time_bins)
-            activity[i, :] = counts
+            # counts, _ = np.histogram(spikes, bins=time_bins)
+            # activity[i, :] = counts
+
+            if len(spikes) == 0:
+                continue
+
+            bin_idx = ((spikes - window[0]) / binsz).astype(int)
+            bin_idx = bin_idx[(bin_idx >= 0) & (bin_idx < n_bins)]
+
+            np.add.at(activity[i], bin_idx, 1)
+
         activity = activity[::-1, :]  # reverse it so that neuron 0 is at the bottom
 
         return activity, time_bins
