@@ -14,20 +14,7 @@ from analyseur.cbgt.parameters import SignalAnalysisParams
 
 class PCA(object):
     """
-    Computes measures of synchrony among the neurons with given spike times
-
-    +----------------------------------+----------------------------------------------------------------------------------------------------------+
-    | Methods                          | Argument                                                                                                 |
-    +==================================+==========================================================================================================+
-    | :py:meth:`.compute_basic`        | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default])                                       |
-    +----------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.compute_basic_slide`  | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default]), `windowsz` (0.5 [default])           |
-    +----------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.compute_fano_factor`  | - `spiketimes_superset`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`      |
-    |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default])                                       |
-    +----------------------------------+----------------------------------------------------------------------------------------------------------+
+    Computes PCA
 
     =========
     Use Cases
@@ -42,7 +29,7 @@ class PCA(object):
     ::
 
         from analyseur.cbgt.loader import LoadSpikeTimes
-        from analyseur.cbgt.stats.sync import Synchrony
+        from analyseur.cbgt.stats.pca import PCA
 
     1.2. Load file and get spike times
     ```````````````````````````````````
@@ -55,41 +42,23 @@ class PCA(object):
     2. Cases
     ---------
 
-    2.1. Compute basic measure of spike times synchrony (for all neurons)
-    ``````````````````````````````````````````````````````````````````````
+    2.1. Compute PCA with default values
+    ````````````````````````````````````
     ::
 
-        B = Synchrony.compute_basic(spiketimes_superset)
+        pca, pca_trajectory, activity_matrix, time_bins = PCA.compute(spiketimes_superset)
 
-    This returns the value for
 
-    .. math::
-
-       Sync = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
-
-    2.2. Compute the basic measure of synchrony on a smoother frequency estimation
-    ```````````````````````````````````````````````````````````````````````````````
+    2.2. Compute PCA with desired parameters
+    ````````````````````````````````````````
     ::
 
-        S = Synchrony.compute_basic_slide(spiketimes_superset)
-
-    This returns the value for
-
-    .. math::
-
-       Sync = \\sqrt{\\frac{var\\left(\\left[\\mu\\left(\\left[f^{{i}}(t)\\right]_{\\forall{t}}\\right)\\right]_{\\forall{i}}\\right)}{\\mu\\left(\\left[var\\left(\\left[f^{(i)}(t)\\right]_{\\forall{i}}\\right)\\right]_{\\forall{t}}\\right)}}
-
-    2.3. Compute Fano factor as a metric for measuring spike times synchrony (for all neurons)
-    ```````````````````````````````````````````````````````````````````````````````````````````
-    ::
-
-        Fs = Synchrony.compute_fano_factor(spiketimes_superset)
-
-    This returns the value for
-
-    .. math::
-
-        F_{Sync} = \\frac{var\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}{\\mu\\left(\\left[\\sum_{\\forall{i}}p^{(i)}(t)\\right]_{\\forall{t}}\\right)}
+        pca, pca_trajectory, activity_matrix, time_bins = PCA.compute(
+                                                   spiketimes_superset,
+                                                   binsz=0.01,
+                                                   window=(0,10),
+                                                   n_comp=0.95,
+                                                   sigma_bins=2)
 
     .. raw:: html
 
@@ -261,6 +230,7 @@ class PCA(object):
             \\widetilde{a}(i,t) = \\sum_\\tau \\left[a(i,\\tau) \\cdot K(t-\\tau)\\right]
 
         where smoothing kernel K is
+
         .. math::
 
             K(\\Delta t) = \\frac{1}{\\sqrt{2\\pi\\sigma}} \\cdot e^\\frac{\\Delta t^2}{2\\sigma^2}
@@ -277,8 +247,8 @@ class PCA(object):
 
         .. math::
 
-            \\widetilde{A}^T \\in \\mathbb{R}^{n_\\text{bins} \\times n_\\text{nuc}} \n
-            X = \\widetilde{A}^T
+            \\tilde{A}^T \\in \\mathbb{R}^{n_\\text{bins} \\times n_\\text{nuc}} \n
+            X = \\tilde{A}^T
 
         for analyzing population activity trajectories over time where each row :math:`x(t,\\forall)` is the population activity vector at time :math:`t`.
 
