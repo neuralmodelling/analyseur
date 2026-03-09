@@ -187,7 +187,7 @@ def get_binary_spiketrains(spiketimes_set, window=None, sampling_rate=None, neur
                     0 & \\otherwise
                    \\end{cases}
 
-    where :math:`t_k = k \\Delta t` and :math:`\\Delta t = 1/\\text{sampling_rate}`.
+    where :math:`t_k = k \\Delta t` and :math:`\\Delta t = 1/\\text{sampling\_rate}`.
 
     Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
