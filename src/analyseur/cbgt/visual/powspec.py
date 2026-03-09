@@ -49,7 +49,7 @@ class VizPSD(object):
 
             \\widetilde{P}_i(f) = \\frac{P_i(f)}{\\text{max}_f P_i(f)}
 
-        which ensures :math:`\\max_{f} \\tilde{P}_i(f) = 1`.
+        which ensures :math:`\\max_{f} \\tilde{P}_i(f) = 1`. After normalization you compare spectral shape, not magnitude.
 
         .. raw:: html
 
