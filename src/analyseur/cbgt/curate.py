@@ -184,7 +184,7 @@ def get_binary_spiketrains(spiketimes_set, window=None, sampling_rate=None, neur
 
         s_i(t_k) = \\begin{cases}
                     1 & \\text{if neuron } i \\text{fires in bin } t_k \n
-                    0 & \\otherwise
+                    0 & \\text{otherwise}
                    \\end{cases}
 
     where :math:`t_k = k \\Delta t` and :math:`\\Delta t = 1/\\text{sampling\_rate}`.
