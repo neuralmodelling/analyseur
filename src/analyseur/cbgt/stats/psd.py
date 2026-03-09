@@ -108,11 +108,11 @@ class PowerSpectrum(object):
         - array of time
 
         .. list-table:: Notes on resolution
-        :widths: auto
-        :header-rows: 1
+            :widths: auto
+            :header-rows: 1
 
-        * - ``resolution`` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
-        * - The sampling rate is proportional to the desired frequency resolution.
+            * - ``resolution`` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
+            * - The sampling rate is proportional to the desired frequency resolution.
 
         .. math::
 
