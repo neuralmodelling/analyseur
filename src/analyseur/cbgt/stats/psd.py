@@ -110,8 +110,8 @@ class PowerSpectrum(object):
 
         .. math::
 
-            \\text{sampling_rate} &\\propto \\text{resolution} \n
-            \\text{sampling_rate} &= \\text{nperseg} \\times \\text{resolution}
+            \\text{sampling\_rate} &\\propto \\text{resolution} \n
+            \\text{sampling\_rate} &= \\text{nperseg} \\times \\text{resolution}
 
         where the constant of proportionality is the number of points per segment `nperseg`.
 
