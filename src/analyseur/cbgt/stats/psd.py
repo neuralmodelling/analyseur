@@ -121,9 +121,14 @@ class PowerSpectrum(object):
 
         where the constant of proportionality is the number of points per segment `nperseg`.
 
-        **NOTE:**
+        .. list-table::
+            :widths: auto
+            :header-rows: 1
 
-        * dd
+            * - Analysis Pitfalls
+            * - :math:`P_i(f)` returns one PSD per neuron
+            * - plotting PSD for just one neuron will mostly be Poisson noise
+            * - the **meaningful** quantity is :math:`P_\\text{pop}(f) = \\frac{1}{n_\\text{nuc}}\\sum_{i=1}^{n_\\text{nuc}}P_i(f)`
 
         .. raw:: html
 
