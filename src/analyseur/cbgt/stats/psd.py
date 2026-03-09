@@ -80,6 +80,12 @@ class PowerSpectrum(object):
     def compute_for_spike(cls, spiketimes_set, sampling_rate=None,
                           window=None, neurons=None, resolution=None):
         """
+        .. math::
+
+            P_i(f) = \\frac{1}{K} \\sum_{k=1}^K \\left[\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i(n)\\cdot w(n) \\cdot e^{-i2\\pi f n}\\right|^2\\right]
+
+        is the estimate of the power spectral density :math:`P_i(f)` with :math:`w(n)` window, :math:`K` number of segments and :math:`L` *nperseg*.
+
         Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
