@@ -128,7 +128,7 @@ class PowerSpectrum(object):
             * - Analysis Pitfalls
             * - :math:`P_i(f)` returns one PSD per neuron
             * - plotting PSD for just one neuron will mostly be Poisson noise
-            * - the **meaningful** quantity is :math:`P_\\text{pop}(f) = \\frac{1}{n_\\text{nuc}}\\sum_{i=1}^{n_\\text{nuc}}P_i(f)`
+            * - the **meaningful** quantity is :math:`P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^{N}P_i(f)`
 
         .. raw:: html
 
@@ -153,7 +153,7 @@ class PowerSpectrum(object):
         if resolution is None:
             points_per_segment = 1024
         else:
-            points_per_segment = sampling_rate / resolution
+            points_per_segment = int(sampling_rate / resolution)
 
         # Spike times > Spike Train
         [spiketrains, yticks, time_axis] = get_binary_spiketrains(spiketimes_set, sampling_rate=sampling_rate,
@@ -164,6 +164,9 @@ class PowerSpectrum(object):
         power_spectra = []
 
         for i, spike_train in enumerate(spiketrains):
+            # since s(t)∈{0,1}, at f = 0 the DC will have a large component
+            spike_train = spike_train - spike_train.mean()
+
             f, Pxx = signal.welch(spike_train, fs=sampling_rate, nperseg=points_per_segment)
             frequencies.append(f)
             power_spectra.append(Pxx)
@@ -172,6 +175,72 @@ class PowerSpectrum(object):
 
     @classmethod
     def compute_for_rate(cls, mu_rate_array, resolution=None, method=None):
+        """
+        .. math::
+
+            P_r(f) = \\frac{1}{T} \\left|\\sum_{t=0}^{T-1}r(t)\\cdot e^{-i2\\pi f t}\\right|^2
+
+        is the squared magnitude of the Fourier transform of the population firing rate signal :math:`r(t)`  with duration :math:`T`.
+
+        Returns the power spectral density (or power spectrum) of firing rate from all neurons.
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
+        :return: a tuple in the following order
+        - array of sample frequencies
+        - power spectral density (or power spectrum)
+        - list of spike trains
+        - list of neuron id's
+        - array of time
+
+        .. list-table:: **Notes on resolution**
+            :widths: auto
+            :header-rows: 0
+
+            * - ``resolution`` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
+            * - The sampling rate is proportional to the desired frequency resolution.
+
+        .. math::
+
+            \\text{sampling\_rate} &\\propto \\text{resolution} \n
+            \\text{sampling\_rate} &= \\text{nperseg} \\times \\text{resolution}
+
+        where the constant of proportionality is the number of points per segment `nperseg`.
+
+        Note that the population rate signal is
+
+        .. math::
+
+            r(t) = \\frac{1}{N}\\sum_{i=1}^N s_i(t)
+
+        where :math:`i`-th neuron has spike train :math:`s_i(t)`. Therefore, using the Fourier transform operator :math:`\\mathcal{F}` the power spectrum can be re-written as
+
+        .. math::
+
+            P_r(f) = \\left|\\mathcal{F}\{r(t)\}\\right|^2
+
+        .. list-table::
+            :widths: auto
+            :header-rows: 1
+
+            * - Population synchrony at oscillatory frequency :math:`f_0`
+            * - oscillation :math:`r(t) = A \\cdot sin(2\\pi f_0 t)`
+            * - PSD peak, :math:`P_r(f_0)`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         # ============== DEFAULT Parameters ==============
         n = len(mu_rate_array)
         T = cls.__siganal.sampling_period  # seconds
@@ -180,7 +249,10 @@ class PowerSpectrum(object):
         if resolution is None:
             points_per_segment = 1024
         else:
-            points_per_segment = sampling_fs / resolution
+            points_per_segment = int(sampling_fs / resolution)
+
+        # at f = 0 the PSD will have a large DC component
+        mu_rate_array = mu_rate_array - np.mean(mu_rate_array)
 
         if method is None or method=="welch":
             # Compute power spectrum using Welch's method
