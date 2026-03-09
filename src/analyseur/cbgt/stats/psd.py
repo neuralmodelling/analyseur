@@ -184,36 +184,15 @@ class PowerSpectrum(object):
 
         Returns the power spectral density (or power spectrum) of firing rate from all neurons.
 
-        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        :param mu_rate_array: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
-        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
-        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
-
-            - `"all"` means subset = superset
-            - `N` (a scalar) means subset of first N neurons in the superset
-            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
-
+        :param method: `"welch"` or `"fft"` or `"fft-mag"`
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
         :return: a tuple in the following order
         - array of sample frequencies
         - power spectral density (or power spectrum)
-        - list of spike trains
-        - list of neuron id's
-        - array of time
 
-        .. list-table:: **Notes on resolution**
-            :widths: auto
-            :header-rows: 0
-
-            * - ``resolution`` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
-            * - The sampling rate is proportional to the desired frequency resolution.
-
-        .. math::
-
-            \\text{sampling\_rate} &\\propto \\text{resolution} \n
-            \\text{sampling\_rate} &= \\text{nperseg} \\times \\text{resolution}
 
         where the constant of proportionality is the number of points per segment `nperseg`.
 
