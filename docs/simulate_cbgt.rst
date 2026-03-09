@@ -12,7 +12,7 @@ Example simulation pipeline
 1. Get (Go to) the model
 ------------------------
 
-Get the model that has been prepared of graded disinhibition (`testinhib` branch)
+Get the model that has been prepared of graded disinhibition (*testinhib* branch)
 
 ..  code-block:: shell
 
@@ -68,10 +68,10 @@ Get the model that has been prepared of graded disinhibition (`testinhib` branch
     cp -r CORTEX/connection_lists/ /home/share/data1/CORTEX/
     cp -r THALAMUS/connection_lists/ /home/share/data1/THALAMUS/
 
-3. Structure of stored results
-------------------------------
+Structure of stored results
+===========================
 
-Wherever you have directed the simulation results (in the shell script above) to be saved in, for N simulations the results sub-folder structure will look like
+Wherever you have directed the simulation results (in the shell script above) to be saved in, for *N* simulations the results sub-folder structure will look like
 
 .. code-block:: text
 
@@ -131,4 +131,11 @@ where
 
     * Although these are also raw data the csv's contains data returned by `Brian 2 <https://brian2.readthedocs.io/en/stable/>`_ computation. For example this has firing rate computed as each sampling during the course of the simulation.
 
+Additional Remarks
+==================
 
+* When running batch runs it is advisable to run the very first simulation with the option `build_new_connection_map=True`
+
+    * creating new connections is compute intensive
+    * but doing this for only the first run will make sure you are running the desired connection configuration
+    * otherwise you risk running simulations for the previously stored connection setup
