@@ -1,5 +1,5 @@
-`analyseur` Functions for `CBGT <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
-*****************************************************************************************
+Available Functions for `CBGT <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
+****************************************************************************************
 
 Loaders
 =======
