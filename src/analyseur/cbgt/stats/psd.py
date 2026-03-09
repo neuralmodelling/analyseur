@@ -185,7 +185,7 @@ class PowerSpectrum(object):
         Returns the power spectral density (or power spectrum) of firing rate from all neurons.
 
         :param mu_rate_array: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
-        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+        or using :meth:`~analyseur.cbgt.stats.rate.Rate.mean_rate`
 
         :param method: `"welch"` or `"fft"` or `"fft-mag"`
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
