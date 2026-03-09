@@ -12,6 +12,30 @@ Loaders
    loader.rst
    curate.rst
 
+Statistics
+==========
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Available statistical functions:
+
+   stats/isi.rst
+   stats/variation.rst
+   stats/sync.rst
+   stats/wavelet.rst
+   stats/psd.rst
+   stats/psth.rst
+   stats/rate.rst
+   stats/pca.rst
+
+Analytics
+==========
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Available analytics functions:
+
+   analytics/ratesparsity.rst
 
 Visualizers
 ===========
@@ -40,29 +64,3 @@ Composite Visualizers
 
    visual/composite/observables.rst
    visual/composite/current_distrib.rst
-
-Statistics
-==========
-
-.. toctree::
-   :maxdepth: 5
-   :caption: Available statistical functions:
-
-   stats/isi.rst
-   stats/variation.rst
-   stats/sync.rst
-   stats/wavelet.rst
-   stats/psd.rst
-   stats/psth.rst
-   stats/rate.rst
-   stats/pca.rst
-
-Analytics
-==========
-
-.. toctree::
-   :maxdepth: 5
-   :caption: Available analytics functions:
-
-   analytics/ratesparsity.rst
-
