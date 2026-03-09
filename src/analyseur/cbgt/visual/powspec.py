@@ -57,9 +57,14 @@ class VizPSD(object):
             PowerSpectrum.compute_for_spike(spiketimes_superset, neurons=neurons, window=window,
                                             sampling_rate=sampling_rate, resolution=resolution)
 
-        colors = ["red", "blue", "green"]
-        for i, (f, Pxx) in enumerate(zip(frequencies, power_spectra)):
-            ax.semilogy(f, Pxx, color=colors[i], label=yticks[i], linewidth=2)
+        # colors = ["red", "blue", "green"]
+        # for i, (f, Pxx) in enumerate(zip(frequencies, power_spectra)):
+        #     ax.semilogy(f, Pxx, color=colors[i], label=yticks[i], linewidth=2)
+
+        psd_matrix = np.array(power_spectra)
+        pop_psd = psd_matrix.mean(axis=0)
+
+        ax.plot(frequencies[0], pop_psd)
 
         ax.set_xlabel(cls.__xlabelHz)
         ax.set_ylabel(cls.__ylabelPSD)
