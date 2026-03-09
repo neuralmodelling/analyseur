@@ -244,17 +244,27 @@ class Synchrony(object):
         active_counts = spike_count_matrix[active_neurons, :]
         n_active = len(active_neurons)
 
+        # for i in range(n_active):
+        #     for j in range(i+1, n_active):
+        #         # Check if either neuron has constant activity
+        #         if np.std(active_counts[i]) > 0 and np.std(active_counts[j]) > 0:
+        #             try:
+        #                 corr, p_val = pearsonr(active_counts[i], active_counts[j])
+        #                 correlations.append(corr)
+        #                 pairs.append((active_neurons[i], active_neurons[j]))
+        #             except:
+        #                 correlations.append(0)
+        #                 pairs.append((0,0))
+
+        # Remove redundant std computations
+        stds = np.std(active_counts, axis=1)   # compute once
+
         for i in range(n_active):
             for j in range(i+1, n_active):
-                # Check if either neuron has constant activity
-                if np.std(active_counts[i]) > 0 and np.std(active_counts[j]) > 0:
-                    try:
-                        corr, p_val = pearsonr(active_counts[i], active_counts[j])
-                        correlations.append(corr)
-                        pairs.append((active_neurons[i], active_neurons[j]))
-                    except:
-                        correlations.append(0)
-                        pairs.append((0,0))
+
+                if stds[i] > 0 and stds[j] > 0:
+                    corr, p_val = pearsonr(active_counts[i], active_counts[j])
+                    correlations.append(corr)
 
         return np.array(correlations), pairs
 

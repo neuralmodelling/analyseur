@@ -13,6 +13,7 @@ models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.f
    :maxdepth: 2
    :caption: Contents:
    
+   simulate_cbgt.rst
    cbgt/contents.rst
 
 
