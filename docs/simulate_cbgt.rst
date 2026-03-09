@@ -12,7 +12,7 @@ Example simulation pipeline
 1. Get (Go to) the model
 ------------------------
 
-Get the model that has been prepared of graded disinhibition
+Get the model that has been prepared of graded disinhibition (`testinhib` branch)
 
 ..  code-block:: shell
 
