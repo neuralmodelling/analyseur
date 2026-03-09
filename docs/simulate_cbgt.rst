@@ -23,7 +23,7 @@ Get the model that has been prepared of graded disinhibition (`testinhib` branch
 --------------------------------------
 
 ..  code-block:: shell
-    :caption: <caption>
+    :caption: myRun.sh
 
     #!/bin/sh
 
