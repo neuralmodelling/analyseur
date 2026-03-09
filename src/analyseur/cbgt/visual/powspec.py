@@ -34,6 +34,27 @@ class VizPSD(object):
     @classmethod
     def plot_in_ax(cls, ax, spiketimes_superset, neurons=None, nucleus=None,
                    window=None, sampling_rate=None, resolution=None, mode=None,):
+        """
+        .. math::
+
+            P_i(f) = \\frac{1}{K}\\sum_{m=1}^K\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i^{(m)}(n)\\cdot w(n)\\cdot e^{-i2\\pi f n/f_s}\\right|^2
+
+        where :math:`s_i(n)` is the spike train of :math:`i`-th neuron, :math:`L` segment length and :math:`K` is the number of Welch's segments.
+
+        Plots each neuron's PSD individually.
+
+        **NOTE:** Because the raw PSD can vary widely and to avoid division by zero the plot employs normalization
+
+        .. math::
+
+            \\widetilde{P}_i(f) = \\frac{P_i(f)}{\\text{max}_f P_i(f)}
+
+        which ensures :math:`\\max_{f} \\tilde{P}_i(f) = 1`.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
             neurons = "all"
@@ -57,14 +78,20 @@ class VizPSD(object):
             PowerSpectrum.compute_for_spike(spiketimes_superset, neurons=neurons, window=window,
                                             sampling_rate=sampling_rate, resolution=resolution)
 
-        # colors = ["red", "blue", "green"]
-        # for i, (f, Pxx) in enumerate(zip(frequencies, power_spectra)):
-        #     ax.semilogy(f, Pxx, color=colors[i], label=yticks[i], linewidth=2)
+        colors = ["red", "blue", "green"]
+        for i, (f, Pxx) in enumerate(zip(frequencies, power_spectra)):
+            # ax.semilogy(f, Pxx, color=colors[i], label=yticks[i], linewidth=2)
+            max_power = np.max(Pxx)
 
-        psd_matrix = np.array(power_spectra)
-        pop_psd = psd_matrix.mean(axis=0)
+            if max_power > 0:
+                Pxx_norm = Pxx / max_power
+            else:
+                Pxx_norm = Pxx
 
-        ax.plot(frequencies[0], pop_psd)
+            ax.semilogy(f, Pxx_norm,
+                        color=colors[i],
+                        label=yticks[i],
+                        linewidth=2)
 
         ax.set_xlabel(cls.__xlabelHz)
         ax.set_ylabel(cls.__ylabelPSD)
@@ -85,6 +112,13 @@ class VizPSD(object):
     @classmethod
     def plot(cls, spiketimes_superset, neurons=None, nucleus=None,
              window=None, sampling_rate=None, resolution=None, mode=None,):
+        """
+        Plots each neuron's PSD individually by calling :py:meth:`.plot_in_ax`
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         if mode == "portrait":
             fig, ax = plt.subplots(figsize=(6, 10))
         else:
@@ -129,6 +163,10 @@ class VizPSD(object):
                            spiketimes_set, neurons=None, nucleus=None,
                            window=None, sampling_rate=None, resolution=None,):
         """
+        .. math::
+
+            P_\\text{mean}(f) = \\frac{1}{N}\\sum_{i=1}^N P_i(f)
+
         Draws the Aggregate Statistic of the Power Spectral Density of the given neuron population on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -153,7 +191,6 @@ class VizPSD(object):
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         # ============== DEFAULT Parameters ==============
         if neurons is None:
@@ -256,7 +293,7 @@ class VizPSD(object):
     def plot_aggstat(cls, spiketimes_set, neurons=None, nucleus=None,
                      window=None, sampling_rate=None, resolution=None,):
         """
-        Visualize the Aggregate Statistic of the Power Spectral Density of the given neuron population.
+        Visualize the Aggregate Statistic of the Power Spectral Density of the given neuron population using :py:meth:`.plot_aggstat_in_ax`
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
