@@ -13,6 +13,7 @@ Example simulation pipeline
 ------------------------
 
 Get the model that has been prepared of graded disinhibition
+
 ```
 git clone ssh://git@gitlab.isir.lan:2222/cobathaco-catatonia/CBGTC.git
 cd CBGTC
