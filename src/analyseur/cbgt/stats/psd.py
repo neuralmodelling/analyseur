@@ -107,11 +107,11 @@ class PowerSpectrum(object):
         - list of neuron id's
         - array of time
 
-        .. list-table:: Notes on resolution
+        .. list-table::
             :widths: auto
             :header-rows: 1
 
-            * -
+            * - Notes on resolution
             * - ``resolution`` or desired frequency resolution is the smallest difference between two frequencies that can be distinguished in the power spectrum.
             * - The sampling rate is proportional to the desired frequency resolution.
 
