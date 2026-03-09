@@ -180,6 +180,15 @@ def __get_valid_indices(indiv_spiketimes, window, sampling_rate, num_samples):
 
 def get_binary_spiketrains(spiketimes_set, window=None, sampling_rate=None, neurons=None):
     """
+    .. math::
+
+        s_i(t_k) = \\begin{cases}
+                    1 & \\text{if neuron } i \\text{fires in bin } t_k \n
+                    0 & \\otherwise
+                   \\end{cases}
+
+    where :math:`t_k = k \\Delta t` and :math:`\\Delta t = 1/\\text{sampling_rate}`.
+
     Returns nested list of spike trains (row-i for neuron ni, column-j for j-th spike time)
     and its associated yticks (list of neuron labels corresponding to the spike trains).
 
