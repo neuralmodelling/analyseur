@@ -11,6 +11,73 @@ from analyseur.cbgt.stats.compute_shared import compute_grand_mean as cgm
 from analyseur.cbgt.parameters import SignalAnalysisParams
 
 class Rate(object):
+    """
+    =========
+    Use Cases
+    =========
+
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules
+    ````````````````````
+    ::
+
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgt.stats.rate import Rate
+
+    1.2. Load file and get spike times
+    ```````````````````````````````````
+    ::
+
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Compute spike count observables
+    ````````````````````````````````````
+    ::
+
+        count_matrix, rate_matrix, time_bins = Rate.get_count_rate_matrix(
+                                                  spiketimes_set=spiketimes_superset)
+
+
+    2.2. Compute spike count observables within a desired window for a select neurons
+    `````````````````````````````````````````````````````````````````````````````````
+    ::
+
+        count_matrix, rate_matrix, time_bins = Rate.get_count_rate_matrix(
+                                                  spiketimes_set=spiketimes_superset,
+                                                  window=(3,8),
+                                                  binsz=0.5,
+                                                  neurons=[2, 3, 6, 7])
+
+    2.3. Compute mean firing rate from all given neurons across all neurons
+    ```````````````````````````````````````````````````````````````````````
+    ::
+
+        mu_rate_vec, time_bins = Rate.mean_rate(
+                                    spiketimes_set=spiketimes_superset,
+                                    neurons="all",
+                                    across="neurons")
+
+    2.4. Compute mean firing rate from all given neurons across all times
+    `````````````````````````````````````````````````````````````````````
+    ::
+
+        mu_rate_vec, time_bins = Rate.mean_rate(
+                                    spiketimes_set=spiketimes_superset,
+                                    neurons="all",
+                                    across="times")
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     __siganal = SignalAnalysisParams()
 
     @classmethod
@@ -24,7 +91,7 @@ class Rate(object):
         :param binsz: integer or float; `0.01` [default]
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
 
-        :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
 
             - `"all"` means subset = superset
             - `N` (a scalar) means subset of first N neurons in the superset
