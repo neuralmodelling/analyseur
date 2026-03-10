@@ -1,3 +1,2 @@
 nbsphinx
 recommonmark
-Pillow
