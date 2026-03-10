@@ -33,7 +33,7 @@ class VizPSD(object):
 
     @classmethod
     def plot_in_ax(cls, ax, spiketimes_set, neurons=None, nucleus=None,
-                   window=None, sampling_rate=None, resolution=None, mode=None,):
+                   window=None, sampling_rate=None, resolution=None,):
         """
         Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the spike times of a given neuron population this method draws the PSD for each neuron.
 
@@ -59,7 +59,6 @@ class VizPSD(object):
         :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
         :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
-        :param mode: `"portrait"` or `"landscape"` [default]
         :return: three axes with respective plotting
 
 
@@ -87,12 +86,6 @@ class VizPSD(object):
             sampling_rate = 1 / cls.__siganal.sampling_period
 
         n_neurons = len(spiketimes_set)
-
-        match mode:
-            case "portrait":
-                orient = "horizontal"
-            case _:
-                orient = "landscape"
 
         frequencies, power_spectra, spiketrains, yticks, time_axis = \
             PowerSpectrum.compute_for_spike(spiketimes_set, neurons=neurons, window=window,
