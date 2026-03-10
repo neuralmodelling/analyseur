@@ -131,6 +131,8 @@ class PowerSpectrum(object):
             * - the **meaningful** quantity is :math:`P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^{N}P_i(f)`
             * - :math:`P_\\text{pop}(f)` is used in :meth:`~analyseur.cbgt.visual.VizPSD.plot_aggstat`
 
+        :math:`P_\\text{pop}(f)` is used in :meth:`~analyseur.cbgt.visual.VizPSD.plot_aggstat`
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
