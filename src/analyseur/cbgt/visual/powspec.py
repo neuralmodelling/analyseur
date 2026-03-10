@@ -46,7 +46,7 @@ class VizPSD(object):
 
     .. raw:: html
 
-    <hr style="border: 2px solid red; margin: 20px 0;">
+        <hr style="border: 2px solid red; margin: 20px 0;">
     """
     __siganal = SignalAnalysisParams()
     __xlabelsec = "Time (s)"
