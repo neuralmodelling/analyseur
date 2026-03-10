@@ -84,7 +84,7 @@ class PowerSpectrum(object):
     def compute_for_spike(cls, spiketimes_set, sampling_rate=None,
                           window=None, neurons=None, resolution=None):
         """
-        Returns the power spectral density (or power spectrum) of spiking times from all neurons.
+        Returns the power spectral density (or power spectrum) of spiking times from all given neurons.
 
         .. math::
 
@@ -181,7 +181,7 @@ class PowerSpectrum(object):
     @classmethod
     def compute_for_rate(cls, mu_rate_array, resolution=None, method=None):
         """
-        Returns the power spectral density (or power spectrum) of firing rate from all neurons.
+        Returns the power spectral density (or power spectrum) of firing rate from all given neurons.
 
         .. math::
 
