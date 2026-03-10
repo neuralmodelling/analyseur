@@ -116,6 +116,10 @@ class VizPSD(object):
         """
         Plots each neuron's PSD individually by calling :py:meth:`.plot_in_ax`
 
+        .. math::
+
+            P_i(f) = \\frac{1}{K}\\sum_{m=1}^K\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i^{(m)}(n)\\cdot w(n)\\cdot e^{-i2\\pi f n/f_s}\\right|^2
+
         **NOTE:** Unlike :py:meth:`.plot_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
 
         .. raw:: html
@@ -306,6 +310,10 @@ class VizPSD(object):
                      window=None, sampling_rate=None, resolution=None,):
         """
         Visualize the Aggregate Statistic of the Power Spectral Density of the given neuron population using :py:meth:`.plot_aggstat_in_ax`.
+
+        .. math::
+
+            P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^N P_i(f)
 
         **NOTE:** Unlike :py:meth:`.plot_aggstat_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
 
