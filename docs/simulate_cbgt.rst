@@ -4,6 +4,11 @@ Simulate CBGTC and get data for analysis
 
 The CBGTC Model is `available here <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_ with the accompanying `Jeanne Barthelemy's thesis <https://theses.hal.science/tel-05375201v1/file/144400_BARTHELEMY_2025_archivage.pdf>`_.
 
+.. image:: images/CBGTC_model.png
+   :scale: 50 %
+   :alt: CBGTC
+   :align: center
+
 Regardless of how one sets up the simulation, to use this analyseaur tool
 
 Example simulation pipeline
@@ -139,3 +144,10 @@ Additional Remarks
     * creating new connections is compute intensive
     * but doing this for only the first run will make sure you are running the desired connection configuration
     * otherwise you risk running simulations for the previously stored connection setup
+
+* While setting up the model for experiments make sure that at baseline the nuclei has the baseline frequencies as shown below.
+
+.. image:: images/CBGTC_baseline_frequencies.png
+   :scale: 50 %
+   :alt: CBGTC baseline frequencies
+   :align: center
