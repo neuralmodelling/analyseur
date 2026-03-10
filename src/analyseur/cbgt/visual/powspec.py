@@ -26,6 +26,28 @@ from analyseur.cbgt.parameters import SignalAnalysisParams
 
 
 class VizPSD(object):
+    """
+
+    +-----------------------------------+------------------------------------+
+    | Plot (display)                    | Plot in axis                       |
+    +===================================+====================================+
+    | :py:meth:`.plot`                  | :py:meth:`.plot_in_ax`             |
+    +-----------------------------------+------------------------------------+
+    | :py:meth:`.plot_aggstat`          | :py:meth:`.plot_aggstat_in_ax`     |
+    +-----------------------------------+------------------------------------+
+    | :py:meth:`.plot_PSD_of_rate`      | :py:meth:`.plot_PSD_of_rate_in_ax` |
+    +-----------------------------------+------------------------------------+
+    | :py:meth:`.plot_heatmap`          | :py:meth:`.plot_heatmap_in_ax`     |
+    +-----------------------------------+------------------------------------+
+    | :py:meth:`.plot_cluster`          | :py:meth:`.plot_cluster_in_ax`     |
+    +-----------------------------------+------------------------------------+
+    | :py:meth:`.plot_with_spiketrains` | :py:meth:`.plot_spiketrain_in_ax`  |
+    +-----------------------------------+------------------------------------+
+
+    .. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     __siganal = SignalAnalysisParams()
     __xlabelsec = "Time (s)"
     __xlabelHz = "Frequency (Hz)"
