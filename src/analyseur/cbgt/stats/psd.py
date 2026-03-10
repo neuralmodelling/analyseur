@@ -29,6 +29,10 @@ class PowerSpectrum(object):
     |                               | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]        |
     |                               | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
     +-------------------------------+-------------------------------------------------------------------------------------------------+
+    | :py:meth:`.compute_for_rate`  | - `mu_rate_array`: see :meth:`~analyseur.cbgt.stats.rate.Rate.mean_rate`                        |
+    |                               | - `method`: "welch" or "fft" or "fft-mag"                                                       |
+    |                               | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
+    +-------------------------------+-------------------------------------------------------------------------------------------------+
 
     =========
     Use Cases
@@ -116,8 +120,8 @@ class PowerSpectrum(object):
 
         .. math::
 
-            \\text{sampling\_rate} &\\propto \\text{resolution} \n
-            \\text{sampling\_rate} &= \\text{nperseg} \\times \\text{resolution}
+            \\text{sampling\\_rate} &\\propto \\text{resolution} \n
+            \\text{sampling\\_rate} &= \\text{nperseg} \\times \\text{resolution}
 
         where the constant of proportionality is the number of points per segment `nperseg`.
 
