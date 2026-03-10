@@ -43,7 +43,7 @@ class VizPSD(object):
 
         where :math:`s_i(n)` is the spike train of :math:`i`-th neuron, :math:`L` segment length and :math:`K` is the number of Welch's segments.
 
-        :param ax: 3-objects of the type `matplotlib.pyplot.axis`
+        :param ax: object `matplotlib.pyplot.axis`
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
@@ -131,6 +131,10 @@ class VizPSD(object):
         .. math::
 
             P_i(f) = \\frac{1}{K}\\sum_{m=1}^K\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i^{(m)}(n)\\cdot w(n)\\cdot e^{-i2\\pi f n/f_s}\\right|^2
+
+        In addition to the arguments for :py:meth:`.plot_in_ax`
+
+        :param mode: `"portrait"` or `"landscape"` [default]
 
         **NOTE:** Unlike :py:meth:`.plot_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
 
@@ -600,6 +604,27 @@ class VizPSD(object):
     def plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=None, window=None,
                                nucleus=None, resolution=None, method=None):
         """
+        Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the firing rates of a given neuron population--:math:`\\frac{1}{N}\\sum_{i=1}^N s_i(t)`where :math:`s_i(n)` is the spike train of :math:`i`-th neuron for total neurons :math:`N`--this method draws the PSD of population rate.
+
+        .. math::
+
+            P_r(f) = \\left|\\mathcal{F}\{r(t)\}\\right|^2
+
+        :math:`\\mathcal{F}` is the Fourier transform operator. Other operators are Welch's method and the Magnitude spectrum of the FFT.
+
+        :param ax: object `matplotlib.pyplot.axis`
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        [OPTIONAL]
+
+        :param nucleus: string; name of the nucleus
+        :param binsz: integer or float; `0.01` [default]
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
+        :param method: `"welch"` or `"fft"` or `"fft-mag"`
+        :return: axis incorporating the plot
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
