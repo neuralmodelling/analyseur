@@ -32,7 +32,7 @@ class VizPSD(object):
     __ylabelPSD = "Power Spectral Density"
 
     @classmethod
-    def plot_in_ax(cls, ax, spiketimes_superset, neurons=None, nucleus=None,
+    def plot_in_ax(cls, ax, spiketimes_set, neurons=None, nucleus=None,
                    window=None, sampling_rate=None, resolution=None, mode=None,):
         """
         Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the spike times of a given neuron population this method draws the PSD for each neuron.
@@ -42,6 +42,25 @@ class VizPSD(object):
             P_i(f) = \\frac{1}{K}\\sum_{m=1}^K\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i^{(m)}(n)\\cdot w(n)\\cdot e^{-i2\\pi f n/f_s}\\right|^2
 
         where :math:`s_i(n)` is the spike train of :math:`i`-th neuron, :math:`L` segment length and :math:`K` is the number of Welch's segments.
+
+        :param ax: 3-objects of the type `matplotlib.pyplot.axis`
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        [OPTIONAL]
+
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+        :param nucleus: string; name of the nucleus
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
+        :param mode: `"portrait"` or `"landscape"` [default]
+        :return: three axes with respective plotting
 
 
         **NOTE:** Because the raw PSD can vary widely and to avoid division by zero the plot employs normalization
@@ -67,7 +86,7 @@ class VizPSD(object):
         if sampling_rate is None:
             sampling_rate = 1 / cls.__siganal.sampling_period
 
-        n_neurons = len(spiketimes_superset)
+        n_neurons = len(spiketimes_set)
 
         match mode:
             case "portrait":
@@ -76,10 +95,10 @@ class VizPSD(object):
                 orient = "landscape"
 
         frequencies, power_spectra, spiketrains, yticks, time_axis = \
-            PowerSpectrum.compute_for_spike(spiketimes_superset, neurons=neurons, window=window,
+            PowerSpectrum.compute_for_spike(spiketimes_set, neurons=neurons, window=window,
                                             sampling_rate=sampling_rate, resolution=resolution)
 
-        colors = ["red", "blue", "green"]
+        colors = plt.cm.tab10.colors
         for i, (f, Pxx) in enumerate(zip(frequencies, power_spectra)):
             # ax.semilogy(f, Pxx, color=colors[i], label=yticks[i], linewidth=2)
             max_power = np.max(Pxx)
@@ -111,7 +130,7 @@ class VizPSD(object):
         return ax, [frequencies, power_spectra], [spiketrains, yticks, time_axis]
 
     @classmethod
-    def plot(cls, spiketimes_superset, neurons=None, nucleus=None,
+    def plot(cls, spiketimes_set, neurons=None, nucleus=None,
              window=None, sampling_rate=None, resolution=None, mode=None,):
         """
         Plots each neuron's PSD individually by calling :py:meth:`.plot_in_ax`
@@ -131,7 +150,7 @@ class VizPSD(object):
         else:
             fig, ax = plt.subplots(figsize=(10, 6))
 
-        ax = cls.plot_in_ax(ax, spiketimes_superset, neurons=neurons, nucleus=nucleus,
+        ax = cls.plot_in_ax(ax, spiketimes_set, neurons=neurons, nucleus=nucleus,
                             window=window, sampling_rate=sampling_rate, resolution=resolution, mode=mode,)
 
         plt.show()
@@ -157,7 +176,7 @@ class VizPSD(object):
         return ax
 
     @classmethod
-    def plot_with_spiketrains(cls, spiketimes_superset, neurons=None, nucleus=None,
+    def plot_with_spiketrains(cls, spiketimes_set, neurons=None, nucleus=None,
                               window=None, sampling_rate=None, resolution=None,):
         """
         .. raw:: html
@@ -167,7 +186,7 @@ class VizPSD(object):
         fig, axes = plt.subplots(12)
 
         axes[0], [frequencies, power_spectra], [spiketrains, yticks, time_axis] = \
-            cls.plot_in_ax(axes[0], spiketimes_superset, neurons=neurons, nucleus=nucleus,
+            cls.plot_in_ax(axes[0], spiketimes_set, neurons=neurons, nucleus=nucleus,
                            window=window, sampling_rate=sampling_rate, resolution=resolution)
 
         axes[1] = cls.plot_spiketrain_in_ax(axes[1], spiketrains, yticks, time_axis)
