@@ -163,12 +163,11 @@ class VizPSD(object):
                            spiketimes_set, neurons=None, nucleus=None,
                            window=None, sampling_rate=None, resolution=None,):
         """
+        Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the spike times of a given neuron population this method draws the Aggregate Statistic of the Power Spectral Density of the population
+
         .. math::
 
             P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^N P_i(f)
-
-        Draws the Aggregate Statistic of the Power Spectral Density of the given neuron population on the given
-        `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
         :param ax: 3-objects of the type `matplotlib.pyplot.axis``
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
