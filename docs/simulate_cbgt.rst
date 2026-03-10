@@ -4,7 +4,7 @@ Simulate CBGTC and get data for analysis
 
 The CBGTC Model is `available here <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_ with the accompanying `Jeanne Barthelemy's thesis <https://theses.hal.science/tel-05375201v1/file/144400_BARTHELEMY_2025_archivage.pdf>`_.
 
-.. image:: images/CBGTC_model.png
+.. image:: /images/CBGTC_model.png
    :scale: 50 %
    :alt: CBGTC
    :align: center
