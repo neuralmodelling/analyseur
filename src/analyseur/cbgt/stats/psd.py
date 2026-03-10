@@ -84,13 +84,13 @@ class PowerSpectrum(object):
     def compute_for_spike(cls, spiketimes_set, sampling_rate=None,
                           window=None, neurons=None, resolution=None):
         """
+        Returns the power spectral density (or power spectrum) of spiking times from all neurons.
+
         .. math::
 
             P_i(f) = \\frac{1}{K} \\sum_{k=1}^K \\left[\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i(n)\\cdot w(n) \\cdot e^{-i2\\pi f n}\\right|^2\\right]
 
         is the Welch's estimate of the power spectral density :math:`P_i(f)` with :math:`w(n)` window, :math:`K` number of segments, :math:`L` *nperseg*, and the binary spike train :math:`s_i(t_k)` (see :meth:`~analyseur.cbgt.curate.get_binary_spiketrains`).
-
-        Returns the power spectral density (or power spectrum) of spiking times from all neurons.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -181,13 +181,13 @@ class PowerSpectrum(object):
     @classmethod
     def compute_for_rate(cls, mu_rate_array, resolution=None, method=None):
         """
+        Returns the power spectral density (or power spectrum) of firing rate from all neurons.
+
         .. math::
 
             P_r(f) = \\frac{1}{T} \\left|\\sum_{t=0}^{T-1}r(t)\\cdot e^{-i2\\pi f t}\\right|^2
 
         is the squared magnitude of the Fourier transform of the population firing rate signal :math:`r(t)`  with duration :math:`T`.
-
-        Returns the power spectral density (or power spectrum) of firing rate from all neurons.
 
         :param mu_rate_array: array of average firing rates for all/multiple neurons using :meth:`~analyseur.cbgt.stats.rate.Rate.mean_rate`
 
