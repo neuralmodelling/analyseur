@@ -692,30 +692,30 @@ class VizPSD(object):
 
         return ax
 
-    @classmethod
-    def plot_PSD_of_rate(cls, spiketimes_set, binsz=None, window=None,
-                         nucleus=None, resolution=None, method=None):
-        """
-        Visualize the Power Spectral Density of the population rate using :py:meth:`.plot_PSD_of_rate_in_ax`.
-
-        .. math::
-
-            P_r(f) = PSD\\{r(t)\\}
-
-        where :math:`r(t) = \\frac{1}{N}\\sum_{i=1}^N s_i(t)` is the rate for the spike train :math:`s_i(n)` of the :math:`i`-th neuron for total neurons :math:`N`.
-
-        **NOTE:** Unlike :py:meth:`.plot_PSD_of_rate_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
-
-        .. raw:: html
-
-            <hr style="border: 2px solid red; margin: 20px 0;">
-
-        """
-        fig, ax = plt.subplots(figsize=(10, 6))
-
-        ax = cls.plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=binsz, window=window,
-                                        nucleus=nucleus, resolution=resolution, method=method):
-
-        plt.show()
-
-        return fig, ax
+    # @classmethod
+    # def plot_PSD_of_rate(cls, spiketimes_set, binsz=None, window=None,
+    #                      nucleus=None, resolution=None, method=None):
+    #     """
+    #     Visualize the Power Spectral Density of the population rate using :py:meth:`.plot_PSD_of_rate_in_ax`.
+    #
+    #     .. math::
+    #
+    #         P_r(f) = PSD\\{r(t)\\}
+    #
+    #     where :math:`r(t) = \\frac{1}{N}\\sum_{i=1}^N s_i(t)` is the rate for the spike train :math:`s_i(n)` of the :math:`i`-th neuron for total neurons :math:`N`.
+    #
+    #     **NOTE:** Unlike :py:meth:`.plot_PSD_of_rate_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
+    #
+    #     .. raw:: html
+    #
+    #         <hr style="border: 2px solid red; margin: 20px 0;">
+    #
+    #     """
+    #     fig, ax = plt.subplots(figsize=(10, 6))
+    #
+    #     ax = cls.plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=binsz, window=window,
+    #                                     nucleus=nucleus, resolution=resolution, method=method):
+    #
+    #     plt.show()
+    #
+    #     return fig, ax
