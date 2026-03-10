@@ -651,7 +651,7 @@ class VizPSD(object):
 
         .. math::
 
-            P_r(f) = \\left|\\mathcal{F}\{r(t)\}\\right|^2
+            P_r(f) = \\left|\\mathcal{F}\\{r(t)\\}\\right|^2
 
         :math:`\\mathcal{F}` is the Fourier transform operator. Other operators are Welch's method and the Magnitude spectrum of the FFT.
 
