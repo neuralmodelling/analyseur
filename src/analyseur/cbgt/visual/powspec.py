@@ -179,6 +179,8 @@ class VizPSD(object):
     @classmethod
     def plot_spiketrain_in_ax(cls, ax, spiketrains, yticks, time_axis):
         """
+        Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ this draws the spike trains for each neuron of a given neuron population.
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
@@ -198,6 +200,25 @@ class VizPSD(object):
     def plot_with_spiketrains(cls, spiketimes_set, neurons=None, nucleus=None,
                               window=None, sampling_rate=None, resolution=None,):
         """
+        Plots each neuron's PSD individually by calling :py:meth:`.plot_in_ax` and their respective spike train by calling :py:meth:`.plot_spiketrain_in_ax`.
+
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        [OPTIONAL]
+
+        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+        :param nucleus: string; name of the nucleus
+        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
+        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
+        :return: four axes with respective plotting
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
