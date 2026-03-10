@@ -129,6 +129,7 @@ class PowerSpectrum(object):
             * - :math:`P_i(f)` returns one PSD per neuron
             * - plotting PSD for just one neuron will mostly be Poisson noise
             * - the **meaningful** quantity is :math:`P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^{N}P_i(f)`
+            * - :math:`P_\\text{pop}(f)` is used in :meth:`~analyseur.cbgt.visual.VizPSD.plot_aggstat`
 
         .. raw:: html
 

@@ -165,7 +165,7 @@ class VizPSD(object):
         """
         .. math::
 
-            P_\\text{mean}(f) = \\frac{1}{N}\\sum_{i=1}^N P_i(f)
+            P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^N P_i(f)
 
         Draws the Aggregate Statistic of the Power Spectral Density of the given neuron population on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
