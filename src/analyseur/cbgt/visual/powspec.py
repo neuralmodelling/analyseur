@@ -711,12 +711,11 @@ class VizPSD(object):
             <hr style="border: 2px solid red; margin: 20px 0;">
 
         """
-#         fig, ax = plt.subplots(figsize=(10, 6))
-#
-#         ax = cls.plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=binsz, window=window,
-#                                         nucleus=nucleus, resolution=resolution, method=method):
-#
-#         plt.show()
-#
-#         return fig, ax
-        pass
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        ax = cls.plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=binsz, window=window,
+                                        nucleus=nucleus, resolution=resolution, method=method)
+
+        plt.show()
+
+        return fig, ax
