@@ -604,7 +604,7 @@ class VizPSD(object):
     def plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=None, window=None,
                                nucleus=None, resolution=None, method=None):
         """
-        Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the firing rates of a given neuron population--:math:`\\frac{1}{N}\\sum_{i=1}^N s_i(t)`where :math:`s_i(n)` is the spike train of :math:`i`-th neuron for total neurons :math:`N`--this method draws the PSD of population rate.
+        Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the firing rates of a given neuron population--:math:`r(t) = \\frac{1}{N}\\sum_{i=1}^N s_i(t)`where :math:`s_i(n)` is the spike train of :math:`i`-th neuron for total neurons :math:`N`--this method draws the PSD of population rate.
 
         .. math::
 
@@ -625,70 +625,6 @@ class VizPSD(object):
         :param method: `"welch"` or `"fft"` or `"fft-mag"`
         :return: axis incorporating the plot
 
-        .. raw:: html
-
-            <hr style="border: 2px solid red; margin: 20px 0;">
-
-        """
-        # ============== DEFAULT Parameters ==============
-        __siganal = SignalAnalysisParams()
-        if window is None:
-            window = __siganal.window
-
-        if binsz is None:
-            binsz = __siganal.binsz_100perbin
-
-        freq_bands = __siganal.freq_bands
-        del freq_bands["Low Gamma"]
-        del freq_bands["High Gamma"]
-
-        # _, rate_matrix, time_bins = Rate.get_count_rate_matrix(spiketimes_set=spiketimes_set,
-        #                                                        window=window, binsz=binsz,
-        #                                                        neurons="all")
-        mu_rate_arr, time_bins = Rate.mean_rate(spiketimes_set=spiketimes_set,
-                                                window=window, binsz=binsz,
-                                                neurons="all")
-        # Compute power spectrum using Welch's method
-        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, method=method, resolution=resolution)
-
-        # Plot power spectrum
-        ax.semilogy(freqs, power, "b-", linewidth=1, label="Power Spectrum")
-        ax.set_xlabel("Frequency (Hz)")
-        ax.set_ylabel("Power Spectral Density")
-
-        nucname = "" if nucleus is None else " in " + nucleus
-        ax.set_title("Power Spectrum of neurons" + nucname)
-
-        ax.grid(True, alpha=0.3)
-
-        # Add vertical lines and annotations for band boundaries
-        band_boundaries = []
-        band_labels = []
-        for k, v in freq_bands.items():
-            band_labels.append(k)
-            if k=="Delta":
-                band_boundaries.append(v[0])
-                band_boundaries.append(v[1])
-            else:
-                band_boundaries.append(v[1])
-
-        for boundary in band_boundaries:
-            ax.axvline(x=boundary, color="red", linestyle="--", alpha=0.5, linewidth=0.8)
-
-        # Add band labels at the top
-        for i, (label, start, end) in enumerate(zip(band_labels, band_boundaries[:-1], band_boundaries[1:])):
-            mid = (start + end) / 2
-            ax.text(mid, ax.get_ylim()[1] * 0.9, label, ha="center", va="top", fontweight="bold",
-                    bbox=dict(boxstyle="round,pad=0.3", facecolor="yellow", alpha=0.7))
-        ax.set_xlim(0, 100)
-
-        return ax
-
-
-    @staticmethod
-    def plot_PSD_of_rate_in_ax_v2(ax, spiketimes_set, binsz=None, window=None,
-                               nucleus=None, resolution=None, method=None):
-        """
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
@@ -755,3 +691,31 @@ class VizPSD(object):
         ax.legend(loc="upper right")
 
         return ax
+
+    @classmethod
+    def plot_PSD_of_rate(cls, spiketimes_set, binsz=None, window=None,
+                         nucleus=None, resolution=None, method=None):
+        """
+        Visualize the Power Spectral Density of the population rate using :py:meth:`.plot_PSD_of_rate_in_ax`.
+
+        .. math::
+
+            P_r(f) = PSD\\{r(t)\\}
+
+        where :math:`r(t) = \\frac{1}{N}\\sum_{i=1}^N s_i(t)` is the rate for the spike train :math:`s_i(n)` of the :math:`i`-th neuron for total neurons :math:`N`.
+
+        **NOTE:** Unlike :py:meth:`.plot_PSD_of_rate_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        ax = cls.plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=binsz, window=window,
+                                        nucleus=nucleus, resolution=resolution, method=method):
+
+        plt.show()
+
+        return fig, ax
