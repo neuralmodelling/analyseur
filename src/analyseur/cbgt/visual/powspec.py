@@ -35,13 +35,14 @@ class VizPSD(object):
     def plot_in_ax(cls, ax, spiketimes_superset, neurons=None, nucleus=None,
                    window=None, sampling_rate=None, resolution=None, mode=None,):
         """
+        Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and the spike times of a given neuron population this method draws the PSD for each neuron.
+
         .. math::
 
             P_i(f) = \\frac{1}{K}\\sum_{m=1}^K\\frac{1}{L}\\left|\\sum_{n=0}^{L-1}s_i^{(m)}(n)\\cdot w(n)\\cdot e^{-i2\\pi f n/f_s}\\right|^2
 
         where :math:`s_i(n)` is the spike train of :math:`i`-th neuron, :math:`L` segment length and :math:`K` is the number of Welch's segments.
 
-        Plots each neuron's PSD individually.
 
         **NOTE:** Because the raw PSD can vary widely and to avoid division by zero the plot employs normalization
 
@@ -115,6 +116,8 @@ class VizPSD(object):
         """
         Plots each neuron's PSD individually by calling :py:meth:`.plot_in_ax`
 
+        **NOTE:** Unlike :py:meth:`.plot_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
+
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
@@ -133,6 +136,11 @@ class VizPSD(object):
 
     @classmethod
     def plot_spiketrain_in_ax(cls, ax, spiketrains, yticks, time_axis):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         for i, spike_train in enumerate(spiketrains):
             ax.plot(time_axis, spike_train + i*0.5, label=yticks[i])
 
@@ -147,6 +155,11 @@ class VizPSD(object):
     @classmethod
     def plot_with_spiketrains(cls, spiketimes_superset, neurons=None, nucleus=None,
                               window=None, sampling_rate=None, resolution=None,):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
         fig, axes = plt.subplots(12)
 
         axes[0], [frequencies, power_spectra], [spiketrains, yticks, time_axis] = \
@@ -169,7 +182,7 @@ class VizPSD(object):
 
             P_\\text{pop}(f) = \\frac{1}{N}\\sum_{i=1}^N P_i(f)
 
-        :param ax: 3-objects of the type `matplotlib.pyplot.axis``
+        :param ax: 3-objects of the type `matplotlib.pyplot.axis`
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
@@ -292,24 +305,9 @@ class VizPSD(object):
     def plot_aggstat(cls, spiketimes_set, neurons=None, nucleus=None,
                      window=None, sampling_rate=None, resolution=None,):
         """
-        Visualize the Aggregate Statistic of the Power Spectral Density of the given neuron population using :py:meth:`.plot_aggstat_in_ax`
+        Visualize the Aggregate Statistic of the Power Spectral Density of the given neuron population using :py:meth:`.plot_aggstat_in_ax`.
 
-        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
-        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
-
-        [OPTIONAL]
-
-        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
-
-            - `"all"` means subset = superset
-            - `N` (a scalar) means subset of first N neurons in the superset
-            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
-
-        :param nucleus: string; name of the nucleus
-        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
-        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
-        :return: object figure and three index axes
+        **NOTE:** Unlike :py:meth:`.plot_aggstat_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
 
         .. raw:: html
 
@@ -432,25 +430,9 @@ class VizPSD(object):
     def plot_heatmap(cls, spiketimes_set, neurons=None, nucleus=None,
                      window=None, sampling_rate=None, resolution=None, ):
         """
-        Visualize the Heatmap of the Power Spectral Density of the given neuron population.
+        Visualize the Heatmap of the Power Spectral Density of the given neuron population using :py:meth:`.plot_heatmap_in_ax`.
 
-        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
-        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
-
-        [OPTIONAL]
-
-        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
-
-            - `"all"` means subset = superset
-            - `N` (a scalar) means subset of first N neurons in the superset
-            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
-
-        :param nucleus: string; name of the nucleus
-        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
-        :param sampling_rate: `10000` [default]
-        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
-        :return: object figure and two indexed axes
+        **NOTE:** Unlike :py:meth:`.plot_heatmap_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
 
         .. raw:: html
 
@@ -574,25 +556,9 @@ class VizPSD(object):
     def plot_cluster(cls, spiketimes_set, neurons=None, nucleus=None,
                      window=None, sampling_rate=None, resolution=None, ):
         """
-        Visualize the Power Spectral Density by Cluster of the given neuron population.
+        Visualize the Power Spectral Density by Cluster of the given neuron population using :py:meth:`.plot_cluster_in_ax`.
 
-        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
-        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
-
-        [OPTIONAL]
-
-        :param neurons: `"all"` [default] or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
-
-            - `"all"` means subset = superset
-            - `N` (a scalar) means subset of first N neurons in the superset
-            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
-
-        :param nucleus: string; name of the nucleus
-        :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-        :param sampling_rate: `1000/dt = 10000` Hz [default]; sampling_rate ∊ (0, 10000)
-        :param sampling_rate: `10000` [default]
-        :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
-        :return: object figure and two indexed axes
+        **NOTE:** Unlike :py:meth:`.plot_cluster_in_ax` this will display the plot and also return the plotted `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ objects.
 
         .. raw:: html
 
@@ -613,6 +579,12 @@ class VizPSD(object):
     @staticmethod
     def plot_PSD_of_rate_in_ax(ax, spiketimes_set, binsz=None, window=None,
                                nucleus=None, resolution=None, method=None):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
         # ============== DEFAULT Parameters ==============
         __siganal = SignalAnalysisParams()
         if window is None:
@@ -671,6 +643,12 @@ class VizPSD(object):
     @staticmethod
     def plot_PSD_of_rate_in_ax_v2(ax, spiketimes_set, binsz=None, window=None,
                                nucleus=None, resolution=None, method=None):
+        """
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+
+        """
         # ============== DEFAULT Parameters ==============
         __siganal = SignalAnalysisParams()
         if window is None:
