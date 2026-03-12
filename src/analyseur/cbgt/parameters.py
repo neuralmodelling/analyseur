@@ -6,7 +6,7 @@
 #
 
 from dataclasses import dataclass, field
-from typing import List, Tuple
+# from typing import List, Tuple, Set, Dict # Not needed for Python 3.9+
 import math
 
 DEFAULT_CONDUCTANCES = {
@@ -316,16 +316,16 @@ class SimulationParams:
     duration: float = 10000 # ms
     t_start_recording = 2000 # ms
     dt: float = 0.1 # ms
-    nuclei_ctx: List[str] = None
-    nuclei_bg: List[str] = None
-    nuclei_thal: List[str] = None
-    neurotrans: List[str] = None
+    nuclei_ctx: list[str] = None
+    nuclei_bg: list[str] = None
+    nuclei_thal: list[str] = None
+    neurotrans: list[str] = None
     conductance: dict = field(default_factory=lambda: DEFAULT_CONDUCTANCES.copy())
     ff_currents: dict = field(default_factory=lambda: DEFAULT_FEEDFORWORD_CURRENTS.copy())
     size_info: dict = field(default_factory=lambda: DEFAULT_SIZE_INFO.copy())
     modelParamsID: int = 9
     projection_types: dict = field(default_factory=lambda: DEFAULT_PROJECTIONS_TYPES.copy())
-    connected_regions: Set[Tuple[str, str]] = field(default_factory=lambda: DEFAULT_CONNECTED_REGIONS.copy())
+    connected_regions: set[tuple[str, str]] = field(default_factory=lambda: DEFAULT_CONNECTED_REGIONS.copy())
 
     def __post_init__(self):
         if self.nuclei_ctx is None:
@@ -391,7 +391,7 @@ class SignalAnalysisParams:
     decimal_places: int = 3
     decimal_places_ephys: int = 5  # very small values for disinhibition experiments
 
-    window: Tuple[float, float] = (0, SimulationParams.duration / _1000ms)
+    window: tuple[float, float] = (0, SimulationParams.duration / _1000ms)
     sampling_period_ms: float = SimulationParams.dt
     sampling_period: float = SimulationParams.dt / _1000ms
 
