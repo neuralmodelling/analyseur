@@ -1,3 +1,7 @@
+# ~/analyseur/cbgt/visual/connections.py
+#
+# Documentation by Lungsi 12 March 2026
+
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
