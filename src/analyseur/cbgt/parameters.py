@@ -333,7 +333,7 @@ class SimulationParams:
         if self.nuclei_bg is None:
             self.nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN",]
         if self.nuclei_thal is None:
-            self.nuclei_thal = ["MD", "TRN",]
+            self.nuclei_thal = ["MD", "TRN",]  # "CMPf" is not accompanied with myriad raw datasets
         if self.neurotrans is None:
             self.neurotrans = ['AMPA', 'NMDA', 'GABAA', 'GABAB']
 

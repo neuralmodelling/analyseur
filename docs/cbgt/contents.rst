@@ -44,7 +44,6 @@ Visualizers
    :maxdepth: 5
    :caption: Available visualization functions:
 
-   visual/connections.rst
    visual/tabular.rst
    visual/peristimulus.rst
    visual/popurate.rst
