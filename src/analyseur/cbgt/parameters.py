@@ -200,16 +200,16 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
     .. math::
 
-        n_{bins} = \\sqrt(N) \n
-        binsz = \\frac{dur}{n_{bins}}
+        n_{bins} &= \\sqrt(N) \n
+        binsz &= \\frac{dur}{n_{bins}}
 
     Formula: Rice Rule
     ------------------
 
     .. math::
 
-        n_{bins} = 2 \\sqrt[3](N) \n
-        binsz = \\frac{dur}{n_{bins}}
+        n_{bins} &= 2 \\sqrt[3](N) \n
+        binsz &= \\frac{dur}{n_{bins}}
 
     Formula: Periodic Rule
     ----------------------
@@ -218,8 +218,8 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
 
     .. math::
 
-        T = \\frac{1}{\\nu} \n
-        binsz = m \\times T
+        T &= \\frac{1}{\\nu} \n
+        binsz &= m \\times T
 
     where `m` is the number of periods. Generally, :math:`m=2`.
 
