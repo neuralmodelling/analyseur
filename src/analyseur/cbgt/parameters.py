@@ -160,6 +160,16 @@ DEFAULT_PROJECTIONS_TYPES = {
     },
 }
 
+DEFAULT_CONNECTED_REGIONS = {
+    ("Cortex", "Cortex"),
+    ("Cortex", "BasalGanglia"),
+    ("Cortex", "Thalamus"),
+    ("BasalGanglia", "Thalamus"),
+    ("Thalamus", "Cortex"),
+    ("BasalGanglia", "BasalGanglia"),
+    ("Thalamus", "Thalamus"),
+}
+
 
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     """
@@ -293,6 +303,16 @@ class SimulationParams:
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    # --- Class constants ---
+    REGION_ALIASES = {"cortex": "Cortex",
+                      "ctx": "Cortex",
+                      "basalganglia": "BasalGanglia",
+                      "bg": "BasalGanglia",
+                      "basal_ganglia": "BasalGanglia",
+                      "thalamus": "Thalamus",
+                      "thal": "Thalamus",}
+
+    # --- Instance fields ---
     duration: float = 10000 # ms
     t_start_recording = 2000 # ms
     dt: float = 0.1 # ms
@@ -305,6 +325,7 @@ class SimulationParams:
     size_info: dict = field(default_factory=lambda: DEFAULT_SIZE_INFO.copy())
     modelParamsID: int = 9
     projection_types: dict = field(default_factory=lambda: DEFAULT_PROJECTIONS_TYPES.copy())
+    connected_regions: Set[Tuple[str, str]] = field(default_factory=lambda: DEFAULT_CONNECTED_REGIONS.copy())
 
     def __post_init__(self):
         if self.nuclei_ctx is None:

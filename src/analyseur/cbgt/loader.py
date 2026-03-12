@@ -11,6 +11,9 @@ import numbers
 import pandas as pd
 import numpy as np
 
+import pickle
+import blosc # allows to compress the lists
+
 from analyseur.cbgt.parameters import SimulationParams, SignalAnalysisParams
 
 
@@ -435,3 +438,446 @@ class LoadMembraneVorI(CommonLoader):
             measurables = None
 
         return measurables
+
+class FetchConnectionList(object):
+    """
+    Fetches the `connection_lists_i.dat` and `connection_lists_j.dat` from `connection_list/`.
+
+    +--------------------------------+
+    | Methods                        |
+    +================================+
+    | :py:meth:`.within_cortex`      |
+    +--------------------------------+
+    | :py:meth:`.within_bg`          |
+    +--------------------------------+
+    | :py:meth:`.within_thalamus`    |
+    +--------------------------------+
+    | :py:meth:`.cortex_to_bg`       |
+    +--------------------------------+
+    | :py:meth:`.cortex_to_thalamus` |
+    +--------------------------------+
+    | :py:meth:`.thalamus_to_cortex` |
+    +--------------------------------+
+    | :py:meth:`.bg_to_thalamus`     |
+    +--------------------------------+
+
+    =========
+    Use Cases
+    =========
+
+    ------------------
+    1. Pre-requisites
+    ------------------
+
+    1.1. Import Modules and Instantiate
+    ```````````````````````````````````
+    ::
+
+        from analyseur.cbgt.loader import FetchConnectionList
+
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+
+    ---------
+    2. Cases
+    ---------
+
+    2.1. Load file and fetch the connection lists
+    `````````````````````````````````````````````
+    ::
+
+        conn_i, self.conn_j = fetch(rootfolder=folder_path, verbose=True)
+
+    such that the `folder_path` is the CBGT data directory whose structure is shown below
+
+    .. code-block:: text
+
+        .
+        ├── BG/
+        │   ├── connection_list/
+        │   │   ├── scale=4_nbchannels=4/
+        │   │   │   └── model_9/
+        │   │   └── active_cortex_inputs_scale=4_nbchannels=4/
+        │   │       └── model_9/
+        │   └── ...
+        ├── CORTEX/
+        │   ├── connection_list/
+        │   │   ├── Thalamus_inputs_nbpops=4/
+        │   │   └── nbpops=4/
+        │   └── ...
+        ├── THALAMUS/
+        │   ├── connection_list/
+        │   │   ├── nbpops=4/
+        │   │   ├── BG_inputs_nbpops=4/
+        │   │   └── active_cortex_inputs_nbpops=4/
+        │   └── ...
+        ├── ...
+        :
+
+    where
+
+    * terminal folders in `connection_list/` contains files `connection_lists_i.dat` and `connection_lists_j.dat`
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    simparams = SimulationParams()
+
+    @staticmethod
+    def filter_src_to_dst(src_nuclei_list, dst_nuclei_list, conn_i, conn_j):
+        nuclei_src = set(src_nuclei_list)
+        nuclei_dst = set(dst_nuclei_list)
+
+        filtered_i = {}
+        filtered_j = {}
+
+        for pair in conn_i:
+
+            src, dst = pair.split("->")
+
+            if src in nuclei_src and  dst in nuclei_dst:
+                filtered_i[pair] = conn_i[pair]
+                filtered_j[pair] = conn_j[pair]
+
+        return filtered_i, filtered_j
+
+    @classmethod
+    def within_cortex(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists within cortex.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        CORTEX_CONNECTION_LISTS_i = {}
+        CORTEX_CONNECTION_LISTS_j = {}
+
+        folder_name = rootfolder + 'CORTEX/connection_lists/nbpops=' + str(
+            int(cls.simparams.size_info["cortex"]['TOTAL_NUMBER_OF_POPULATIONS'])) + '/'
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_CORTEX_CONNECTION_LISTS_i = f.read()
+        CORTEX_CONNECTION_LISTS_i_pickle = pickle.loads(blosc.decompress(compressed_pickle_CORTEX_CONNECTION_LISTS_i))
+
+        for name in CORTEX_CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            CORTEX_CONNECTION_LISTS_i[name] = CORTEX_CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_CORTEX_CONNECTION_LISTS_j = f.read()
+        CORTEX_CONNECTION_LISTS_j_pickle = pickle.loads(blosc.decompress(compressed_pickle_CORTEX_CONNECTION_LISTS_j))
+
+        for name in CORTEX_CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            CORTEX_CONNECTION_LISTS_j[name] = CORTEX_CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_ctx,
+                cls.simparams.nuclei_ctx,
+                CORTEX_CONNECTION_LISTS_i,
+                CORTEX_CONNECTION_LISTS_j)
+
+            return filtered_i, filtered_j
+        else:
+            return CORTEX_CONNECTION_LISTS_i, CORTEX_CONNECTION_LISTS_j
+
+    @classmethod
+    def within_bg(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists within basal ganglia.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        CONNECTION_LISTS_i = {}
+        CONNECTION_LISTS_j = {}
+
+        folder_name = rootfolder + 'BG/connection_lists/scale=' + str(
+            int(cls.simparams.size_info["bg"]['scale'])) + '_nbchannels=' + str(
+            cls.simparams.size_info["bg"]['TOTAL_NUMBER_OF_CHANNELS']) + '/model_' + str(
+            cls.simparams.modelParamsID) + '/'  # TODO see if pb with the double // ?
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_CONNECTION_LISTS_i = f.read()
+        CONNECTION_LISTS_i_pickle = pickle.loads(blosc.decompress(compressed_pickle_CONNECTION_LISTS_i))
+
+        for name in CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            CONNECTION_LISTS_i[name] = CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_CONNECTION_LISTS_j = f.read()
+        CONNECTION_LISTS_j_pickle = pickle.loads(blosc.decompress(compressed_pickle_CONNECTION_LISTS_j))
+
+        for name in CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            CONNECTION_LISTS_j[name] = CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_bg,
+                cls.simparams.nuclei_bg,
+                CONNECTION_LISTS_i,
+                CONNECTION_LISTS_j)
+
+            return filtered_i, filtered_j
+        else:
+            return CONNECTION_LISTS_i, CONNECTION_LISTS_j
+
+    @classmethod
+    def within_thalamus(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists within thalamus.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        THALAMUS_CONNECTION_LISTS_i = {}
+        THALAMUS_CONNECTION_LISTS_j = {}
+
+        folder_name = rootfolder + 'THALAMUS/connection_lists/nbpops=' + str(
+            int(cls.simparams.size_info["thalamus"]['TOTAL_NUMBER_OF_POPULATIONS'])) + '/'
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_THALAMUS_CONNECTION_LISTS_i = f.read()
+        THALAMUS_CONNECTION_LISTS_i_pickle = pickle.loads(
+            blosc.decompress(compressed_pickle_THALAMUS_CONNECTION_LISTS_i))
+
+        for name in THALAMUS_CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            THALAMUS_CONNECTION_LISTS_i[name] = THALAMUS_CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_THALAMUS_CONNECTION_LISTS_j = f.read()
+        THALAMUS_CONNECTION_LISTS_j_pickle = pickle.loads(
+            blosc.decompress(compressed_pickle_THALAMUS_CONNECTION_LISTS_j))
+
+        for name in THALAMUS_CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            THALAMUS_CONNECTION_LISTS_j[name] = THALAMUS_CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_thal,
+                cls.simparams.nuclei_thal,
+                THALAMUS_CONNECTION_LISTS_i,
+                THALAMUS_CONNECTION_LISTS_j)
+
+            return filtered_i, filtered_j
+        else:
+            return THALAMUS_CONNECTION_LISTS_i, THALAMUS_CONNECTION_LISTS_j
+
+
+    @classmethod
+    def cortex_to_bg(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists between the cortex and basal ganglia.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        CONNECTION_LISTS_i_active_cortex_inputs = {}
+        CONNECTION_LISTS_j_active_cortex_inputs = {}
+
+        folder_name = rootfolder + 'BG/connection_lists/active_cortex_inputs_scale=' + str(
+            int(cls.simparams.size_info["bg"]['scale'])) + '_nbchannels=' + str(
+            cls.simparams.size_info["bg"]['TOTAL_NUMBER_OF_CHANNELS']) + '/model_' + str(cls.simparams.modelParamsID) + '/'
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_CONNECTION_LISTS_i = f.read()
+        CONNECTION_LISTS_i_pickle = pickle.loads(blosc.decompress(compressed_pickle_CONNECTION_LISTS_i))
+
+        for name in CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            CONNECTION_LISTS_i_active_cortex_inputs[name] = CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_CONNECTION_LISTS_j = f.read()
+        CONNECTION_LISTS_j_pickle = pickle.loads(blosc.decompress(compressed_pickle_CONNECTION_LISTS_j))
+
+        for name in CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            CONNECTION_LISTS_j_active_cortex_inputs[name] = CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_ctx,
+                cls.simparams.nuclei_bg,
+                CONNECTION_LISTS_i_active_cortex_inputs,
+                CONNECTION_LISTS_j_active_cortex_inputs)
+
+            return filtered_i, filtered_j
+        else:
+            return CONNECTION_LISTS_i_active_cortex_inputs, CONNECTION_LISTS_j_active_cortex_inputs
+
+
+    @classmethod
+    def cortex_to_thalamus(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists between the cortex and thalamus.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        THALAMUS_CONNECTION_LISTS_i_active_cortex_inputs = {}
+        THALAMUS_CONNECTION_LISTS_j_active_cortex_inputs = {}
+
+        folder_name = rootfolder + 'THALAMUS/connection_lists/active_cortex_inputs_nbpops=' + str(
+            int(cls.simparams.size_info["thalamus"]['TOTAL_NUMBER_OF_POPULATIONS'])) + '/'
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_THALAMUS_CONNECTION_LISTS_i = f.read()
+        THALAMUS_CONNECTION_LISTS_i_pickle = pickle.loads(
+            blosc.decompress(compressed_pickle_THALAMUS_CONNECTION_LISTS_i))
+
+        for name in THALAMUS_CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            THALAMUS_CONNECTION_LISTS_i_active_cortex_inputs[name] = THALAMUS_CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_THALAMUS_CONNECTION_LISTS_j = f.read()
+        THALAMUS_CONNECTION_LISTS_j_pickle = pickle.loads(
+            blosc.decompress(compressed_pickle_THALAMUS_CONNECTION_LISTS_j))
+
+        for name in THALAMUS_CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            THALAMUS_CONNECTION_LISTS_j_active_cortex_inputs[name] = THALAMUS_CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_ctx,
+                cls.simparams.nuclei_thal,
+                THALAMUS_CONNECTION_LISTS_i_active_cortex_inputs,
+                THALAMUS_CONNECTION_LISTS_j_active_cortex_inputs)
+
+            return filtered_i, filtered_j
+        else:
+            return THALAMUS_CONNECTION_LISTS_i_active_cortex_inputs, THALAMUS_CONNECTION_LISTS_j_active_cortex_inputs
+
+
+    @classmethod
+    def bg_to_thalamus(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists between the basal ganglia and thalamus.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        THALAMUS_CONNECTION_LISTS_i_BG_inputs = {}
+        THALAMUS_CONNECTION_LISTS_j_BG_inputs = {}
+
+        folder_name = rootfolder + 'THALAMUS/connection_lists/BG_inputs_nbpops=' + str(
+            int(cls.simparams.size_info["thalamus"]['TOTAL_NUMBER_OF_POPULATIONS'])) + '/'
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_THALAMUS_CONNECTION_LISTS_i = f.read()
+        THALAMUS_CONNECTION_LISTS_i_pickle = pickle.loads(
+            blosc.decompress(compressed_pickle_THALAMUS_CONNECTION_LISTS_i))
+
+        for name in THALAMUS_CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            THALAMUS_CONNECTION_LISTS_i_BG_inputs[name] = THALAMUS_CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_THALAMUS_CONNECTION_LISTS_j = f.read()
+        THALAMUS_CONNECTION_LISTS_j_pickle = pickle.loads(
+            blosc.decompress(compressed_pickle_THALAMUS_CONNECTION_LISTS_j))
+
+        for name in THALAMUS_CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            THALAMUS_CONNECTION_LISTS_j_BG_inputs[name] = THALAMUS_CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_bg,
+                cls.simparams.nuclei_thal,
+                THALAMUS_CONNECTION_LISTS_i_BG_inputs,
+                THALAMUS_CONNECTION_LISTS_j_BG_inputs)
+
+            return filtered_i, filtered_j
+        else:
+            return THALAMUS_CONNECTION_LISTS_i_BG_inputs, THALAMUS_CONNECTION_LISTS_j_BG_inputs
+
+    @classmethod
+    def thalamus_to_cortex(cls, rootfolder=None, verbose=False, nuclei_filter=False):
+        """
+        Allows to fetch the synapses connection lists between the thalamus and cortex.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        CORTEX_CONNECTION_LISTS_i_Thalamus_inputs = {}
+        CORTEX_CONNECTION_LISTS_j_Thalamus_inputs = {}
+
+        folder_name = rootfolder + 'CORTEX/connection_lists/Thalamus_inputs_nbpops=' + str(
+            int(cls.simparams.size_info["cortex"]["TOTAL_NUMBER_OF_POPULATIONS"])) + '/'
+
+        with open(folder_name + "connection_lists_i.dat", "rb") as f:
+            compressed_pickle_CORTEX_CONNECTION_LISTS_i = f.read()
+        CORTEX_CONNECTION_LISTS_i_pickle = pickle.loads(blosc.decompress(compressed_pickle_CORTEX_CONNECTION_LISTS_i))
+
+        for name in CORTEX_CONNECTION_LISTS_i_pickle:
+            if verbose:
+                print(name)
+            CORTEX_CONNECTION_LISTS_i_Thalamus_inputs[name] = CORTEX_CONNECTION_LISTS_i_pickle[name]
+
+        with open(folder_name + "connection_lists_j.dat", "rb") as f:
+            compressed_pickle_CORTEX_CONNECTION_LISTS_j = f.read()
+        CORTEX_CONNECTION_LISTS_j_pickle = pickle.loads(blosc.decompress(compressed_pickle_CORTEX_CONNECTION_LISTS_j))
+
+        for name in CORTEX_CONNECTION_LISTS_j_pickle:
+            if verbose:
+                print(name)
+            CORTEX_CONNECTION_LISTS_j_Thalamus_inputs[name] = CORTEX_CONNECTION_LISTS_j_pickle[name]
+
+        if verbose:
+            print("\n=====> Connection lists fetched in folder: " + folder_name + " \n")
+
+        if nuclei_filter:
+            filtered_i, filtered_j = cls.filter_src_to_dst(
+                cls.simparams.nuclei_thal,
+                cls.simparams.nuclei_ctx,
+                CORTEX_CONNECTION_LISTS_i_Thalamus_inputs,
+                CORTEX_CONNECTION_LISTS_j_Thalamus_inputs)
+
+            return filtered_i, filtered_j
+        else:
+            return CORTEX_CONNECTION_LISTS_i_Thalamus_inputs, CORTEX_CONNECTION_LISTS_j_Thalamus_inputs
