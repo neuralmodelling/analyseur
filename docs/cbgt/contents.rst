@@ -46,8 +46,8 @@ Visualizers
 
    visual/connections.rst
    visual/markerplot.rst
-   visual/tabular.rst
    visual/peristimulus.rst
+   visual/tabular.rst
    visual/popurate.rst
    visual/popact.rst
    visual/scalo.rst
