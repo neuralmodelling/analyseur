@@ -45,13 +45,13 @@ Visualizers
    :caption: Available visualization functions:
 
    visual/connections.rst
+   visual/markerplot.rst
    visual/tabular.rst
    visual/peristimulus.rst
    visual/popurate.rst
    visual/popact.rst
    visual/scalo.rst
    visual/distribution.rst
-   visual/markerplot.rst
    visual/variation.rst
    visual/rate.rst
    visual/powspec.rst
