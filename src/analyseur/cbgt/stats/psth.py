@@ -375,7 +375,7 @@ class PSTH(object):
         }
 
         # firerate = self._compute_firing_rate_in_window(window, allspikes_in_window)
-        popfirerates = cls._compute_pop_firing_rate(len(desired_spiketimes_subset), binsz, counts)
+        popfirerates = cls._compute_pop_avg_firing_rate(len(desired_spiketimes_subset), binsz, counts)
         true_avg_rate = cls._compute_true_avg_firing_rate(window, desired_spiketimes_subset)
 
         return average_psth, std_err_psth, bin_info, popfirerates, true_avg_rate, desired_spiketimes_subset

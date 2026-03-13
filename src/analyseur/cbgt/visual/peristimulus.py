@@ -35,23 +35,24 @@ class VizPSTH(object):
     ::
 
       from  analyseur.cbgt.loader import LoadSpikeTimes
+      from analyseur.cbgt.visual.peristimulus import VizPSTH
+
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
       spiketimes_superset = loadST.get_spiketrains()
 
-      c
 
     2. Peri-Stimulus Time Histogram for the whole simulation window
 
     ::
 
-      vizPSTH.plot_pool(spiketimes_superset)
+      VizPSTH.plot_pool(spiketimes_superset)
 
     3. PSTH for desired window and bin size
 
     ::
 
-      vizPSTH.plot_pool(spiketimes_superset, window=(0,5), binsz=1)  # time unit in seconds
-      vizPSTH.plot_pool(spiketimes_superset, window=(0,5), binsz=0.05)
+      VizPSTH.plot_pool(spiketimes_superset, window=(0,5), binsz=1)  # time unit in seconds
+      VizPSTH.plot_pool(spiketimes_superset, window=(0,5), binsz=0.05)
 
     .. raw:: html
 
@@ -63,6 +64,23 @@ class VizPSTH(object):
     @classmethod
     def plot_pool_in_ax(cls, ax, spiketimes_set, binsz=None, window=None, neurons=None, nucleus=None):
         """
+        .. code-block:: text
+
+            Pooled PSTH (Population Activity)
+
+            Total Spike Count
+            |
+            |        ████ █████ ████ █████ ████
+            |        ████ █████ ████ █████ ████
+            |        ████ █████ ████ █████ ████
+            |
+            +--------------------------------------------------> Time (s)
+            0        2        4        6        8        10
+
+            Histogram bins show spike counts aggregated across neurons.
+            Each bar represents the number of spikes from the pooled neuron
+            population within a time bin.
+
         Draws the Pooled Peri-Stimulus Time Histogram (PSTH) on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -122,7 +140,7 @@ class VizPSTH(object):
     def plot_pool(cls, spiketimes_set, binsz=0.01, window=(0, 10), neurons="all", nucleus=None, show=True):
         """
         Displays the Pooled Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
-        and returns the plot figure (to save if necessary).
+        and returns the plot figure (to save if necessary) using :py:meth:`.plot_pool_in_ax`.
         
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -164,6 +182,23 @@ class VizPSTH(object):
     @classmethod
     def plot_avg_in_ax(cls, ax, spiketimes_set, binsz=None, window=None, neurons=None, nucleus=None):
         """
+        .. code-block:: text
+
+            Averaged PSTH (Population Activity)
+
+            Average Firing Rate (Hz)
+            ^
+            |        ┬      ┬      ┬      ┬      ┬
+            |       ███    ███    ███    ███    ███
+            |       ███    ███    ███    ███    ███
+            |       ███    ███    ███    ███    ███
+            |        ┴      ┴      ┴      ┴      ┴
+            +--------------------------------------------------> Time (s)
+            0        2        4        6        8        10
+
+            Bars represent the population-average firing rate per time bin.
+            Error bars indicate variability across neurons (SEM).
+
         Draws the Averaged Peri-Stimulus Time Histogram (PSTH) on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -222,7 +257,7 @@ class VizPSTH(object):
     def plot_avg(cls, spiketimes_set, binsz=0.01, window=(0, 10), neurons="all", nucleus=None, show=True):
         """
         Displays the Averaged Peri-Stimulus Time Histogram (PSTH) of the given spike times (seconds)
-        and returns the plot figure (to save if necessary).
+        and returns the plot figure (to save if necessary) using :py:meth:`.plot_avg_in_ax`.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
