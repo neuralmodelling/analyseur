@@ -333,7 +333,7 @@ def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neuron
 
 def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None,):
     """
-    Visualize Raster plot for the given neuron population using :py:meth:`.plot_raster_in_ax`.
+    Visualize Raster plot for the given neuron population using :py:func:`plot_raster_in_ax`.
 
     :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
@@ -582,7 +582,7 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
 def plot_ratechange(spiketimes_superset, stimulus_onset=None,
                      window=None, neurons=None, nucleus=None, mode=None):
     """
-    Visualize Rate Change Scatter of the given neuron population using :py:meth:`.plot_ratechange_in_ax`.
+    Visualize Rate Change Scatter of the given neuron population using :py:func:`plot_ratechange_in_ax`.
 
     :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
