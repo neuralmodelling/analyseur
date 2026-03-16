@@ -6,6 +6,10 @@
 #
 
 """
+=============
+Rate Plotting
+=============
+
 +------------------------------------------------------+
 | Functions                                            |
 +======================================================+
@@ -26,52 +30,50 @@
 | :func:`plot_mean_rate_all_neurons_across_time_in_ax` |
 +------------------------------------------------------+
 
-===============
+--------------
 Plot Mean Rate
-===============
+--------------
 
------------------
 1. Pre-requisites
------------------
+=================
 
 1.1. Import Modules
-````````````````````
+-------------------
 ::
 
     from analyseur.cbgt.loader import LoadSpikeTimes
     from analyseur.cbgt.visual.rate import plot_mean_rate_isi
 
 1.2. Load file and get spike times
-```````````````````````````````````
+----------------------------------
 ::
 
     loadST = LoadSpikeTimes("spikes_GPi.csv")
     spiketimes_superset = loadST.get_spiketimes_superset()
 
----------
 2. Cases
----------
+========
 
 2.1. Visualize Mean Rate with default setting
-``````````````````````````````````````````````
+---------------------------------------------
 ::
 
     [fig, ax] = plot_mean_rate_isi(spiketimes_superset)
 
 2.2. Visualize Mean Rate in portrait mode
-``````````````````````````````````````````
+-----------------------------------------
 ::
 
     [fig, ax] = plot_mean_rate_isi(spiketimes_superset, mode="portrait")
 
 2.3. Visualize Mean Rate in portrait mode with nucleus name in title
-````````````````````````````````````````````````````````````````````
+--------------------------------------------------------------------
 ::
 
     [fig, ax] = plot_mean_rate_isi(spiketimes_superset, mode="portrait", nucleus="GPi")
 
 2.4. Create the plot for customization
-``````````````````````````````````````
+--------------------------------------
 This is for power users who for instance want to insert the Mean Rate plot in their
 collage of subplots.
 ::
@@ -90,9 +92,9 @@ collage of subplots.
 NOTE: This example shows :func:`plot_mean_rate_isi_in_ax` in default setting but this function works like
 :func:`plot_mean_rate_isi` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plot_mean_rate_isi_in_ax`.
 
-===============================
+-------------------------------
 Plot Average Instantaneous Rate
-===============================
+-------------------------------
 
 Similar as documented above for plotting Mean Rate but using the function
 :func:`plot_avg_inst_rate` and :func:`plot_avg_inst_rate_in_ax` with the
