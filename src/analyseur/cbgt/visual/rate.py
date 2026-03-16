@@ -6,13 +6,29 @@
 #
 
 """
-+------------------------------+--------------------------------------------------------------------------------------+
-| Functions                    | Purpose                                                                              |
-+==============================+======================================================================================+
-| :func:`plot_mean_rate`       | plots Mean Rate (1/s) of all the neurons in a population                             |
-+------------------------------+--------------------------------------------------------------------------------------+
-| :func:`plot_mean_rate_in_ax` | draws the Mean Rate (1/s) of all the neurons into a given `matplotlib.pyplot.axis`   |
-+------------------------------+--------------------------------------------------------------------------------------+
++------------------------------------------------------+
+| Functions                                            |
++======================================================+
+| :func:`plot_mean_rate`                               |
++------------------------------------------------------+
+| :func:`plot_mean_rate_in_ax`                         |
++------------------------------------------------------+
+| :func:`plot_mean_rate_isi`                           |
++------------------------------------------------------+
+| :func:`plot_mean_rate_isi_in_ax`                     |
++------------------------------------------------------+
+| :func:`plot_pool_avg_inst_rates`                     |
++------------------------------------------------------+
+| :func:`plot_pool_avg_inst_rates_in_ax`               |
++------------------------------------------------------+
+| :func:`plot_true_avg_inst_rate`                      |
++------------------------------------------------------+
+| :func:`plot_true_avg_inst_rate_in_ax`                |
++------------------------------------------------------+
+| :func:`plot_mean_rate_spikecounts_in_ax`             |
++------------------------------------------------------+
+| :func:`plot_mean_rate_all_neurons_across_time_in_ax` |
++------------------------------------------------------+
 
 ===============
 Plot Mean Rate
@@ -27,7 +43,7 @@ Plot Mean Rate
 ::
 
     from analyseur.cbgt.loader import LoadSpikeTimes
-    from analyseur.cbgt.visual.rate import plot_mean_rate
+    from analyseur.cbgt.visual.rate import plot_mean_rate_isi
 
 1.2. Load file and get spike times
 ```````````````````````````````````
@@ -44,19 +60,19 @@ Plot Mean Rate
 ``````````````````````````````````````````````
 ::
 
-    [fig, ax] = plot_mean_rate(spiketimes_superset)
+    [fig, ax] = plot_mean_rate_isi(spiketimes_superset)
 
 2.2. Visualize Mean Rate in portrait mode
 ``````````````````````````````````````````
 ::
 
-    [fig, ax] = plot_mean_rate(spiketimes_superset, mode="portrait")
+    [fig, ax] = plot_mean_rate_isi(spiketimes_superset, mode="portrait")
 
 2.3. Visualize Mean Rate in portrait mode with nucleus name in title
 ````````````````````````````````````````````````````````````````````
 ::
 
-    [fig, ax] = plot_mean_rate(spiketimes_superset, mode="portrait", nucleus="GPi")
+    [fig, ax] = plot_mean_rate_isi(spiketimes_superset, mode="portrait", nucleus="GPi")
 
 2.4. Create the plot for customization
 ``````````````````````````````````````
@@ -65,18 +81,18 @@ collage of subplots.
 ::
 
     import matplotlib.pyplot as plt
-    from analyseur.cbgt.visual.rate import plot_mean_rate_in_ax
+    from analyseur.cbgt.visual.rate import plot_mean_rate_isi_in_ax
 
     fig, (ax1, ax2) = plt.subplots(1, 2)
     fig.suptitle('Horizontally stacked subplots')
 
-    ax1 = plot_mean_rate_in_ax(ax1, spiketimes_superset)
-    ax2 = plot_mean_rate_in_ax(ax2, spiketimes_superset)
+    ax1 = plot_mean_rate_isi_in_ax(ax1, spiketimes_superset)
+    ax2 = plot_mean_rate_isi_in_ax(ax2, spiketimes_superset)
 
     plt.show()
 
-NOTE: This example shows :func:`plot_mean_rate_in_ax` in default setting but this function works like
-:func:`plot_mean_rate` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plot_mean_rate_in_ax`.
+NOTE: This example shows :func:`plot_mean_rate_isi_in_ax` in default setting but this function works like
+:func:`plot_mean_rate_isi` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plot_mean_rate_isi_in_ax`.
 
 ===============================
 Plot Average Instantaneous Rate
@@ -120,6 +136,20 @@ __simparams = SimulationParams()
 def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None,
                                      nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        Mean Rate (1/s)
+        ^
+        |      █  █   █ █   █   █ █   █
+        |     ███ ██ ████ ██ ██ ███ ██
+        |    █████████████████████████
+        |
+        +---------------------------------------------> Neurons
+        0      50      100      150      200
+
+        Each bar represents the mean firing rate of one neuron
+        computed from spike counts within the analysis window.
+
     Draws the Mean Rate (1/s) on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -182,6 +212,20 @@ def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None
 
 def plot_mean_rate_isi_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        Mean Rate (1/s)
+        ^
+        |      █  █   █ █   █   █ █   █
+        |     ███ ██ ████ ██ ██ ███ ██
+        |    █████████████████████████
+        |
+        +---------------------------------------------> Neurons
+        0      50      100      150      200
+
+        Each bar represents the mean firing rate of one neuron
+        computed from its inter-spike intervals (ISI).
+
     Draws the Mean Rate (1/s) on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -237,7 +281,7 @@ def plot_mean_rate_isi_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
 def plot_mean_rate_isi(spiketimes_superset, nucleus=None, mode=None):
     """
-    Visualize Mean Rate (1/s) of the given neuron population.
+    Visualize Mean Rate (1/s) of the given neuron population using :py:func:`plot_mean_rate_isi_in_ax`.
 
     :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
 
@@ -270,6 +314,20 @@ def plot_mean_rate_isi(spiketimes_superset, nucleus=None, mode=None):
 
 def plot_pool_avg_inst_rates_in_ax(ax, spiketimes_superset, binsz=None, nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        Average Inst. Rate (Hz)
+        ^
+        |      ███ ████ ███ ████ ███ ███
+        |     █████████████████████████
+        |    ██████████████████████████
+        |
+        +--------------------------------------------------> Time (s)
+        0        2        4        6        8        10
+
+        Each bar represents the average instantaneous firing rate
+        of the neuron population within a time bin.
+
     Draws the Mean Rate (1/s) on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -328,7 +386,7 @@ def plot_pool_avg_inst_rates_in_ax(ax, spiketimes_superset, binsz=None, nucleus=
 
 def plot_pool_avg_inst_rates(spiketimes_superset, binsz=None, nucleus=None, mode=None):
     """
-    Visualize Mean Rate (1/s) of the given neuron population.
+    Visualize Mean Rate (1/s) of the given neuron population using :py:func:`plot_pool_avg_inst_rates_in_ax`.
 
     :param spiketimes_superset: Dictionary returned using :class:`~analyseur.cbgt.loader.LoadSpikeTimes`
 
@@ -362,6 +420,20 @@ def plot_pool_avg_inst_rates(spiketimes_superset, binsz=None, nucleus=None, mode
 
 def plot_true_avg_inst_rate_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        Avg. Inst. Rate (Hz)
+        ^
+        |      █  █   █ █   █   █ █   █
+        |     ███ ██ ████ ██ ██ ███ ██
+        |    █████████████████████████
+        |
+        +---------------------------------------------> Neurons
+        0      50      100      150      200
+
+        Each bar represents the average instantaneous firing rate
+        of an individual neuron computed from its ISI sequence.
+
     Draws the Instantaneuous Rate (1/s) on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -421,7 +493,7 @@ def plot_true_avg_inst_rate_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
 def plot_true_avg_inst_rate(spiketimes_set, nucleus=None, mode=None):
     """
-    Visualize Instantaneuous Rate (1/s) of the given neuron population.
+    Visualize Instantaneuous Rate (1/s) of the given neuron population using :py:func:`plot_true_avg_inst_rate_in_ax`.
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -455,6 +527,41 @@ def plot_true_avg_inst_rate(spiketimes_set, nucleus=None, mode=None):
 
 def plot_mean_rate_all_neurons_across_time_in_ax(ax, spiketimes_set, window=None,
                                                  binsz=None, nucleus=None,):
+    """
+    .. code-block:: text
+
+        Mean Population Firing Rate Over Time
+
+        Firing Rate (Hz)
+        ^
+        |        ~~~      ~~~    ~~~        ~~~
+        |      ~~   ~~  ~~   ~~  ~~   ~~  ~~   ~~
+        |     ~      ~~       ~~      ~~       ~
+        |
+        +--------------------------------------------------> Time (s)
+        0        5        10        15        20
+
+        Line shows the mean firing rate of the neuron population
+        as it evolves over time.
+
+    Draws the Mean Firing Rate (1/s) over time on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    :param window: 2-tuple; (0, 10) [default]
+    :param binsz: 0.01 [default]
+    :param nucleus: string; name of the nucleus
+    :return: object `ax` with plotting of the temporal dynamics of the mean firing rate across neurons
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     # ============== DEFAULT Parameters ==============
     if window is None:
         window = __siganal.window
@@ -465,7 +572,7 @@ def plot_mean_rate_all_neurons_across_time_in_ax(ax, spiketimes_set, window=None
     n_neurons = len(spiketimes_set)
 
     mu_rate_vec, time_bins = Rate.mean_rate(spiketimes_set=spiketimes_set, window=window,
-                                            binsz=binsz, neurons="all")
+                                            binsz=binsz, neurons="all", across="times")
 
     # Plot
     ax.plot(np.arange(len(mu_rate_vec)) / (window[1] - window[0]),
