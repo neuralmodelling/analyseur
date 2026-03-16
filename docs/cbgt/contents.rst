@@ -22,11 +22,11 @@ Statistics
    stats/isi.rst
    stats/variation.rst
    stats/sync.rst
-   stats/psth.rst
-   stats/wavelet.rst
-   stats/psd.rst
    stats/rate.rst
+   stats/psth.rst
+   stats/psd.rst
    stats/pca.rst
+   stats/wavelet.rst
 
 Analytics
 ==========
