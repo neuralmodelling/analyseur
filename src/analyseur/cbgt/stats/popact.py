@@ -26,7 +26,7 @@ class PopAct(object):
 
             C_k = \\sum_{i=1}^{n_\\text{nuc}} \\sum_{j=1}^{K_i}1(b_k \\le t_{ij} < b_{k+1})]
 
-        with the indicator function :math:`1(.)`, bin width :math:`\\Delta t`, number of bins :math:`\\lceil(T_\\text{max} - T_\\text{min})/\\Delta t\\rceil` such that :math:`T_\\text{min} = \\text{min}(S_\\text{all})`, :math:`T_\\text{max} = \\text{max}(S_\\text{all})`, :math:`S_\\text{all} = \\bigcup_{i=1}^{n_\\text{nuc}} S_i, S_i = \\{t_{i1}, t_{i2}, \\ldots, t_{iK_i}\\}`, and bin edges :math:`b_k = T_\\text{min} + k\\Delta t` for :math:`k=0,1,\\ldots,K`. The bin centers are :math:`c_k = (b_k + b_{k+1})/2`.
+        with the indicator function :math:`1(.)`, bin width :math:`\\Delta t`, number of bins :math:`\\lceil(T_\\text{max} - T_\\text{min})/\\Delta t\\rceil` such that :math:`T_\\text{min} = \\text{min}(S_\\text{all}), T_\\text{max} = \\text{max}(S_\\text{all}), S_\\text{all} = \\bigcup_{i=1}^{n_\\text{nuc}} S_i, S_i = \\{t_{i1}, t_{i2}, \\ldots, t_{iK_i}\\}`, and bin edges :math:`b_k = T_\\text{min} + k\\Delta t` for :math:`k=0,1,\\ldots,K`. The bin centers are :math:`c_k = (b_k + b_{k+1})/2`.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
