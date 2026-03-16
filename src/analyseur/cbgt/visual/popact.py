@@ -19,45 +19,53 @@ from analyseur.cbgt.parameters import SignalAnalysisParams
 
 class VizPopAct(object):
     """
-    The PopAct Class is instantiated by passing
+    +-----------------------------------------+
+    | Methods                                 |
+    +=========================================+
+    | :py:meth:`.plot_heatmap`                |
+    +-----------------------------------------+
+    | :py:meth:`.plot_heatmap_in_ax`          |
+    +-----------------------------------------+
+    | :py:meth:`.plot_pcatraj`                |
+    +-----------------------------------------+
+    | :py:meth:`.plot_pcatraj_in_ax`          |
+    +-----------------------------------------+
+    | :py:meth:`.plot_popcount_dist_in_ax`    |
+    +-----------------------------------------+
+    | :py:meth:`.plot_popcount_vs_time_in_ax` |
+    +-----------------------------------------+
 
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
-    
-    +--------------------------------+--------------------------------------------------------------------+
-    | Methods                        | Return                                                             |
-    +================================+====================================================================+
-    | :py:meth:`.plot`               | - `matplotlib.pyplot.imshow` object                                |
-    +--------------------------------+--------------------------------------------------------------------+
+    =========
+    Use Cases
+    =========
 
-    * `PopAct.plot` gives a spatio-temporal pattern across neurons
-    
-    **Use Case:**
+    -----------------
+    1. Pre-requisites
+    -----------------
 
-    1. Setup
-
+    1.1. Import Modules
+    ````````````````````
     ::
 
-      from  analyseur.cbgt.loader import LoadSpikeTimes
-      loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
-      spiketimes_superset = loadST.get_spiketimes_superset()
+        from analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgt.visual.popact import VizPopAct
 
-      from analyseur.cbgt.visual.popact import VizPopAct
-
-      my_pact = PopAct(spiketimes_superset)
-
-    2. Population Activity Heatmap for the entire simulation window
-
+    1.2. Load file and get spike times
+    ```````````````````````````````````
     ::
 
-      my_pact.plot()
+        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        spiketimes_superset = loadST.get_spiketimes_superset()
 
-    3. Population Activity Heatmap for desired window and bin size
+    ------------
+    2. Visualize
+    ------------
 
-    ::
+    To visualize pass the spiketimes to respective method.
 
-      my_pact.plot(spike_trains, window=(0,5), binsz=1)    # time unit in seconds
-      my_pact.plot(spike_trains, window=(0,5), binsz=0.05)
+    .. raw:: html
 
+        <hr style="border: 2px solid red; margin: 20px 0;">
     """
     __siganal = SignalAnalysisParams()
 
