@@ -176,6 +176,20 @@ class PSTH(object):
     @classmethod
     def _compute_true_avg_firing_rate(cls, window, spiketimes_set):
         """
+        .. math::
+
+            \\overline{r} = \\frac{1}{N} \\sum_{i=1}^{n_\\text{nuc}}r_i
+
+        where
+        .. math::
+
+            r_i = \\frac{n_i}{T_1 - T_0}
+
+        for :math:`n_i` number of spikes from :math:`i`-th neuron in the window and standard deviation
+        .. math::
+
+            \\sigma_r = \\sqrt{\\frac{1}{N}\\sum_{i=1}^{n_\\text{nuc}}\\left(r_i - \\overline{r}\\right)^2}
+
         Computes the average of each neuron's firing rate over the entire period
 
         :param window: Tuple in the form `(start_time, end_time)`
@@ -202,6 +216,12 @@ class PSTH(object):
     @classmethod
     def _compute_avg_firing_rate_from_PSTH(cls, window, n_neurons, pop_counts):
         """
+        .. math::
+
+            R = \\frac{\\sum_{\\forall k}C_k}{n_\\text{nuc} T}
+
+        for :math:`T = T_1 - T_0` total duration.
+
         Computes the average of each neuron's firing rate from PSTH data
 
         :param window: Tuple in the form `(start_time, end_time)`
@@ -214,6 +234,12 @@ class PSTH(object):
     @classmethod
     def _compute_pop_avg_firing_rate(cls, n_neurons, binsz, pop_counts):
         """
+        .. math::
+
+            R_k = \\frac{C_k}{n_\\text{nuc} \\Delta t}
+
+        for :math:`k` bin.
+
         Computes the  average firing rate of the whole population at each bin.
         Therefore, this is the TIME-VARYING population rate (since its at each bin).
         Hence, mean of the population rates across the bins is NOT average firing rate.
@@ -228,6 +254,24 @@ class PSTH(object):
     @classmethod
     def compute_poolPSTH(cls, spiketimes_set, neurons=None, binsz=None, window=None):
         """
+        .. math::
+
+            C_k = \\sum_{t \\in S_\\text{pool}}1(b_k \\le t < b_{k+1})
+
+        is the pooled spike train the PSTH count in bin :math:`k` where
+
+        .. math::
+
+            S_\\text{pool} = \\bigcup_{i=1}^{n_\\text{nuc}}S_i
+
+        is the pooled spike train for spike times of the :math:`i`-th neuron, :math:`S_i = \\{t_{i1}, t_{i2}, \\ldots, t_{iK_i}\\}` inside the window :math:`t \\in [T_0, T_1]`, :math:`1(.)` is the indicator function with bin width :math:`\\Delta t` and bin_edges
+
+        .. math::
+
+            b_k = T_0 + k \\Delta t
+
+        for :math:`k = 0,1,\\ldots,K`.
+
         Computation of Pooled Population Peri-Stimulus Time Histogram (PSTH) of all individual neurons.
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
@@ -254,6 +298,26 @@ class PSTH(object):
             - "mean_firing_rate": mean of the array of firing rates
             - "std_firing_rate": standard deviation of the array of firing rates
         - a nested list of spike times used for computing the PSTH
+
+        The time-varying population firing rate is
+
+        .. math::
+
+            R_k = \\frac{C_k}{n_\\text{nuc} \\Delta t}
+
+        for :math:`k` bin.
+
+        While the true average firing rate (across neurons) is
+
+        .. math::
+
+            \\overline{r} = \\frac{1}{N} \\sum_{i=1}^{n_\\text{nuc}}r_i
+
+        where :math:`r_i = n_i/(T_1 - T_0)` for :math:`n_i` number of spikes from :math:`i`-th neuron in the window and standard deviation
+
+        .. math::
+
+            \\sigma_r = \\sqrt{\\frac{1}{N}\\sum_{i=1}^{n_\\text{nuc}}\\left(r_i - \\overline{r}\\right)^2}
 
         .. raw:: html
 
@@ -304,6 +368,24 @@ class PSTH(object):
     @classmethod
     def compute_avgPSTH(cls, spiketimes_set, neurons=None, binsz=None, window=None):
         """
+        .. math::
+
+            \\overline{R}_k = \\frac{1}{n_\\text{nuc}} \\sum_{i=1}^{n_\\text{nuc}} R_{i,k}
+
+        is the average population PSTH of the firing rate :math:`R_{i,k} = C_{i,k}/\\Delta t` where
+
+        .. math::
+
+            C_{i,k} = \\sum_{t \\in S_i}1(b_k \\le t < b_{k+1})
+
+        is the PSTH count for bin :math:`k` and :math:`i`-th neuron having spike times :math:`S_i = \\{t_{i1}, t_{i2}, \\ldots, t_{iK_i}\\}` inside the window :math:`t \\in [T_0, T_1]`, :math:`1(.)` is the indicator function with bin width :math:`\\Delta t` and bin_edges
+
+        .. math::
+
+            b_k = T_0 + k \\Delta t
+
+        for :math:`k = 0,1,\\ldots,K`.
+
         Computation of Average of Individual Peri-Stimulus Time Histogram (Population PSTH).
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
@@ -330,6 +412,18 @@ class PSTH(object):
             - "mean_firing_rate": mean of the array of firing rates
             - "std_firing_rate": standard deviation of the array of firing rates
         - a nested list of spike times used for computing the PSTH
+
+        The standard error across neurons is
+
+        .. math::
+
+            \\text{SEM}_k = \\frac{\\sigma_k}{\\sqrt{n_\\text{nuc}}}
+
+        where
+
+        .. math::
+
+            \\sigma_k = \\sqrt{\\frac{1}{n_\\text{nuc}} \\sum_{i=1}^{n_\\text{nuc}}\\left(R_{i,k} - \\overline{R}_k\\right)^2}
 
         .. raw:: html
 
