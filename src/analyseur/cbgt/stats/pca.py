@@ -114,6 +114,8 @@ class PCA(object):
             if len(spikes) == 0:
                 continue
 
+            spikes = np.array(spikes)
+
             bin_idx = ((spikes - window[0]) / binsz).astype(int)
             bin_idx = bin_idx[(bin_idx >= 0) & (bin_idx < n_bins)]
 
@@ -315,7 +317,7 @@ class PCA(object):
 
         time_bins_center = (time_bins[:-1] + time_bins[1:]) / 2
 
-        [pca, pca_trajectory] = cls.__compute_PCA(activity_matrix, n_comp)
+        [pca, pca_trajectory] = cls.__compute_PCA(activity_matrix, n_comp, sigma_bins)
 
         return pca, pca_trajectory, activity_matrix, time_bins
 

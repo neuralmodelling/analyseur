@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from scipy.stats import skew, kurtosis
 
-from sklearn.decomposition import PCA
-
 # from ..curate import get_desired_spiketimes_superset
 from analyseur.cbgt.curate import get_desired_spiketimes_subset
 from analyseur.cbgt.stats.pca import PCA
@@ -43,7 +41,7 @@ class VizPopAct(object):
       loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
       spiketimes_superset = loadST.get_spiketimes_superset()
 
-      from analyseur.cbgt.visual.popact import PopAct
+      from analyseur.cbgt.visual.popact import VizPopAct
 
       my_pact = PopAct(spiketimes_superset)
 
@@ -79,15 +77,34 @@ class VizPopAct(object):
     @classmethod
     def plot_heatmap_in_ax(cls, fig, ax, spiketimes_set, binsz=None, window=None, nucleus=None,):
         """
-        Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
+        .. code-block:: text
 
+            Population Activity Heatmap
+
+            Neurons
+            ^
+            |  █▓▒░█▓▒░█▓▒░█▓▒░█▓▒░█▓▒░
+            |  ░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█
+            |  █▓▒░█▓▒░█▓▒░█▓▒░█▓▒░█▓▒░
+            |  ░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█
+            |
+            +--------------------------------------------------> Time (s)
+            0        2        4        6        8        10
+
+            Each cell represents the spike count of a neuron
+            within a time bin. Color intensity encodes activity.
+
+        Displays the Population Activity Heatmap of the given spike times on the given `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and returns the plot figure (to save if necessary)
+
+        :param fig: object `matplotlib.pyplot.figure`
+        :param ax: object `matplotlib.pyplot.axis``
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
         :param binsz: defines the number of equal-width bins in the range [default: 50]
         :param window: defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: [OPTIONAL] None or name of the nucleus (string)
-        :param show: boolean [default: True]
+
         :return: object `matplotlib.pyplot.imshow <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html>`_
     
         * `window` controls the binning range as well as the spike counting window
@@ -134,7 +151,7 @@ class VizPopAct(object):
     @classmethod
     def plot_heatmap(cls, spiketimes_set, binsz=None, window=None, nucleus=None, ):
         """
-        Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
+        Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary) using :py:meth:`.plot_heatmap_in_ax`
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -162,22 +179,63 @@ class VizPopAct(object):
         return fig, ax
 
     @classmethod
-    def plot_pcatraj_in_ax(cls, fig, axes, spiketimes_set, binsz=None, window=None, n_comp=3, nucleus=None,):
+    def plot_pcatraj_in_ax(cls, fig, axes, spiketimes_set, binsz=None, window=None, n_comp=None, nucleus=None,):
         """
-        PCA Trajectory of population activity
+        .. code-block:: text
+
+            PCA Trajectory of Population Activity
+
+            Principal Component Analysis
+            ┌──────────────────────────────────────────────────────────────┐
+            │                     PC1 Over Time                            │
+            │  PC1                                                         │
+            │   ^        ~~      ~~      ~~       ~~      ~~               │
+            │   |      ~~  ~~  ~~  ~~  ~~  ~~  ~~  ~~  ~~  ~~              │
+            │   |____~~____~~____~~____~~____~~____~~____~~_______________ │
+            │                                                              │
+            │   +-----------------------------------------------> Time (s) │
+            └──────────────────────────────────────────────────────────────┘
+
+            ┌───────────────────────────────┐   ┌───────────────────────────────┐
+            │ PCA Trajectory (PC1 vs PC2)   │   │ PCA Variance Explained        │
+            │                               │   │                               │
+            │  PC2 ^                        │   │ Variance ^                    │
+            │      |   • • • • • • •        │   │         █                     │
+            │      |  • • • • • • • •       │   │         ███                   │
+            │      | • • • • • • • • •      │   │         █████                 │
+            │      |  • • • • • • • •       │   │         ███████               │
+            │      |   • • • • • • •        │   │         █████████             │
+            │      +--------------------->  │   │         +-------------------> │
+            │            PC1                │   │           Principal Component │
+            └───────────────────────────────┘   └───────────────────────────────┘
+
+            Top: temporal evolution of the first principal component.
+            Bottom-left: trajectory of activity in PC space (colored by time).
+            Bottom-right: variance explained by each principal component.
+
+        Displays the PCA Trajectory of population activity on the given `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ and returns the plot figure (to save if necessary)
+
+        :param fig: object `matplotlib.pyplot.figure`
+        :param ax: object `matplotlib.pyplot.axis``
+        :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+        or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+        :param binsz: defines the number of equal-width bins in the range [default: 50]
+        :param window: defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
+        :param n_comp: integer or float; `0.95` [default]
+        :param nucleus: [OPTIONAL] None or name of the nucleus (string)
+        :return: fig object and axes object comprising of three suplots
 
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        scaler, pca, pca_trajectory, activity_matrix, time_bins = PCA.compute(spiketimes_set, binsz=binsz,
-                                                                              window=window, n_comp=n_comp)
+        pca, pca_trajectory, activity_matrix, time_bins = PCA.compute(spiketimes_set, binsz=binsz,
+                                                                      window=window, n_comp=n_comp)
         t_points = np.linspace(window[0], window[1], pca_trajectory.shape[0])
         n_neurons = len(spiketimes_set)
 
         # Plot
-        fig = plt.figure(2)
-
         # PC1 vs Time
         axes[0].plot(t_points, pca_trajectory[:, 0], linewidth=2)
         axes[0].grid(True, alpha=0.3)
@@ -211,7 +269,7 @@ class VizPopAct(object):
     @classmethod
     def plot_pcatraj(cls, spiketimes_set, binsz=None, window=None, nucleus=None, ):
         """
-        Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary).
+        Displays the Population Activity Heatmap of the given spike times and returns the plot figure (to save if necessary) using :py:meth:`.plot_pcatraj_in_ax`
 
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -220,24 +278,30 @@ class VizPopAct(object):
         :param window: defines upper and lower range of the bins but ignore lower and upper outliers [default: (0,10000)]
         :param nucleus: [OPTIONAL] None or name of the nucleus (string)
         :param show: boolean [default: True]
-        :return: object `matplotlib.pyplot.imshow <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html>`_
-
-        * `window` controls the binning range as well as the spike counting window
-        * CBGT simulation was done in seconds so window `(0, 10)` signifies time 0 s to 10 s
-        * `popactivity` gives a spatio-temporal pattern across neurons
+        :return: fig object and axes object comprising of three suplots
 
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        fig = plt.subplots(figsize=(10, 6))
+        plt.close("all")   # <-- important to avoid an additional blank white pop-up window
+        # ============== DEFAULT Parameters ==============
+        if window is None:
+            window = cls.__siganal.window
 
-        ax1 = plt.subplot2grid((2,2),(0,0), colspan=2) # TOP subplot
-        ax2 = plt.subplot2grid((2,2),(1,0))
-        ax3 = plt.subplot2grid((2,2),(1,1))
+        if binsz is None:
+            binsz = cls.__siganal.binsz_100perbin
 
-        fig, axes = cls.plot_pcatraj_in_ax(cls, fig, [ax1,ax2,ax3], spiketimes_set,
-                                           binsz=binsz, window=window, n_comp=3, nucleus=nucleus,)
+        fig = plt.figure(figsize=(10,6))
+
+        gs = fig.add_gridspec(2,2)
+
+        ax1 = fig.add_subplot(gs[0, :])   # top row (span 2 columns)
+        ax2 = fig.add_subplot(gs[1, 0])
+        ax3 = fig.add_subplot(gs[1, 1])
+
+        fig, axes = cls.plot_pcatraj_in_ax(fig, [ax1,ax2,ax3], spiketimes_set,
+                                           binsz=binsz, window=window, n_comp=0.95, nucleus=nucleus,)
         plt.tight_layout()
         plt.show()
 
@@ -277,6 +341,27 @@ class VizPopAct(object):
     @classmethod
     def plot_popcount_dist_in_ax(cls, ax, spiketimes_set, binsz=None, nucleus=None, mode=None):
         """
+        .. code-block:: text
+
+            Population Spike Count Distribution
+
+            Probability Density
+            ^
+            |            █
+            |          ████
+            |        ███████
+            |      ██████████
+            |    ██████████████
+            |  ██████████████████
+            |        │
+            |        │  Mean
+            +-----------------------------------------------> Spike Counts per Bin
+            0      50      100      150      200      250
+
+            Histogram shows the distribution of population spike counts
+            (complexity) across time bins. The vertical marker indicates
+            the mean spike count.
+
         Draws the Distribution of Population Spike Counts (complexity) across time bin on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -375,6 +460,24 @@ class VizPopAct(object):
     @classmethod
     def plot_popcount_vs_time_in_ax(cls, ax, spiketimes_set, binsz=None, nucleus=None):
         """
+        .. code-block:: text
+
+            Population Spike Counts vs Time
+
+            Spike Count
+            ^
+            |     ███ ████ ████ ███ ████ ███
+            |    ███████████████████████████
+            |   ████████████████████████████
+            |----------------------------------  Mean
+            |
+            +--------------------------------------------------> Time (s)
+            0        2        4        6        8        10
+
+            Bars represent the number of spikes in the population
+            within each time bin. The dashed line indicates the
+            mean spike count across bins.
+
         Draws the Population Spike Counts over time on the given
         `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
