@@ -24,6 +24,7 @@ Statistics
    stats/sync.rst
    stats/rate.rst
    stats/psth.rst
+   stats/popact.rst
    stats/psd.rst
    stats/pca.rst
    stats/wavelet.rst
