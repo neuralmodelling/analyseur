@@ -48,12 +48,12 @@ Visualizers
    visual/markerplot.rst
    visual/peristimulus.rst
    visual/popurate.rst
-   visual/tabular.rst
    visual/popact.rst
+   visual/rate.rst
+   visual/tabular.rst
    visual/scalo.rst
    visual/distribution.rst
    visual/variation.rst
-   visual/rate.rst
    visual/powspec.rst
 
 Composite Visualizers
