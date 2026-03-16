@@ -70,6 +70,9 @@ class PSRH(object):
 
       my_psrh.plot_ratevar()
 
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
     """
 
     def __init__(self, spiketimes_superset):
@@ -94,6 +97,22 @@ class PSRH(object):
 
     def plot(self, binsz=0.05, window=(0, 10), nucleus=None, show=True):
         """
+        .. code-block:: text
+
+            Population Spiking Rate Histogram (PSRH)
+
+            Firing Rate
+            |
+            |      ~~~~~~~^^~~~~~^~~~~~~~
+            |     ~~~~~~~~~~~~~~~~~~~~~~~
+            |    ~~~~~~~~~~~~~~~~~~~~~~~~
+            |
+            +-----------------------------------------------> Time (s)
+            0        2        4        6        8        10
+
+            Continuous curve represents the time-varying
+            population firing rate across neurons.
+
         Displays the Population Spike Rate Histogram (PSRH) of the given spike times (seconds)
         and returns the plot figure (to save if necessary).
         
@@ -106,6 +125,9 @@ class PSRH(object):
         * `window` controls the binning range as well as the spike counting window
         * CBGT simulation was done in seconds so window `(0, 10)` signifies time 0 s to 10 s
         
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         # Set binsz and window as the instance attributes
         self.binsz = binsz
@@ -167,6 +189,9 @@ class PSRH(object):
         | `"kurtosis"` | "tailedness" of distribution (peak or flat)   |
         +---------------------------+------------------------------+
 
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         mean_rate = np.mean(self.pop_rate)
 
@@ -193,11 +218,31 @@ class PSRH(object):
 
     def plot_ratevar(self):
         """
+        .. code-block:: text
+
+            Population Rate Variability
+
+            Mean ± STD Firing Rate                 Coefficient of Variation
+            Firing Rate (Hz)                       CV
+            ^                                      ^
+            |        ~~~~~~                        |      ~~~^~~~~~~
+            |      ~~~~~~~~~~~~                    |    ~~~~~~~~~~~~
+            |    ~~~~~~Mean~~~~~~                  |   ~~~~~~~~~~~~~
+            |   ~~   ± STD band  ~~                |
+            +-----------------------------> Time   +---------------------------> Time
+            0    2    4    6    8    10             0    2    4    6    8    10
+
+            Left : population firing rate with variability band (Mean ± STD)
+            Right: coefficient of variation of firing rates across neurons
+
         Displays the Population Spike Rate Variability in terms of:
         Mean ± STD Variability and Coefficient of Variation.
 
         :return: object `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
-        
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         t_axis = self.bins[:-1] + self.binsz / 2
         linewidth = 2
