@@ -16,6 +16,18 @@ class PopAct(object):
         """
         Returns spike counts (from any neuron) in each bin
 
+        .. math::
+
+            \\{C_k\\}_{k=0}^{K-1}
+
+        where :math:`C_k` is the spike couns per bin :math:`k` given by
+
+        .. math::
+
+            C_k = \\sum_{i=1}^{n_\\text{nuc}} \\sum_{j=1}^{K_i}1(b_k \\le t_{ij} < b_{k+1})]
+
+        with the indicator function :math:`1(.)`, bin width :math:`\\Delta t`, number of bins :math:`\\lceil(T_\\text{max} - T_\\text{min})/\\Delta t\\rceil` such that :math:`T_\\text{min} = \\text{min}(S_\\text{all}), T_\\text{max} = \\text{max}(S_\\text{all}), S_\\text{all} = \\bigcup_{i=1}^{n_\\text{nuc}} S_i, S_i = \\{t_{i1, t_{i2}, \\ldots, t_{iK_i}\\}\\right}`, and bin edges :math:`b_k = T_\\text{min} + k\\Delta t` for :math:`k=0,1,\\ldots,K`. The bin centers are :math:`c_k = (b_k + b_{k+1})/2`.
+
         :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
         or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
@@ -67,6 +79,18 @@ class PopAct(object):
     @staticmethod
     def compute_complexity_pdf(spike_counts_per_bin):
         """
+        .. math::
+
+            P(k) = \\frac{n_k}{B}
+
+        is the complexity probability distribution such that :math:`\\sum_{k=0}^{k_\\text{max}} P(k) = 1`, complexity in the spike count in a bin is :math:`k=0,1,\\ldots,k_\\text{max}`, and the number of bins whose spike count equal :math:`k` is given by
+
+        .. math::
+
+            n_k = \\sum_{b=1}^B 1(C_b = k)
+
+        where :math:`1(.)` is the indicator function, :math:`B` is the number of time bins, :math:`C = \\{C_b\\}` is the spike counts per bin such that :math:`C_b` is the number of spikes in bin :math:`b`, and :math:`k_\\text{max} = \\text{max}(C)`
+
         Returns spike counts (from any neuron) in each bin
 
         :param spike_counts_per_bin: array returned using :meth:`.count_allspikes_per_bin`
