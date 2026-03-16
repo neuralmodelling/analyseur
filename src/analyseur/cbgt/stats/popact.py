@@ -79,19 +79,19 @@ class PopAct(object):
     @staticmethod
     def compute_complexity_pdf(spike_counts_per_bin):
         """
+        Returns the complexity probability distribution
+
         .. math::
 
             P(k) = \\frac{n_k}{B}
 
-        is the complexity probability distribution such that :math:`\\sum_{k=0}^{k_\\text{max}} P(k) = 1`, complexity in the spike count in a bin is :math:`k=0,1,\\ldots,k_\\text{max}`, and the number of bins whose spike count equal :math:`k` is given by
+        such that :math:`\\sum_{k=0}^{k_\\text{max}} P(k) = 1`, complexity in the spike count in a bin is :math:`k=0,1,\\ldots,k_\\text{max}`, and the number of bins whose spike count equal :math:`k` is given by
 
         .. math::
 
             n_k = \\sum_{b=1}^B 1(C_b = k)
 
         where :math:`1(.)` is the indicator function, :math:`B` is the number of time bins, :math:`C = \\{C_b\\}` is the spike counts per bin such that :math:`C_b` is the number of spikes in bin :math:`b`, and :math:`k_\\text{max} = \\text{max}(C)`
-
-        Returns spike counts (from any neuron) in each bin
 
         :param spike_counts_per_bin: array returned using :meth:`.count_allspikes_per_bin`
 
