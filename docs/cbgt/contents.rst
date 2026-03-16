@@ -22,9 +22,9 @@ Statistics
    stats/isi.rst
    stats/variation.rst
    stats/sync.rst
+   stats/psth.rst
    stats/wavelet.rst
    stats/psd.rst
-   stats/psth.rst
    stats/rate.rst
    stats/pca.rst
 
