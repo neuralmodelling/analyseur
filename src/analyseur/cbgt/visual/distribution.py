@@ -28,6 +28,27 @@ simparams = SimulationParams()
 def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
                         neurons=None, nucleus=None, orient=None):
     """
+    .. code-block:: text
+
+        Population Rate Distribution
+
+        Number of Neurons
+        ^
+        |                █
+        |              ████
+        |            ███████
+        |          ███████████
+        |        ███████████████
+        |      ███████████████████
+        |            │
+        |            │  Mean
+        +-------------------------------------------------> Firing Rate (Hz)
+        65     70     75     80     85     90     95    100
+
+        Histogram shows the distribution of firing rates
+        across neurons. The vertical marker indicates the
+        mean population firing rate.
+
     Draws the Population Rate Distribution on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -46,7 +67,6 @@ def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     # ============== DEFAULT Parameters ==============
     if neurons is None:
@@ -93,7 +113,7 @@ def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
 def plot_ratedist(spiketimes_superset, binsz=None, window=None,
                   neurons=None, nucleus=None, orient=None):
     """
-    Visualize Rate Distribution of the given neuron population.
+    Visualize Rate Distribution of the given neuron population using :py:meth:`.plot_ratedist_in_ax`
 
     :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
 
@@ -109,7 +129,6 @@ def plot_ratedist(spiketimes_superset, binsz=None, window=None,
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if orient=="horizontal":
         fig, ax = plt.subplots(figsize=(6, 10))
@@ -131,6 +150,27 @@ def plot_ratedist(spiketimes_superset, binsz=None, window=None,
 def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=None,
                            window=None, neurons=None, nucleus=None, orient=None):
     """
+    .. code-block:: text
+
+        Response Latency Distribution
+
+        Number of Neurons
+        ^
+        |            █
+        |          ████
+        |        ███████
+        |      ███████████
+        |    ███████████████
+        |      ███████████
+        |            │
+        |            │  Mean
+        +-------------------------------------------------> Response Latency (s)
+        0.000   0.005   0.010   0.015   0.020   0.025
+
+        Histogram shows the distribution of response latencies
+        across neurons. The vertical marker indicates the
+        mean response latency.
+
     Draws the Population Latency Distribution on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -150,7 +190,6 @@ def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=N
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     # ============== DEFAULT Parameters ==============
     if neurons is None:
@@ -208,7 +247,7 @@ def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=N
 def plot_latencydist(spiketimes_superset, stimulus_onset=None, binsz=None,
                      window=None, neurons=None, nucleus=None, orient=None):
     """
-    Visualize Latency Distribution of the given neuron population.
+    Visualize Latency Distribution of the given neuron population using :py:meth:`.plot_latencydist_in_ax`
 
     :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
 
@@ -225,7 +264,6 @@ def plot_latencydist(spiketimes_superset, stimulus_onset=None, binsz=None,
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if orient=="horizontal":
         fig, ax = plt.subplots(figsize=(6, 10))
@@ -264,6 +302,27 @@ def _get_pop_count(desired_spiketimes_subset):
 
 def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucleus=None, orient=None):
     """
+    .. code-block:: text
+
+        Cumulative Spike Count
+        ^
+        |                             ███████████████████
+        |                        █████
+        |                   █████
+        |              █████
+        |         █████
+        |    █████
+        | █████
+        |
+        +-------------------------------------------------> Time (s)
+        0          2          4          6          8         10
+
+        Thin step curves represent cumulative spike counts
+        for individual neurons.
+
+        The thicker curve represents the total cumulative
+        spike count of the entire neuron population.
+
     Draws the Spike Count Distribution on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -280,7 +339,6 @@ def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucle
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if neurons is None:
         neurons = "all"
@@ -322,7 +380,7 @@ def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucle
 
 def plot_spike_counts_distrib(spiketimes_superset, neurons=None, nucleus=None, orient=None):
     """
-    Visualize Spike Count Distribution of the given neuron population.
+    Visualize Spike Count Distribution of the given neuron population using :py:meth:`.plot_spike_counts_distrib_in_ax`
 
     :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
 
@@ -336,7 +394,6 @@ def plot_spike_counts_distrib(spiketimes_superset, neurons=None, nucleus=None, o
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if orient=="horizontal":
         fig, ax = plt.subplots(figsize=(6, 10))
@@ -353,49 +410,158 @@ def plot_spike_counts_distrib(spiketimes_superset, neurons=None, nucleus=None, o
 ##########################################################################
 #    SPIKE DENSITY PLOT
 ##########################################################################
-
 def _get_neuron_densities(spiketimes_1neuron, time_points, bandwidth):
     spiketimes = np.array(spiketimes_1neuron)
-    kde = gaussian_kde(spiketimes, bw_method=bandwidth)
 
+    if len(spiketimes) < 2:
+        return np.zeros_like(time_points)
+
+    kde = gaussian_kde(spiketimes, bw_method=bandwidth)
     return kde(time_points)
 
 def _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth):
-    all_spiketimes = np.array(desired_spiketimes_subset)
-    all_spikes = np.sort(np.concatenate([spiketimes for spiketimes in all_spiketimes if len(spiketimes) > 0]))
+
+    all_spikes = np.sort(
+        np.concatenate([
+            spiketimes for spiketimes in desired_spiketimes_subset
+            if len(spiketimes) > 0
+        ])
+    )
+
     kde = gaussian_kde(all_spikes, bw_method=bandwidth)
 
     return all_spikes, kde(time_points)
 
-def plot_spike_density_distrib_in_ax(ax, spiketimes_superset, window=(0, 10), bandwidth=0.1):
+def plot_spike_density_distrib_stacked_in_ax(ax, spiketimes_superset,
+                                             window=(0, 10), bandwidth=0.1,
+                                             max_neurons=20):
+    """
+    .. code-block:: text
+
+        Density + Offset
+        ^
+
+        |      ───────────── population density
+        |
+        |      ~~~~~~~~ neuron 10
+        |      ~~~~~~~~ neuron 9
+        |         :       :    :
+        |      ~~~~~~~~ neuron 3
+        |      ~~~~~~~~ neuron 2
+        |      ~~~~~~~~ neuron 1
+        |
+        +------------------------------------> Time
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
     time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
 
-    for i, indiv_spiketimes in enumerate(desired_spiketimes_subset):
-        if len(indiv_spiketimes) > 0:
-            neuron_density = _get_neuron_densities(indiv_spiketimes, time_points, bandwidth)
+    if len(desired_spiketimes_subset) > max_neurons:
+        desired_spiketimes_subset = desired_spiketimes_subset[:max_neurons]
 
-            ax.step(time_points, neuron_density + i*0.1, alpha=0.7, linewidth=1)
+    densities = []
+    for spks in desired_spiketimes_subset:
+        if len(spks) > 1:
+            densities.append(_get_neuron_densities(spks, time_points, bandwidth))
 
-    [all_spikes, pop_density] = _get_pop_count(desired_spiketimes_subset)
+    if not densities:
+        return ax
 
-    if len(all_spikes) > 0:
-        ax.step(time_points, pop_density + len(desired_spiketimes_subset)*0.1, "r-",
-                linewidth=2, label="Population Average")
+    max_density = max(np.max(d) for d in densities)
+    offset_step = max_density * 2
+
+    for i, neuron_density in enumerate(densities):
+        ax.step(time_points, neuron_density + i * offset_step,
+                linewidth=1, alpha=0.7)
+
+    all_spikes, pop_density = _get_pop_densities(desired_spiketimes_subset,
+                                                 time_points, bandwidth)
+
+    ax.step(time_points, pop_density + len(densities) * offset_step,
+            "r-", linewidth=2, label="Population Average")
 
     ax.grid(True, alpha=0.3)
 
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("Density + Offset")
     ax.set_title("Spike Density")
-    ax.set_legend()
+    ax.legend()
 
     return ax
 
-def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1):
+def plot_spike_density_distrib_line_in_ax(ax, spiketimes_superset,
+                                          window=(0, 10), bandwidth=0.1):
+    """
+    .. code-block:: text
+
+        Population Spike Density
+
+        Density
+        ^
+        |                ________
+        |             __--      --__
+        |           _--            --_
+        |         _--                --_
+        |       _--                    --_
+        |______--                        --______
+        |
+        +-------------------------------------------------> Time (s)
+        0          2          4          6          8         10
+
+        Smooth red curve represents the population spike
+        density estimated using kernel density estimation
+        (KDE) over all spikes in the neuron population.
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
+    time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
+
+    _, pop_density = _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth)
+
+    ax.plot(time_points, pop_density, color="red", linewidth=2)
+
+    ax.grid(True, alpha=0.3)
+
+    ax.set_xlabel("Time (s)")
+    ax.set_ylabel("Density")
+    ax.set_title("Population Spike Density")
+    ax.legend()
+
+    return ax
+
+def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1, plot_type="line"):
+    """
+    Visualize Spike Density Distribution of the given neuron population using :py:meth:`.plot_spike_density_distrib_line_in_ax` or :py:meth:`.plot_spike_density_distrib_stacked_in_ax`
+    (depending on the `plot_type`).
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param window: 2-tuple; defines upper and lower range of the bins
+    - :param bandwidth: `0.1` [default]
+    - :param plot_type: `"line"` [default] or `"stacked"`
+
+    - :return: object `ax` with spike density distribution plot done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_spike_density_distrib_in_ax(ax, spiketimes_superset, window=window, bandwidth=bandwidth)
+    if plot_type=="line":
+        ax = plot_spike_density_distrib_line_in_ax(ax, spiketimes_superset,
+                                                   window=window, bandwidth=bandwidth)
+    else:
+        ax = plot_spike_density_distrib_in_ax(ax, spiketimes_superset,
+                                              window=window, bandwidth=bandwidth)
 
     plt.show()
 
@@ -406,32 +572,77 @@ def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.
 #    ISI PLOT
 ##########################################################################
 
-def isi_distrib(spiketimes_superset, n_bins=50):
+def plot_isi_distrib(spiketimes_superset, n_bins=50):
+    """
+    .. code-block:: text
+
+        Interspike Interval Distributions
+
+        ┌─────────────────────────────────────┐   ┌─────────────────────────────────────┐
+        │ Neuron ISI Distributions            │   │ Population ISI Distributions        │
+        │                                     │   │                                     │
+        │ Density                             │   │ Density                             │
+        │ ^                                   │   │ ^                                   │
+        │ |      ████                         │   │ |       ████                         │
+        │ |    ████████                       │   │ |     ████████                       │
+        │ |   ███████████                     │   │ |   ███████████                      │
+        │ |    █████████                      │   │ |     █████████                      │
+        │ |      █████                        │   │ |       █████                        │
+        │ |                                   │   │ |                                   │
+        │ +---------------------------------> │   │ +---------------------------------> │
+        │     Interspike Interval (s)         │   │     Interspike Interval (s)         │
+        └─────────────────────────────────────┘   └─────────────────────────────────────┘
+
+        Left: overlapping ISI histograms for individual neurons.
+        Right: histogram of ISIs pooled across the entire population.
+
+    Visualize Spike Density Distribution of the given neuron population using :py:meth:`.plot_spike_density_distrib_in_ax`
+
+    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+
+    OPTIONAL parameters
+
+    - :param n_bins: `50` [default]
+
+    - :return: object `ax` with ISI Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     fig, axes = plt.subplots(1, 2)
 
     all_isis = []
+    per_neuron_isis = []
+
     for neuron_id, spiketimes in spiketimes_superset.items():
         if len(spiketimes) > 1:
             isis = np.diff(spiketimes)
+            per_neuron_isis.append(isis)
             all_isis.extend(isis)
 
-            axes[0].hist(isis, bins=n_bins, alpha=0.3, density=True)
+    if not all_isis:
+        return fig, axes
+
+    bins = np.linspace(min(all_isis), max(all_isis), n_bins + 1)
+
+    for isis in per_neuron_isis:
+        axes[0].hist(isis, bins=bins, alpha=0.3, density=True)
+
+    axes[1].hist(all_isis, bins=bins, alpha=0.7, color="red", density=True)
 
     axes[0].grid(True, alpha=0.3)
+    axes[1].grid(True, alpha=0.3)
+
     axes[0].set_xlabel("Interspike Interval (s)")
     axes[0].set_ylabel("Density")
     axes[0].set_title("Neuron ISI Distributions")
 
-    if all_isis:
-        axes[1].hist(all_isis, bins=n_bins, alpha=0.7, color="red", density=True)
-        axes[1].set_grid(True, alpha=0.3)
-
-        axes[1].set_xlabel("Interspike Interval (s)")
-        axes[1].set_ylabel("Density")
-        axes[1].set_title("Population ISI Distributions")
+    axes[1].set_xlabel("Interspike Interval (s)")
+    axes[1].set_ylabel("Density")
+    axes[1].set_title("Population ISI Distributions")
 
     plt.tight_layout()
-
     plt.show()
 
     return fig, axes
