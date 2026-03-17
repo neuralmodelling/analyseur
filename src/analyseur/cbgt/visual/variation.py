@@ -25,53 +25,35 @@ Plot Variation Statistics
 | :func:`plotLV_in_ax`         | draws the Local Variations of all the neurons into a given `matplotlib.pyplot.axis`                 |
 +------------------------------+-----------------------------------------------------------------------------------------------------+
 
-==============================
-Plot Coefficient of Variations
-==============================
-
------------------
 1. Pre-requisites
------------------
+=================
 
 1.1. Import Modules
-````````````````````
+-------------------
 ::
 
     from analyseur.cbgt.loader import LoadSpikeTimes
-    from analyseur.cbgt.visual.variation import plotCV
+    from analyseur.cbgt.visual.variation import <desired_method>
 
 1.2. Load file and get spike times
-```````````````````````````````````
+----------------------------------
 ::
 
     loadST = LoadSpikeTimes("spikes_GPi.csv")
-    spiketimes_superset = loadST.get_spiketimes_superset()
+    spiketimes_set = loadST.get_spiketimes_superset()
 
----------
 2. Cases
----------
+========
 
-2.1. Visualize CV with default setting
-``````````````````````````````````````
+2.1. Standard plot
+------------------
 ::
 
-    [fig, ax] = plotCV(spiketimes_superset)
+    <desired_method>(spiketimes_set)
 
-2.2. Visualize CV in portrait mode
-``````````````````````````````````
-::
-
-    [fig, ax] = plotCV(spiketimes_superset, mode="portrait")
-
-2.3. Visualize CV in portrait mode with nucleus name in title
-`````````````````````````````````````````````````````````````
-::
-
-    [fig, ax] = plotCV(spiketimes_superset, mode="portrait", nucleus="GPi")
-
-2.4. Create the plot for customization
-``````````````````````````````````````
-This is for power users who for instance want to insert the CV plot in their
+2.2. Create the plot for customization
+--------------------------------------
+This is for power users who for instance want to insert the plot in their
 collage of subplots.
 ::
 
@@ -81,33 +63,10 @@ collage of subplots.
     fig, (ax1, ax2) = plt.subplots(1, 2)
     fig.suptitle('Horizontally stacked subplots')
 
-    ax1 = plotCV_in_ax(ax1, spiketimes_superset)
-    ax2 = plotCV_in_ax(ax2, spiketimes_superset)
+    ax1 = plotCV_in_ax(ax1, spiketimes_set)
+    ax2 = plotCV_in_ax(ax2, spiketimes_set)
 
     plt.show()
-
-NOTE: This example shows :func:`plotCV_in_ax` in default setting but this function works like
-:func:`plotCV` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plotCV_in_ax`.
-
-====================================
-Plot Local Coefficient of Variations
-====================================
-
-Same as documented above for plotting CV but using the function :func:`plotCV2` and :func:`plotCV2_in_ax`
-imported as
-::
-
-    from analyseur.cbgt.visual.variation import plotCV2, plotCV2_in_ax
-
-=====================
-Plot Local Variations
-=====================
-
-Same as documented above for plotting CV but using the function :func:`plotLV` and :func:`plotLV_in_ax`
-imported as
-::
-
-    from analyseur.cbgt.visual.variation import plotLV, plotLV_in_ax
 
 .. raw:: html
 

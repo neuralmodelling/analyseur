@@ -79,7 +79,6 @@ collage of subplots.
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">
-
 """
 import matplotlib
 import matplotlib.pyplot as plt
