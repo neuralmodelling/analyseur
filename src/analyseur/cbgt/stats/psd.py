@@ -210,7 +210,7 @@ class PowerSpectrum(object):
 
         .. math::
 
-            P_r(f) = \\left|\\mathcal{F}\{r(t)\}\\right|^2
+            P_r(f) = \\left|\\mathcal{F}\\{r(t)\\}\\right|^2
 
         .. list-table::
             :widths: auto

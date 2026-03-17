@@ -13,9 +13,7 @@ from analyseur.cbgt.stats.psth import PSTH
 
 class VizPSTH(object):
     """
-    The Peri-Stimulus Time Histogram (PSTH) Class is instantiated by passing
-
-    :param spiketimes_superset: Dictionary returned using :class:`~analyseur/cbgt/loader.LoadSpikeTimes`
+    The Peri-Stimulus Time Histogram (PSTH) Class.
     
     +--------------------------------+--------------------------------------------------------------------+
     | Methods                        | Return                                                             |
@@ -24,9 +22,6 @@ class VizPSTH(object):
     +--------------------------------+--------------------------------------------------------------------+
     | :py:meth:`.plot_in_ax`         | - `matplotlib.pyplot.axis` object                                  |
     +--------------------------------+--------------------------------------------------------------------+
-
-    * PSTH gives an overall temporal pattern of population activity with a picture in both temporal and rate
-    * The computation is done by :class:`~analyseur.cbgt.stats.psth.PSTH`
     
     **Use Case:**
 
@@ -54,10 +49,12 @@ class VizPSTH(object):
       VizPSTH.plot_pool(spiketimes_superset, window=(0,5), binsz=1)  # time unit in seconds
       VizPSTH.plot_pool(spiketimes_superset, window=(0,5), binsz=0.05)
 
+    * PSTH gives an overall temporal pattern of population activity with a picture in both temporal and rate
+    * The computation is done by :class:`~analyseur.cbgt.stats.psth.PSTH`
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     __siganal = SignalAnalysisParams()
 

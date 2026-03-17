@@ -27,6 +27,7 @@ from analyseur.cbgt.parameters import SignalAnalysisParams
 
 class VizPSD(object):
     """
+    View Power Spectral Density (PSD) Class.
 
     +-----------------------------------+------------------------------------+
     | Plot (display)                    | Plot in axis                       |
@@ -43,6 +44,32 @@ class VizPSD(object):
     +-----------------------------------+------------------------------------+
     | :py:meth:`.plot_with_spiketrains` | :py:meth:`.plot_spiketrain_in_ax`  |
     +-----------------------------------+------------------------------------+
+
+    **Use Case:**
+
+    1. Setup
+
+    ::
+
+      from  analyseur.cbgt.loader import LoadSpikeTimes
+      from analyseur.cbgt.visual.powspec import VizPSD
+
+      loadST = LoadSpikeTimes("/full/path/to/spikes_GPi.csv")
+      spiketimes_superset = loadST.get_spiketrains()
+
+
+    2. Power Spectral Densityfor the whole simulation window
+
+    ::
+
+      VizPSD.plot_pool(spiketimes_superset)
+
+    3. PSD for desired window and bin size
+
+    ::
+
+      VizPSD.plot_pool(spiketimes_superset, window=(0,5), binsz=1)  # time unit in seconds
+      VizPSD.plot_pool(spiketimes_superset, window=(0,5), binsz=0.05)
 
     .. raw:: html
 
@@ -170,7 +197,7 @@ class VizPSD(object):
             fig, ax = plt.subplots(figsize=(10, 6))
 
         ax = cls.plot_in_ax(ax, spiketimes_set, neurons=neurons, nucleus=nucleus,
-                            window=window, sampling_rate=sampling_rate, resolution=resolution, mode=mode,)
+                            window=window, sampling_rate=sampling_rate, resolution=resolution)
 
         plt.show()
 
@@ -690,7 +717,7 @@ class VizPSD(object):
         #                                                        neurons="all")
         mu_rate_arr, time_bins = Rate.mean_rate(spiketimes_set=spiketimes_set,
                                                 window=window, binsz=binsz,
-                                                neurons="all")
+                                                neurons="all", across="times")
         # Compute power spectrum using Welch's method
         freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, method=method, resolution=resolution)
 
