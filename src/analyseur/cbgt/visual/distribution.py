@@ -190,7 +190,7 @@ def plot_ratedist_in_ax(ax, spiketimes_set, binsz=None, window=None,
 def plot_ratedist(spiketimes_set, binsz=None, window=None,
                   neurons=None, nucleus=None, orient=None):
     """
-    Visualize Rate Distribution of the given neuron population using :py:meth:`.plot_ratedist_in_ax`
+    Visualize Rate Distribution of the given neuron population using :func:`plot_ratedist_in_ax`
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -326,7 +326,7 @@ def plot_latencydist_in_ax(ax, spiketimes_set, stimulus_onset=None, binsz=None,
 def plot_latencydist(spiketimes_set, stimulus_onset=None, binsz=None,
                      window=None, neurons=None, nucleus=None, orient=None):
     """
-    Visualize Latency Distribution of the given neuron population using :py:meth:`.plot_latencydist_in_ax`
+    Visualize Latency Distribution of the given neuron population using :func:`plot_latencydist_in_ax`
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -461,7 +461,7 @@ def plot_spike_counts_distrib_in_ax(ax, spiketimes_set, neurons=None, nucleus=No
 
 def plot_spike_counts_distrib(spiketimes_set, neurons=None, nucleus=None, orient=None):
     """
-    Visualize Spike Count Distribution of the given neuron population using :py:meth:`.plot_spike_counts_distrib_in_ax`
+    Visualize Spike Count Distribution of the given neuron population using :func:`plot_spike_counts_distrib_in_ax`
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -643,7 +643,7 @@ def plot_spike_density_distrib_line_in_ax(ax, spiketimes_set,
 
 def plot_spike_density_distrib(spiketimes_set, window=(0, 10), bandwidth=0.1, plot_type="line"):
     """
-    Visualize Spike Density Distribution of the given neuron population using :py:meth:`.plot_spike_density_distrib_line_in_ax` or :py:meth:`.plot_spike_density_distrib_stacked_in_ax`
+    Visualize Spike Density Distribution of the given neuron population using :func:`plot_spike_density_distrib_line_in_ax` or :func:`plot_spike_density_distrib_stacked_in_ax`
     (depending on the `plot_type`).
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
