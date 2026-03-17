@@ -4,8 +4,11 @@
 #
 # This contains function for SpikingStats
 #
-
 """
+=========================
+Plot Variation Statistics
+=========================
+
 +------------------------------+-----------------------------------------------------------------------------------------------------+
 | Functions                    | Purpose                                                                                             |
 +==============================+=====================================================================================================+
@@ -109,7 +112,6 @@ imported as
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">
-
 """
 
 import matplotlib.pyplot as plt
@@ -124,6 +126,24 @@ from analyseur.cbgt.stats.variation import Variations
 
 def plotCV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        CV Distribution
+
+        CV
+        ^
+        |        |  |   | | |  |   |  | | |  |
+        |      | |  | | | | |  | | |  | | |  |
+        |    | | |  | | | | |  | | |  | | |  |
+        |  | | | |  | | | | |  | | |  | | |  |
+        |
+        +-------------------------------------------------> Neurons
+            0        50        100        150        200
+
+        Each vertical bar represents the coefficient of variation (CV)
+        of a single neuron. The distribution shows variability in firing
+        regularity across the neuron population.
+
     Draws the Coefficient of Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -185,7 +205,7 @@ def plotCV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
 def plotCV(spiketimes_set, nucleus=None, mode=None):
     """
-    Visualize Coefficient of Variation of the given neuron population.
+    Visualize Coefficient of Variation of the given neuron population using :func:`plotCV_in_ax`
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -224,6 +244,24 @@ def plotCV(spiketimes_set, nucleus=None, mode=None):
 
 def plotCV2_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        CV2 Distribution of Neurons
+
+        CV2
+        ^
+        |        |  |   | | |  |   |  | | |  |
+        |      | |  | | | | |  | | |  | | |  |
+        |    | | |  | | | | |  | | |  | | |  |
+        |  | | | |  | | | | |  | | |  | | |  |
+        |
+        +-------------------------------------------------> Neurons
+            0        50        100        150        200
+
+        Each vertical bar represents the local coefficient of variation (CV2)
+        of a single neuron. CV2 measures local variability between successive
+        interspike intervals.
+
     Draws the Local Coefficient of Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -246,7 +284,6 @@ def plotCV2_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     n_neurons = len(spiketimes_set)
 
@@ -280,7 +317,7 @@ def plotCV2_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
 def plotCV2(spiketimes_set, nucleus=None, mode=None):
     """
-    Visualize Local Coefficient of Variation of the given neuron population.
+    Visualize Local Coefficient of Variation of the given neuron population using :func:`plotCV2_in_ax`
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -300,7 +337,6 @@ def plotCV2(spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if mode=="portrait":
         fig, ax = plt.subplots(figsize=(6, 10))
@@ -320,6 +356,24 @@ def plotCV2(spiketimes_set, nucleus=None, mode=None):
 
 def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     """
+    .. code-block:: text
+
+        LV Distribution
+
+        LV
+        ^
+        |        |  |   | | |  |   |  | | |  |
+        |      | |  | | | | |  | | |  | | |  |
+        |    | | |  | | | | |  | | |  | | |  |
+        |  | | | |  | | | | |  | | |  | | |  |
+        |
+        +-------------------------------------------------> Neurons
+            0        50        100        150        200
+
+        Each vertical bar represents the local variation (LV)
+        of a single neuron. LV quantifies the variability in
+        firing patterns across the neuron population.
+
     Draws the Local Variation on the given
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
@@ -342,7 +396,6 @@ def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     n_neurons = len(spiketimes_set)
 
@@ -376,7 +429,7 @@ def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
 
 def plotLV(spiketimes_set, nucleus=None, mode=None):
     """
-    Visualize Local Variation of the given neuron population.
+    Visualize Local Variation of the given neuron population using :func:`plotLV_in_ax`
 
     :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
     or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
@@ -396,7 +449,6 @@ def plotLV(spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if mode=="portrait":
         fig, ax = plt.subplots(figsize=(6, 10))
