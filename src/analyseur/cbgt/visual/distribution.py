@@ -4,7 +4,83 @@
 #
 # This contains function for SpikingStats
 #
+"""
+=====================
+Distribution Plotting
+=====================
 
++--------------------------------------------------+
+| Functions                                        |
++==================================================+
+| :func:`plot_ratedist`                            |
++--------------------------------------------------+
+| :func:`plot_ratedist_in_ax`                      |
++--------------------------------------------------+
+| :func:`plot_latencydist`                         |
++--------------------------------------------------+
+| :func:`plot_latencydist_in_ax`                   |
++--------------------------------------------------+
+| :func:`plot_spike_counts_distrib`                |
++--------------------------------------------------+
+| :func:`plot_spike_counts_distrib_in_ax`          |
++--------------------------------------------------+
+| :func:`plot_spike_density_distrib`               |
++--------------------------------------------------+
+| :func:`plot_spike_density_distrib_line_in_ax`    |
++--------------------------------------------------+
+| :func:`plot_spike_density_distrib_stacked_in_ax` |
++--------------------------------------------------+
+| :func:`plot_isi_distrib`                         |
++--------------------------------------------------+
+
+1. Pre-requisites
+=================
+
+1.1. Import Modules
+-------------------
+::
+
+    from analyseur.cbgt.loader import LoadSpikeTimes
+    from analyseur.cbgt.visual.distribution import <desired_method>
+
+1.2. Load file and get spike times
+----------------------------------
+::
+
+    loadST = LoadSpikeTimes("spikes_GPi.csv")
+    spiketimes_set = loadST.get_spiketimes_superset()
+
+2. Cases
+========
+
+2.1. Standard plot
+------------------
+::
+
+    <desired_method>(spiketimes_set)
+
+2.2. Create the plot for customization
+--------------------------------------
+This is for power users who for instance want to insert the plot in their
+collage of subplots.
+::
+
+    import matplotlib.pyplot as plt
+    from analyseur.cbgt.visual.distribution import plot_ratedist_in_ax
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Horizontally stacked subplots')
+
+    ax1 = plot_ratedist_in_ax(ax1, spiketimes_set)
+    ax2 = plot_ratedist_in_ax(ax2, spiketimes_set)
+
+    plt.show()
+
+.. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+
+"""
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,7 +101,7 @@ simparams = SimulationParams()
 #    Rate Distribution PLOT
 ##########################################################################
 
-def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
+def plot_ratedist_in_ax(ax, spiketimes_set, binsz=None, window=None,
                         neurons=None, nucleus=None, orient=None):
     """
     .. code-block:: text
@@ -53,7 +129,8 @@ def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -78,7 +155,7 @@ def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
     if binsz is None:
         binsz = siganal.binsz_100perbin
 
-    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
 
     # Compute Firing Rate
     firing_rates = [len(indiv_spiketimes) / (window[1] - window[0])
@@ -110,12 +187,13 @@ def plot_ratedist_in_ax(ax, spiketimes_superset, binsz=None, window=None,
 
     return ax
 
-def plot_ratedist(spiketimes_superset, binsz=None, window=None,
+def plot_ratedist(spiketimes_set, binsz=None, window=None,
                   neurons=None, nucleus=None, orient=None):
     """
     Visualize Rate Distribution of the given neuron population using :py:meth:`.plot_ratedist_in_ax`
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -135,7 +213,7 @@ def plot_ratedist(spiketimes_superset, binsz=None, window=None,
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_ratedist_in_ax(ax, spiketimes_superset, binsz=binsz, window=window,
+    ax = plot_ratedist_in_ax(ax, spiketimes_set, binsz=binsz, window=window,
                              neurons=neurons, nucleus=nucleus, orient=orient)
 
     plt.show()
@@ -147,7 +225,7 @@ def plot_ratedist(spiketimes_superset, binsz=None, window=None,
 #    Latency Distribution PLOT
 ##########################################################################
 
-def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=None,
+def plot_latencydist_in_ax(ax, spiketimes_set, stimulus_onset=None, binsz=None,
                            window=None, neurons=None, nucleus=None, orient=None):
     """
     .. code-block:: text
@@ -175,7 +253,8 @@ def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=N
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -204,7 +283,7 @@ def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=N
     if stimulus_onset is None:
         stimulus_onset = 0
 
-    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons=neurons)
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons=neurons)
 
     n_bins = round((window[1] - window[0]) / binsz)
     n_neurons = len(desired_spiketimes_subset)
@@ -244,12 +323,13 @@ def plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=None, binsz=N
     else:
         return None
 
-def plot_latencydist(spiketimes_superset, stimulus_onset=None, binsz=None,
+def plot_latencydist(spiketimes_set, stimulus_onset=None, binsz=None,
                      window=None, neurons=None, nucleus=None, orient=None):
     """
     Visualize Latency Distribution of the given neuron population using :py:meth:`.plot_latencydist_in_ax`
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -270,7 +350,7 @@ def plot_latencydist(spiketimes_superset, stimulus_onset=None, binsz=None,
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_latencydist_in_ax(ax, spiketimes_superset, stimulus_onset=stimulus_onset, binsz=binsz,
+    ax = plot_latencydist_in_ax(ax, spiketimes_set, stimulus_onset=stimulus_onset, binsz=binsz,
                                 window=window, neurons=neurons, nucleus=nucleus, orient=orient)
 
     if ax is None:
@@ -300,7 +380,7 @@ def _get_pop_count(desired_spiketimes_subset):
 
     return  all_spikes, pop_cumulative
 
-def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucleus=None, orient=None):
+def plot_spike_counts_distrib_in_ax(ax, spiketimes_set, neurons=None, nucleus=None, orient=None):
     """
     .. code-block:: text
 
@@ -327,7 +407,8 @@ def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucle
     `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
 
     :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -343,7 +424,7 @@ def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucle
     if neurons is None:
         neurons = "all"
 
-    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
 
     n_neurons = len(desired_spiketimes_subset)
 
@@ -378,11 +459,12 @@ def plot_spike_counts_distrib_in_ax(ax, spiketimes_superset, neurons=None, nucle
 
     return ax
 
-def plot_spike_counts_distrib(spiketimes_superset, neurons=None, nucleus=None, orient=None):
+def plot_spike_counts_distrib(spiketimes_set, neurons=None, nucleus=None, orient=None):
     """
     Visualize Spike Count Distribution of the given neuron population using :py:meth:`.plot_spike_counts_distrib_in_ax`
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -400,7 +482,7 @@ def plot_spike_counts_distrib(spiketimes_superset, neurons=None, nucleus=None, o
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_spike_counts_distrib_in_ax(ax, spiketimes_superset)
+    ax = plot_spike_counts_distrib_in_ax(ax, spiketimes_set)
 
     plt.show()
 
@@ -432,7 +514,7 @@ def _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth):
 
     return all_spikes, kde(time_points)
 
-def plot_spike_density_distrib_stacked_in_ax(ax, spiketimes_superset,
+def plot_spike_density_distrib_stacked_in_ax(ax, spiketimes_set,
                                              window=(0, 10), bandwidth=0.1,
                                              max_neurons=20):
     """
@@ -452,11 +534,24 @@ def plot_spike_density_distrib_stacked_in_ax(ax, spiketimes_superset,
         |
         +------------------------------------> Time
 
+    Visualize Spike Density Distribution of the given neuron population and
+    plot `max_neurons` such that plot of one neuron is stacked over another.
+
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    - :param window: 2-tuple; defines upper and lower range of the bins
+    - :param bandwidth: `0.1` [default]
+    - :param max_neurons: `20` [default]
+    - :return: object `ax` with Spike Density Distribution plot done into it
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
     """
-    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
     time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
 
     if len(desired_spiketimes_subset) > max_neurons:
@@ -492,7 +587,7 @@ def plot_spike_density_distrib_stacked_in_ax(ax, spiketimes_superset,
 
     return ax
 
-def plot_spike_density_distrib_line_in_ax(ax, spiketimes_superset,
+def plot_spike_density_distrib_line_in_ax(ax, spiketimes_set,
                                           window=(0, 10), bandwidth=0.1):
     """
     .. code-block:: text
@@ -515,11 +610,22 @@ def plot_spike_density_distrib_line_in_ax(ax, spiketimes_superset,
         density estimated using kernel density estimation
         (KDE) over all spikes in the neuron population.
 
+    Visualize Spike Density Distribution of the given neuron population.
+
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    - :param window: 2-tuple; defines upper and lower range of the bins
+    - :param bandwidth: `0.1` [default]
+    - :return: object `ax` with Spike Density Distribution plot done into it
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
     """
-    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_superset, neurons="all")
+    [desired_spiketimes_subset, _] = get_desired_spiketimes_subset(spiketimes_set, neurons="all")
     time_points = np.linspace(window[0], window[1], 1000) # have to decide on the number 1000
 
     _, pop_density = _get_pop_densities(desired_spiketimes_subset, time_points, bandwidth)
@@ -535,12 +641,13 @@ def plot_spike_density_distrib_line_in_ax(ax, spiketimes_superset,
 
     return ax
 
-def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.1, plot_type="line"):
+def plot_spike_density_distrib(spiketimes_set, window=(0, 10), bandwidth=0.1, plot_type="line"):
     """
     Visualize Spike Density Distribution of the given neuron population using :py:meth:`.plot_spike_density_distrib_line_in_ax` or :py:meth:`.plot_spike_density_distrib_stacked_in_ax`
     (depending on the `plot_type`).
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -557,10 +664,10 @@ def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.
     fig, ax = plt.subplots(figsize=(10, 6))
 
     if plot_type=="line":
-        ax = plot_spike_density_distrib_line_in_ax(ax, spiketimes_superset,
+        ax = plot_spike_density_distrib_line_in_ax(ax, spiketimes_set,
                                                    window=window, bandwidth=bandwidth)
     else:
-        ax = plot_spike_density_distrib_in_ax(ax, spiketimes_superset,
+        ax = plot_spike_density_distrib_in_ax(ax, spiketimes_set,
                                               window=window, bandwidth=bandwidth)
 
     plt.show()
@@ -572,7 +679,7 @@ def plot_spike_density_distrib(spiketimes_superset, window=(0, 10), bandwidth=0.
 #    ISI PLOT
 ##########################################################################
 
-def plot_isi_distrib(spiketimes_superset, n_bins=50):
+def plot_isi_distrib(spiketimes_set, n_bins=50):
     """
     .. code-block:: text
 
@@ -583,11 +690,11 @@ def plot_isi_distrib(spiketimes_superset, n_bins=50):
         │                                     │   │                                     │
         │ Density                             │   │ Density                             │
         │ ^                                   │   │ ^                                   │
-        │ |      ████                         │   │ |       ████                         │
-        │ |    ████████                       │   │ |     ████████                       │
-        │ |   ███████████                     │   │ |   ███████████                      │
-        │ |    █████████                      │   │ |     █████████                      │
-        │ |      █████                        │   │ |       █████                        │
+        │ |      ████                         │   │ |       ████                        │
+        │ |    ████████                       │   │ |     ████████                      │
+        │ |   ███████████                     │   │ |   ███████████                     │
+        │ |    █████████                      │   │ |     █████████                     │
+        │ |      █████                        │   │ |       █████                       │
         │ |                                   │   │ |                                   │
         │ +---------------------------------> │   │ +---------------------------------> │
         │     Interspike Interval (s)         │   │     Interspike Interval (s)         │
@@ -596,9 +703,10 @@ def plot_isi_distrib(spiketimes_superset, n_bins=50):
         Left: overlapping ISI histograms for individual neurons.
         Right: histogram of ISIs pooled across the entire population.
 
-    Visualize Spike Density Distribution of the given neuron population using :py:meth:`.plot_spike_density_distrib_in_ax`
+    Visualize Distribution of Inter-Spike Interval of the given neuron population.
 
-    :param spiketimes_superset: Dictionary returned using :meth:`analyseur.cbgt.stats.isi.InterSpikeInterval.compute`
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`
 
     OPTIONAL parameters
 
@@ -615,7 +723,7 @@ def plot_isi_distrib(spiketimes_superset, n_bins=50):
     all_isis = []
     per_neuron_isis = []
 
-    for neuron_id, spiketimes in spiketimes_superset.items():
+    for neuron_id, spiketimes in spiketimes_set.items():
         if len(spiketimes) > 1:
             isis = np.diff(spiketimes)
             per_neuron_isis.append(isis)
