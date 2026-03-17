@@ -654,7 +654,6 @@ def plot_spike_density_distrib(spiketimes_set, window=(0, 10), bandwidth=0.1, pl
     - :param window: 2-tuple; defines upper and lower range of the bins
     - :param bandwidth: `0.1` [default]
     - :param plot_type: `"line"` [default] or `"stacked"`
-
     - :return: object `ax` with spike density distribution plot done into it
 
     .. raw:: html
@@ -711,7 +710,6 @@ def plot_isi_distrib(spiketimes_set, n_bins=50):
     OPTIONAL parameters
 
     - :param n_bins: `50` [default]
-
     - :return: object `ax` with ISI Distribution plotting done into it
 
     .. raw:: html
