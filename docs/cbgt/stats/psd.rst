@@ -1,5 +1,5 @@
-Power Spectrum of CBGT spike times
-==================================
+Power Spectrum of CBGTC spike times
+===================================
 
 .. automodule:: analyseur.cbgt.stats.psd
    :members:

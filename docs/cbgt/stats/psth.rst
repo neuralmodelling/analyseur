@@ -1,5 +1,5 @@
-Peri-Stimulus Time Histogram (PSTH) of CBGT spike times
-=======================================================
+Peri-Stimulus Time Histogram (PSTH) of CBGTC spike times
+========================================================
 
 .. automodule:: analyseur.cbgt.stats.psth
    :members:

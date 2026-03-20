@@ -46,6 +46,7 @@ Visualizers
    :caption: Available visualization functions:
 
    visual/connections.rst
+   visual/measurable.rst
    visual/markerplot.rst
    visual/rate.rst
    visual/distribution.rst

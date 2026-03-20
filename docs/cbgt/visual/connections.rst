@@ -1,5 +1,5 @@
-Visualize Connection Statistics of CBGT model
-=============================================
+Visualize Connection Statistics of CBGTC model
+==============================================
 
 .. automodule:: analyseur.cbgt.visual.connections
    :members:

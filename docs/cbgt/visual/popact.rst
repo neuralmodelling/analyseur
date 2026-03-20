@@ -1,5 +1,5 @@
-Population Activity of CBGT spike times
-=======================================
+Population Activity of CBGTC spike times
+========================================
 
 .. automodule:: analyseur.cbgt.visual.popact
    :members:

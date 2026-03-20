@@ -1,5 +1,5 @@
-Population Spike Rate Histogram (PSRH) of CBGT spike times
-==========================================================
+Population Spike Rate Histogram (PSRH) of CBGTC spike times
+===========================================================
 
 .. automodule:: analyseur.cbgt.visual.popurate
    :members:

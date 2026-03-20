@@ -1,5 +1,5 @@
-Distribution Plotting of CBGT spike times
-=========================================
+Distribution Plotting of CBGTC spike times
+==========================================
 
 .. automodule:: analyseur.cbgt.visual.distribution
    :members:

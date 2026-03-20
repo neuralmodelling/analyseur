@@ -1,5 +1,5 @@
-Scalogram for CBGT spike times
-==============================
+Scalogram for CBGTC spike times
+===============================
 
 .. automodule:: analyseur.cbgt.visual.scalo
    :members:

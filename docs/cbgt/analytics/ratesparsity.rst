@@ -1,4 +1,4 @@
-Sparsity Index of CBGT spike times
+Sparsity Index of CBGTC spike times
 ===================================
 
 .. automodule:: analyseur.cbgt.analytics.ratesparsity

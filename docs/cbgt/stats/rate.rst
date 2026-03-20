@@ -1,5 +1,5 @@
-Rate Statistics of CBGT spike times
-===================================
+Rate Statistics of CBGTC spike times
+====================================
 
 .. automodule:: analyseur.cbgt.stats.rate
    :members:

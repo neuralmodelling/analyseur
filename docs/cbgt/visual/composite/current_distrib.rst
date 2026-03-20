@@ -1,5 +1,5 @@
-Current Distributions of CBGT spike times
-=========================================
+Current Distributions of CBGTC spike times
+==========================================
 
 .. automodule:: analyseur.cbgt.visual.composite.current_distrib
    :members:

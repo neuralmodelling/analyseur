@@ -1,5 +1,5 @@
-Spiking Statistics of CBGT spike times
-======================================
+Spiking Statistics of CBGTC spike times
+=======================================
 
 .. automodule:: analyseur.cbgt.visual.composite.observables
    :members:

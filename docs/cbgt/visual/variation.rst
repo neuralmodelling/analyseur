@@ -1,5 +1,5 @@
-Visualize Variation Statistics of CBGT spike times
-==================================================
+Visualize Variation Statistics of CBGTC spike times
+===================================================
 
 .. automodule:: analyseur.cbgt.visual.variation
    :members:

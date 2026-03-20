@@ -1,5 +1,5 @@
-Power Spectral Density Plots of CBGT spike times
-================================================
+Power Spectral Density Plots of CBGTC spike times
+=================================================
 
 .. automodule:: analyseur.cbgt.visual.powspec
    :members:
