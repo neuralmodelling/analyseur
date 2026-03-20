@@ -140,5 +140,6 @@ Scripts
    :caption: Scripts:
 
    ../scripts/cbgt/raster_all_neurons.rst
+   ../scripts/cbgt/raster_150neurons_1s.rst
    ../scripts/cbgt/osc_regime.rst
    ../scripts/cbgt/cwt_scalogram.rst
