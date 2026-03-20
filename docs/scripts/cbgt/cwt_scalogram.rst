@@ -1,5 +1,5 @@
-`cwt_scalogram` MATLAB script for generating magnitude scalogram
-================================================================
+`cwt_scalogram`: MATLAB script for generating magnitude scalogram
+=================================================================
 
 **MATLAB function**
 
