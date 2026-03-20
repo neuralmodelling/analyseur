@@ -137,6 +137,7 @@ Scripts
 
 .. toctree::
    :maxdepth: 5
+   :caption: Scripts:
 
    ../scripts/cbgt/raster_all_neurons.rst
    ../scripts/cbgt/osc_regime.rst
