@@ -75,3 +75,4 @@ Applications
    :caption: Scripts:
 
    ../scripts/cbgt/osc_regime.rst
+   ../scripts/cbgt/cwt_scalogram.rst
