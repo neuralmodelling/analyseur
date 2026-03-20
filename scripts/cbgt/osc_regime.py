@@ -3,6 +3,9 @@
 Two figures for identifying the oscillatory regimes
 ===================================================
 
+The figures are invisibly generated and saved under the current working directory and
+under the sub-directory `~/dynaregime/`
+
 1. Figure 1
 ===========
 
@@ -23,7 +26,7 @@ Two figures for identifying the oscillatory regimes
     |                     |                       |
     +---------------------+-----------------------+
 
-Figure 1 contains four subplots such that for each disinhibition experiment it plots:
+Figure 1 contains five subplots such that for each disinhibition experiment it plots:
 
 * subplot 1: raster of all the neurons
 * subplot 2: CV distribution of all the neurons
@@ -48,8 +51,6 @@ Figure 1 contains four subplots such that for each disinhibition experiment it p
 | 5     | time-series of population rate        | reveals oscillations and variability           |
 +-------+---------------------------------------+------------------------------------------------+
 
-phase cancellation issues
-
 2. Figure 2
 ===========
 
@@ -70,7 +71,7 @@ phase cancellation issues
     |                     |           |           |
     +---------------------+-----------+-----------+
 
-Figure 2 contains five subplots such that across all disinhibition experiments it plots:
+Figure 2 contains six subplots such that across all disinhibition experiments it plots:
 
 * subplot 1: times-series of the population rate for all experiments and mean across all experiments
 * subplot 2: pooled CV histogram (CV vs Density)
