@@ -132,3 +132,12 @@ where
     * Although these are also raw data the csv's contains data returned by `Brian 2 <https://brian2.readthedocs.io/en/stable/>`_ computation. For example this has firing rate computed as each sampling during the course of the simulation.
 
 
+Scripts
+=======
+
+.. toctree::
+   :maxdepth: 5
+
+   ../scripts/cbgt/raster_all_neurons.rst
+   ../scripts/cbgt/osc_regime.rst
+   ../scripts/cbgt/cwt_scalogram.rst

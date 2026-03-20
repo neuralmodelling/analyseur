@@ -4,10 +4,13 @@
    contain the root `toctree` directive.
 
 Welcome to analyseur's documentation!
-=================================
+=====================================
 
 analyseur is a module for viewing analytical measures from (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
+
+For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
+-------------------------------------------------------------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -17,6 +20,8 @@ models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.f
    cbgt/contents.rst
    analyze_cbgt.rst
 
+For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
+-------------------------------------------------------------------------------
 
 
 Indices and tables
