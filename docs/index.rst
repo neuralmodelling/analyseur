@@ -17,7 +17,7 @@ models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.f
 
 .. raw:: html
 
-   <img src="images/analyseur.svg" alt="Analyseur" height="200" />
+   <img src="|static|/images/analyseur.svg" alt="Analyseur" height="200" />
 
 For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 -------------------------------------------------------------------------------
