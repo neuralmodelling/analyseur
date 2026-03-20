@@ -23,12 +23,12 @@ class VoltageTrace(object):
     +-----------------------------------------+
     | :py:meth:`.plot_collection_in_ax`       |
     +-----------------------------------------+
-    | :py:meth:`.load_measurables`*           |
+    | :py:meth:`.load_measurables`‡           |
     +-----------------------------------------+
-    | :py:meth:`.volt_trace_collections`*     |
+    | :py:meth:`.volt_trace_collections`‡     |
     +-----------------------------------------+
 
-    **NOTE:** *Are not plotting methods.
+    **NOTE:** ‡Are not plotting methods.
 
     =========
     Use Cases
