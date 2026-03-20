@@ -1,5 +1,5 @@
-Script for analyzing the oscillatory regime
-===========================================
+`osc_regime`: Script for analyzing the oscillatory regime
+=========================================================
 
 .. automodule:: cbgt.osc_regime
    :members:
