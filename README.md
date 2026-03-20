@@ -93,3 +93,70 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+# Analyseur
+
+> A lightweight and extensible analysis toolkit
+
+![Analyseur Logo](docs/images/analyseur.svg)
+
+## Overview
+
+**Analyseur** is a modular package designed to simplify data analysis workflows. It provides a clean API, extensibility, and composable components for building custom analysis pipelines.
+
+## Features
+
+- 🔍 Flexible data analysis pipeline
+- ⚙️ Modular architecture
+- 📦 Easy integration with existing projects
+
+## Installation
+
+```bash
+pip install analyseur
+```
+
+Or install from source:
+
+```bash
+git clone https://github.com/neuralmodelling/analyseur.git
+cd analyseur
+pip install -e .
+```
+
+## Usage
+
+```python
+from analyseur import Analyseur
+
+analyser = Analyseur()
+result = analyser.run(data)
+print(result)
+```
+
+## Project Structure
+
+```
+analyseur/
+├── core/
+├── modules/
+├── utils/
+└── __init__.py
+```
+
+## License
+
+MIT License
+
+---
+
+## Supported by
+
+<p align="center">
+  <img src="/docs/images/LOGO_CNRS_BLEU.png" alt="CNRS" height="80" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="/docs/images/Logo_Sorbonne_University.png" alt="Sorbonne University" height="80" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="/docs/images/logo-isir.png" alt="ISIR" height="80" />
+</p>
+
