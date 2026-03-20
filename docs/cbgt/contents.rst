@@ -66,3 +66,12 @@ Composite Visualizers
 
    visual/composite/observables.rst
    visual/composite/current_distrib.rst
+
+Applications
+------------
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Scripts:
+
+   scripts/cbgt/osc_regime.py

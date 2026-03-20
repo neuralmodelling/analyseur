@@ -160,7 +160,7 @@ def plotCV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     nucname = "" if nucleus is None else " in " + nucleus
     ax.set_title("CV Distribution of " + str(n_neurons) + " neurons" + nucname)
 
-    return ax
+    return ax, vec_CV, all_isi
 
 def plotCV(spiketimes_set, nucleus=None, mode=None):
     """
@@ -190,11 +190,11 @@ def plotCV(spiketimes_set, nucleus=None, mode=None):
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plotCV_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
+    ax, vec_CV, all_isi = plotCV_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
 
     plt.show()
 
-    return fig, ax
+    return fig, ax, vec_CV, all_isi
 
 
 ##########################################################################

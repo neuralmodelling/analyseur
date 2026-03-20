@@ -22,3 +22,12 @@ def compute_grand_mean(all_neuron_stat=None):
         i += 1
 
     return np.mean(stat_array)
+
+def autocorr(x):
+    """
+    Performs autocorrelation
+    """
+    x = x - np.mean(x)
+    corr = np.correlate(x, x, mode="full")
+    corr = corr[corr.size // 2:]  # keep non-negative lags
+    return corr / corr[0]         # normalize
