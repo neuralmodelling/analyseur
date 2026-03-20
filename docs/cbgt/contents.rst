@@ -74,4 +74,4 @@ Applications
    :maxdepth: 5
    :caption: Scripts:
 
-   ../scripts/cbgt/osc_regime.py
+   scripts/cbgt/osc_regime.py
