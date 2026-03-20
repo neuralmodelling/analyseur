@@ -94,6 +94,10 @@ class VoltageTrace(object):
         Loads the membrane voltage preprocessed by averaging across all neurons
         in the respective nuclei and sampled at 1 ms. Note that this preprocessing
         and saving the data in respective csv file is done at simulation.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         filepath = fileloc + nucleus + cls.__sufix
         loadV = LoadMembraneVorI(filepath)
@@ -105,6 +109,10 @@ class VoltageTrace(object):
         """
         This performs NumPy‑ization of multiple :py:meth:`.load_measurables` and
         return it and the mean of the coerced array.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
         """
         m = len(all_fileloc)
         for i, fileloc in enumerate(all_fileloc):
