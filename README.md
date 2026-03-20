@@ -98,9 +98,7 @@ If you have run out of energy or time for your project, put a note at the top of
 
 > A lightweight and extensible analysis toolkit
 
-![Analyseur Logo](docs/images/analyseur.svg)
-
-<img src="/docs/images/analyseur.svg" alt="Analyseur" height="80" />
+<img src="/docs/images/analyseur.svg" alt="Analyseur" height="200" />
 
 ## Overview
 
