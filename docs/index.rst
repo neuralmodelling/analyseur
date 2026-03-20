@@ -9,12 +9,6 @@ Welcome to analyseur's documentation!
 analyseur is a module for viewing analytical measures from (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
 
-.. image:: images/analyseur.svg
-   :alt: Analyseur logo
-   :width: 70%
-   :align: center
-
-
 .. raw:: html
 
    <img src="images/analyseur.svg" alt="Analyseur" height="200" />
