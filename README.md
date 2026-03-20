@@ -100,6 +100,8 @@ If you have run out of energy or time for your project, put a note at the top of
 
 ![Analyseur Logo](docs/images/analyseur.svg)
 
+<img src="/docs/images/analyseur.svg" alt="Analyseur" height="80" />
+
 ## Overview
 
 **Analyseur** is a modular package designed to simplify data analysis workflows. It provides a clean API, extensibility, and composable components for building custom analysis pipelines.
