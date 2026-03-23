@@ -216,7 +216,7 @@ class Conn(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        fig, ax = plt.figure(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(12, 6))
 
         connection_counts = [len(self.conn_i[pair]) for pair in self.source_target_pairs]
 
