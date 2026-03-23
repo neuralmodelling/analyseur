@@ -400,7 +400,10 @@ class Conn(object):
 
         fig, axes = plt.subplots(rows, cols, figsize=(5*cols, 5*rows))
 
-        axes = axes.flatten()
+        if rows*cols > 1:
+            axes = axes.flatten()
+        else:
+            axes = [axes]
 
         for idx, pair in enumerate(self.source_target_pairs):
 
@@ -507,7 +510,11 @@ class Conn(object):
         rows = int(np.ceil(self.n_pairs / cols))
 
         fig, axes = plt.subplots(rows, cols, figsize=(5*cols, 5*rows))
-        axes = np.atleast_1d(axes).flatten()
+
+        if rows*cols > 1:
+            axes = np.atleast_1d(axes).flatten()
+        else:
+            axes = [axes]
 
         for idx, pair in enumerate(self.source_target_pairs):
 
@@ -955,7 +962,9 @@ class Conn(object):
         nx.draw_networkx_labels(G, pos, ax=ax)
         nx.draw_networkx_edges(G, pos, width=widths, arrows=True, arrowsize=20, ax=ax)
 
-        ax.legend(handles=legend_elements, loc='upper right')
+        if self.source_region != self.target_region:
+            ax.legend(handles=legend_elements, loc='upper right')
+
         ax.set_title(f"{self.source_region} → {self.target_region} Population Connectivity")
         ax.axis("off")
 
