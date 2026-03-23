@@ -4,6 +4,7 @@
 
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 import numpy as np
 
 from analyseur.cbgt.loader import FetchConnectionList
@@ -194,7 +195,7 @@ class Conn(object):
         return len(self.conn_i[pair]) > 0 and len(self.conn_j[pair]) > 0
 
 
-    def connections_bar_chart(self):
+    def connections_bar_chart(self, show=True):
         """
         Show summary of connections at population level
 
@@ -215,23 +216,25 @@ class Conn(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        plt.figure(figsize=(12, 6))
+        fig, ax = plt.figure(figsize=(12, 6))
 
         connection_counts = [len(self.conn_i[pair]) for pair in self.source_target_pairs]
 
-        plt.bar(self.source_target_pairs, connection_counts, color="skyblue")
-        plt.title(f"Title {self.source_region}→{self.target_region} Connections per Population")
-        plt.xlabel(f"{self.target_region} Populations")
-        plt.ylabel("Number of Connections")
-        plt.xticks(rotation=45)
-        plt.grid(True, alpha=0.3)
+        ax.bar(self.source_target_pairs, connection_counts, color="skyblue")
+        ax.set_title(f"Title {self.source_region}→{self.target_region} Connections per Population")
+        ax.set_xlabel(f"{self.target_region} Populations")
+        ax.set_ylabel("Number of Connections")
+        ax.ticks_params(axis="x", rotation=45)
+        ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
         for i, v in enumerate(connection_counts):
-            plt.text(i, v, str(v), ha="center", va="bottom")
+            ax.text(i, v, str(v), ha="center", va="bottom")
 
-        plt.tight_layout()
-        plt.show()
+        fig.tight_layout()
+
+        if show:
+            plt.show()
 
         print("Connection Statistics:")
         for pair in self.source_target_pairs:
@@ -239,8 +242,10 @@ class Conn(object):
             j_conn = len(self.conn_j[pair])
             print(f" {pair}: {i_conn} connections (should equal {j_conn})")
 
+        return fig, ax
 
-    def overall_connections_bar_chart(self):
+
+    def overall_connections_bar_chart(self, show=True):
         """
         Compare connection patterns across all populations
 
@@ -308,11 +313,15 @@ class Conn(object):
         axes[1, 1].set_title(f"Average Divergence (conns/{self.source_region} neurons)")
         axes[1, 1].tick_params(axis="x", rotation=45)
 
-        plt.tight_layout()
-        plt.show()
+        fig.tight_layout()
+
+        if show:
+            plt.show()
+
+        return fig, axes
 
 
-    def plot_connectivity_matrix(self, pair_name):
+    def plot_connectivity_matrix(self, pair_name, show=True):
         """
         Plot connection matrix for a `<source nucleus>-><target nucleus>` (e.g `PTN->MSN`)
 
@@ -342,22 +351,31 @@ class Conn(object):
         i = np.array(self.conn_i[pair_name])
         j = np.array(self.conn_j[pair_name])
 
-        plt.figure(figsize=(8,8))
+        fig, ax = plt.subplots(figsize=(8, 8))
 
-        plt.scatter(i, j, s=1, alpha=0.5)
+        # ax.scatter(i, j, s=1, alpha=0.5)
+        ax.scatter(i, j, s=1, alpha=0.3, rasterized=True)
+
+        ax.set_xlim(0, max(i) + 1)
+        ax.set_ylim(0, max(j) + 1)
 
         src_to_dst = pair_name.split("->")
 
-        plt.xlabel(f"{src_to_dst[0]} neuron index")
-        plt.ylabel(f"{src_to_dst[1]} neuron index")
+        ax.set_xlabel(f"{src_to_dst[0]} neuron index")
+        ax.set_ylabel(f"{src_to_dst[1]} neuron index")
 
-        plt.title(f"Connectivity matrix: {self.source_region} ({src_to_dst[0]}) → {self.target_region} ({src_to_dst[1]})")
+        ax.set_title(f"Connectivity matrix: {self.source_region} ({src_to_dst[0]}) → {self.target_region} ({src_to_dst[1]})")
 
-        plt.grid(alpha=0.2)
-        plt.show()
+        # ax.set_aspect('equal')
+        ax.grid(alpha=0.2)
+
+        if show:
+            plt.show()
+
+        return fig, ax
 
 
-    def plot_all_connectivity_matrices(self):
+    def plot_all_connectivity_matrices(self, show=True):
         """
         Shows all the projection patterns.
 
@@ -401,12 +419,16 @@ class Conn(object):
         for k in range(idx+1, len(axes)):
             axes[k].axis("off")
 
-        plt.suptitle(f"{self.source_region} → {self.target_region} Connectivity (All Populations)")
-        plt.tight_layout()
-        plt.show()
+        fig.suptitle(f"{self.source_region} → {self.target_region} Connectivity (All Populations)")
+        fig.tight_layout()
+
+        if show:
+            plt.show()
+
+        return fig, axes
 
 
-    def plot_density(self, pair_name, bins=100):
+    def plot_density(self, pair_name, bins=100, show=True):
         """
         Plot density heatmap for a `<Source nucleus>-><Target nucleus>` (e.g `PTN->MSN`)
 
@@ -437,23 +459,30 @@ class Conn(object):
         i = np.array(self.conn_i[pair_name])
         j = np.array(self.conn_j[pair_name])
 
-        plt.figure(figsize=(8,8))
+        fig, ax = plt.subplots(figsize=(8, 8))
 
-        plt.hist2d(i, j, bins=bins, cmap="inferno")
+        # ax.hist2d(i, j, bins=bins, cmap="inferno")
+        h = ax.hist2d(i, j, bins=bins, cmap="inferno", rasterized=True)
 
-        plt.colorbar(label="Number of connections")
+        fig.colorbar(h[3], ax=ax, label="Number of connections")
+
+        ax.set_xlim(0, max(i) + 1)
+        ax.set_ylim(0, max(j) + 1)
 
         src_to_dst = pair_name.split("->")
 
-        plt.xlabel(f"{src_to_dst[0]} neuron")
-        plt.ylabel(f"{src_to_dst[1]} neuron")
+        ax.set_xlabel(f"{src_to_dst[0]} neuron")
+        ax.set_ylabel(f"{src_to_dst[1]} neuron")
 
-        plt.title(f"Projection density: {self.source_region} ({src_to_dst[0]}) → {self.target_region} ({src_to_dst[1]})")
+        ax.set_title(f"Projection density: {self.source_region} ({src_to_dst[0]}) → {self.target_region} ({src_to_dst[1]})")
 
-        plt.show()
+        if show:
+            plt.show()
+
+        return fig, ax
 
 
-    def plot_all_density(self, bins=100):
+    def plot_all_density(self, bins=100, show=True):
         """
         Shows connection density patterns for all source region nucleus to target region nucleus.
 
@@ -495,12 +524,16 @@ class Conn(object):
         for k in range(idx+1, len(axes)):
             axes[k].axis("off")
 
-        plt.suptitle(f"Connection Density: {self.source_region} → {self.target_region}")
-        plt.tight_layout()
-        plt.show()
+        fig.suptitle(f"Connection Density: {self.source_region} → {self.target_region}")
+        fig.tight_layout()
+
+        if show:
+            plt.show()
+
+        return fig, axes
 
 
-    def plot_degree_distribution(self, pair_name):
+    def plot_degree_distribution(self, pair_name, show=True):
         """
         Plot convergence and divergence patterns for a `<Source nucleus>-><Target nucleus>` (e.g `PTN->MSN`)
 
@@ -531,20 +564,22 @@ class Conn(object):
         source_deg = np.bincount(i)
         target_deg = np.bincount(j)
 
-        plt.figure(figsize=(12,5))
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-        plt.subplot(1,2,1)
-        plt.hist(source_deg[source_deg>0], bins=50)
-        plt.title(f"{self.source_region} divergence")
-        plt.xlabel("Connections per neuron")
+        axes[0].hist(source_deg[source_deg>0], bins=50)
+        axes[0].set_title(f"{self.source_region} divergence")
+        axes[0].set_xlabel("Connections per neuron")
 
-        plt.subplot(1,2,2)
-        plt.hist(target_deg[target_deg>0], bins=50)
-        plt.title(f"{self.target_region} convergence")
-        plt.xlabel("Connections per neuron")
+        axes[1].hist(target_deg[target_deg>0], bins=50)
+        axes[0].set_title(f"{self.target_region} convergence")
+        axes[0].set_xlabel("Connections per neuron")
 
-        plt.tight_layout()
-        plt.show()
+        fig.tight_layout()
+
+        if show:
+            plt.show()
+
+        return fig, axes
 
 
     def plot_global_connectivity(self, n_channels=None, band_height=2000, density_contours=False):
@@ -627,7 +662,7 @@ class Conn(object):
         plt.show()
 
 
-    def plot_global_density(self, bins=150):
+    def plot_global_density(self, bins=150, show=True):
         """
         Connectome-style plot.
 
@@ -680,19 +715,24 @@ class Conn(object):
         all_i = np.concatenate(all_i)
         all_j = np.concatenate(all_j)
 
-        plt.figure(figsize=(10,8))
+        fig, ax = plt.subplots(figsize=(10, 8))
 
-        plt.hist2d(all_i, all_j, bins=bins, cmap="inferno")
+        # plt.hist2d(all_i, all_j, bins=bins, cmap="inferno")
+        h = ax.hist2d(all_i, all_j, bins=bins, cmap="inferno", rasterized=True)
 
-        plt.colorbar(label="Number of connections")
+        fig.colorbar(h[3], ax=ax, label="Number of connections")
 
-        plt.xlabel(f"{self.source_region} neurons")
-        plt.ylabel(f"{self.target_region} neurons")
+        ax.set_xlabel(f"{self.source_region} neurons")
+        ax.set_ylabel(f"{self.target_region} neurons")
 
-        plt.title(f"Global {self.source_region} → {self.target_region} Projection Density")
+        ax.set_title(f"Global {self.source_region} → {self.target_region} Projection Density")
 
-        plt.tight_layout()
-        plt.show()
+        fig.tight_layout()
+
+        if show:
+            plt.show()
+
+        return fig, ax
 
 
     def global_stats(self):
@@ -731,7 +771,7 @@ class Conn(object):
             print(f"  divergence                   : {divergence:.2f}")
             print()
 
-    def plot_channel_projection(self, pair_name, n_channels=None):
+    def plot_channel_projection(self, pair_name, n_channels=None, show=True):
         """
         Show channel-projection map for desired population pair as diagonal channel blocks.
 
@@ -799,24 +839,29 @@ class Conn(object):
         for cx, bg in zip(source_channels, target_channels):
             matrix[cx, bg] += 1
 
-        plt.figure(figsize=(6,6))
+        fig, ax = plt.subplots(figsize=(6, 6))
 
-        plt.imshow(matrix, cmap="inferno", origin="lower")
-        plt.colorbar(label="Number of connections")
+        im = ax.imshow(matrix, cmap="inferno", origin="lower")
+
+        fig.colorbar(im, ax=ax, label="Number of connections")
 
         # Set ticks from 1 to n_channels
-        plt.xticks(range(n_channels), range(1, n_channels + 1))
-        plt.yticks(range(n_channels), range(1, n_channels + 1))
+        ax.set_xticks(range(n_channels), range(1, n_channels + 1))
+        ax.set_yticks(range(n_channels), range(1, n_channels + 1))
 
         src_to_dst = pair_name.split("->")
 
-        plt.xlabel(f"{src_to_dst[0]} channel")
-        plt.ylabel(f"{src_to_dst[1]} channel")
+        ax.set_xlabel(f"{src_to_dst[0]} channel")
+        ax.set_ylabel(f"{src_to_dst[1]} channel")
 
-        plt.title(f"Channel Projection: {self.source_region} ({src_to_dst[0]}) → {self.target_region} ({src_to_dst[1]})")
+        ax.set_title(f"Channel Projection: {self.source_region} ({src_to_dst[0]}) → {self.target_region} ({src_to_dst[1]})")
 
-        plt.tight_layout()
-        plt.show()
+        fig.tight_layout()
+
+        if show:
+            plt.show()
+
+        return fig, ax
 
 
     def plot_all_channel_projections(self, n_channels=None):
@@ -836,7 +881,7 @@ class Conn(object):
             self.plot_channel_projection(pair, n_channels)
 
 
-    def plot_population_connectome(self):
+    def plot_population_connectome(self, show=True):
         """
         Displays model connectivity as a connectome diagram.
 
@@ -854,6 +899,12 @@ class Conn(object):
 
             <hr
         """
+        legend_elements = [
+            Patch(facecolor='lightgreen', label='Source'),
+            Patch(facecolor='salmon', label='Target'),
+            # Patch(facecolor='lightblue', label='Intermediate'),
+            ]
+
         G = nx.DiGraph()
         edges = []
 
@@ -882,16 +933,33 @@ class Conn(object):
             else:
                 color_map.append("lightblue")    # intermediate (both)
 
-        pos = nx.circular_layout(G)
+        # pos = nx.circular_layout(G)
+        pos = nx.spring_layout(G, seed=42)
+
         weights = np.array([G[u][v]["weight"] for u, v in G.edges()])
-        widths = 1 + 6 * weights / weights.max() if weights.size > 0 else []
 
-        plt.figure(figsize=(7, 7))
-        nx.draw_networkx_nodes(G, pos, node_size=2500, node_color=color_map)
-        nx.draw_networkx_labels(G, pos)
-        if widths.size > 0:
-            nx.draw_networkx_edges(G, pos, width=widths, arrows=True, arrowsize=20)
+        # widths = 1 + 6 * weights / weights.max() if weights.size > 0 else []
+        if weights.size > 0 and weights.max() > 0:
+            widths = 1 + 6 * weights / weights.max()
+        else:
+            widths = np.ones_like(weights)
 
-        plt.title(f"{self.source_region} → {self.target_region} Population Connectivity")
-        plt.axis("off")
-        plt.show()
+        fig, ax = plt.subplots(figsize=(7, 7))
+
+        # nx.draw_networkx_nodes(G, pos, node_size=2500, node_color=color_map)
+        # nx.draw_networkx_labels(G, pos)
+        # if widths.size > 0:
+        #     nx.draw_networkx_edges(G, pos, width=widths, arrows=True, arrowsize=20)
+
+        nx.draw_networkx_nodes(G, pos, node_size=2500, node_color=color_map, ax=ax)
+        nx.draw_networkx_labels(G, pos, ax=ax)
+        nx.draw_networkx_edges(G, pos, width=widths, arrows=True, arrowsize=20, ax=ax)
+
+        ax.legend(handles=legend_elements, loc='upper right')
+        ax.set_title(f"{self.source_region} → {self.target_region} Population Connectivity")
+        ax.axis("off")
+
+        if show:
+            plt.show()
+
+        return fig, ax
