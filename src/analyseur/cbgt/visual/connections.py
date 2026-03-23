@@ -571,8 +571,8 @@ class Conn(object):
         axes[0].set_xlabel("Connections per neuron")
 
         axes[1].hist(target_deg[target_deg>0], bins=50)
-        axes[0].set_title(f"{self.target_region} convergence")
-        axes[0].set_xlabel("Connections per neuron")
+        axes[1].set_title(f"{self.target_region} convergence")
+        axes[1].set_xlabel("Connections per neuron")
 
         fig.tight_layout()
 
