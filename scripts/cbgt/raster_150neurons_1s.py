@@ -127,7 +127,7 @@ def main():
             ax5 = fig.add_subplot(gs[1, 1:])  # row 1, span cols 1 & 2
 
 
-            ax1 = plot_raster_in_ax(ax1, spiketimes_set, nucleus=nucleus, neurons=neurons)
+            ax1 = plot_raster_in_ax(ax1, spiketimes_set, nucleus=nucleus, neurons=neurons, alpha=False)
             ax2 = plotCV_in_ax(ax2, spiketimes_set, mode="portrait")
 
             ax3 = plot_mean_rate_spikecounts_in_ax(ax3, spiketimes_set, window=window, binsz=binsz, nucleus=nucleus, mode="portrait")

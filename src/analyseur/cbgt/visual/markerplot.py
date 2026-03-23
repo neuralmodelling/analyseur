@@ -222,7 +222,7 @@ def __plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neur
 
     return ax
 
-def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neurons=None, nucleus=None,):
+def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neurons=None, nucleus=None, alpha=True):
     """
     .. code-block:: text
 
@@ -245,9 +245,10 @@ def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neuron
     OPTIONAL parameters
 
     :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
-    :param colors: `False` [default] or True
+    :param colors: `False` [default] or `True`
     :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
     :param nucleus: string; name of the nucleus
+    :param alpha: `True` [default]
     :return: object `ax` with Raster plotting done into it
 
     .. raw:: html
@@ -303,8 +304,11 @@ def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neuron
 
     marker_size = np.clip(20000 / n_spikes, 0.5, 3)
 
-    density = n_spikes / (n_neurons * (window[1] - window[0]))
-    alpha = np.clip(1 / (1 + density), 0.05, 0.7)
+    if alpha:
+        density = n_spikes / (n_neurons * (window[1] - window[0]))
+        alpha = np.clip(1 / (1 + density), 0.05, 0.7)
+    else:
+        alpha = None
 
     ax.scatter(
         x,
@@ -331,7 +335,7 @@ def plot_raster_in_ax(ax, spiketimes_superset, window=None, colors=False, neuron
 
     return ax
 
-def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None,):
+def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None, alpha=True):
     """
     Visualize Raster plot for the given neuron population using :py:func:`plot_raster_in_ax`.
 
@@ -339,9 +343,10 @@ def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None,):
 
     OPTIONAL parameters
 
-    :param colors: `False` [default] or True
+    :param colors: `False` [default] or `True`
     :param neurons: `"all"` [default] or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]
     :param nucleus: string; name of the nucleus
+    :param alpha: `True` [default]
     :return: object `ax` with Raster plotting done into it
 
     .. raw:: html
@@ -351,7 +356,8 @@ def plot_raster(spiketimes_superset, colors=False, neurons=None, nucleus=None,):
     """
     fig, ax = plt.subplots(figsize=(18, 12))
 
-    ax = plot_raster_in_ax(ax, spiketimes_superset, colors=colors, neurons=neurons, nucleus=nucleus,)
+    ax = plot_raster_in_ax(ax, spiketimes_superset, colors=colors,
+                           neurons=neurons, nucleus=nucleus, alpha=alpha)
 
     plt.show()
 
@@ -446,8 +452,8 @@ def __plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
 
     return ax
 
-def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
-                           window=None, neurons=None, nucleus=None, mode=None):
+def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None, window=None,
+                          neurons=None, nucleus=None, mode=None, alpha=True):
     """
     .. code-block:: text
 
@@ -488,6 +494,7 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
     :param neurons: "all" [default] or list: range(a, b) or [1, 4, 5, 9]
     :param nucleus: string; name of the nucleus
     :param mode: "portrait" or None/landscape [default]
+    :param alpha: `True` [default]
     :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
@@ -538,7 +545,11 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
     n_points = max(n_neurons, 1)
 
     marker_size = np.clip(2000 / n_points, 2, 15)
-    alpha = np.clip(5000 / n_points, 0.2, 0.8)
+
+    if alpha:
+        alpha = np.clip(5000 / n_points, 0.2, 0.8)
+    else:
+        alpha = None
 
     max_rate = max(np.max(baseline_rates), np.max(response_rates))
 
@@ -579,8 +590,8 @@ def plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=None,
 
     return ax
 
-def plot_ratechange(spiketimes_superset, stimulus_onset=None,
-                     window=None, neurons=None, nucleus=None, mode=None):
+def plot_ratechange(spiketimes_superset, stimulus_onset=None, window=None,
+                    neurons=None, nucleus=None, mode=None, alpha=True):
     """
     Visualize Rate Change Scatter of the given neuron population using :py:func:`plot_ratechange_in_ax`.
 
@@ -593,6 +604,7 @@ def plot_ratechange(spiketimes_superset, stimulus_onset=None,
     :param neurons: "all" or list: range(a, b) or [1, 4, 5, 9]
     :param nucleus: string; name of the nucleus
     :param mode: "portrait" or None/landscape [default]
+    :param alpha: `True` [default]
     :return: object `ax` with Rate Distribution plotting done into it
 
     .. raw:: html
@@ -605,8 +617,8 @@ def plot_ratechange(spiketimes_superset, stimulus_onset=None,
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax = plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=stimulus_onset,
-                                window=window, neurons=neurons, nucleus=nucleus, mode=mode)
+    ax = plot_ratechange_in_ax(ax, spiketimes_superset, stimulus_onset=stimulus_onset, window=window,
+                               neurons=neurons, nucleus=nucleus, mode=mode, alpha=alpha)
 
     if ax is None:
         print("There are no latencies to plot.")
