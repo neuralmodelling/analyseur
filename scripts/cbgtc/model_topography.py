@@ -1,44 +1,27 @@
 """
-========================================================
-Population activity and membrane dynamics of 150 neurons
-========================================================
+=========================================================
+View the connectivity and summary statistics of the model
+=========================================================
 
-The figure is invisibly generated and saved under the current working directory and
-under the sub-directory `~/raster150_1s/`
+Three figures are invisibly generated and saved under the current working directory and
+under the sub-directory `~/topography/`
 
-Structure
----------
-
-.. code-block:: text
-
-    +---------------------+-----------+-----------+
-    |                     |           |           |
-    |      subplot 1      | subplot 2 | subplot 3 |
-    |                     |           |           |
-    +---------------------+-----------+-----------+
-    |                     |                       |
-    |      subplot 4      |       subplot 5       |
-    |                     |                       |
-    +---------------------+-----------------------+
-
-Figure contains five subplots such that for each disinhibition experiment it plots:
-
-* subplot 1: raster of the neurons
-* subplot 2: CV distribution of the neurons
-* subplot 3: mean rate of the neurons
-* subplot 4: mean membrane voltage
-* subplot 5: spike count distribution
+* figure 1: view all the projection patterns
+* figure 2: summary of connections at population level
+* figure 3: connectivity as a connectome diagram
 
 Guide
 ------
 
-+-------+---------------------------------------+--------------------------------------------------------------------------------+
-|Figure | Content                               | Interpretation                                                                 |
-+=======+=======================================+================================================================================+
-| 1     | raster of all the neurons             | :meth:`analyseur.cbgtc.visual.connections.Conn.plot_all_connectivity_matrices` |
-+-------+---------------------------------------+--------------------------------------------------------------------------------+
-| 2     | CV distribution of all the neurons    | :meth:`analyseur.cbgtc.visual.connections.Conn.plot_population_connectome`     |
-+-------+---------------------------------------+--------------------------------------------------------------------------------+
++-------+--------------------------------------------+--------------------------------------------------------------------------------+
+|Figure | Content                                    | Interpretation                                                                 |
++=======+============================================+================================================================================+
+| 1     | view all the projection patterns           | :meth:`analyseur.cbgtc.visual.connections.Conn.plot_all_connectivity_matrices` |
++-------+--------------------------------------------+--------------------------------------------------------------------------------+
+| 2     | summary of connections at population level | :meth:`analyseur.cbgtc.visual.connections.Conn.connections_bar_chart`          |
++-------+--------------------------------------------+--------------------------------------------------------------------------------+
+| 3     | connectivity as a connectome diagram       | :meth:`analyseur.cbgtc.visual.connections.Conn.plot_population_connectome`     |
++-------+--------------------------------------------+--------------------------------------------------------------------------------+
 
 .. raw:: html
 
@@ -68,11 +51,13 @@ def main():
         conn = Conn(rootfolder=rootpath, region_connections=reg_to_reg)
 
         fig1, fig1_ax = conn.plot_all_connectivity_matrices(show=False)
-        fig2, fig2_ax = conn.plot_population_connectome(show=False)
+        fig2, fig2_ax = conn.connections_bar_chart(show=False)
+        fig3, fig3_ax = conn.plot_population_connectome(show=False)
 
         Path("topography").mkdir(parents=True, exist_ok=True)
         fig1.savefig("topography/Connectivity_matrices_of_" + reg_to_reg + ".png")
-        fig2.savefig("topography/Connectome_of_" + reg_to_reg + ".png")
+        fig2.savefig("topography/Summary_of_" + reg_to_reg + ".png")
+        fig3.savefig("topography/Connectome_of_" + reg_to_reg + ".png")
         #
         plt.close()
 

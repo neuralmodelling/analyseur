@@ -139,6 +139,7 @@ Scripts
    :maxdepth: 5
    :caption: Scripts:
 
+   ../scripts/cbgtc/model_topography.rst
    ../scripts/cbgtc/raster_all_neurons.rst
    ../scripts/cbgtc/raster_150neurons_1s.rst
    ../scripts/cbgtc/osc_regime.rst
