@@ -21,7 +21,7 @@ For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
    :caption: Contents:
    
    simulate_cbgtc.rst
-   cbgt/contents.rst
+   cbgtc/contents.rst
    analyze_cbgtc.rst
 
 For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
