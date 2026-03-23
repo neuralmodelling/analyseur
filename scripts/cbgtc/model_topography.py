@@ -53,7 +53,6 @@ Guide
 
 from pathlib import Path
 
-import matplotlib
 import matplotlib.pyplot as plt
 
 from analyseur.cbgtc.visual.connections import Conn
