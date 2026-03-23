@@ -224,7 +224,7 @@ class Conn(object):
         ax.set_title(f"Title {self.source_region}→{self.target_region} Connections per Population")
         ax.set_xlabel(f"{self.target_region} Populations")
         ax.set_ylabel("Number of Connections")
-        ax.ticks_params(axis="x", rotation=45)
+        ax.tick_params(axis="x", rotation=45)
         ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
