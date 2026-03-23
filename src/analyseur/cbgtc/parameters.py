@@ -1,12 +1,67 @@
-# ~/analyseur/rbcbg/parameters.py
+# ~/analyseur/cbgtc/parameters.py
 #
-# Documentation by Lungsi 18 Nov 2025
+# Documentation by Lungsi 20 Oct 2025
+#
+# This contains function for loading the files
 #
 
 from dataclasses import dataclass, field
-from typing import List, Tuple
+# from typing import List, Tuple, Set, Dict # Not needed for Python 3.9+
 import math
 
+DEFAULT_CONDUCTANCES = {
+    "cortex": { # 0.05
+        "g_L": 1.0, # This is called g_L_mean in CBGTC and unit is mS.cm-2
+    },
+    "bg": {},
+    "thalamus": {
+        "g_L": 0.05, # This is called g_L_mean in CBGTC and unit is mS.cm-2
+    },
+}
+
+DEFAULT_FEEDFORWORD_CURRENTS = {
+    "cortex": { # Case: NOT 'cortex_alone'
+        "CSN": 1.124,
+        "PTN": 1.25,
+        "IN": 1.178,
+    },
+    "bg": { # Case: NOT 'bg_alone'
+        "MSN": 28.3, # * mvolt
+        "FSI": 12.0, # * mvolt
+        "STN": 19.5, # * mvolt
+        "GPe": 26.0, # * mvolt
+        "GPi": 15.0, # * mvolt
+        # NOTE: for bg these are NOT current values
+    },
+    "thalamus": { # Case: NOT 'thalamus_alone'
+        "MD": 1.15,
+        "TRN": 1.2,
+    },
+}
+
+DEFAULT_EQUILIBRIUM_POTENTIALS = {
+    "cortex": {
+        "V_L": -70.0, # mV
+        "V_AMPA": 0.0, # mV
+        "V_GABAA": -70.0, # mV
+        "V_NMDA": 0.0, # mV
+        "V_GABAB": -90.0, # mV
+    },
+    "bg": {
+        "V_L": -70.0, # mV
+        "V_AMPA": 0.0, # mV
+        "V_NMDA": 0.0, # mV
+        "V_GABAA": -70.0, # mV
+        "V_GABAB": -90.0, # mV
+    },
+    "thalamus": {
+        "V_L": -70.0, # mV
+        "V_AMPA": 0.0, # mV
+        "V_GABAA": -70.0, # mV
+        "V_NMDA": 0.0, # mV
+        "V_GABAB": -90.0, # mV
+    }
+}
 
 DEFAULT_FREQUENCY_BANDS = {
     "Delta": (1, 4),
@@ -17,6 +72,104 @@ DEFAULT_FREQUENCY_BANDS = {
     "Low Gamma": (30, 80),
     "High Gamma": (80, 150),
 }
+
+DEFAULT_SIZE_INFO = {
+    "cortex": {
+        "TOTAL_NUMBER_OF_POPULATIONS": 4,  # TOTAL_NUMBER_OF_CHANNELS_MODEL
+        "scale": 4,  # The number of neurons will be multiplied by this value
+        "TOTAL_NUMBER_OF_CHANNELS": 4,
+    },
+    "bg": {
+        "TOTAL_NUMBER_OF_POPULATIONS": 4,
+        "scale": 4,
+        "TOTAL_NUMBER_OF_CHANNELS": 4,
+    },
+    "thalamus": {
+        "TOTAL_NUMBER_OF_POPULATIONS": 4,
+        "scale": 4,
+        "TOTAL_NUMBER_OF_CHANNELS": 4,
+    }
+}
+
+DEFAULT_PROJECTIONS_TYPES = {
+    "bg": {
+        'MD->MSN' : 'focused', # TODO check if should be diffuse instead?
+        'MD->FSI' : 'focused', # TODO check if should be diffuse instead?
+        'ProtGPe->STN':          'focused', # ^
+        'GPe->STN':           'focused', # ^
+        'PTN->MSN':           'focused', # ^
+        'CSN->MSN':           'focused', #
+        'CMPf->MSN':          'diffuse', # ^
+        'MSN->MSN':           'diffuse', # ^
+        'FSI->MSN':           'diffuse', # ^
+        'STN->MSN':           'diffuse', # ^
+        'GPe->MSN':           'diffuse', # ^
+        'CSN->FSI':           'focused', # ^
+        'PTN->FSI':           'focused', # ^
+        'CMPf->FSI':          'diffuse', # ^
+        'FSI->FSI':           'diffuse', # ^
+        'STN->FSI':           'diffuse', # ^
+        'GPe->FSI':           'diffuse', # ^
+        'PTN->STN':           'focused', # ^
+        'CMPf->STN':          'diffuse', # ^
+        'GPe->STN':           'focused', # ^
+        'CMPf->GPe':          'diffuse', # ^
+        'MSN->GPe':           'focused', # ^
+        'STN->GPe':           'diffuse', # ^
+        'GPe->GPe':           'diffuse', # ^
+        'CMPf->GPi':          'diffuse', # ^
+        'MSN->GPi':           'focused', # ^
+        'STN->GPi':           'diffuse', # ^
+        'GPe->GPi':           'diffuse', #
+        'ArkyGPe->MSN':          'diffuse', # ^
+        'ArkyGPe->FSI':          'diffuse', # ^
+        'CMPf->ArkyGPe':         'diffuse', # ^
+        'MSN->ArkyGPe':          'focused', # ^
+        'STN->ArkyGPe':          'diffuse', # ^
+        'ArkyGPe->ArkyGPe':         'diffuse', # ^
+        'ProtGPe->ArkyGPe':         'diffuse', # ^
+        'CMPf->ProtGPe':         'diffuse', # ^
+        'MSN->ProtGPe':          'focused', # ^
+        'STN->ProtGPe':          'diffuse', # ^
+        'ArkyGPe->ProtGPe':         'diffuse', # ^
+        'ProtGPe->ProtGPe':         'diffuse', # ^
+        'ProtGPe->GPi':          'diffuse', # ^
+    },
+    "cortex": {
+        'CSN->CSN': 'diffuse',
+        'CSN->PTN': 'diffuse',
+        'CSN->IN': 'diffuse',
+        'PTN->CSN': 'diffuse',
+        'PTN->PTN': 'diffuse',
+        'PTN->IN': 'diffuse',
+        'IN->CSN': 'diffuse',
+        'IN->IN': 'diffuse',
+        'IN->PTN': 'diffuse',
+        'MD->IN': 'diffuse',
+        'MD->PTN': 'focused',
+        'MD->CSN': 'focused'
+    },
+    "thalamus": {
+        'TRN->MD': 'diffuse',
+        'MD->TRN': 'focused',
+        'TRN->TRN' : 'diffuse',
+        'GPi->MD': 'focused',
+        'PTN->MD': 'focused',
+        'PTN->TRN': 'focused',
+        'CMPf->TRN': 'diffuse'
+    },
+}
+
+DEFAULT_CONNECTED_REGIONS = {
+    ("Cortex", "Cortex"),
+    ("Cortex", "BasalGanglia"),
+    ("Cortex", "Thalamus"),
+    ("BasalGanglia", "Thalamus"),
+    ("Thalamus", "Cortex"),
+    ("BasalGanglia", "BasalGanglia"),
+    ("Thalamus", "Thalamus"),
+}
+
 
 def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     """
@@ -150,21 +303,39 @@ class SimulationParams:
         <hr style="border: 2px solid red; margin: 20px 0;">
 
     """
+    # --- Class constants ---
+    REGION_ALIASES = {"cortex": "Cortex",
+                      "ctx": "Cortex",
+                      "basalganglia": "BasalGanglia",
+                      "bg": "BasalGanglia",
+                      "basal_ganglia": "BasalGanglia",
+                      "thalamus": "Thalamus",
+                      "thal": "Thalamus",}
+
+    # --- Instance fields ---
     duration: float = 10000 # ms
-    dt: float = 1.0 # ms
-    modelID: int = 9
-    nuclei_ctx: List[str] = None
-    nuclei_bg: List[str] = None
-    nuclei_thal: List[str] = None
+    t_start_recording = 2000 # ms
+    dt: float = 0.1 # ms
+    nuclei_ctx: list[str] = None
+    nuclei_bg: list[str] = None
+    nuclei_thal: list[str] = None
+    neurotrans: list[str] = None
+    conductance: dict = field(default_factory=lambda: DEFAULT_CONDUCTANCES.copy())
+    ff_currents: dict = field(default_factory=lambda: DEFAULT_FEEDFORWORD_CURRENTS.copy())
+    size_info: dict = field(default_factory=lambda: DEFAULT_SIZE_INFO.copy())
+    modelParamsID: int = 9
+    projection_types: dict = field(default_factory=lambda: DEFAULT_PROJECTIONS_TYPES.copy())
+    connected_regions: set[tuple[str, str]] = field(default_factory=lambda: DEFAULT_CONNECTED_REGIONS.copy())
 
     def __post_init__(self):
         if self.nuclei_ctx is None:
-            self.nuclei_ctx = ["CSN", "PTN", "CTX_E", "CTX_I",]
+            self.nuclei_ctx = ["CSN", "PTN", "IN",]
         if self.nuclei_bg is None:
-            self.nuclei_bg = ["FSI", "STN", "GPe", "GPiSNr",]
+            self.nuclei_bg = ["FSI", "GPe", "GPi", "MSN", "STN",]
         if self.nuclei_thal is None:
-            self.nuclei_thal = ["TRN", "TH"]
-
+            self.nuclei_thal = ["MD", "TRN",]  # "CMPf" is not accompanied with myriad raw datasets
+        if self.neurotrans is None:
+            self.neurotrans = ['AMPA', 'NMDA', 'GABAA', 'GABAB']
 
 @dataclass
 class SignalAnalysisParams:
@@ -220,7 +391,7 @@ class SignalAnalysisParams:
     decimal_places: int = 3
     decimal_places_ephys: int = 5  # very small values for disinhibition experiments
 
-    window: Tuple[float, float] = (0, SimulationParams.duration / _1000ms)
+    window: tuple[float, float] = (0, SimulationParams.duration / _1000ms)
     sampling_period_ms: float = SimulationParams.dt
     sampling_period: float = SimulationParams.dt / _1000ms
 

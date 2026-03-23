@@ -35,15 +35,15 @@ Guide
 +-------+---------------------------------------+-------------------------------------------------------------------------+
 |Subplot| Content                               | Interpretation                                                          |
 +=======+=======================================+=========================================================================+
-| 1     | raster of all the neurons             | :func:`analyseur.cbgt.visual.markerplot.plot_raster_in_ax`              |
+| 1     | raster of all the neurons             | :func:`analyseur.cbgtc.visual.markerplot.plot_raster_in_ax`              |
 +-------+---------------------------------------+-------------------------------------------------------------------------+
-| 2     | CV distribution of all the neurons    | :func:`analyseur.cbgt.visual.variation.plotCV_in_ax`                    |
+| 2     | CV distribution of all the neurons    | :func:`analyseur.cbgtc.visual.variation.plotCV_in_ax`                    |
 +-------+---------------------------------------+-------------------------------------------------------------------------+
-| 3     | mean rate of all the neurons          | :func:`analyseur.cbgt.visual.rate.plot_mean_rate_spikecounts_in_ax`     |
+| 3     | mean rate of all the neurons          | :func:`analyseur.cbgtc.visual.rate.plot_mean_rate_spikecounts_in_ax`     |
 +-------+---------------------------------------+-------------------------------------------------------------------------+
-| 4     | pooled PSTH                           | :meth:`analyseur.cbgt.visual.peristimulus.VizPSTH.plot_pool_in_ax`      |
+| 4     | pooled PSTH                           | :meth:`analyseur.cbgtc.visual.peristimulus.VizPSTH.plot_pool_in_ax`      |
 +-------+---------------------------------------+-------------------------------------------------------------------------+
-| 5     | spike count distribution              | :meth:`analyseur.cbgt.visual.popact.VizPopAct.plot_popcount_dist_in_ax` |
+| 5     | spike count distribution              | :meth:`analyseur.cbgtc.visual.popact.VizPopAct.plot_popcount_dist_in_ax` |
 +-------+---------------------------------------+-------------------------------------------------------------------------+
 
 .. raw:: html
@@ -56,14 +56,14 @@ from pathlib import Path
 import matplotlib
 import matplotlib.pyplot as plt
 
-from analyseur.cbgt.loader import LoadSpikeTimes
-from analyseur.cbgt.parameters import SignalAnalysisParams
+from analyseur.cbgtc.loader import LoadSpikeTimes
+from analyseur.cbgtc.parameters import SignalAnalysisParams
 
-from analyseur.cbgt.visual.markerplot import plot_raster_in_ax
-from analyseur.cbgt.visual.variation import plotCV_in_ax
-from analyseur.cbgt.visual.rate import plot_mean_rate_isi_in_ax, plot_true_avg_inst_rate_in_ax, plot_mean_rate_spikecounts_in_ax
-from analyseur.cbgt.visual.peristimulus import VizPSTH
-from analyseur.cbgt.visual.popact import VizPopAct
+from analyseur.cbgtc.visual.markerplot import plot_raster_in_ax
+from analyseur.cbgtc.visual.variation import plotCV_in_ax
+from analyseur.cbgtc.visual.rate import plot_mean_rate_isi_in_ax, plot_true_avg_inst_rate_in_ax, plot_mean_rate_spikecounts_in_ax
+from analyseur.cbgtc.visual.peristimulus import VizPSTH
+from analyseur.cbgtc.visual.popact import VizPopAct
 
 siganal = SignalAnalysisParams()
 

@@ -37,7 +37,7 @@ Use cases are documented [here.](https://analyseur.readthedocs.io)
 ```
 analyseur/
 ├── src/
-|   |__ cbgt/
+|   |__ cbgtc/
 |   |   |__ modules/
 |   |__ rbcbg/
 |   |   |__ modules/

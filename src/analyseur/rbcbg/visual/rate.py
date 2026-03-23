@@ -26,8 +26,8 @@ Plot Mean Rate
 ````````````````````
 ::
 
-    from analyseur.cbgt.loader import LoadSpikeTimes
-    from analyseur.cbgt.visual.rate import plot_mean_rate
+    from analyseur.cbgtc.loader import LoadSpikeTimes
+    from analyseur.cbgtc.visual.rate import plot_mean_rate
 
 1.2. Load file and get spike times
 ```````````````````````````````````
@@ -65,7 +65,7 @@ collage of subplots.
 ::
 
     import matplotlib.pyplot as plt
-    from analyseur.cbgt.visual.rate import plot_mean_rate_in_ax
+    from analyseur.cbgtc.visual.rate import plot_mean_rate_in_ax
 
     fig, (ax1, ax2) = plt.subplots(1, 2)
     fig.suptitle('Horizontally stacked subplots')
@@ -88,7 +88,7 @@ additional OPTIONAL argument for `binsz` (otherwise it picks a default value).
 This is imported as
 ::
 
-    from analyseur.cbgt.visual.rate import plot_avg_inst_rate, plot_avg_inst_rate_in_ax
+    from analyseur.cbgtc.visual.rate import plot_avg_inst_rate, plot_avg_inst_rate_in_ax
 
 .. raw:: html
 

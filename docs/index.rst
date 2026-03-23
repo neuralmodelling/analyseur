@@ -20,9 +20,9 @@ For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
    :maxdepth: 2
    :caption: Contents:
    
-   simulate_cbgt.rst
+   simulate_cbgtc.rst
    cbgt/contents.rst
-   analyze_cbgt.rst
+   analyze_cbgtc.rst
 
 For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 -------------------------------------------------------------------------------

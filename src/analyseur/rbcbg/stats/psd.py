@@ -21,8 +21,8 @@ class PowerSpectrum(object):
     +-------------------------------+-------------------------------------------------------------------------------------------------+
     | Methods                       | Argument                                                                                        |
     +===============================+=================================================================================================+
-    | :py:meth:`.compute_for_spike` | - `spiketimes_set`: see :class:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_superset`  |
-    |                               |      -  also :meth:`~analyseur.cbgt.loader.LoadSpikeTimes.get_spiketimes_subset`                |
+    | :py:meth:`.compute_for_spike` | - `spiketimes_set`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`  |
+    |                               |      -  also :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`                |
     |                               | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                    |
     |                               | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                        |
     |                               | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]        |
@@ -41,8 +41,8 @@ class PowerSpectrum(object):
     ````````````````````
     ::
 
-        from analyseur.cbgt.loader import LoadSpikeTimes
-        from analyseur.cbgt.stats.psd import PowerSpectrum
+        from analyseur.cbgtc.loader import LoadSpikeTimes
+        from analyseur.cbgtc.stats.psd import PowerSpectrum
 
     1.2. Load file and get spike times
     ```````````````````````````````````

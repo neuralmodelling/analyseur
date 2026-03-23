@@ -88,7 +88,7 @@ class LoadRates(CommonLoader):
     ```````````````````````````````````
     ::
 
-        from analyseur.cbgt.loader import LoadSpikeTimes
+        from analyseur.cbgtc.loader import LoadSpikeTimes
 
         loadST = LoadSpikeTimes("spikes_GPi.csv")
 

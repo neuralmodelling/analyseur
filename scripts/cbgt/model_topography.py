@@ -35,15 +35,15 @@ Guide
 +-------+---------------------------------------+---------------------------------------------------------------------+
 |Subplot| Content                               | Interpretation                                                      |
 +=======+=======================================+=====================================================================+
-| 1     | raster of all the neurons             | :func:`analyseur.cbgt.visual.markerplot.plot_raster_in_ax`          |
+| 1     | raster of all the neurons             | :func:`analyseur.cbgtc.visual.markerplot.plot_raster_in_ax`          |
 +-------+---------------------------------------+---------------------------------------------------------------------+
-| 2     | CV distribution of all the neurons    | :func:`analyseur.cbgt.visual.variation.plotCV_in_ax`                |
+| 2     | CV distribution of all the neurons    | :func:`analyseur.cbgtc.visual.variation.plotCV_in_ax`                |
 +-------+---------------------------------------+---------------------------------------------------------------------+
-| 3     | mean rate of all the neurons          | :func:`analyseur.cbgt.visual.rate.plot_mean_rate_spikecounts_in_ax` |
+| 3     | mean rate of all the neurons          | :func:`analyseur.cbgtc.visual.rate.plot_mean_rate_spikecounts_in_ax` |
 +-------+---------------------------------------+---------------------------------------------------------------------+
-| 4     | mean membrane voltage                 | :meth:`analyseur.cbgt.visual.measurable.VoltageTrace.plot_in_ax`    |
+| 4     | mean membrane voltage                 | :meth:`analyseur.cbgtc.visual.measurable.VoltageTrace.plot_in_ax`    |
 +-------+---------------------------------------+---------------------------------------------------------------------+
-| 5     | pooled PSTH                           | :meth:`analyseur.cbgt.visual.peristimulus.VizPSTH.plot_pool_in_ax`  |
+| 5     | pooled PSTH                           | :meth:`analyseur.cbgtc.visual.peristimulus.VizPSTH.plot_pool_in_ax`  |
 +-------+---------------------------------------+---------------------------------------------------------------------+
 
 .. raw:: html
@@ -56,7 +56,7 @@ from pathlib import Path
 import matplotlib
 import matplotlib.pyplot as plt
 
-from analyseur.cbgt.visual.connections import Conn
+from analyseur.cbgtc.visual.connections import Conn
 
 rootpath = "/home/lungsi/DockerShare/data/09Feb2026/"
 

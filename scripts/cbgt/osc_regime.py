@@ -110,14 +110,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-from analyseur.cbgt.loader import LoadSpikeTimes
-from analyseur.cbgt.parameters import SignalAnalysisParams
+from analyseur.cbgtc.loader import LoadSpikeTimes
+from analyseur.cbgtc.parameters import SignalAnalysisParams
 
-from analyseur.cbgt.visual.markerplot import plot_raster_in_ax
-from analyseur.cbgt.visual.variation import plotCV_in_ax
-from analyseur.cbgt.stats.rate import Rate
-from analyseur.cbgt.stats.psd import PowerSpectrum
-from analyseur.cbgt.stats.compute_shared import autocorr
+from analyseur.cbgtc.visual.markerplot import plot_raster_in_ax
+from analyseur.cbgtc.visual.variation import plotCV_in_ax
+from analyseur.cbgtc.stats.rate import Rate
+from analyseur.cbgtc.stats.psd import PowerSpectrum
+from analyseur.cbgtc.stats.compute_shared import autocorr
 
 siganal = SignalAnalysisParams()
 

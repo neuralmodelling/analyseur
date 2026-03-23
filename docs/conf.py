@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("../scripts"))
 # -- Verify module structure -------------------------------------------------
 
 # try:
-#     from analyseur.cbgt.loader import *
+#     from analyseur.cbgtc.loader import *
 #     print("Import successful!")
 #     print([x for x in dir() if not x.startswith("_")])
 # except Exception as e:

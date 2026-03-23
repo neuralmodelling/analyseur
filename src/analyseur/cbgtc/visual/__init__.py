@@ -1,0 +1,1 @@
+# ~/analyseur/analyseur/cbgtc/visual/__init__.py

@@ -1,0 +1,1 @@
+# ~/analyseur/analyseur/cbgtc/stat/__init__.py

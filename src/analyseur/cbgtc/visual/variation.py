@@ -1,0 +1,421 @@
+# ~/analyseur/cbgtc/visual/variation.py
+#
+# Documentation by Lungsi 30 Oct 2025
+#
+# This contains function for SpikingStats
+#
+"""
+=========================
+Plot Variation Statistics
+=========================
+
++------------------------------+-----------------------------------------------------------------------------------------------------+
+| Functions                    | Purpose                                                                                             |
++==============================+=====================================================================================================+
+| :func:`plotCV`               | plots Coefficient of Variations of all the neurons in a population                                  |
++------------------------------+-----------------------------------------------------------------------------------------------------+
+| :func:`plotCV_in_ax`         | draws the Coefficient of Variations of all the neurons into a given `matplotlib.pyplot.axis`        |
++------------------------------+-----------------------------------------------------------------------------------------------------+
+| :func:`plotCV2`              | plots Local Coefficient of Variations of all the neurons in a population                            |
++------------------------------+-----------------------------------------------------------------------------------------------------+
+| :func:`plotCV2_in_ax`        | draws the Local Coefficient of Variations of all the neurons into a given `matplotlib.pyplot.axis`  |
++------------------------------+-----------------------------------------------------------------------------------------------------+
+| :func:`plotLV`               | plots Local Variations of all the neurons in a population                                           |
++------------------------------+-----------------------------------------------------------------------------------------------------+
+| :func:`plotLV_in_ax`         | draws the Local Variations of all the neurons into a given `matplotlib.pyplot.axis`                 |
++------------------------------+-----------------------------------------------------------------------------------------------------+
+
+1. Pre-requisites
+=================
+
+1.1. Import Modules
+-------------------
+::
+
+    from analyseur.cbgtc.loader import LoadSpikeTimes
+    from analyseur.cbgtc.visual.variation import <desired_method>
+
+1.2. Load file and get spike times
+----------------------------------
+::
+
+    loadST = LoadSpikeTimes("spikes_GPi.csv")
+    spiketimes_set = loadST.get_spiketimes_superset()
+
+2. Cases
+========
+
+2.1. Standard plot
+------------------
+::
+
+    <desired_method>(spiketimes_set)
+
+2.2. Create the plot for customization
+--------------------------------------
+This is for power users who for instance want to insert the plot in their
+collage of subplots.
+::
+
+    import matplotlib.pyplot as plt
+    from analyseur.cbgtc.visual.variation import plotCV_in_ax
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Horizontally stacked subplots')
+
+    ax1 = plotCV_in_ax(ax1, spiketimes_set)
+    ax2 = plotCV_in_ax(ax2, spiketimes_set)
+
+    plt.show()
+
+.. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+"""
+
+import matplotlib.pyplot as plt
+
+from analyseur.cbgtc.stats.isi import InterSpikeInterval
+from analyseur.cbgtc.stats.variation import Variations
+
+
+##########################################################################
+#    CV PLOT
+##########################################################################
+
+def plotCV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
+    """
+    .. code-block:: text
+
+        CV Distribution
+
+        CV
+        ^
+        |        |  |   | | |  |   |  | | |  |
+        |      | |  | | | | |  | | |  | | |  |
+        |    | | |  | | | | |  | | |  | | |  |
+        |  | | | |  | | | | |  | | |  | | |  |
+        |
+        +-------------------------------------------------> Neurons
+            0        50        100        150        200
+
+        Each vertical bar represents the coefficient of variation (CV)
+        of a single neuron. The distribution shows variability in firing
+        regularity across the neuron population.
+
+    Draws the Coefficient of Variation on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    n_neurons = len(spiketimes_set)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
+    CVarr = Variations.computeCV(all_isi)
+    vec_CV = CVarr.values()
+
+    # window = __spikeanal.window
+    # binsz = __spikeanal.binsz_100perbin
+    # n_bins = round((window[1] - window[0]) / binsz)
+
+    if orient=="horizontal":
+        ax.barh(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel("CV")
+        ax.margins(y=0)
+    else:
+        ax.bar(range(len(vec_CV)), vec_CV, color="steelblue", edgecolor="black")
+        # ax.hist(vec_CV, bins=n_bins, alpha=0.7, color="green", edgecolor="black", )
+        ax.set_ylabel("CV")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("CV Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax, vec_CV, all_isi
+
+def plotCV(spiketimes_set, nucleus=None, mode=None):
+    """
+    Visualize Coefficient of Variation of the given neuron population using :func:`plotCV_in_ax`
+
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    [OPTIONAL]
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    if mode=="portrait":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax, vec_CV, all_isi = plotCV_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
+
+    plt.show()
+
+    return fig, ax, vec_CV, all_isi
+
+
+##########################################################################
+#    CV2 PLOT
+##########################################################################
+
+def plotCV2_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
+    """
+    .. code-block:: text
+
+        CV2 Distribution of Neurons
+
+        CV2
+        ^
+        |        |  |   | | |  |   |  | | |  |
+        |      | |  | | | | |  | | |  | | |  |
+        |    | | |  | | | | |  | | |  | | |  |
+        |  | | | |  | | | | |  | | |  | | |  |
+        |
+        +-------------------------------------------------> Neurons
+            0        50        100        150        200
+
+        Each vertical bar represents the local coefficient of variation (CV2)
+        of a single neuron. CV2 measures local variability between successive
+        interspike intervals.
+
+    Draws the Local Coefficient of Variation on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    [OPTIONAL]
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    n_neurons = len(spiketimes_set)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
+    CV2arr = Variations.computeCV2(all_isi)
+    vec_CV2 = CV2arr.values()
+
+    if orient=="horizontal":
+        ax.barh(range(len(vec_CV2)), vec_CV2, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel(r"CV_2")
+    else:
+        ax.bar(range(len(vec_CV2)), vec_CV2, color="steelblue", edgecolor="black")
+        ax.set_ylabel(r"CV_2")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title(r"CV_2" + " Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
+
+def plotCV2(spiketimes_set, nucleus=None, mode=None):
+    """
+    Visualize Local Coefficient of Variation of the given neuron population using :func:`plotCV2_in_ax`
+
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    [OPTIONAL]
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    if mode=="portrait":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plotCV2_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
+
+    plt.show()
+
+    return fig, ax
+
+
+##########################################################################
+#    LV PLOT
+##########################################################################
+
+def plotLV_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
+    """
+    .. code-block:: text
+
+        LV Distribution
+
+        LV
+        ^
+        |        |  |   | | |  |   |  | | |  |
+        |      | |  | | | | |  | | |  | | |  |
+        |    | | |  | | | | |  | | |  | | |  |
+        |  | | | |  | | | | |  | | |  | | |  |
+        |
+        +-------------------------------------------------> Neurons
+            0        50        100        150        200
+
+        Each vertical bar represents the local variation (LV)
+        of a single neuron. LV quantifies the variability in
+        firing patterns across the neuron population.
+
+    Draws the Local Variation on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    [OPTIONAL]
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    n_neurons = len(spiketimes_set)
+
+    match mode:
+        case "portrait":
+            orient = "horizontal"
+        case _:
+            orient = "landscape"
+
+    get_axis = lambda orient: "x" if orient=="horizontal" else "y"
+
+    [all_isi, _] = InterSpikeInterval.compute(spiketimes_set)
+    LVarr = Variations.computeLV(all_isi)
+    vec_LV = LVarr.values()
+
+    if orient=="horizontal":
+        ax.barh(range(len(vec_LV)), vec_LV, color="steelblue", edgecolor="black")
+        ax.set_ylabel("Neurons")
+        ax.set_xlabel("LV")
+    else:
+        ax.bar(range(len(vec_LV)), vec_LV, color="steelblue", edgecolor="black")
+        ax.set_ylabel("LV")
+        ax.set_xlabel("Neurons")
+
+    ax.grid(True, alpha=0.3, axis=get_axis(orient))
+
+    nucname = "" if nucleus is None else " in " + nucleus
+    ax.set_title("LV Distribution of " + str(n_neurons) + " neurons" + nucname)
+
+    return ax
+
+def plotLV(spiketimes_set, nucleus=None, mode=None):
+    """
+    Visualize Local Variation of the given neuron population using :func:`plotLV_in_ax`
+
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    [OPTIONAL]
+
+    :param neurons: `"all"` or `scalar` or `range(a, b)` or list of neuron ids like `[2, 3, 6, 7]`
+
+            - `"all"` means subset = superset
+            - `N` (a scalar) means subset of first N neurons in the superset
+            - `range(a, b)` or `[2, 3, 6, 7]` means subset of selected neurons
+
+    :param nucleus: string; name of the nucleus
+    :param mode: "portrait" or None/landscape [default]
+    :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    if mode=="portrait":
+        fig, ax = plt.subplots(figsize=(6, 10))
+    else:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax = plotLV_in_ax(ax, spiketimes_set, nucleus=nucleus, mode=mode)
+
+    plt.show()
+
+    return fig, ax
