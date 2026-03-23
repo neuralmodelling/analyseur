@@ -36,6 +36,6 @@ dependencies = [
 #packages = {find = {where = ["src"]}}
 
 [project.urls]
-"Homepage" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"
-"Source" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur"
-"Bug Reports" = "https://gitlab.isir.upmc.fr/cobathaco-catatonia/analyseur/issues"
+"Homepage" = "https://analyseur.readthedocs.io/"
+"Source" = "https://github.com/neuralmodelling/analyseur"
+"Bug Reports" = "https://github.com/neuralmodelling/analyseur/issues"
