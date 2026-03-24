@@ -4,7 +4,7 @@
 #
 
 from dataclasses import dataclass, field
-from typing import List, Tuple
+# from typing import List, Tuple, Set, Dict # Not needed for Python 3.9+
 import math
 
 
@@ -146,9 +146,9 @@ class SimulationParams:
     duration: float = 10000 # ms
     dt: float = 1.0 # ms
     modelID: int = 9
-    nuclei_ctx: List[str] = None
-    nuclei_bg: List[str] = None
-    nuclei_thal: List[str] = None
+    nuclei_ctx: list[str] = None
+    nuclei_bg: list[str] = None
+    nuclei_thal: list[str] = None
 
     def __post_init__(self):
         if self.nuclei_ctx is None:
