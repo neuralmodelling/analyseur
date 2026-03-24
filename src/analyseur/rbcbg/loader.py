@@ -66,15 +66,20 @@ class LoadRates(CommonLoader):
     Loads the csv file containing spike times for all the neurons
     in a particular nucleus and **returns all their spike times in seconds** by calling :py:meth:`.get_spiketimes_superset`.
 
-    +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
-    | Methods                             | Argument                                                | Return                                                            |
-    +=====================================+=========================================================+===================================================================+
-    | :py:meth:`.get_spiketimes_superset` | - no arguments                                          | - dictionary with keys, `n<X>` where `X ∊ [0, N] ⊂ 𝗭`             |
-    |                                     | - instantiated with full file path                      | - key value is a array of spike times for respective neuron `n<X>`|
-    +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
-    | :py:meth:`.get_spiketimes_subset`   | - superset (return of :meth:`.get_spiketimes_superset`) | - dictionary with keys, `n<X>` where `X ∊ neurons`                |
-    |                                     | - `"neurons"` ("all", range or list)                    | - key value is a array of spike times for respective neuron `n<X>`|
-    +-------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+
+    +-------------------------------------+---------------------------------------------------------+
+    | Methods                             | Argument                                                |
+    +=====================================+=========================================================+
+    | :py:meth:`.extract_nucleus_name`    | - no arguments (access instantiated attribute)          |
+    |                                     | - or filename                                           |
+    +-------------------------------------+---------------------------------------------------------+
+    | :py:meth:`.extract_modelID`         | - no arguments (access instantiated attribute)          |
+    |                                     | - or filename                                           |
+    +-------------------------------------+---------------------------------------------------------+
+    | :py:meth:`.extract_percentage`      | - no arguments (access instantiated attribute)          |
+    |                                     | - or filename                                           |
+    +-------------------------------------+---------------------------------------------------------+
+    | :py:meth:`.get_mean_rates`          | - no arguments (access instantiated attribute)          |
+    +-------------------------------------+---------------------------------------------------------+
 
     =========
     Use Cases
@@ -141,7 +146,7 @@ class LoadRates(CommonLoader):
     __pattern_with_percentage = r"^.+percent_(\d+)\."
 
 
-    def extract_nucleus_name(self, filename):
+    def extract_nucleus_name(self, filename=self.filename):
         """
         Extracts <nucleus> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
@@ -161,7 +166,7 @@ class LoadRates(CommonLoader):
 
         return nucleus
 
-    def extract_modelID(self, filename):
+    def extract_modelID(self, filename=self.filename):
         """
         Extracts <ID> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
@@ -180,7 +185,7 @@ class LoadRates(CommonLoader):
         return modelID
 
 
-    def extract_percentage(self, filename):
+    def extract_percentage(self, filename=self.filename):
         """
         Extracts <value> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
