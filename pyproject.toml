@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neurosig-analyseur"
+name = "neurosig-analyzer"
 version = "0.0.1"
 authors = [
   { name="Lungsi NGWUA", email="neuralgraphs@gmail.com" },
