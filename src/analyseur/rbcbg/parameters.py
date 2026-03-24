@@ -212,7 +212,7 @@ class SignalAnalysisParams:
     decimal_places: int = 3
     decimal_places_ephys: int = 5  # very small values for disinhibition experiments
 
-    window: Tuple[float, float] = (0, SimulationParams.duration / _1000ms)
+    window: tuple[float, float] = (0, SimulationParams.duration / _1000ms)
     sampling_period_ms: float = SimulationParams.dt
     sampling_period: float = SimulationParams.dt / _1000ms
 
