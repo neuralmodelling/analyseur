@@ -117,6 +117,11 @@ __simparams = SimulationParams()
 
 def plot_rate_all_channels_across_time_in_ax(ax, rates_set, window=None,
                                                  nucleus=None,):
+    """
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     # ============== DEFAULT Parameters ==============
     if window is None:
         window = __siganal.window
@@ -145,6 +150,38 @@ def plot_rate_all_channels_across_time_in_ax(ax, rates_set, window=None,
     return ax
 
 def plot_mean_rate_all_channels_across_time_in_ax(ax, mu_rate_arr, window=None, nucleus=None,):
+    """
+    .. code-block:: text
+
+        Mean Rate (1/s)
+        ^
+        |      █  █   █ █   █   █ █   █
+        |     ███ ██ ████ ██ ██ ███ ██
+        |    █████████████████████████
+        |
+        +---------------------------------------------> Neurons
+        0      50      100      150      200
+
+        Each bar represents the mean firing rate of one neuron
+        computed from spike counts within the analysis window.
+
+    Draws the Mean Rate (1/s) on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     # ============== DEFAULT Parameters ==============
     if window is None:
         window = __siganal.window
@@ -168,6 +205,38 @@ def plot_mean_rate_all_channels_across_time_in_ax(ax, mu_rate_arr, window=None, 
 
 def plot_rate_across_time_in_ax(ax, rates_set, window=None,
                                 nucleus=None, n_neurons=None):
+    """
+    .. code-block:: text
+
+        Mean Rate (1/s)
+        ^
+        |      █  █   █ █   █   █ █   █
+        |     ███ ██ ████ ██ ██ ███ ██
+        |    █████████████████████████
+        |
+        +---------------------------------------------> Neurons
+        0      50      100      150      200
+
+        Each bar represents the mean firing rate of one neuron
+        computed from spike counts within the analysis window.
+
+    Draws the Mean Rate (1/s) on the given
+    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+
+    :param ax: object `matplotlib.pyplot.axis``
+    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
+    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+
+    OPTIONAL parameters
+
+    - :param nucleus: string; name of the nucleus
+    - :param mode: "portrait" or None/landscape [default]
+    - :return: object `ax` with Rate Distribution plotting done into it
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
     # ============== DEFAULT Parameters ==============
     if window is None:
         window = __siganal.window

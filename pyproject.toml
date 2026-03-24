@@ -19,7 +19,7 @@ keywords = ["NEUROSCIENCE", "COMPUTATIONAL NEUROSCIENCE", "SIGNAL PROCESSING", "
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
-    "License :: OSI Approved :: BSD-3-Clause",
+    "License :: OSI Approved :: BSD License",
     "Development Status :: 3 - Alpha",      # "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
     "Intended Audience :: Developers",      # Define that your audience are developers
 ]
@@ -30,6 +30,7 @@ dependencies = [
     "scipy",
     "scikit-learn", # import sklearn
     "pywavelets",
+    "networkx",
 ]
 
 #[tool.setuptools]

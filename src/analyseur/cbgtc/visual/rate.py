@@ -164,7 +164,6 @@ def plot_mean_rate_spikecounts_in_ax(ax, spiketimes_set, window=None, binsz=None
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     # ============== DEFAULT Parameters ==============
     if window is None:
@@ -240,7 +239,6 @@ def plot_mean_rate_isi_in_ax(ax, spiketimes_set, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     n_neurons = len(spiketimes_set)
 
@@ -292,7 +290,6 @@ def plot_mean_rate_isi(spiketimes_superset, nucleus=None, mode=None):
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     if mode=="portrait":
         fig, ax = plt.subplots(figsize=(6, 10))
