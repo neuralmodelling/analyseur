@@ -71,13 +71,10 @@ class LoadRates(CommonLoader):
     | Methods                             | Argument                                                |
     +=====================================+=========================================================+
     | :py:meth:`.extract_nucleus_name`    | - no arguments (access instantiated attribute)          |
-    |                                     | - or filename                                           |
     +-------------------------------------+---------------------------------------------------------+
     | :py:meth:`.extract_modelID`         | - no arguments (access instantiated attribute)          |
-    |                                     | - or filename                                           |
     +-------------------------------------+---------------------------------------------------------+
     | :py:meth:`.extract_percentage`      | - no arguments (access instantiated attribute)          |
-    |                                     | - or filename                                           |
     +-------------------------------------+---------------------------------------------------------+
     | :py:meth:`.get_mean_rates`          | - no arguments (access instantiated attribute)          |
     +-------------------------------------+---------------------------------------------------------+
@@ -94,46 +91,37 @@ class LoadRates(CommonLoader):
     ```````````````````````````````````
     ::
 
-        from analyseur.cbgtc.loader import LoadSpikeTimes
+        from analyseur.rbcbg.loader import LoadRates
 
-        loadST = LoadSpikeTimes("spikes_GPi.csv")
+        loadFR = LoadRates("GPiSNr_model_9_percent_0.csv")
 
     ---------
     2. Cases
     ---------
 
-    2.1. Load file and get the whole spike times
-    `````````````````````````````````````````````
+    2.1. Load file and get the firing rates
+    ```````````````````````````````````````
     ::
 
-        spiketimes_superset = loadST.get_spiketimes_superset()
+        t_sec, rates_Hz = loadFR.get_mean_rates()
 
-    2.2. From the whole spike times get a subset; specific range
-    ````````````````````````````````````````````````````````````
+    2.2. Extract the nucleus name
+    `````````````````````````````
     ::
 
-        neurons = range(30, 62)  # neuron id from "n30" to "n62"
-        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+        nuc = loadFR.extract_nucleus_name()
 
-    2.3. From the whole spike times get a subset; specific list
-    ```````````````````````````````````````````````````````````
+    2.3. Extract the model ID
+    `````````````````````````
     ::
 
-        neurons = [1, 2, 3, 6, 9, 10, 11, 21, 31]  # neuron ids "n1", "n2", ..., "n21", "n31"
-        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=neurons)
+        modelID = loadFR.extract_modelID()
 
-    2.4. From the whole spike times get a subset; first N neurons
-    `````````````````````````````````````````````````````````````
+    2.4. Extract the disinhibition percentage
+    `````````````````````````````````````````
     ::
 
-        N = 50  # first 50 neurons regardless of the neuron id
-        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons=N)
-
-    2.5 Superset and subset are the same
-    ````````````````````````````````````
-    ::
-
-        spiketimes_subset = LoadSpikeTimes.get_spiketimes_subset(spiketimes_superset, neurons="all")
+        pc = loadFR.extract_percentage()
 
     .. raw:: html
 
@@ -147,7 +135,7 @@ class LoadRates(CommonLoader):
     __pattern_with_percentage = r"^.+percent_(\d+)\."
 
 
-    def extract_nucleus_name(self, filename=self.filename):
+    def extract_nucleus_name(self):
         """
         Extracts <nucleus> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
@@ -157,7 +145,7 @@ class LoadRates(CommonLoader):
         """
         # flist = filename.split("_")
         # nucleus = flist[1].split(".")[0]
-        match = re.match(self.__pattern_with_nucleus_name, filename)
+        match = re.match(self.__pattern_with_nucleus_name, self.filename)
 
         if match:
             nucleus = match.group(1)
@@ -167,7 +155,7 @@ class LoadRates(CommonLoader):
 
         return nucleus
 
-    def extract_modelID(self, filename=self.filename):
+    def extract_modelID(self):
         """
         Extracts <ID> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
@@ -175,7 +163,7 @@ class LoadRates(CommonLoader):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        match = re.match(self.__pattern_with_modelID, filename)
+        match = re.match(self.__pattern_with_modelID, self.filename)
 
         if match:
             modelID = int(match.group(1))
@@ -186,7 +174,7 @@ class LoadRates(CommonLoader):
         return modelID
 
 
-    def extract_percentage(self, filename=self.filename):
+    def extract_percentage(self):
         """
         Extracts <value> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
@@ -194,7 +182,7 @@ class LoadRates(CommonLoader):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        match = re.match(self.__pattern_with_percentage, filename)
+        match = re.match(self.__pattern_with_percentage, self.filename)
 
         if match:
             percentage = int(match.group(1))
