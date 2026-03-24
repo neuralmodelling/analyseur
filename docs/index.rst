@@ -27,6 +27,12 @@ For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 -------------------------------------------------------------------------------
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   rbcbg/contents.rst
+
 
 Indices and tables
 ==================
