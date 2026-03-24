@@ -9,3 +9,4 @@ Loaders
    :caption: Available file loaders:
 
    parameters.rst
+   loader.rst

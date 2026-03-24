@@ -23,7 +23,7 @@ class CommonLoader(object):
 
     - Instantiated with the full file path
         - sets atrributes: `full_filepath`, `filename`
-    - Contains static method :meth:`.get_region_name`
+    - Contains instance method :meth:`.get_region_name`
 
     .. raw:: html
 
@@ -39,7 +39,7 @@ class CommonLoader(object):
 
     def get_region_name(self, nucleus):
         """
-        Returns region name for respective nucleus name for which the spike times are for in the file.
+        Returns region name for respective nucleus name for which the spike times are in the file.
 
         +---------------------------------------+--------------+
         | Nuclei                                | Region name  |
@@ -48,13 +48,12 @@ class CommonLoader(object):
         +---------------------------------------+--------------+
         | `["FSI", "GPe", "GPi", "MSN", "STN"]` | `"bg"`       |
         +---------------------------------------+--------------+
-        | `['AMPA', 'NMDA', 'GABAA', 'GABAB']`  | `"thalamus"` |
+        | `["TRN", "MD"]`                       | `"thalamus"` |
         +---------------------------------------+--------------+
 
         .. raw:: html
 
             <hr style="border: 2px solid red; margin: 20px 0;">
-
         """
         if nucleus in self.simparams.nuclei_ctx:
             region = "cortex"

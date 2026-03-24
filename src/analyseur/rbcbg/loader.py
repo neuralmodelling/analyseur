@@ -16,11 +16,11 @@ from analyseur.rbcbg.parameters import SimulationParams, SignalAnalysisParams
 
 class CommonLoader(object):
     """
-    This is the parent class for :class:`.LoadSpikeTimes` and :class:`.LoadChannelVorG`
+    This is the parent class for :class:`.LoadRates`
 
     - Instantiated with the full file path
         - sets atrributes: `full_filepath`, `filename`
-    - Contains static method :meth:`.get_region_name`
+    - Contains instance method :meth:`.get_region_name`
 
     .. raw:: html
 
@@ -35,16 +35,16 @@ class CommonLoader(object):
 
     def get_region_name(self, nucleus):
         """
-        Returns region name for respective nucleus name for which the spike times are for in the file.
+        Returns region name for respective nucleus name for which the firing rates are in the file.
 
         +---------------------------------------+--------------+
         | Nuclei                                | Region name  |
         +=======================================+==============+
-        | `["CSN", "PTN", "IN"]`                | `"cortex"`   |
+        | `["CSN", "PTN", "CTX_E", "CTX_I"]`    | `"cortex"`   |
         +---------------------------------------+--------------+
-        | `["FSI", "GPe", "GPi", "MSN", "STN"]` | `"bg"`       |
+        | `["FSI", "STN", "GPe", "GPiSNr"]`     | `"bg"`       |
         +---------------------------------------+--------------+
-        | `['AMPA', 'NMDA', 'GABAA', 'GABAB']`  | `"thalamus"` |
+        | `["TRN", "TH"]`                       | `"thalamus"` |
         +---------------------------------------+--------------+
 
         .. raw:: html
@@ -143,7 +143,7 @@ class LoadRates(CommonLoader):
 
     def extract_nucleus_name(self, filename):
         """
-        Extracts <nucleus> name from `spikes_<nucleus>.csv`
+        Extracts <nucleus> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
         .. raw:: html
 
@@ -163,7 +163,7 @@ class LoadRates(CommonLoader):
 
     def extract_modelID(self, filename):
         """
-        Extracts <nucleus> name from `spikes_<nucleus>.csv`
+        Extracts <ID> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
         .. raw:: html
 
@@ -182,7 +182,7 @@ class LoadRates(CommonLoader):
 
     def extract_percentage(self, filename):
         """
-        Extracts <nucleus> name from `spikes_<nucleus>.csv`
+        Extracts <value> name from `<nucleus>_model_<ID>_percent_<value>.csv`
 
         .. raw:: html
 
@@ -199,11 +199,13 @@ class LoadRates(CommonLoader):
         return percentage
 
 
-    def get_rates_superset(self):
+    def __get_rates_superset(self):
         """
-        Returns a dictionary containing the spike times (numpy.array data type) in seconds
-        for all the neurons recorded into the file as value of the key `n<X>` where
-        :math:`X \\in [0, N] \\subset \\mathbb{Z}`.
+        Returns a dictionary containing the firing rates (numpy.array data type) in seconds
+        for all the neurons recorded with a sampling period of 1 ms.
+
+        NOTE: old version of rBCBG simulations spits results (firing rate) for each channel (total=4)
+        current version spits results simply as the average firing rate of all the neurons across all channels
 
         .. raw:: html
 
@@ -220,13 +222,13 @@ class LoadRates(CommonLoader):
 
         return rates_superset
 
-    def get_mean_rates(self):
+    def __get_mean_rates(self):
         """
-        Returns an array of mean rates across the ten channels.
+        Returns a the average (across all channels) firing rates (numpy.array data type) in seconds
+        for all the neurons recorded with a sampling period of 1 ms.
 
-        Returns a dictionary containing the spike times (numpy.array data type) in seconds
-        for all the neurons recorded into the file as value of the key `n<X>` where
-        :math:`X \\in [0, N] \\subset \\mathbb{Z}`.
+        NOTE: old version of rBCBG simulations spits results (firing rate) for each channel (total=4)
+        current version spits results simply as the average firing rate of all the neurons across all channels
 
         .. raw:: html
 
@@ -235,3 +237,22 @@ class LoadRates(CommonLoader):
         dataframe = pd.read_csv(self.full_filepath)
 
         return np.mean(dataframe.values, axis=1)
+
+    def get_mean_rates(self):
+        """
+        Returns the average (across all channels) firing rate and its corresponding time stamps (in seconds)
+        recorded with a sampling period of 1 ms.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        dataframe = pd.read_csv(self.full_filepath)
+
+        time_sec = np.linspace(0,
+                               (len(dataframe)-1)*self.siganal.sampling_period,
+                               len(dataframe))
+
+        rates_Hz = dataframe.squeeze().values    # squeeze removes the column dimension
+
+        return times_sec, rates_Hz
