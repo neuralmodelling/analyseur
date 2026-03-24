@@ -75,7 +75,7 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     --------
     ::
 
-        from analyseur.cbgtc.parameters import bin_size_by_rule
+        from analyseur.rbcbg.parameters import bin_size_by_rule
 
         dur = 10  # seconds
         nu = 80  # Hz
@@ -111,28 +111,22 @@ class SimulationParams:
     SimulationParams
     ================
 
-    Default parameters from CBGT simulation
+    Default parameters from rBCBG simulation
 
     +----------------------+---------------------------------------+
     | Parameter name       | Value                                 |
     +======================+=======================================+
     | `duration`           | `10000` milliseconds                  |
     +----------------------+---------------------------------------+
-    | `t_start_recording`  | `2000` milliseconds                   |
+    | `dt`                 | `1.0` milliseconds                    |
     +----------------------+---------------------------------------+
-    | `dt`                 | `0.1` milliseconds                    |
+    | `modelID`            | `9`                                   |
     +----------------------+---------------------------------------+
-    | `nuclei_ctx`         | `["CSN", "PTN", "IN"]`                |
+    | `nuclei_ctx`         | `["CSN", "PTN", "CTX_E", "CTX_I"]`    |
     +----------------------+---------------------------------------+
-    | `nuclei_bg`          | `["FSI", "GPe", "GPi", "MSN", "STN"]` |
+    | `nuclei_bg`          | `["FSI", "STN", "GPe", "GPiSNr",]`    |
     +----------------------+---------------------------------------+
-    | `nuclei_thal`        | `["TRN", "MD"]`                       |
-    +----------------------+---------------------------------------+
-    | `neurotrans`         | `['AMPA', 'NMDA', 'GABAA', 'GABAB']`  |
-    +----------------------+---------------------------------------+
-    | `conductance`        | `DEFAULT_CONDUCTANCES`                |
-    +----------------------+---------------------------------------+
-    | `ff_currents`        | `DEFAULT_FEEDFORWORD_CURRENTS`        |
+    | `nuclei_thal`        | `["TRN", "TH"]`                       |
     +----------------------+---------------------------------------+
 
     --------
@@ -140,7 +134,7 @@ class SimulationParams:
     --------
     ::
 
-        from analyseur.cbgtc.parameters import SimulationParams
+        from analyseur.rbcbg.parameters import SimulationParams
 
         simparams = SimulationParams()
 
@@ -148,7 +142,6 @@ class SimulationParams:
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     duration: float = 10000 # ms
     dt: float = 1.0 # ms
@@ -186,19 +179,19 @@ class SignalAnalysisParams:
     +------------------------+---------------------+
     | `window`               | `(0, 10)` seconds   |
     +------------------------+---------------------+
-    | `sampling_period`      | `0.0001` seconds    |
+    | `sampling_period`      | `0.001` seconds     |
     +------------------------+---------------------+
-    | `sampling_period_ms`   | `0.1` milliseconds  |
+    | `sampling_period_ms`   | `1.0` milliseconds  |
     +------------------------+---------------------+
-    | `binsz_sqrt_rule`      | `100`               |
+    | `binsz_sqrt_rule`      | `3.333`             |
     +------------------------+---------------------+
-    | `binsz_rice_rule`      | `232.558`           |
+    | `binsz_rice_rule`      | `2.5`               |
     +------------------------+---------------------+
-    | `binsz_10perbin`       | `0.001`             |
+    | `binsz_10perbin`       | `0.01`              |
     +------------------------+---------------------+
-    | `binsz_100perbin`      | `0.01`              |
+    | `binsz_100perbin`      | `0.1`               |
     +------------------------+---------------------+
-    | `binsz_1000perbin`     | `0.1`               |
+    | `binsz_1000perbin`     | `1.0`               |
     +------------------------+---------------------+
 
     --------
@@ -206,7 +199,7 @@ class SignalAnalysisParams:
     --------
     ::
 
-        from analyseur.cbgtc.parameters import SignalAnalysisParams
+        from analyseur.rbcbg.parameters import SignalAnalysisParams
 
         siganal = SignalAnalysisParams()
 
@@ -214,7 +207,6 @@ class SignalAnalysisParams:
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
-
     """
     _1000ms: int = 1000
     decimal_places: int = 3
