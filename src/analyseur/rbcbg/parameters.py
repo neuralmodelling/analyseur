@@ -34,13 +34,14 @@ def bin_size_by_rule(total_time=None, rule=None, frequency=None):
     -------
 
     .. table::
-    ============================================ ======================================================
-      Definitions                                 Interpretation
-    ============================================ ======================================================
-     duration, :math:`dur`                        total time in seconds
-     sampling period, :math:`T`                   sampling period in seconds
-     total samples, :math:`N = dur / T`           total number of samples
-    ============================================ ======================================================
+
+        ============================================ ======================================================
+        Definitions                                 Interpretation
+        ============================================ ======================================================
+        duration, :math:`dur`                        total time in seconds
+        sampling period, :math:`T`                   sampling period in seconds
+        total samples, :math:`N = dur / T`           total number of samples
+        ============================================ ======================================================
 
     Formula: Square Root Rule
     -------------------------
