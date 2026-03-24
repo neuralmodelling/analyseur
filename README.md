@@ -17,7 +17,7 @@
 ## Installation
 
 ```bash
-pip install analyseur
+pip install neurosig-analyseur
 ```
 
 Or install from source:
