@@ -20,8 +20,14 @@ models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.f
    :alt: Analyseur
    :align: center
 
+.. |pip| image:: /images/logo-pypi.svg
+   :height: 1.5ex
+   :target: https://pypi.org/project/neurosig-analyseur/
+
 Installation
 ------------
+
+|pip| install
 
 .. code-block:: bash
 
