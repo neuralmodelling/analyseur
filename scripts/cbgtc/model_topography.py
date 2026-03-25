@@ -23,19 +23,6 @@ Guide
 | 3     | connectivity as a connectome diagram       | :meth:`analyseur.cbgtc.visual.connections.Conn.plot_population_connectome`     |
 +-------+--------------------------------------------+--------------------------------------------------------------------------------+
 
-View script
------------
-:mod:`analyseur.scripts.cbgtc.model_topography`
-
-.. literalinclude:: ../../scripts/cbgtc/model_topography.py
-   :language: python
-
-Download script
----------------
-:file:`analyseur/scripts/cbgtc/model_topography.py`
-
-`model_topography.py <https://github.com/neuralmodelling/analyseur/blob/main/scripts/cbgtc/model_topography.py>`_
-
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">
