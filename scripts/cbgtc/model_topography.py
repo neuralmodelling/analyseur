@@ -23,6 +23,14 @@ Guide
 | 3     | connectivity as a connectome diagram       | :meth:`analyseur.cbgtc.visual.connections.Conn.plot_population_connectome`     |
 +-------+--------------------------------------------+--------------------------------------------------------------------------------+
 
+View script
+-----------
+:mod:`analyseur.script.cbgtc.model_topography`
+
+Download script
+---------------
+:file:`analyseur/script/cbgtc/model_topography.py`
+
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">

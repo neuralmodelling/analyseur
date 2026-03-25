@@ -193,7 +193,7 @@ class LoadRates(CommonLoader):
         return percentage
 
 
-    def __get_rates_superset(self):
+    def get_rates_superset(self):
         """
         Returns a dictionary containing the firing rates (numpy.array data type) in seconds
         for all the neurons recorded with a sampling period of 1 ms.
@@ -216,7 +216,7 @@ class LoadRates(CommonLoader):
 
         return rates_superset
 
-    def __get_mean_rates(self):
+    def get_mean_rates(self):
         """
         Returns a the average (across all channels) firing rates (numpy.array data type) in seconds
         for all the neurons recorded with a sampling period of 1 ms.
@@ -232,7 +232,7 @@ class LoadRates(CommonLoader):
 
         return np.mean(dataframe.values, axis=1)
 
-    def get_mean_rates(self):
+    def __get_mean_rates(self):
         """
         Returns the average (across all channels) firing rate and its corresponding time stamps (in seconds)
         recorded with a sampling period of 1 ms.
