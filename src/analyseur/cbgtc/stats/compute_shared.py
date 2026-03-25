@@ -65,3 +65,55 @@ def autocorr(x):
     corr = np.correlate(x, x, mode="full")
     corr = corr[corr.size // 2:]  # keep non-negative lags
     return corr / corr[0]         # normalize
+
+def correlation_time(rho, binsz, method="zero_crossing"):
+    """
+    Returns correlation time :math:`\\tau` from :func:`autocorr`
+
+    .. math::
+
+        \\tau &= \\sum_{k=0}^\\infty \\rho(k)\\Delta t \n
+        &\\approx \\Delta t \\sum_{k=0}^K \\rho(k)
+
+    where :math:`\\Delta t` is the bin size and :math:`K` is the cutoff where
+    correlation :math:`\\rho` becomes negligible.
+
+    **Guide**
+
+    .. table:: Guide
+    ============= =========== ====== ==========
+     regime        frequency   CV     τ
+    ============= =========== ====== ==========
+     asynchronous  none        ~1     small
+     oscillatory   >0          <1     moderate
+     synchronized  strong      low    large
+    ============= =========== ====== ==========
+
+    Therefore,
+
+    .. math::
+
+        \\tau = \\Delta t \\sum_{k=0}^K \\rho(k)
+
+    measures how long the system remembers itself.
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
+    """
+    rho = np.array(rho)
+
+    if method == "zero_crossing":
+        idx = np.where(rho <= 0)[0]
+        K = idx[0] if len(idx) > 0 else len(rho)
+
+    elif method == "threshold":
+        eps = 0.05
+        idx = np.where(rho < eps)[0]
+        K = idx[0] if len(idx) > 0 else len(rho)
+
+    else:
+        K = len(rho)
+
+    tau = binsz * np.sum(rho[:K])
+    return tau
