@@ -22,14 +22,14 @@ class PowerSpectrum(object):
     +-------------------------------+-------------------------------------------------------------------------------------------------+
     | Methods                       | Argument                                                                                        |
     +===============================+=================================================================================================+
-    | :py:meth:`.compute_for_spike` | - `spiketimes_set`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`  |
-    |                               |      -  also :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`                |
+    | :py:meth:`.compute_for_spike` | - `spiketimes_set`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset` |
+    |                               |      -  also :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`               |
     |                               | - `sampling_rate` [OPTIONAL]: `1000/dt = 10000 Hz` [default]                                    |
     |                               | - `window` [OPTIONAL]: Tuple `(0, 10) seconds` [default]                                        |
     |                               | - `neurons` [OPTIONAL]: "all" [default] or a scalar or list: range(a, b) or [1, 4, 5, 9]        |
     |                               | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
     +-------------------------------+-------------------------------------------------------------------------------------------------+
-    | :py:meth:`.compute_for_rate`  | - `mu_rate_array`: see :meth:`~analyseur.cbgtc.stats.rate.Rate.mean_rate`                        |
+    | :py:meth:`.compute_for_rate`  | - `mu_rate_array`: see :meth:`~analyseur.cbgtc.stats.rate.Rate.mean_rate`                       |
     |                               | - `method`: "welch" or "fft" or "fft-mag"                                                       |
     |                               | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
     +-------------------------------+-------------------------------------------------------------------------------------------------+
