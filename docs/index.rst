@@ -22,16 +22,12 @@ Installation
 ------------
 
 .. code-block:: bash
-   :caption:
-   :linenos:
 
    pip install neurosig-analyseur
 
 Or install from |github| (source):
 
 .. code-block:: bash
-   :caption:
-   :linenos:
 
    git clone https://github.com/neuralmodelling/analyseur.git
    cd analyseur
