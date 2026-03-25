@@ -25,11 +25,11 @@ Guide
 
 View script
 -----------
-:mod:`analyseur.script.cbgtc.model_topography`
+:mod:`analyseur.scripts.cbgtc.model_topography`
 
 Download script
 ---------------
-:file:`analyseur/script/cbgtc/model_topography.py`
+:file:`analyseur/scripts/cbgtc/model_topography.py`
 
 .. raw:: html
 
