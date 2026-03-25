@@ -1,5 +1,5 @@
-`cwt_scalogram.m`: MATLAB script for generating magnitude scalogram
-===================================================================
+`cwt_scalogram.m <https://github.com/neuralmodelling/analyseur/blob/main/scripts/cbgtc/cwt_scalogram.m>`_: MATLAB script for generating magnitude scalogram
+===========================================================================================================================================================
 
 **MATLAB function**
 
