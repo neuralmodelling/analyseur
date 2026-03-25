@@ -41,7 +41,7 @@ def autocorr(x):
 
         \\tilde{x}_t = x_t - \\frac{1}{N}\\sum_{t=0}^{N-1}x_t
 
-    Note that the Fourier transfrom of the biased normalized autocorrelation is the power spectrum
+    Note that the Fourier transform of the biased normalized autocorrelation is the power spectrum
     (`Wiener-Khinchin Theorem <https://mathworld.wolfram.com/Wiener-KhinchinTheorem.html>`_). Thus,
 
     .. math::
@@ -55,7 +55,7 @@ def autocorr(x):
 
         x(t) \\to \\rho(k) \\Leftrightarrow P(f)
 
-    :class:`~analyseur.cbgtc.stats.psd.PowerSpectrum`
+    See :class:`~analyseur.cbgtc.stats.psd.PowerSpectrum`
 
     .. raw:: html
 
