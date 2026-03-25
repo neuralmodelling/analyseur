@@ -18,13 +18,13 @@ class Synchrony(object):
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
     | Methods                          | Argument                                                                                                 |
     +==================================+==========================================================================================================+
-    | :py:meth:`.compute_basic`        | - `spiketimes_superset`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    | :py:meth:`.compute_basic`        | - `spiketimes_superset`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`     |
     |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default])                                       |
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.compute_basic_slide`  | - `spiketimes_superset`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    | :py:meth:`.compute_basic_slide`  | - `spiketimes_superset`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`     |
     |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default]), `windowsz` (0.5 [default])           |
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
-    | :py:meth:`.compute_fano_factor`  | - `spiketimes_superset`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`      |
+    | :py:meth:`.compute_fano_factor`  | - `spiketimes_superset`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`     |
     |                                  | - OPTIONAL: `binsz` (0.01 [default]), `window` ((0, 10) [default])                                       |
     +----------------------------------+----------------------------------------------------------------------------------------------------------+
 
