@@ -16,17 +16,17 @@ class Variations(object):
     +------------------------+---------------------------------------------------------------------------------------------+
     | Methods                | Argument                                                                                    |
     +========================+=============================================================================================+
-    | :py:meth:`.computeCV`  | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`   |
+    | :py:meth:`.computeCV`  | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`  |
     +------------------------+---------------------------------------------------------------------------------------------+
-    | :py:meth:`.computeCV2` | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`   |
+    | :py:meth:`.computeCV2` | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`  |
     +------------------------+---------------------------------------------------------------------------------------------+
-    | :py:meth:`.computeLV`  | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`   |
+    | :py:meth:`.computeLV`  | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`  |
     +------------------------+---------------------------------------------------------------------------------------------+
-    | :py:meth:`grandCV`     | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`   |
+    | :py:meth:`grandCV`     | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`  |
     +------------------------+---------------------------------------------------------------------------------------------+
-    | :py:meth:`grandCV2`    | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`   |
+    | :py:meth:`grandCV2`    | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`  |
     +------------------------+---------------------------------------------------------------------------------------------+
-    | :py:meth:`grandLV`     | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`   |
+    | :py:meth:`grandLV`     | `isi_set`: Dictionary returned; see :class:`~analyseur.cbgtc.stats.isi.InterSpikeInterval`  |
     +------------------------+---------------------------------------------------------------------------------------------+
 
     =========
