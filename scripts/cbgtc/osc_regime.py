@@ -41,7 +41,7 @@ Figure 1 contains five subplots such that for each disinhibition experiment it p
 |       |                                       | - :meth:`analyseur.cbgtc.stats.psd.PowerSpectrum.compute_for_rate` |
 +-------+---------------------------------------+--------------------------------------------------------------------+
 | 5     | time-series of population rate        | - reveals oscillations and variability                             |
-|       |                                       | - :meth:`aanalyseur.cbgtc.stats.rate.Ratemean_rate`                |
+|       |                                       | - :meth:`aanalyseur.cbgtc.stats.rate.Rate.mean_rate`               |
 +-------+---------------------------------------+--------------------------------------------------------------------+
 
 2. Figure 2

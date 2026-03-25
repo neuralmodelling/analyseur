@@ -6,9 +6,6 @@ Population-level neural activity and summary statistics
 The figure is invisibly generated and saved under the current working directory and
 under the sub-directory `~/raster_all/`
 
-Structure
----------
-
 .. code-block:: text
 
     +---------------------+-----------+-----------+

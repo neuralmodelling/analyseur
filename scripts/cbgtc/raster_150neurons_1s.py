@@ -6,9 +6,6 @@ Population activity and membrane dynamics of 150 neurons
 The figure is invisibly generated and saved under the current working directory and
 under the sub-directory `~/raster150_1s/`
 
-Structure
----------
-
 .. code-block:: text
 
     +---------------------+-----------+-----------+
