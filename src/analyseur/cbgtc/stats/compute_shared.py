@@ -13,6 +13,10 @@ def compute_grand_mean(all_neuron_stat=None):
 
     :param all_neuron_stat:
     :return: a number
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
     """
     stat_array = np.zeros(len(all_neuron_stat))
 
@@ -26,6 +30,10 @@ def compute_grand_mean(all_neuron_stat=None):
 def autocorr(x):
     """
     Performs autocorrelation
+
+    .. raw:: html
+
+        <hr style="border: 2px solid red; margin: 20px 0;">
     """
     x = x - np.mean(x)
     corr = np.correlate(x, x, mode="full")

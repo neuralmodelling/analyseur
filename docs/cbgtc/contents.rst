@@ -28,6 +28,7 @@ Statistics
    stats/psd.rst
    stats/pca.rst
    stats/wavelet.rst
+   stats/compute_shared.rst
 
 Analytics
 ==========
