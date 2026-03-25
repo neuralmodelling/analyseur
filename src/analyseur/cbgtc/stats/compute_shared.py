@@ -29,7 +29,7 @@ def compute_grand_mean(all_neuron_stat=None):
 
 def autocorr(x):
     """
-    Performs autocorrelation
+    Performs autocorrelation (biased normalized autocorrelation)
 
     .. math::
 
@@ -40,6 +40,22 @@ def autocorr(x):
     .. math::
 
         \\tilde{x}_t = x_t - \\frac{1}{N}\\sum_{t=0}^{N-1}x_t
+
+    Note that the Fourier transfrom of the biased normalized autocorrelation is the power spectrum
+    (`Wiener-Khinchin Theorem <https://mathworld.wolfram.com/Wiener-KhinchinTheorem.html>`_). Thus,
+
+    .. math::
+
+        P(f) &= \\mathcal{F}\\{\\rho(k)\\} \n
+        \\rho(k) &= \\mathcal{F}^{-1}\\{P(f)\\}
+
+    Thus, the pipeline connects
+
+    .. math::
+
+        x(t) \\to \\rho(k) \\Leftrightarrow P(f)
+
+    :class:`~analyseur.cbgtc.stats.psd.PowerSpectrum`
 
     .. raw:: html
 
