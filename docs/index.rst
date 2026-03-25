@@ -9,9 +9,10 @@ Welcome to analyseur's documentation!
 analyseur is a module for viewing analytical measures from (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
 
-.. raw:: html
-
-   <img src="images/analyseur.svg" alt="Analyseur" height="200" />
+.. image:: /images/analyseur.svg
+   :height: 200px
+   :alt: Analyseur
+   :align: center
 
 For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 -------------------------------------------------------------------------------
