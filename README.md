@@ -37,13 +37,25 @@ Use cases are documented [here.](https://analyseur.readthedocs.io)
 ```
 analyseur/
 ├── src/
+|   |__ analyseur/
+|   |   |__ cbgtc/
+|   |   |   |__ modules/
+|   |   |
+|   |   |__ rbcbg/
+|   |       |__ modules/
+|   |
+|__ scripts/
 |   |__ cbgtc/
-|   |   |__ modules/
+|   |   |__ scriptX.py
+|   |
 |   |__ rbcbg/
-|   |   |__ modules/
-├── scripts/
-├── docs/
-└── __init__.py
+|
+|__ docs/
+|   |__ cbgtc/
+|   |__ rbcbg/
+|   |__ scripts/
+|
+|__ __init__.py
 ```
 
 ## Authors and acknowledgment
