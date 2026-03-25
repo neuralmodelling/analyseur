@@ -27,13 +27,14 @@ View script
 -----------
 :mod:`analyseur.scripts.cbgtc.model_topography`
 
+.. literalinclude:: ../../scripts/cbgtc/model_topography.py
+   :language: python
+
 Download script
 ---------------
 :file:`analyseur/scripts/cbgtc/model_topography.py`
 
-`model_topography.py <../../scripts/cbgtc/model_topography.py>`_
-
-`model_topography.py <model_topography.py>`_
+`model_topography.py <https://github.com/neuralmodelling/analyseur/blob/main/scripts/cbgtc/model_topography.py>`_
 
 .. raw:: html
 
