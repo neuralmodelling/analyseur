@@ -9,9 +9,6 @@ under the sub-directory `~/dynaregime/`
 1. Figure 1
 ===========
 
-1.1. Structure
---------------
-
 .. code-block:: text
 
     Figure 1 for each disinhibition experiment
@@ -28,34 +25,27 @@ under the sub-directory `~/dynaregime/`
 
 Figure 1 contains five subplots such that for each disinhibition experiment it plots:
 
-* subplot 1: raster of all the neurons
-* subplot 2: CV distribution of all the neurons
-* subplot 3: autocorrelation of all the neurons
-* subplot 4: power spectrum of the population rate (mean across all neurons)
-* subplot 5: time-series of population rate (mean across all neurons)
-
-1.1. Guide
-----------
-
-+-------+---------------------------------------+------------------------------------------------+
-|Subplot| Content                               | Interpretation                                 |
-+=======+=======================================+================================================+
-| 1     | raster of all the neurons             | synchrony by visual detection                  |
-+-------+---------------------------------------+------------------------------------------------+
-| 2     | CV distribution of all the neurons    | low means regular firing, high means irregular |
-+-------+---------------------------------------+------------------------------------------------+
-| 3     | autocorrelation of all the neurons    | distinguish SI vs AI                           |
-+-------+---------------------------------------+------------------------------------------------+
-| 4     | power spectrum of the population rate | detect oscillation even with noise             |
-+-------+---------------------------------------+------------------------------------------------+
-| 5     | time-series of population rate        | reveals oscillations and variability           |
-+-------+---------------------------------------+------------------------------------------------+
++-------+---------------------------------------+--------------------------------------------------------------------+
+|Subplot| Content                               | Interpretation                                                     |
++=======+=======================================+====================================================================+
+| 1     | raster of all the neurons             | - synchrony by visual detection                                    |
+|       |                                       | - :func:`analyseur.cbgtc.visual.markerplot.plot_raster_in_ax`      |
++-------+---------------------------------------+--------------------------------------------------------------------+
+| 2     | CV distribution of all the neurons    | - low means regular firing, high means irregular                   |
+|       |                                       | - :func:`analyseur.cbgtc.visual.variation.plotCV_in_ax`            |
++-------+---------------------------------------+--------------------------------------------------------------------+
+| 3     | autocorrelation of all the neurons    | - distinguish SI vs AI                                             |
+|       |                                       | - :func:`analyseur.cbgtc.stats.compute_shared.autocorr`            |
++-------+---------------------------------------+--------------------------------------------------------------------+
+| 4     | power spectrum of the population rate | - detect oscillation even with noise                               |
+|       |                                       | - :meth:`analyseur.cbgtc.stats.psd.PowerSpectrum.compute_for_rate` |
++-------+---------------------------------------+--------------------------------------------------------------------+
+| 5     | time-series of population rate        | - reveals oscillations and variability                             |
+|       |                                       | - :meth:`aanalyseur.cbgtc.stats.rate.Ratemean_rate`                |
++-------+---------------------------------------+--------------------------------------------------------------------+
 
 2. Figure 2
 ===========
-
-2.1. Structure
---------------
 
 .. code-block:: text
 
@@ -72,16 +62,6 @@ Figure 1 contains five subplots such that for each disinhibition experiment it p
     +---------------------+-----------+-----------+
 
 Figure 2 contains six subplots such that across all disinhibition experiments it plots:
-
-* subplot 1: times-series of the population rate for all experiments and mean across all experiments
-* subplot 2: pooled CV histogram (CV vs Density)
-* subplot 3: phase space (CV vs frequency)
-* subplot 4: average power spectra across experiments
-* subplot 5: peak frequency vs disinhibition
-* subplot 6: peak frequency vs disinhibition
-
-2.1. Guide
-----------
 
 +-------+---------------------------------------+------------------------------------------------+
 |Subplot| Content                               | Interpretation                                 |

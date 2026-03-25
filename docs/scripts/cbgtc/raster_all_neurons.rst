@@ -1,5 +1,5 @@
-`raster_all_neurons.py`: Script for viewing the population-level neural activity
-================================================================================
+`raster_all_neurons.py <https://github.com/neuralmodelling/analyseur/blob/main/scripts/cbgtc/raster_all_neurons.py>`_: Script for viewing the population-level neural activity
+==============================================================================================================================================================================
 
 .. automodule:: cbgtc.raster_all_neurons
    :members:

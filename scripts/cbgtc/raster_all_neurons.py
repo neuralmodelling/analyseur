@@ -23,15 +23,6 @@ Structure
 
 Figure contains five subplots such that for each disinhibition experiment it plots:
 
-* subplot 1: raster of all the neurons
-* subplot 2: CV distribution of all the neurons
-* subplot 3: mean rate of all the neurons
-* subplot 4: pooled PSTH
-* subplot 5: spike count distribution
-
-Guide
-------
-
 +-------+---------------------------------------+--------------------------------------------------------------------------+
 |Subplot| Content                               | Interpretation                                                           |
 +=======+=======================================+==========================================================================+
