@@ -31,6 +31,16 @@ def autocorr(x):
     """
     Performs autocorrelation
 
+    .. math::
+
+        \\rho(k) = \\frac{\\sum_{t=0}^{N-1-k}\\tilde{x}_t \\tilde{x}_{t+k}}{\\sum_{t=0}^{N-1}\\tilde{x}_t^2}
+
+    where :math:`k=0,1,\\ldots,N-1` and
+
+    .. math::
+
+        \\tilde{x}_t = x_t - \\frac{1}{N}\\sum_{t=0}^{N-1}x_t
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
