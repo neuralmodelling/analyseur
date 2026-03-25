@@ -6,13 +6,6 @@ View the connectivity and summary statistics of the model
 Three figures are invisibly generated and saved under the current working directory and
 under the sub-directory `~/topography/`
 
-* figure 1: view all the projection patterns
-* figure 2: summary of connections at population level
-* figure 3: connectivity as a connectome diagram
-
-Guide
-------
-
 +-------+--------------------------------------------+--------------------------------------------------------------------------------+
 |Figure | Content                                    | Interpretation                                                                 |
 +=======+============================================+================================================================================+
