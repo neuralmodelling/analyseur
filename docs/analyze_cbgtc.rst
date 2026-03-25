@@ -1,8 +1,9 @@
-=======================================
-Using `analyseur` to analyze CBGTC data
-=======================================
+=======================================================================================
+Using `analyseur <https://github.com/neuralmodelling/analyseur>`_ to analyze CBGTC data
+=======================================================================================
 
-The CBGTC Model is `available here <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_ with the accompanying `Jeanne Barthelemy's thesis <https://theses.hal.science/tel-05375201v1/file/144400_BARTHELEMY_2025_archivage.pdf>`_.
+The CBGTC Model is `available here <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
+with the accompanying `Jeanne Barthelemy's thesis <https://theses.hal.science/tel-05375201v1/file/144400_BARTHELEMY_2025_archivage.pdf>`_.
 
 Regardless of how one sets up the simulation, to use this analyseaur tool
 
@@ -16,7 +17,7 @@ Get the model that has been prepared of graded disinhibition (`testinhib` branch
 
 ..  code-block:: shell
 
-    git clone ssh://git@gitlab.isir.lan:2222/cobathaco-catatonia/CBGTC.git
+    git clone -b testinhib ssh://git@gitlab.isir.lan:2222/cobathaco-catatonia/CBGTC.git
     cd CBGTC
 
 2. Create a shell script for batch run
