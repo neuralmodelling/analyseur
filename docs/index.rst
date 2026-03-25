@@ -9,7 +9,7 @@ Welcome to analyseur's documentation!
 analyseur |github| is a module for analyzing (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
 
-.. |github| image:: /images/logo-github-64.png
+.. |github| image:: /images/logo-github.svg
    :height: 3ex
    :target: https://github.com/neuralmodelling/analyseur
 
