@@ -10,7 +10,7 @@ analyseur |github| is a module for analyzing (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
 
 .. |github| image:: /images/logo-github-64.png
-   :height: 4ex
+   :height: 3ex
    :target: https://github.com/neuralmodelling/analyseur
 
 .. image:: /images/analyseur.svg
@@ -18,7 +18,24 @@ models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.f
    :alt: Analyseur
    :align: center
 
+Installation
+------------
 
+.. code-block:: bash
+   :caption:
+   :linenos:
+
+   pip install neurosig-analyseur
+
+Or install from |github| (source):
+
+.. code-block:: bash
+   :caption:
+   :linenos:
+
+   git clone https://github.com/neuralmodelling/analyseur.git
+   cd analyseur
+   pip install -e .
 
 For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 -------------------------------------------------------------------------------
