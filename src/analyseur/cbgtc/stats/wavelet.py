@@ -24,8 +24,8 @@ class ContinuousWaveletTransform(object):
     +-----------------------------------+-------------------------------------------------------------------------------------------------------+
     | Methods                           | Argument                                                                                              |
     +===================================+=======================================================================================================+
-    | :py:meth:`.smooth_signal`         | - `spiketimes_set`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`        |
-    |                                   |      -  also :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`                      |
+    | :py:meth:`.smooth_signal`         | - `spiketimes_set`: see :class:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`       |
+    |                                   |      -  also :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`                     |
     +-----------------------------------+-------------------------------------------------------------------------------------------------------+
     | :py:meth:`.scale_to_freq`         | - `all_neurons_isi`: Dictionary returned; see :py:meth:`.compute`                                     |
     +-----------------------------------+-------------------------------------------------------------------------------------------------------+
@@ -48,7 +48,7 @@ class ContinuousWaveletTransform(object):
     |                  | to continuous signals         | - over smoothing can obscure precise timing                                   |
     +------------------+-------------------------------+-------------------------------------------------------------------------------+
     | scales           | defines the frequencies       | - smaller scales for high frequencies and larger for lower frequencies        |
-    |                  | analyzed                      | - voices per ocatve ≜ number of scales between 2 frequencies (≜ octave)       |
+    |                  | analyzed                      | - voices per ocatve ≜ number of scales between 2 frequencies (≜ octave)      |
     |                  |                               | - higher voices per octave give smoother scalogram but increased computation  |
     +------------------+-------------------------------+-------------------------------------------------------------------------------+
     | wavelet choice   | determines trade-off between  | - Morlet ("cmorB-C") for oscillation                                          |
