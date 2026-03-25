@@ -31,6 +31,10 @@ Download script
 ---------------
 :file:`analyseur/scripts/cbgtc/model_topography.py`
 
+`model_topography.py <../../scripts/cbgtc/model_topography.py>`_
+
+`model_topography.py <model_topography.py>`_
+
 .. raw:: html
 
     <hr style="border: 2px solid red; margin: 20px 0;">
