@@ -6,11 +6,11 @@
 Welcome to analyseur's documentation!
 =====================================
 
-.. |github| image:: /imgages/logo-github-64.png
-   :height: 2ex
-
 analyseur `|github|<https://github.com/neuralmodelling/analyseur>`_  is a module for analyzing (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
+
+.. |github| image:: /images/logo-github-64.png
+   :height: 2ex
 
 .. image:: /images/analyseur.svg
    :height: 200px
