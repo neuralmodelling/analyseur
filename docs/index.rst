@@ -27,7 +27,7 @@ models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.f
 Installation
 ------------
 
-|pip| install
+Install from |pip| PyPi
 
 .. code-block:: bash
 
