@@ -30,8 +30,8 @@ pip install -e .
 
 ## Usage
 
-- [🗃️] [Documentation](https://analyseur.readthedocs.io)
-- [📄🐍] [Source](https://github.com/neuralmodelling/analyseur)
+- [Documentation](https://analyseur.readthedocs.io) 🗃️
+- [Source](https://github.com/neuralmodelling/analyseur) 📄🐍
 
 ## Project Structure
 
