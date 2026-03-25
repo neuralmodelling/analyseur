@@ -6,13 +6,18 @@
 Welcome to analyseur's documentation!
 =====================================
 
-analyseur is a module for viewing analytical measures from (potentially) myriad
+analyseur `|github|<https://github.com/neuralmodelling/analyseur>`_  is a module for analyzing (potentially) myriad
 models developed (or involved) in `Dr. Benoît Girard's <https://www.isir.upmc.fr/personnel/girard/>`_ lab.
+
+.. |github| image:: /imgages/logo-github-64.png
+   :height: 2ex
 
 .. image:: /images/analyseur.svg
    :height: 200px
    :alt: Analyseur
    :align: center
+
+
 
 For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 -------------------------------------------------------------------------------
