@@ -76,6 +76,8 @@ class LoadRates(CommonLoader):
     +-------------------------------------+---------------------------------------------------------+
     | :py:meth:`.extract_percentage`      | - no arguments (access instantiated attribute)          |
     +-------------------------------------+---------------------------------------------------------+
+    | :py:meth:`.get_rates`               | - no arguments (access instantiated attribute)          |
+    +-------------------------------------+---------------------------------------------------------+
     | :py:meth:`.get_mean_rates`          | - no arguments (access instantiated attribute)          |
     +-------------------------------------+---------------------------------------------------------+
 
@@ -251,7 +253,7 @@ class LoadRates(CommonLoader):
         #rates_Hz = dataframe.squeeze().values    # squeeze removes the column dimension but
                                                   # not recommended of single column as you cannot use mean(axis=1)
 
-        return time_sec dataframe.values
+        return time_sec, dataframe.values
 
     def get_mean_rates(self):
         """
