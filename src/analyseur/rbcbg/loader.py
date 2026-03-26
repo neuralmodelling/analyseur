@@ -193,7 +193,7 @@ class LoadRates(CommonLoader):
         return percentage
 
 
-    def get_rates_superset(self):
+    def __get_rates_superset(self):
         """
         Returns a dictionary containing the firing rates (numpy.array data type) in seconds
         for all the neurons recorded with a sampling period of 1 ms.
@@ -216,7 +216,7 @@ class LoadRates(CommonLoader):
 
         return rates_superset
 
-    def get_mean_rates(self):
+    def __get_mean_rates(self):
         """
         Returns a the average (across all channels) firing rates (numpy.array data type) in seconds
         for all the neurons recorded with a sampling period of 1 ms.
@@ -232,9 +232,9 @@ class LoadRates(CommonLoader):
 
         return np.mean(dataframe.values, axis=1)
 
-    def __get_mean_rates(self):
+    def get_rates(self):
         """
-        Returns the average (across all channels) firing rate and its corresponding time stamps (in seconds)
+        Returns the recorded firing rates (Hz) and its corresponding time stamps (in seconds)
         recorded with a sampling period of 1 ms.
 
         .. raw:: html
@@ -247,6 +247,20 @@ class LoadRates(CommonLoader):
                                (len(dataframe)-1)*self.siganal.sampling_period,
                                len(dataframe))
 
-        rates_Hz = dataframe.squeeze().values    # squeeze removes the column dimension
+        #rates_Hz = dataframe.squeeze().values    # squeeze removes the column dimension but
+                                                  # not recommended of single column as you cannot use mean(axis=1)
 
-        return times_sec, rates_Hz
+        return time_sec dataframe.values
+
+    def get_mean_rates(self):
+        """
+        Returns the average (across all neurons/channels) firing rate and its corresponding time stamps (in seconds)
+        recorded with a sampling period of 1 ms.
+
+        .. raw:: html
+
+            <hr style="border: 2px solid red; margin: 20px 0;">
+        """
+        t_sec, rates_Hz = self.get_rates()
+
+        return t_sec, rates_Hz.mean(axis=1)
