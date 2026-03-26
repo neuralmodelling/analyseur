@@ -103,6 +103,7 @@ class LoadRates(CommonLoader):
     ```````````````````````````````````````
     ::
 
+        t_sec, rates_Hz = loadFR.get_rates()
         t_sec, rates_Hz = loadFR.get_mean_rates()
 
     2.2. Extract the nucleus name
@@ -127,9 +128,9 @@ class LoadRates(CommonLoader):
 
         <hr style="border: 2px solid red; margin: 20px 0;">
     """
-    _description = ( "LoadSpikeTimes loads the spike times containing csv file "
-                   + "and `get_spiketimes_superset` returns a dictionary containing the "
-                   + "spike times in milliseconds for all the neurons recorded." )
+    _description = ( "LoadRates loads the firing rates containing csv file "
+                   + "and `get_rates` returns the rates in Hz and corresponding "
+                   + "times in seconds." )
     __pattern_with_nucleus_name = r"^(.*?)_"
     __pattern_with_modelID = r"^.+model_(\d+)"
     __pattern_with_percentage = r"^.+percent_(\d+)\."

@@ -16,7 +16,7 @@ siganal = SignalAnalysisParams()
 # filter_rates
 # ==========================================
 
-def extract_channel_no(channel_id):
+def __extract_channel_no(channel_id):
     """
     Given a channel_id
 
