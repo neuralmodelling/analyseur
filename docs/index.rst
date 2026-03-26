@@ -52,8 +52,8 @@ For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
    cbgtc/contents.rst
    analyze_cbgtc.rst
 
-For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
--------------------------------------------------------------------------------
+For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/bcbg-parents/rBCBG-ANNarchy>`_
+-----------------------------------------------------------------------------------------------------
 
 .. toctree::
    :maxdepth: 2

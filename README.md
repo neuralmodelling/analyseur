@@ -2,7 +2,7 @@
 
 > A lightweight and extensible analysis toolkit
 
-<img src="/docs/images/analyseur.svg" alt="Analyseur" height="200" />
+<img src="https://github.com/neuralmodelling/analyseur/raw/refs/heads/main/docs/images/analyseur.svg" alt="Analyseur" height="200" />
 
 ## Overview
 
@@ -74,9 +74,9 @@ If you have run out of energy or time for your project, put a note at the top of
 ## Supported by
 
 <p align="center">
-  <img src="/docs/images/LOGO_CNRS_BLEU.png" alt="CNRS" height="80" />
+  <img src="https://raw.githubusercontent.com/neuralmodelling/analyseur/refs/heads/main/docs/images/LOGO_CNRS_BLEU.png" alt="CNRS" height="80" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="/docs/images/Logo_Sorbonne_University.png" alt="Sorbonne University" height="80" />
+  <img src="https://raw.githubusercontent.com/neuralmodelling/analyseur/refs/heads/main/docs/images/Logo_Sorbonne_University.png" alt="Sorbonne University" height="80" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="/docs/images/logo-isir.png" alt="ISIR" height="80" />
+  <img src="https://raw.githubusercontent.com/neuralmodelling/analyseur/refs/heads/main/docs/images/logo-isir.png" alt="ISIR" height="80" />
 </p>
