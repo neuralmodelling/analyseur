@@ -2,6 +2,61 @@
 #
 # Documentation by Lungsi 18 Nov 2025
 #
+"""
++----------------------+
+| Functions            |
++======================+
+| :func:`filter_rates` |
++----------------------+
+| :func:`preprocess`   |
++----------------------+
+
+=========
+Use Cases
+=========
+
+-----------------
+1. Pre-requisites
+-----------------
+
+1.1. Import Modules
+````````````````````
+::
+
+    from analyseur.rbcbg.loader import LoadRates
+    from analyseur.rbcbg.curate import filter_rates, preprocess
+
+1.2. Load file and get the firing rates
+```````````````````````````````````````
+::
+
+    loadFR = LoadRates("GPiSNr_model_9_percent_0.csv")
+    t_sec, rates_Hz = loadFR.get_rates()
+
+---------
+2. Cases
+---------
+
+2.1. Filter rates for a desired window
+``````````````````````````````````````
+::
+
+    filtered_t, filter_rates = filter_rates(times_sec=t_sec, rates_Hz=rates_Hz, window=(0.2, 0.5))
+
+filters for time window 0.2 seconds to 0.5 seconds.
+
+2.2. Preprocess the rates
+`````````````````````````
+::
+
+    prep_rates = preprocess(rates_Hz=rates_Hz, highpass_freq=0.5)
+
+prepocessed for high-pass frequency cutoff 0.5 Hz.
+
+.. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+"""
 
 import re
 
@@ -97,7 +152,7 @@ def apply_highpass_filter(detrended_rates, fs, hp_freq):
     """
     High-pass filter to remove slow drifts, i.e. remove noise (low frequencies).
 
-    :param detrended_rates: array returned using :py:meth:`.detrend_rates`
+    :param detrended_rates: array returned using :func:`detrend_rates`
     :param fs: scalar value for frequency
     :param hp_freq: scalar value for high-pass cutoff
     :return: array
@@ -126,7 +181,7 @@ def zscore_normalize(filtered_rates):
     """
     Normalize firing rates using z-score standardization, z = (x - mean) / std.
 
-    :param filtered_rates: array returned using :py:meth:`.apply_highpass_filter`
+    :param filtered_rates: array returned using :func:`apply_highpass_filter`
     :return: array
 
     .. raw:: html
@@ -147,9 +202,9 @@ def preprocess(rates_Hz=None, highpass_freq=None):
 
     The preprocessing is done in the following order:
 
-    - detrend the rates (removes linear trend); see :py:meth:`.deterend_rates`
-    - filter to remove noise; see :py:meth:`.apply_highpass_filter`
-    - normalize using z-score; see :py:meth:`.zscore_normalize`
+    - detrend the rates (removes linear trend); see :func:`deterend_rates`
+    - filter to remove noise; see :func:`apply_highpass_filter`
+    - normalize using z-score; see :func:`zscore_normalize`
 
     .. raw:: html
 
