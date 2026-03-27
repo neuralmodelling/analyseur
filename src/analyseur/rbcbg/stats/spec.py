@@ -58,6 +58,71 @@ def compute_stft(rate_array, sample_rate, nperseg=256, noverlap=128):
     - t: time vector for spectrogram
     - Sxx: spectrogram power (dB)
 
+    **Mathematically**, the array of firing rates :math:`x[n]` is segmented into overlapping windows
+    and according to the window position :math:`m` (time index) and angular frequency :math:`\\omega`
+    it is Fourier transformed as
+
+    .. math::
+
+        X(m,\\omega) = \\sum_{n=-\\infty}^\\infty x[n]\\cdot w[n-m] \\cdot e^{-j\\omega n}
+
+    where the window function :math:`w[n]` is given by the `Hann window <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.windows.hann.html>`_
+
+    .. math::
+
+        w[n] = 0.5\\left(1 - cos\\left\\frac{2\\pi n}{N-1}\\right)\\right)
+
+    where :math:`N` is the segment length (`nperseg`).
+
+    Then the spectrogram is the squared magnitude of the STFT
+
+    .. math::
+
+        S(m,\\omega) &= |X(m,\\omega)|^2 \n
+        S(m, f) &= \\frac{1}{f_s||w||^2} \\cdot \\left|\\sum_{n=0}^{N-1}x[n+m]\\cdot w[n] \\cdot e^{-j2\\pi fn/f_s} \\right|^2
+
+    where :math:`f_s` is the sampling frequency (`sample_rate`) and :math:`||w||^2 = \\sum_n w[n]^2` is the normalized window.
+
+    Finally, for :math:`k=0,1,\\ldots,N/2` the frequency bins are
+
+    .. math::
+
+        f_k = \\frac{k}{N} \\cdot f_s
+
+    the time bins are
+
+    .. math::
+
+        t_m = \\frac{m(N-\\text{noverlap})}{f_s}
+
+    and the power is converted to decibels
+
+    .. math::
+
+        S_\\text{dB}(m,f) = 10 log_{10}(S(m,f) + \\epsilon)
+
+    where :math:`\\epsilon = 10^{-10}` is a small constant to avoid :math:`log(0)`
+
+    Note that the no overlap parameter `noverlap` when subtracted from the segment length :math:`N` yields the *hop size* (step size) :math:`= N - \\text{noverlap}`. It acts like a sliding window such that
+
+    .. code-block:: text
+
+        noverlap = 0
+
+        [--------][--------][--------]
+
+    but with the presence of overlap
+
+    .. code-block:: text
+
+        noverlap = 128
+
+        [--------]
+            [--------]
+                [--------]
+
+    resulting in more redundancy but better continuity and hence smoother time resolution.
+
     .. raw:: html
 
         <hr style="border: 2px solid red; margin: 20px 0;">
@@ -99,6 +164,6 @@ def compute_spectrogram(rates_Hz, resolution=None):
 
     return f, t_spec, Sxx_db  # freq, time, power
 
-def compute_band_powers():
-    pass
+# def compute_band_powers():
+#     pass
 

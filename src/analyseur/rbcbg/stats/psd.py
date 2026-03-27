@@ -16,7 +16,7 @@ class PowerSpectrum(object):
     Computes the power spectra
     (`Welch’s method <https://doi.org/10.1109/TAU.1967.1161901>`_ using
     `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)
-    of all the neurons with given spike times
+    of the firing rates for all the neurons.
 
     +-------------------------------+-------------------------------------------------------------------------------------------------+
     | Methods                       | Argument                                                                                        |
