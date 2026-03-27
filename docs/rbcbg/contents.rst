@@ -1,12 +1,13 @@
 Available Functions for `rBCBG <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 *****************************************************************************************
 
-Loaders
-=======
+Data Loading and Processing
+===========================
 
 .. toctree::
    :maxdepth: 5
-   :caption: Available file loaders:
+   :caption: Available functions:
 
    parameters.rst
    loader.rst
+   curate.rst
