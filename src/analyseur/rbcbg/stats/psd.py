@@ -77,11 +77,13 @@ class PowerSpectrum(object):
 
 
     @classmethod
-    def compute_for_rate(cls, mu_rate_array, resolution=None, method=None):
-        # ============== DEFAULT Parameters ==============
+    def compute_for_rate(cls, mu_rate_array, binsz, resolution=None, method=None):
+        sampling_fs = 1.0 / binsz
+        T = 1 / sampling_fs
         n = len(mu_rate_array)
-        T = cls.__siganal.sampling_period  # seconds
-        sampling_fs = 1 / T  # Hz
+        # ============== DEFAULT Parameters ==============
+        # T = cls.__siganal.sampling_period  # seconds
+        # sampling_fs = 1 / T  # Hz
 
         if resolution is None:
             points_per_segment = 1024

@@ -27,7 +27,7 @@ class VizPSD(object):
 
 
     @staticmethod
-    def plot_in_ax(ax, mu_rate_arr, nucleus=None, resolution=None, method=None):
+    def plot_in_ax(ax, mu_rate_arr, binsz, nucleus=None, resolution=None, method=None):
         # ============== DEFAULT Parameters ==============
         __siganal = SignalAnalysisParams()
 
@@ -36,7 +36,7 @@ class VizPSD(object):
         del freq_bands["High Gamma"]
 
         # Compute power spectrum using Welch's method
-        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, method=method, resolution=resolution)
+        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, binsz, method=method, resolution=resolution)
 
         # Plot power spectrum
         ax.semilogy(freqs, power, "b-", linewidth=1, label="Power Spectrum")

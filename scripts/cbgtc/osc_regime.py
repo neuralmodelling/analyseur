@@ -172,7 +172,7 @@ def main():
             ax5 = fig.add_subplot(gs[1, 1:])  # row 1, span cols 1 & 2
 
 
-            ax1 = plot_raster_in_ax(ax1, spiketimes_set, nucleus=nucleus, neurons=neurons)
+            ax1 = plot_raster_in_ax(ax1, spiketimes_set, nucleus=nucleus, neurons=neurons, alpha=False)
             ax2, vec_CV, _ = plotCV_in_ax(ax2, spiketimes_set, mode="portrait")
 
             for v in vec_CV:  # flat list of finite scalars only
@@ -205,7 +205,7 @@ def main():
             mu_rate_raw = mu_rate_vec.copy()
             mu_rate_zero = mu_rate_vec - mu_rate_vec.mean()
 
-            freqs, power = PowerSpectrum.compute_for_rate(mu_rate_zero, method="welch")
+            freqs, power = PowerSpectrum.compute_for_rate(mu_rate_zero, binsz, method="welch")
 
             max_power = np.max(power)
             if max_power > 0:

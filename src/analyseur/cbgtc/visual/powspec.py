@@ -719,7 +719,7 @@ class VizPSD(object):
                                                 window=window, binsz=binsz,
                                                 neurons="all", across="times")
         # Compute power spectrum using Welch's method
-        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, method=method, resolution=resolution)
+        freqs, power = PowerSpectrum.compute_for_rate(mu_rate_arr, binsz, method=method, resolution=resolution)
 
         # Plot power spectrum
         ax.semilogy(freqs, power, "b-", linewidth=1, label="Power Spectrum")

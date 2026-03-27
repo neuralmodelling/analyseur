@@ -30,6 +30,7 @@ class PowerSpectrum(object):
     |                               | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
     +-------------------------------+-------------------------------------------------------------------------------------------------+
     | :py:meth:`.compute_for_rate`  | - `mu_rate_array`: see :meth:`~analyseur.cbgtc.stats.rate.Rate.mean_rate`                       |
+    |                               | - `binsz`: integer or float                                                                     |
     |                               | - `method`: "welch" or "fft" or "fft-mag"                                                       |
     |                               | - `resolution` [OPTIONAL]: `~ 9.76 Hz = sampling_rate/1024` [default]                           |
     +-------------------------------+-------------------------------------------------------------------------------------------------+
@@ -179,7 +180,7 @@ class PowerSpectrum(object):
         return frequencies, power_spectra, spiketrains, yticks, time_axis
 
     @classmethod
-    def compute_for_rate(cls, mu_rate_array, resolution=None, method=None):
+    def compute_for_rate(cls, mu_rate_array, binsz, resolution=None, method=None):
         """
         Returns the power spectral density (or power spectrum) of firing rate from all given neurons.
 
@@ -191,6 +192,7 @@ class PowerSpectrum(object):
 
         :param mu_rate_array: array of average firing rates for all/multiple neurons using :meth:`~analyseur.cbgtc.stats.rate.Rate.mean_rate`
 
+        :param binsz: integer or float
         :param method: `"welch"` or `"fft"` or `"fft-mag"`
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
         :return: a tuple in the following order
@@ -224,10 +226,12 @@ class PowerSpectrum(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        # ============== DEFAULT Parameters ==============
+        sampling_fs = 1.0 / binsz
+        T = 1 / sampling_fs
         n = len(mu_rate_array)
-        T = cls.__siganal.sampling_period  # seconds
-        sampling_fs = 1 / T  # Hz
+        # ============== DEFAULT Parameters ==============
+        # T = cls.__siganal.sampling_period  # seconds
+        # sampling_fs = 1 / T  # Hz
 
         if resolution is None:
             points_per_segment = 1024
