@@ -70,7 +70,7 @@ def compute_stft(rate_array, sample_rate, nperseg=256, noverlap=128):
 
     .. math::
 
-        w[n] = 0.5\\left(1 - cos\\left\\frac{2\\pi n}{N-1}\\right)\\right)
+        w[n] = 0.5\\left(1 - cos\\left(\\frac{2\\pi n}{N-1}\\right)\\right)
 
     where :math:`N` is the segment length (`nperseg`).
 
