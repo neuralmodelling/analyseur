@@ -78,9 +78,9 @@ class PowerSpectrum(object):
 
     @classmethod
     def compute_for_rate(cls, mu_rate_array, binsz, resolution=None, method=None):
+        n = len(mu_rate_array)
         sampling_fs = 1.0 / binsz
         T = 1 / sampling_fs
-        n = len(mu_rate_array)
         # ============== DEFAULT Parameters ==============
         # T = cls.__siganal.sampling_period  # seconds
         # sampling_fs = 1 / T  # Hz
