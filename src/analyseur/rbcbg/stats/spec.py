@@ -1,3 +1,43 @@
+"""
+=========
+Use Cases
+=========
+
+-----------------
+1. Pre-requisites
+-----------------
+
+1.1. Import Modules
+````````````````````
+::
+
+    from analyseur.rbcbg.loader import LoadRates
+    from analyseur.rbcbg.stats.spec import compute_spectrogram
+
+1.2. Load file and get the firing rates
+```````````````````````````````````````
+::
+
+    loadFR = LoadRates("GPiSNr_model_9_percent_0.csv")
+    t_sec, rates_Hz = loadFR.get_rates()
+
+---------
+2. Cases
+---------
+
+2.1. Spectogram for a desired resolution
+````````````````````````````````````````
+::
+
+    freq_arr, time_arr, power_arr = compute_spectrogram(rates_Hz, resolution=10)
+
+done for resolution 10 Hz.
+
+.. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+"""
+
 import scipy
 import numpy as np
 
@@ -7,8 +47,9 @@ siganal = SignalAnalysisParams()
 
 def compute_stft(rate_array, sample_rate, nperseg=256, noverlap=128):
     """
+    Computes short-time Fourier transform (STFT)
 
-    :param rate_array: array, Preprocessed rate array
+    :param rate_array: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
     :param sample_rate: float
     :param nperseg: int, Length of each segment
     :param noverlap: int, Overlaps between segments
@@ -31,11 +72,11 @@ def compute_stft(rate_array, sample_rate, nperseg=256, noverlap=128):
 
     return f, t_spec, Sxx_db
 
-def compute_spectrogram(rates_set, resolution=None):
+def compute_spectrogram(rates_Hz, resolution=None):
     """
-    Compute spectrogram using STFT
+    Compute spectrogram using STFT (see :func:`compute_stft`)
 
-    :param rates_set: dictionary of arrays (Preprocessed rates)
+    :param rates_Hz: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
     :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
 
     .. raw:: html
@@ -52,18 +93,11 @@ def compute_spectrogram(rates_set, resolution=None):
 
     noverlap_points_between_segments = points_per_segment // 2
 
-    freq_set = {}
-    time_set = {}
-    power_set = {}
-    for c_id, rates in rates_set.items():
-        f, t_spec, Sxx_db = compute_stft(rates, sampling_rate,
-                                         nperseg=points_per_segment,
-                                         noverlap=noverlap_points_between_segments)
-        freq_set[c_id] = f
-        time_set[c_id] = time_set
-        power_set[c_id] = Sxx_db
+    f, t_spec, Sxx_db = compute_stft(rates_Hz, sampling_rate,
+                                     nperseg=points_per_segment,
+                                     noverlap=noverlap_points_between_segments)
 
-    return freq_set, time_set, power_set
+    return f, t_spec, Sxx_db  # freq, time, power
 
 def compute_band_powers():
     pass

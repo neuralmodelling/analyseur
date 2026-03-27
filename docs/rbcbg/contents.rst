@@ -11,3 +11,12 @@ Data Loading and Processing
    parameters.rst
    loader.rst
    curate.rst
+
+Statistics
+==========
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Available statistical functions:
+
+   stats/spec.rst
