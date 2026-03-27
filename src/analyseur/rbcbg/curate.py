@@ -202,7 +202,7 @@ def preprocess(rates_Hz=None, highpass_freq=None):
 
     The preprocessing is done in the following order:
 
-    - detrend the rates (removes linear trend); see :func:`deterend_rates`
+    - detrend the rates (removes linear trend); see :func:`detrend_rates`
     - filter to remove noise; see :func:`apply_highpass_filter`
     - normalize using z-score; see :func:`zscore_normalize`
 
