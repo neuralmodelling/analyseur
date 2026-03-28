@@ -207,7 +207,8 @@ def main():
 
             freqs, power = PowerSpectrum.compute_for_rate(mu_rate_zero, binsz, method="welch")
 
-            max_power = np.max(power)
+            valid = freqs < 100
+            max_power = np.max(power[valid])
             if max_power > 0:
                 power = power / max_power
 
@@ -224,7 +225,7 @@ def main():
             else:
                 f_peak = np.nan
 
-            ax4.plot(freqs, power, color="blue", alpha=0.3, linewidth=1)
+            ax4.plot(freqs[valid], power[valid], color="blue", alpha=0.3, linewidth=1)
             ax4.set_xlabel("Frequency (Hz)")
             ax4.set_yscale("log")
 
