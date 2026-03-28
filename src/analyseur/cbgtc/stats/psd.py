@@ -186,9 +186,9 @@ class PowerSpectrum(object):
 
         .. math::
 
-            P_r(f) = \\frac{1}{T} \\left|\\sum_{t=0}^{T-1}r(t)\\cdot e^{-i2\\pi f t}\\right|^2
+            P_r(f_k) = \\frac{1}{N f_s} \\left| \\sum_{t=0}^{N-1} r(t)\\, e^{-i 2\\pi k t / N} \\right|^2
 
-        is the squared magnitude of the Fourier transform of the population firing rate signal :math:`r(t)`  with duration :math:`T`.
+        is the squared magnitude of the Fourier transform of the population firing rate signal :math:`r(t)`  with number of samples :math:`N` and sampling frequency is :math:`f_s = 1 / \\Delta t`.
 
         :param mu_rate_array: array of average firing rates for all/multiple neurons using :meth:`~analyseur.cbgtc.stats.rate.Rate.mean_rate`
 
