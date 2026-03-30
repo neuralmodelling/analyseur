@@ -108,7 +108,7 @@ class PowerSpectrum(object):
 
         .. math::
 
-            \\hat{P}_{xx}(f) = \\frac{1}{K} \\sum_{m=1}^K \\frac{1}{f_s||w||^2}} \\cdot \\left|\\sum_{n=0}^{N-1}x[n+m]\\cdot w[n] \\cdot e^{-j2\\pi fn/f_s} \\right|^2
+            \\hat{P}_{xx}(f) = \\frac{1}{K} \\sum_{m=1}^K \\frac{1}{f_s||w||^2} \\cdot \\left|\\sum_{n=0}^{N-1}x[n+m]\\cdot w[n] \\cdot e^{-j2\\pi fn/f_s} \\right|^2
 
         where :math:`N` is the segment length (`nperseg`), :math:`f_s` is the sampling frequency (`sample_rate`) and :math:`||w||^2 = \\sum_n w[n]^2` is the normalized window.
 
@@ -120,25 +120,7 @@ class PowerSpectrum(object):
 
         This is the power spectrum from the single whole global window.
 
-        .. math::
-
-            r(t) = \\frac{1}{N}\\sum_{i=1}^N s_i(t)
-
-        where :math:`i`-th neuron has spike train :math:`s_i(t)`. Therefore, using the Fourier transform operator :math:`\\mathcal{F}` the power spectrum can be re-written as
-
-        .. math::
-
-            P_r(f) = \\left|\\mathcal{F}\\{r(t)\\}\\right|^2
-
-        .. list-table::
-            :widths: auto
-            :header-rows: 1
-
-            * - Population synchrony at oscillatory frequency :math:`f_0`
-            * - oscillation :math:`r(t) = A \\cdot sin(2\\pi f_0 t)`
-            * - PSD peak, :math:`P_r(f_0)`
-
-        **NOTE:*** This average power spectrum of the entire signal tells us the *overall frequency content*.
+        **NOTE:*** This average (or single/global) power spectrum of the entire signal tells us the *overall frequency content*.
 
         .. raw:: html
 
