@@ -20,3 +20,4 @@ Statistics
    :caption: Available statistical functions:
 
    stats/spec.rst
+   stats/psd.rst
