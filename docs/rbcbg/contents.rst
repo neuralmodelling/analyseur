@@ -19,5 +19,4 @@ Statistics
    :maxdepth: 5
    :caption: Available statistical functions:
 
-   stats/spec.rst
    stats/psd.rst
