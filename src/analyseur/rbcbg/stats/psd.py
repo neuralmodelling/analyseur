@@ -120,7 +120,7 @@ class PowerSpectrum(object):
 
         This is the power spectrum from the single whole global window.
 
-        **NOTE:*** This average (or single/global) power spectrum of the entire signal tells us the *overall frequency content*.
+        **NOTE:** This average (or single/global) power spectrum of the entire signal tells us the *overall frequency content*.
 
         .. raw:: html
 
