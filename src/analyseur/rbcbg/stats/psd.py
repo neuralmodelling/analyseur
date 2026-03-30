@@ -260,7 +260,7 @@ class PowerSpectrum(object):
         :param rates_Hz: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
 
-        **NOTE:*** This time-varying power spectrum tells us *how frequencies evolve*.
+        **NOTE:** This time-varying power spectrum tells us *how frequencies evolve*.
 
         .. raw:: html
 
