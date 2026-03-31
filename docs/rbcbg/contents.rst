@@ -1,5 +1,5 @@
-Available Functions for `rBCBG <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
-*****************************************************************************************
+Available Functions for `rBCBG <https://gitlab.isir.upmc.fr/cobathaco-catatonia/bcbg-parents/rBCBG-ANNarchy/-/tree/disinhibition-experiments>`_
+***********************************************************************************************************************************************
 
 Data Loading and Processing
 ===========================

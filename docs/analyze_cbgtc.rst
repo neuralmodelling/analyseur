@@ -5,7 +5,7 @@ Using `analyseur <https://github.com/neuralmodelling/analyseur>`_ to analyze CBG
 The CBGTC Model is `available here <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
 with the accompanying `Jeanne Barthelemy's thesis <https://theses.hal.science/tel-05375201v1/file/144400_BARTHELEMY_2025_archivage.pdf>`_.
 
-Regardless of how one sets up the simulation, to use this analyseaur tool
+Regardless of how one sets up the simulation, to use this analyseur tool
 
 Example simulation pipeline
 ===========================

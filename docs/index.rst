@@ -52,14 +52,15 @@ For the `CBGTC model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/CBGTC>`_
    cbgtc/contents.rst
    analyze_cbgtc.rst
 
-For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/bcbg-parents/rBCBG-ANNarchy>`_
------------------------------------------------------------------------------------------------------
+For the `rBCBG model. <https://gitlab.isir.upmc.fr/cobathaco-catatonia/bcbg-parents/rBCBG-ANNarchy/-/tree/disinhibition-experiments>`_
+---------------------------------------------------------------------------------------------------------------------------------------
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    rbcbg/contents.rst
+   analyze_rbcbg.rst
 
 
 Indices and tables
