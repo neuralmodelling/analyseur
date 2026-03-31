@@ -1,3 +1,76 @@
+"""
+=======================================================
+Two figures for viewing firing rates and power spectrum
+=======================================================
+
+The figures are invisibly generated and saved under the current working directory and
+under the sub-directory `~/psd_rBCBG/`
+
+1. Figure 1
+===========
+
+.. code-block:: text
+
+    Figure 1 for visualizing the power spectrum
+
+    +---------------------+
+    |                     |
+    |      subplot 1      |
+    |                     |
+    +---------------------+
+    |                     |
+    |      subplot 2      |
+    |                     |
+    +---------------------+
+    |                     |
+    |      subplot 3      |
+    |                     |
+    +---------------------+
+
+Figure 1 contains two subplots such that:
+
++-------+---------------------------------------+-------------------------------------------------------------------------------+
+|Subplot| Content                               | Interpretation                                                                |
++=======+=======================================+===============================================================================+
+| 1     | mean firing rate (across all neurons) | :func:`analyseur.rbcbg.visual.rate.plot_mean_rate_in_ax`                      |
++-------+---------------------------------------+-------------------------------------------------------------------------------+
+| 2     | time-varying power spectrum           | :meth:`analyseur.rbcbg.visual.powspec.VizPSD.PowerSpectrum.plot_tv_in_axis`   |
++-------+---------------------------------------+-------------------------------------------------------------------------------+
+| 3     | averaged power spectrum               | :meth:`analyseur.rbcbg.visual.powspec.VizPSD.PowerSpectrum.plot_global_in_ax` |
++-------+---------------------------------------+-------------------------------------------------------------------------------+
+
+2. Figure 2
+===========
+
+.. code-block:: text
+
+    Figure 2 for visualizing the firing rates
+
+    +---------------------+
+    |                     |
+    |      subplot 1      |
+    |                     |
+    +---------------------+
+    |                     |
+    |      subplot 2      |
+    |                     |
+    +---------------------+
+
+Figure 2 contains two subplots such that:
+
++-------+---------------------------------------+-----------------------------------------------------------------+
+|Subplot| Content                               | Interpretation                                                  |
++=======+=======================================+=================================================================+
+| 1     | firing rates for all neurons          | :func:`analyseur.rbcbg.visual.rate.plot_rate_all_neurons_in_ax` |
++-------+---------------------------------------+-----------------------------------------------------------------+
+| 2     | mean firing rate (across all neurons) | :func:`analyseur.rbcbg.visual.rate.plot_mean_rate_in_ax`        |
++-------+---------------------------------------+-----------------------------------------------------------------+
+
+.. raw:: html
+
+    <hr style="border: 2px solid red; margin: 20px 0;">
+"""
+
 from pathlib import Path
 
 import numpy as np
@@ -54,8 +127,10 @@ for nucleus in nuclei_list:
 
         plt.tight_layout()
 
-        Path(f"psd_rBCBG_{method}").mkdir(parents=True, exist_ok=True)
-        plt.savefig(f"psd_rBCBG_{method}/PowerSpectrum_of_" + nucleus + "_" + str_decay + "%.png")
+        # Path(f"psd_rBCBG_{method}").mkdir(parents=True, exist_ok=True)
+        # plt.savefig(f"psd_rBCBG_{method}/PowerSpectrum_of_" + nucleus + "_" + str_decay + "%.png")
+        Path(f"psd_rBCBG").mkdir(parents=True, exist_ok=True)
+        plt.savefig(f"psd_rBCBG/PowerSpectrum_of_" + nucleus + "_" + str_decay + "%.png")
 
         plt.close()
 
@@ -71,6 +146,7 @@ for nucleus in nuclei_list:
 
         plt.tight_layout()
 
-        plt.savefig(f"psd_rBCBG_{method}/rates_of_" + nucleus + "_" + str_decay + "%.png")
+        # plt.savefig(f"psd_rBCBG_{method}/rates_of_" + nucleus + "_" + str_decay + "%.png")
+        plt.savefig(f"psd_rBCBG/rates_of_" + nucleus + "_" + str_decay + "%.png")
 
         plt.close()
