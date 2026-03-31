@@ -2,17 +2,17 @@
 #
 # Documentation by Lungsi 18 Nov 2025
 #
-# This contains function for SpikingStats
+# This contains function for Visualizing Rates
 #
 
 """
-+------------------------------+--------------------------------------------------------------------------------------+
-| Functions                    | Purpose                                                                              |
-+==============================+======================================================================================+
-| :func:`plot_mean_rate`       | plots Mean Rate (1/s) of all the neurons in a population                             |
-+------------------------------+--------------------------------------------------------------------------------------+
-| :func:`plot_mean_rate_in_ax` | draws the Mean Rate (1/s) of all the neurons into a given `matplotlib.pyplot.axis`   |
-+------------------------------+--------------------------------------------------------------------------------------+
++-------------------------------------+----------------------------------------------------------------------------------------+
+| Functions                           | Purpose                                                                                |
++=====================================+========================================================================================+
+| :func:`plot_rate_all_neurons_in_ax` | plots Rate (1/s) of each neurons in a population into a given `matplotlib.pyplot.axis` |
++-------------------------------------+----------------------------------------------------------------------------------------+
+| :func:`plot_mean_rate_in_ax`        | draws the Mean Rate (1/s) of all the neurons into a given `matplotlib.pyplot.axis`     |
++-------------------------------------+----------------------------------------------------------------------------------------+
 
 ===============
 Plot Mean Rate
@@ -26,69 +26,53 @@ Plot Mean Rate
 ````````````````````
 ::
 
-    from analyseur.cbgtc.loader import LoadSpikeTimes
-    from analyseur.cbgtc.visual.rate import plot_mean_rate
+    from analyseur.rbcbg.loader import LoadRates
+    from analyseur.rbcbg.visual.rate import plot_rate_all_neurons_in_ax, plot_mean_rate_in_ax
 
-1.2. Load file and get spike times
+
+1.2. Load file and get firing rates
 ```````````````````````````````````
 ::
 
-    loadST = LoadSpikeTimes("spikes_GPi.csv")
-    spiketimes_superset = loadST.get_spiketimes_superset()
+    loadFR = LoadRates("GPiSNr_model_9_percent_0.csv")
+    t_sec, rates_Hz = loadFR.get_rates()
 
 ---------
 2. Cases
 ---------
 
-2.1. Visualize Mean Rate with default setting
-``````````````````````````````````````````````
+2.1. Visualize All Firing Rates with default setting
+````````````````````````````````````````````````````
 ::
 
-    [fig, ax] = plot_mean_rate(spiketimes_superset)
+    fig, ax = plt.subplots(figsize=(6, 10))
 
-2.2. Visualize Mean Rate in portrait mode
-``````````````````````````````````````````
-::
-
-    [fig, ax] = plot_mean_rate(spiketimes_superset, mode="portrait")
-
-2.3. Visualize Mean Rate in portrait mode with nucleus name in title
-````````````````````````````````````````````````````````````````````
-::
-
-    [fig, ax] = plot_mean_rate(spiketimes_superset, mode="portrait", nucleus="GPi")
-
-2.4. Create the plot for customization
-``````````````````````````````````````
-This is for power users who for instance want to insert the Mean Rate plot in their
-collage of subplots.
-::
-
-    import matplotlib.pyplot as plt
-    from analyseur.cbgtc.visual.rate import plot_mean_rate_in_ax
-
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-    fig.suptitle('Horizontally stacked subplots')
-
-    ax1 = plot_mean_rate_in_ax(ax1, spiketimes_superset)
-    ax2 = plot_mean_rate_in_ax(ax2, spiketimes_superset)
+    ax = plot_rate_all_neurons_in_ax(ax, t_sec, rates_Hz, nucleus="GPiSNr")
 
     plt.show()
 
-NOTE: This example shows :func:`plot_mean_rate_in_ax` in default setting but this function works like
-:func:`plot_mean_rate` therefore all the cases 2.1, 2.2 and 2.3 are applicable for :func:`plot_mean_rate_in_ax`.
-
-===============================
-Plot Average Instantaneous Rate
-===============================
-
-Similar as documented above for plotting Mean Rate but using the function
-:func:`plot_avg_inst_rate` and :func:`plot_avg_inst_rate_in_ax` with the
-additional OPTIONAL argument for `binsz` (otherwise it picks a default value).
-This is imported as
+2.2. Visualize All Firing Rates within a desired window
+```````````````````````````````````````````````````````
 ::
 
-    from analyseur.cbgtc.visual.rate import plot_avg_inst_rate, plot_avg_inst_rate_in_ax
+    window = (0,1)  # first second
+
+    fig, ax = plt.subplots(figsize=(6, 10))
+
+    ax = plot_rate_all_neurons_in_ax(ax, t_sec, rates_Hz, nucleus="GPiSNr", window=window)
+
+    plt.show()
+
+2.3. Visualize Mean Firing rate
+```````````````````````````````
+::
+
+    fig, ax = plt.subplots(figsize=(6, 10))
+
+    ax = plot_mean_rate_in_ax(ax, t_sec, rates_Hz, nucleus="GPiSNr")
+
+    plt.show()
+
 
 .. raw:: html
 
@@ -104,7 +88,7 @@ from scipy.stats import gaussian_kde, alpha
 
 import re
 
-from analyseur.rbcbg.curate import filter_rates, filter_rates_set
+from analyseur.rbcbg.curate import filter_rates
 from analyseur.rbcbg.parameters import SignalAnalysisParams, SimulationParams
 
 __siganal = SignalAnalysisParams()
@@ -115,68 +99,43 @@ __simparams = SimulationParams()
 #    PLOT Instantaneous Rate
 ##########################################################################
 
-def plot_rate_all_channels_across_time_in_ax(ax, rates_set, window=None,
-                                                 nucleus=None,):
-    """
-    .. raw:: html
-
-        <hr style="border: 2px solid red; margin: 20px 0;">
-    """
-    # ============== DEFAULT Parameters ==============
-    if window is None:
-        window = __siganal.window
-
-    filtered_set = filter_rates_set(rates_set=rates_set, window=window)
-
-    # Generate colors from colormap
-    num_colors = len(filtered_set)
-    colors = plt.cm.tab20(np.linspace(0, 1, num_colors))
-    line_styles = cycle(["-", "--", "-.", ":"])
-    # Plot
-    for i, (key, array) in enumerate(rates_set.items()):
-        style = next(line_styles)
-        color = colors[i % len(colors)]
-        ax.plot(array, label=key, linestyle=style, color=color, linewidth=2)
-    ax.grid(True, alpha=0.3)
-
-    ax.set_xlabel("Time (seconds)")
-    ax.set_ylabel("Firing Rate (Hz)")
-
-    nucname = "" if nucleus is None else " in " + nucleus
-    ax.set_title("Firing Rate Over Time for all channels of " + " neurons" + nucname)
-
-    ax.legend(bbox_to_anchor=(1.05,1), loc="upper left")
-
-    return ax
-
-def plot_mean_rate_all_channels_across_time_in_ax(ax, mu_rate_arr, window=None, nucleus=None,):
+def plot_rate_all_neurons_in_ax(ax, times_array, rates_array,
+                                nucleus=None, window=None):
     """
     .. code-block:: text
 
-        Mean Rate (1/s)
-        ^
-        |      █  █   █ █   █   █ █   █
-        |     ███ ██ ████ ██ ██ ███ ██
-        |    █████████████████████████
-        |
-        +---------------------------------------------> Neurons
-        0      50      100      150      200
+        Firing Rate (Hz)
+        │
+        │ 0.4 ┤            /\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\
+        │     │           /\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\
+        │     │          /\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\
+        │ 0.3 ┤   ~~~~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/
+        │     │  ~~~~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\
+        │     │ ~~~~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/
+        │ 0.2 ┤~~~~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\
+        │     │~~~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/
+        │     │~~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\
+        │ 0.1 ┤~~~/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/
+        │     │  /
+        │     │ /
+        │ 0.0 ┼─┴──────────────────────────────────────────────────→ Time (s)
+                0        2        4        6        8        10
 
-        Each bar represents the mean firing rate of one neuron
-        computed from spike counts within the analysis window.
+        (many neurons → overlapping oscillatory traces with slight offsets;
+        initial transient → synchronized rhythmic activity)
 
-    Draws the Mean Rate (1/s) on the given
-    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+    Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ this draws
+    the firing rates (1/s) for each neurons in a given population
 
-    :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
-    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+    :param ax: object `matplotlib.pyplot.axis`
+    :param times_array: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
+    :param mu_rate_array: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
 
-    OPTIONAL parameters
+    [OPTIONAL]
 
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param nucleus: string; name of the nucleus
+    :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+    :return: ax with respective plotting
 
     .. raw:: html
 
@@ -186,52 +145,67 @@ def plot_mean_rate_all_channels_across_time_in_ax(ax, mu_rate_arr, window=None, 
     if window is None:
         window = __siganal.window
 
-    t_end_ms = window[1] * __siganal._1000ms
-    t_axis = np.arange(t_end_ms - 1) / __siganal._1000ms
+    n_neurons = rates_array.shape[1]
 
-    mu_rate_vec = filter_rates(rates_array=mu_rate_arr, window=window)
+    filtered_t, filtered_r = filter_rates(times_sec=times_array,
+                                          rates_Hz=rates_array,
+                                          window=window)
 
-    # Plot
-    ax.plot(t_axis, mu_rate_vec, "b-", linewidth=1)
+    # ---- Colors & styles ----
+    colors = plt.cm.tab20(np.linspace(0, 1, n_neurons))
+    line_styles = cycle(["-", "--", "-.", ":"])
+
+    # ---- Plot each channel ----
+    for i in range(n_neurons):
+        style = next(line_styles)
+        color = colors[i % len(colors)]
+
+        ax.plot(filtered_t, filtered_r[:, i], linestyle=style,
+                color=color, linewidth=1.5, label=f"Neuron {i}")
+
+    # ---- Formatting ----
     ax.grid(True, alpha=0.3)
-
     ax.set_xlabel("Time (seconds)")
     ax.set_ylabel("Firing Rate (Hz)")
 
     nucname = "" if nucleus is None else " in " + nucleus
-    ax.set_title("Firing Rate Over Time of " + " neurons" + nucname)
+    ax.set_title("Firing Rate Over Time (All Neurons)" + nucname)
+
+    ax.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
 
     return ax
 
-def plot_rate_across_time_in_ax(ax, rates_set, window=None,
-                                nucleus=None, n_neurons=None):
+def plot_mean_rate_in_ax(ax, times_array, rates_array,
+                         nucleus=None, window=None):
     """
     .. code-block:: text
 
-        Mean Rate (1/s)
-        ^
-        |      █  █   █ █   █   █ █   █
-        |     ███ ██ ████ ██ ██ ███ ██
-        |    █████████████████████████
-        |
-        +---------------------------------------------> Neurons
-        0      50      100      150      200
+        Firing Rate (Hz)
+        │
+        │ 4.0 ┤        ▲
+        │     │       / \\
+        │ 3.0 ┤      /   \\        /\\    /\\    /\\    /\\    /\
+        │     │     /     \\      /  \\  /  \\  /  \\  /  \\  /  \
+        │ 2.0 ┤    /       \\    /    \\/    \\/    \\/    \\/    \
+        │     │   /         \\__/
+        │ 1.0 ┤__/
+        │
+        └────────────────────────────────────────────────────→ Time (s)
+        0        2        4        6        8        10
 
-        Each bar represents the mean firing rate of one neuron
-        computed from spike counts within the analysis window.
 
-    Draws the Mean Rate (1/s) on the given
-    `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_
+    Given a `matplotlib.pyplot.axis <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html>`_ this draws
+    the firing rates (1/s) averaged across all neurons in a given population
 
-    :param ax: object `matplotlib.pyplot.axis``
-    :param spiketimes_set: Dictionary returned using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_superset`
-    or using :meth:`~analyseur.cbgtc.loader.LoadSpikeTimes.get_spiketimes_subset`
+    :param ax: object `matplotlib.pyplot.axis`
+    :param times_array: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
+    :param mu_rate_array: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
 
-    OPTIONAL parameters
+    [OPTIONAL]
 
-    - :param nucleus: string; name of the nucleus
-    - :param mode: "portrait" or None/landscape [default]
-    - :return: object `ax` with Rate Distribution plotting done into it
+    :param nucleus: string; name of the nucleus
+    :param window: Tuple in the form `(start_time, end_time)`; `(0, 10)` [default]
+    :return: ax with respective plotting
 
     .. raw:: html
 
@@ -241,27 +215,22 @@ def plot_rate_across_time_in_ax(ax, rates_set, window=None,
     if window is None:
         window = __siganal.window
 
-    filtered_set = filter_rates_set(rates_set=rates_set, window=window)
+    filtered_t, filtered_r = filter_rates(times_sec=times_array,
+                                          rates_Hz=rates_array,
+                                          window=window)
 
-    if n_neurons is not None:
-        filtered_set = {k: filtered_set[k] for k in list(filtered_set)[:n_neurons]}
+    filtered_r_mean = filtered_r.mean(axis=1)
 
-    # Generate colors from colormap
-    num_colors = len(filtered_set)
-    colors = plt.cm.tab20(np.linspace(0, 1, num_colors))
-    line_styles = cycle(["-", "--", "-.", ":"])
-    # Plot
-    for i, (key, array) in enumerate(rates_set.items()):
-        style = next(line_styles)
-        color = colors[i % len(colors)]
-        ax.plot(array, label=key, linestyle=style, color=color, linewidth=2)
+    # ---- Plot the mean rate ----
+    ax.plot(filtered_t, filtered_r_mean, linewidth=1.5)
+
+    # ---- Formatting ----
     ax.grid(True, alpha=0.3)
-
     ax.set_xlabel("Time (seconds)")
     ax.set_ylabel("Firing Rate (Hz)")
 
     nucname = "" if nucleus is None else " in " + nucleus
-    ax.set_title("Firing Rate Over Time for all channels of " + " neurons" + nucname)
+    ax.set_title("Mean Firing Rate Over Time" + nucname)
 
-    ax.legend(bbox_to_anchor=(1.05,1), loc="upper left")
+    return ax
 

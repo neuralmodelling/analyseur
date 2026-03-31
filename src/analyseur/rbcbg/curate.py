@@ -105,7 +105,7 @@ def filter_rates(times_sec=None, rates_Hz=None, window=None):
     filtered_t = times_sec[i_start:i_end]
     filtered_rates = rates_Hz[i_start:i_end]
 
-    return filtered_t, filter_rates
+    return filtered_t, filtered_rates
 
 def __filter_rates_set(rates_set=None, window=None):
     """

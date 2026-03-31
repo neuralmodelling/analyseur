@@ -84,6 +84,17 @@ class PowerSpectrum(object):
     __siganal = SignalAnalysisParams()
 
 
+    @staticmethod
+    def __prepare_signal(x):
+        x = np.asarray(x)
+        if x.ndim == 2:
+            if x.shape[0] >= x.shape[1]:
+                x = x.mean(axis=1)
+            else:
+                x = x.mean(axis=0)
+        return x.reshape(-1)
+
+
     @classmethod
     def compute_for_rate(cls, mu_rate_array, binsz, resolution=None, method=None):
         """
@@ -95,8 +106,7 @@ class PowerSpectrum(object):
 
         is the average of the spectrogram :math:`S(m,f)` (see :py:meth:`.compute_spectrogram`) over time windows (Welch PSD). Thus, :math:`P(f)` is averaged over :math:`m` while :math:`S(m,f)` depends on time.
 
-        :param mu_rate_array: array of average firing rates for all/multiple neurons using :meth:`~analyseur.cbgtc.stats.rate.Rate.mean_rate`
-
+        :param mu_rate_array: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
         :param binsz: integer or float
         :param method: `"welch"` or `"fft"` or `"fft-mag"`
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
@@ -126,6 +136,8 @@ class PowerSpectrum(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
+        mu_rate_array = cls.__prepare_signal(mu_rate_array)
+
         n = len(mu_rate_array)
         sampling_fs = 1.0 / binsz
         T = 1 / sampling_fs
@@ -242,11 +254,14 @@ class PowerSpectrum(object):
 
             <hr style="border: 2px solid red; margin: 20px 0;">
         """
-        f, t_spec, Sxx = scipy.signal.spectrogram(rate_array, fs=sample_rate,
-                                                nperseg=nperseg,
-                                                noverlap=noverlap,
-                                                window="hann",
-                                                scaling="density")
+        f, t_spec, Sxx = signal.spectrogram(
+            rate_array,
+            fs=sample_rate,
+            nperseg=nperseg,
+            noverlap=noverlap,
+            window="hann",
+            scaling="density",)
+
         # Convert to dB and avoid log(0)
         Sxx_db = 10 * np.log10(Sxx + 1e-10)
 
@@ -259,6 +274,10 @@ class PowerSpectrum(object):
 
         :param rates_Hz: array returned using :meth:`~analyseur.rbcbg.loader.LoadRates.get_rates`
         :param resolution: `~ 9.76 Hz = sampling_rate/1024` [default]
+        :return: a tuple in the following order
+        - f: frequency vector
+        - t: time vector for spectrogram
+        - Sxx: spectrogram power (dB)
 
         **NOTE:** This time-varying power spectrum tells us *how frequencies evolve*.
 
@@ -272,9 +291,22 @@ class PowerSpectrum(object):
         if resolution is None:
             points_per_segment = 1024
         else:
-            points_per_segment = sampling_rate / resolution
+            points_per_segment = int(round(sampling_rate / resolution))
+
+        points_per_segment = max(2, points_per_segment)
+
+        # Clamp to signal length
+        points_per_segment = min(points_per_segment, len(rates_Hz))
 
         noverlap_points_between_segments = points_per_segment // 2
+
+        noverlap_points_between_segments = min(noverlap_points_between_segments,
+                                               points_per_segment - 1)
+
+        # print("len:", len(rates_Hz), "nperseg:", points_per_segment,
+        #       "noverlap:", noverlap_points_between_segments)
+
+        rates_Hz = cls.__prepare_signal(rates_Hz)
 
         f, t_spec, Sxx_db = cls.compute_stft(rates_Hz, sampling_rate,
                                              nperseg=points_per_segment,

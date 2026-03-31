@@ -20,3 +20,13 @@ Statistics
    :caption: Available statistical functions:
 
    stats/psd.rst
+
+Visualizers
+===========
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Available visualization functions:
+
+   visual/rate.rst
+   visual/powspec.rst

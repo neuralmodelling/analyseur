@@ -58,7 +58,7 @@ class VizPSD(object):
       spiketimes_superset = loadST.get_spiketrains()
 
 
-    2. Power Spectral Densityfor the whole simulation window
+    2. Power Spectral Density for the whole simulation window
 
     ::
 
